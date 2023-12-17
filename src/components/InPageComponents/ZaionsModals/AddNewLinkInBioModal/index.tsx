@@ -50,6 +50,7 @@ import {
 } from '@/types/AdminPanel/linkInBioType';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { ENVS } from '@/utils/envKeys';
 
 // Styles
 
@@ -198,7 +199,8 @@ const ZaionsAddLinkInBioModal: React.FC<{
 
   // #region Comp Constants
   const formikInitialValues = {
-    linkInBioTitle: ''
+    linkInBioTitle: '',
+    shortUrlDomain: ENVS.defaultShortUrlDomain
   };
   // #endregion
 
@@ -245,8 +247,10 @@ const ZaionsAddLinkInBioModal: React.FC<{
               // Making an api call creating new link in bio
               const zStringifyData = zStringify({
                 linkInBioTitle: values.linkInBioTitle,
+                shortUrlDomain: values.shortUrlDomain,
                 theme: zStringify(ZaionsLinkInBioDefaultData.theme), // passing default data with title
-                folderId: 1
+                folderId: CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
+                tags: zStringify([])
               });
               await FormikSubmitHandler(zStringifyData);
             } catch (error) {

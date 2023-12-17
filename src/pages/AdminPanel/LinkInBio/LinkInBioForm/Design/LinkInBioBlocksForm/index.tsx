@@ -347,8 +347,11 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 
           const _updatedLinkInBioBlocksState: LinkInBioBlockFromType[] =
             linkInBioBlocksState.map(el => {
-              if (el.id === _extractItemFromResult?.id) {
-                return _extractItemFromResult as LinkInBioBlockFromType;
+              if (
+                el.id === _extractItemFromResult?.id &&
+                _extractItemFromResult !== undefined
+              ) {
+                return _extractItemFromResult;
               } else {
                 return el;
               }

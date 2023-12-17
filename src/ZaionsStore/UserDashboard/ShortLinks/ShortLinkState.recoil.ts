@@ -81,9 +81,9 @@ export const FilteredShortLinkDataSelector = selector<
           _filterOptions.timeFilter.daysToSubtract ===
           TimeFilterEnum.customRange
         ) {
-          startDate = new Date(_filterOptions.timeFilter.startedAt as string);
+          startDate = new Date(String(_filterOptions.timeFilter.startedAt));
           endDate = new Date(
-            new Date(_filterOptions.timeFilter.endAt as string).toLocaleString(
+            new Date(String(_filterOptions.timeFilter.endAt)).toLocaleString(
               'en-US',
               CONSTANTS.toLocaleStringOptions
             )
@@ -97,7 +97,7 @@ export const FilteredShortLinkDataSelector = selector<
 
         _filterLinksData = shortLinksRStateAtom?.filter(el => {
           const _createdAt = new Date(
-            new Date(el.createdAt as string)
+            new Date(String(el.createdAt))
           ).toLocaleString('en-US', CONSTANTS.toLocaleStringOptions);
 
           if (
@@ -117,8 +117,8 @@ export const FilteredShortLinkDataSelector = selector<
         _filterOptions.tags?.length > 0
       ) {
         _filterLinksData = shortLinksRStateAtom.filter(el => {
-          return (_filterOptions.tags as string[]).every(tag =>
-            (el.tags as string[]).includes(tag)
+          return _filterOptions?.tags?.every(tag =>
+            (el?.tags as string[]).includes(tag)
           );
         });
       }
@@ -142,19 +142,18 @@ export const FilteredShortLinkDataSelector = selector<
         _filterOptions?.searchQuery !== null &&
         _filterOptions?.searchQuery?.trim()?.length > 0
       ) {
+        const _sq = _filterOptions?.searchQuery?.toLocaleLowerCase();
         _filterLinksData = shortLinksRStateAtom.filter(el => {
           return (
             (el.title
               ?.toLocaleLowerCase()
               ?.includes(
-                (_filterOptions.searchQuery as string)?.toLocaleLowerCase()
+                String(_filterOptions?.searchQuery)?.toLocaleLowerCase()
               ) ??
               false) ||
-            ((JSON.parse(el.target as string) as LinkTargetType).url as string)
+            (JSON.parse(el.target as string) as LinkTargetType).url
               ?.toLocaleLowerCase()
-              ?.includes(
-                (_filterOptions.searchQuery as string)?.toLocaleLowerCase()
-              )
+              ?.includes(_sq)
           );
         });
       }

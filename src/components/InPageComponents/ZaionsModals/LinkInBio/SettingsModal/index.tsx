@@ -55,6 +55,7 @@ import {
 } from '@/types/AdminPanel/linkInBioType';
 import { Formik } from 'formik';
 import { reportCustomError } from '@/utils/customErrorType';
+import { showSuccessNotification } from '@/utils/notification';
 
 /**
  * Custom Imports go down
@@ -234,6 +235,8 @@ const ZLinkInBioFormSettingsModal: React.FC<{
             extractType: ZRQGetRequestExtractEnum.extractItem,
             updateHoleData: true
           });
+
+          showSuccessNotification(MESSAGES.LINK_IN_BIO.FORM_SETTINGS.UPDATED);
         }
       }
     } catch (error) {
@@ -253,6 +256,7 @@ const ZLinkInBioFormSettingsModal: React.FC<{
   return (
     <Formik
       initialValues={FormikInitialValues}
+      enableReinitialize
       onSubmit={values => {
         const zStringifyData = zStringify({
           type: ZUserSettingTypeEnum.libFormSettings,
@@ -260,7 +264,7 @@ const ZLinkInBioFormSettingsModal: React.FC<{
         });
         void formikSubmitHandler(zStringifyData);
       }}>
-      {({ values, setFieldValue, submitForm }) => {
+      {({ values, setFieldValue, submitForm, isValid, dirty }) => {
         return (
           <>
             <ZIonContent className='ion-padding'>
@@ -369,6 +373,7 @@ const ZLinkInBioFormSettingsModal: React.FC<{
                 <ZIonCol className='flex gap-2 ion-justify-content-end ion-align-items-center'>
                   <ZIonButton
                     size='default'
+                    disabled={!isValid || !dirty}
                     className='ion-text-capitalize'
                     onClick={() => {
                       void submitForm();

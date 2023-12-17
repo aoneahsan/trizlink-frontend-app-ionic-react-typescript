@@ -256,6 +256,7 @@ const ZLinkInBioAddBlockModal: React.FC<{
                   blockType:
                     LinkInBioBlockEnum[_data?.blockType as LinkInBioBlockEnum],
                   blockContent:
+                    // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
                     _data?.blockContent as LinkInBioSingleBlockContentType,
                   // icon: 'string',
                   isActive: _data?.isActive,
@@ -276,6 +277,7 @@ const ZLinkInBioAddBlockModal: React.FC<{
                   blockType:
                     LinkInBioBlockEnum[_data?.blockType as LinkInBioBlockEnum],
                   blockContent:
+                    // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
                     _data?.blockContent as LinkInBioSingleBlockContentType, // icon: 'string',
                   isActive: _data?.isActive,
                   orderNo: '100000' // as in API we always set orderNo from 0, so setting it, 100000 mean this will have the highest orderNo (hopefully)

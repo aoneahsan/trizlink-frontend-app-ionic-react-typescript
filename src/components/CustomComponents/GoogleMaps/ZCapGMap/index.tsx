@@ -39,7 +39,9 @@ const ZCapGMap: React.FC<IZCapGMapProps> = props => {
           zoomControl: false,
           scaleControl: false,
           streetViewControl: false,
-          rotateControl: false
+          rotateControl: false,
+          disableDoubleClickZoom: true,
+          draggable: false
         }
       });
     })();

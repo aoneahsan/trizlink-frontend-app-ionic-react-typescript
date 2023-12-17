@@ -50,9 +50,10 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 // Styles
 
-const DomainName: React.FC<{ showSkeleton?: boolean }> = ({
-  showSkeleton = false
-}) => {
+const DomainName: React.FC<{
+  showSkeleton?: boolean;
+  isEditMode?: boolean;
+}> = ({ showSkeleton = false, isEditMode = false }) => {
   const DefaultDomains = useRecoilValue(DefaultDomainsState);
   const {
     initialValues,
@@ -70,9 +71,8 @@ const DomainName: React.FC<{ showSkeleton?: boolean }> = ({
   const { getRQCDataHandler } = useZGetRQCacheData();
 
   // getting workspace and shortlink ids from url with the help of useParams.
-  const { editLinkId, workspaceId } = useParams<{
+  const { workspaceId } = useParams<{
     workspaceId?: string;
-    editLinkId?: string;
   }>();
 
   const { data: zIsPathAvailable, refetch: refetchZIsPathAvailable } =
@@ -95,8 +95,6 @@ const DomainName: React.FC<{ showSkeleton?: boolean }> = ({
       _extractType: ZRQGetRequestExtractEnum.extractItem,
       _showLoader: false
     });
-
-  const isZEditMode = (editLinkId?.trim()?.length ?? 0) > 0;
 
   useEffect(() => {
     try {
@@ -140,7 +138,7 @@ const DomainName: React.FC<{ showSkeleton?: boolean }> = ({
           </ZIonText>
         </ZIonCol>
 
-        {isZEditMode ? (
+        {isEditMode ? (
           <ZIonCol size='max-content'>
             <ZIonIcon
               icon={alertCircleOutline}
@@ -181,19 +179,19 @@ const DomainName: React.FC<{ showSkeleton?: boolean }> = ({
             labelPlacement='stacked'
             fill='outline'
             minHeight='2.3rem'
-            disabled={isZEditMode}
+            disabled={isEditMode}
             value={values?.shortUrlDomain}
             testingselector={
               CONSTANTS.testingSelectors.shortLink.formPage.customDomain
                 .domainSelector
             }
             onIonChange={e => {
-              if (!isZEditMode) {
+              if (!isEditMode) {
                 handleChange(e);
               }
             }}
             onIonBlur={e => {
-              if (!isZEditMode) {
+              if (!isEditMode) {
                 handleBlur(e);
               }
             }}>
@@ -226,7 +224,7 @@ const DomainName: React.FC<{ showSkeleton?: boolean }> = ({
             minHeight='2.3rem'
             maxlength={6}
             counter={true}
-            disabled={isZEditMode}
+            disabled={isEditMode}
             value={values?.shortUrlPath}
             errorText={
               touched?.shortUrlPath !== undefined
@@ -238,7 +236,7 @@ const DomainName: React.FC<{ showSkeleton?: boolean }> = ({
                 .customizeInput
             }
             onIonChange={e => {
-              if (!isZEditMode) {
+              if (!isEditMode) {
                 handleChange(e);
                 void setFieldValue('isShortUrlPathValid', false, false);
                 const _oldValue = getRQCDataHandler({
@@ -261,7 +259,7 @@ const DomainName: React.FC<{ showSkeleton?: boolean }> = ({
               }
             }}
             onIonBlur={e => {
-              if (!isZEditMode) {
+              if (!isEditMode) {
                 handleBlur(e);
 
                 if (
@@ -278,7 +276,7 @@ const DomainName: React.FC<{ showSkeleton?: boolean }> = ({
               }
             }}
             helperText={
-              !isZEditMode
+              !isEditMode
                 ? touched?.shortUrlPath === true
                   ? values?.shortUrlPath?.trim().length === 6
                     ? zIsPathAvailable?.isAvailable === true

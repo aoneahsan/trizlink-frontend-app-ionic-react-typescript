@@ -256,6 +256,9 @@ const LINK_IN_BIO = {
     SUB_HEADER: 'Confirm Your Move!',
     MESSAGES:
       "Deleting this link-in-bio means it's gone forever. Are you certain this is what you want?"
+  },
+  FORM_SETTINGS: {
+    UPDATED: 'Bingo! successfully updated the settings'
   }
 };
 

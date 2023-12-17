@@ -80,7 +80,7 @@ export const FilteredLinkInBioLinksDataSelector = selector<
 
         _filterLinksData = linkInBiosStateAtom?.filter(el => {
           const _createdAt = new Date(
-            new Date(el.createdAt as string)
+            new Date(el.createdAt ?? '')
           ).toLocaleString('en-US', toLocaleStringOptions);
 
           if (
@@ -96,8 +96,8 @@ export const FilteredLinkInBioLinksDataSelector = selector<
 
       if (_filterOptions.tags?.length !== undefined) {
         _filterLinksData = linkInBiosStateAtom.filter(el => {
-          return (_filterOptions.tags as string[]).every(tag =>
-            (el.tags as string[]).includes(tag)
+          return (_filterOptions.tags ?? []).every(tag =>
+            (el.tags ?? []).includes(tag)
           );
         });
       }
@@ -120,9 +120,7 @@ export const FilteredLinkInBioLinksDataSelector = selector<
         _filterLinksData = linkInBiosStateAtom.filter(el => {
           return el.title
             ?.toLocaleLowerCase()
-            ?.includes(
-              (_filterOptions.searchQuery as string)?.toLocaleLowerCase()
-            );
+            ?.includes((_filterOptions.searchQuery ?? '')?.toLocaleLowerCase());
         });
       }
     }
@@ -142,8 +140,16 @@ export const LinkInBiosFieldsDataRStateSelector = selector({
     // const _domains = new Set<string>();
 
     linkInBiosStateAtom?.forEach(el => {
-      if ((el.tags as string[])?.length > 0) {
-        (el.tags as string[])?.forEach(tag => _tagsArray.add(tag));
+      if (typeof el?.tags === 'string') {
+        if (((JSON.parse(el.tags as string) as string[]) ?? [])?.length > 0) {
+          ((JSON.parse(el.tags as string) as string[]) ?? [])?.forEach(tag =>
+            _tagsArray.add(tag)
+          );
+        }
+      } else if (typeof el?.tags !== 'undefined' && Array.isArray(el?.tags)) {
+        if ((el.tags ?? [])?.length > 0) {
+          (el.tags ?? [])?.forEach(tag => _tagsArray.add(tag));
+        }
       }
 
       // const _url = (JSON.parse(el.target as string) as LinkTargetType).url;

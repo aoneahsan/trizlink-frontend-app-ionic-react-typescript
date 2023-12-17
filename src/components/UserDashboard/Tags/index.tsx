@@ -109,22 +109,41 @@ const Tags: React.FC = () => {
         />
         <div className='tags'>
           {values.tags !== undefined && values.tags.length > 0
-            ? values.tags.map(el => {
-                return (
-                  <ZIonChip
-                    key={el}
-                    testingselector={
-                      CONSTANTS.testingSelectors.shortLink.formPage.tag
-                        .singleTag
-                    }
-                    onClick={() => {
-                      removeTags(el);
-                    }}>
-                    <ZIonLabel>{el}</ZIonLabel>
-                    <ZIonIcon icon={close} />
-                  </ZIonChip>
-                );
-              })
+            ? typeof values?.tags === 'string'
+              ? (JSON.parse(values?.tags) as string[])?.map(el => {
+                  return (
+                    <ZIonChip
+                      key={el}
+                      testingselector={
+                        CONSTANTS.testingSelectors.shortLink.formPage.tag
+                          .singleTag
+                      }
+                      onClick={() => {
+                        removeTags(el);
+                      }}>
+                      <ZIonLabel>{el}</ZIonLabel>
+                      <ZIonIcon icon={close} />
+                    </ZIonChip>
+                  );
+                })
+              : Array.isArray(values.tags)
+              ? values?.tags?.map(el => {
+                  return (
+                    <ZIonChip
+                      key={el}
+                      testingselector={
+                        CONSTANTS.testingSelectors.shortLink.formPage.tag
+                          .singleTag
+                      }
+                      onClick={() => {
+                        removeTags(el);
+                      }}>
+                      <ZIonLabel>{el}</ZIonLabel>
+                      <ZIonIcon icon={close} />
+                    </ZIonChip>
+                  );
+                })
+              : ''
             : ''}
         </div>
       </div>

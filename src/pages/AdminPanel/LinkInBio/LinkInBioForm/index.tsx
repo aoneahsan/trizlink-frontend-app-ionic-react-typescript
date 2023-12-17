@@ -532,8 +532,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
               const stringifyValue = zStringify({
                 linkInBioTitle: values.linkInBioTitle,
                 theme: zStringify(values.theme),
-                settings: zStringify(values.settings),
-                folderId: 1
+                settings: zStringify(values.settings)
               });
 
               setLinkInBioFormState(oldValues => ({
@@ -615,45 +614,47 @@ const ZaionsLinkInBioForm: React.FC = () => {
                                     'ion-no-padding ion-no-margin me-2 ion-align-items-start z-inner-padding-end-0':
                                       true
                                   })}>
-                                  <ZIonInput
-                                    aria-label='Link-in-bio title'
-                                    counter={false}
-                                    minHeight='40px'
-                                    name='linkInBioTitle'
-                                    onIonChange={handleChange}
-                                    onIonBlur={handleBlur}
-                                    value={values.linkInBioTitle}
-                                    testingselector={
-                                      CONSTANTS.testingSelectors.linkInBio
-                                        .formPage.topBar.titleInput
-                                    }
-                                    className={classNames(
-                                      classes['link-in-bio-title-field'],
-                                      {
-                                        'text-[18px] z-ion-border-radius-point-8rem':
-                                          true
+                                  <div className='flex w-full'>
+                                    <ZIonInput
+                                      aria-label='Link-in-bio title'
+                                      counter={false}
+                                      minHeight='40px'
+                                      name='linkInBioTitle'
+                                      onIonChange={handleChange}
+                                      onIonBlur={handleBlur}
+                                      value={values.linkInBioTitle}
+                                      testingselector={
+                                        CONSTANTS.testingSelectors.linkInBio
+                                          .formPage.topBar.titleInput
                                       }
-                                    )}
-                                  />
-                                  <ZIonButton
-                                    className='ion-text-capitalize ion-no-margin'
-                                    height='40px'
-                                    expand='full'
-                                    testingselector={
-                                      CONSTANTS.testingSelectors.linkInBio
-                                        .formPage.topBar.titleSaveBtn
-                                    }
-                                    onClick={() => {
-                                      void setFieldValue(
-                                        'enableTitleInput',
-                                        false,
-                                        false
-                                      );
-                                    }}>
-                                    <ZIonText className='text-sm'>
-                                      save
-                                    </ZIonText>
-                                  </ZIonButton>
+                                      className={classNames(
+                                        classes['link-in-bio-title-field'],
+                                        {
+                                          'text-[18px] z-ion-border-radius-point-8rem ion-padding-start-point-8rem':
+                                            true
+                                        }
+                                      )}
+                                    />
+                                    <ZIonButton
+                                      className='ion-text-capitalize ion-no-margin'
+                                      height='40px'
+                                      expand='full'
+                                      testingselector={
+                                        CONSTANTS.testingSelectors.linkInBio
+                                          .formPage.topBar.titleSaveBtn
+                                      }
+                                      onClick={() => {
+                                        void setFieldValue(
+                                          'enableTitleInput',
+                                          false,
+                                          false
+                                        );
+                                      }}>
+                                      <ZIonText className='text-sm'>
+                                        save
+                                      </ZIonText>
+                                    </ZIonButton>
+                                  </div>
                                 </ZIonItem>
                               )}
                               {!values.enableTitleInput && (

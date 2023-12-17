@@ -28,7 +28,7 @@ import CONSTANTS from '@/utils/constants';
 // Styles
 
 const LinkFavIcon: React.FC = () => {
-  const { values } =
+  const { values, setFieldValue } =
     useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
   return (
     <ZIonCol
@@ -57,7 +57,24 @@ const LinkFavIcon: React.FC = () => {
         <ZDragAndDrop
           // setFieldValue={setFieldValue}
           // fieldName='favicon'
-          imageUrl={values.favicon}
+          onDrop={event => {
+            if (event[0] !== undefined && event[0] !== null) {
+              void setFieldValue('favicon.file', event[0], false);
+
+              const reader = new FileReader();
+
+              reader.onload = ({ target }) => {
+                void setFieldValue(
+                  'favicon.url',
+                  target?.result as string,
+                  false
+                );
+              };
+
+              reader.readAsDataURL(event[0]);
+            }
+          }}
+          imageUrl={values?.favicon?.url}
           title='Click to upload favicon'
           className='h-[9rem]'
           testingselector={

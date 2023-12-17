@@ -234,9 +234,7 @@ const LinkInBioDesignPage: React.FC = () => {
       const _linkInBioBlocksIds: string[] = [];
       for (let i = 0; i < _linkInBioBlocksEls.length; i++) {
         const _block = _linkInBioBlocksEls[i];
-        _linkInBioBlocksIds.push(
-          _block.getAttribute('data-block-id') as string
-        );
+        _linkInBioBlocksIds.push(String(_block.getAttribute('data-block-id')));
       }
 
       if (_linkInBioBlocksIds.length > 0) {
@@ -314,6 +312,7 @@ const LinkInBioDesignPage: React.FC = () => {
 
   const ZIonColStyle = {
     ...generatePredefinedThemeBackgroundValue(
+      // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
       values.theme.background as LinkInBioThemeBackgroundType
     )
   };

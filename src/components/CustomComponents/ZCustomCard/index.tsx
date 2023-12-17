@@ -94,6 +94,12 @@ interface ZCustomCardInterface {
   animationType?: LinkInBioBlockAnimationEnum;
 }
 
+enum audioPlatforms {
+  spotify = 'spotify.com',
+  soundCloud = 'soundcloud.com',
+  amazonPrime = 'amazon'
+}
+
 /**
  * Functional Component
  * About: Generic card...
@@ -185,6 +191,27 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
   //   [mediaLink]
   // );
   // #endregion
+  // https://open.spotify.com/album/5AivaZj0CiQJoDWqVH2pbh?si=68ac3e8ecd90485d
+
+  const audioLink = useMemo(() => {
+    let _mediaLink = mediaLink;
+    if (
+      mediaType === ZMediaEnum.iframe &&
+      _mediaLink !== null &&
+      _mediaLink !== undefined
+    ) {
+      if (_mediaLink?.trim()?.includes(audioPlatforms.spotify)) {
+        _mediaLink = _mediaLink.replace(
+          audioPlatforms.spotify,
+          `${audioPlatforms.spotify}/embed`
+        );
+      } else if (_mediaLink?.trim()?.includes(audioPlatforms.soundCloud)) {
+        _mediaLink = `https://w.soundcloud.com/player/?url=${_mediaLink}&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true`;
+      }
+    }
+
+    return _mediaLink;
+  }, [mediaLink, mediaType]);
 
   return (
     <ZIonCol
@@ -309,7 +336,7 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
                   frameBorder='0'
                   allow='encrypted-media'
                   height='100%'
-                  src={mediaLink}
+                  src={audioLink}
                 />
               </ZIonCol>
             )}

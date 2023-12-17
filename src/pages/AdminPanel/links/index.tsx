@@ -371,7 +371,7 @@ const ZShortLinksListPage: React.FC = () => {
       for (let i = 0; i < _shortLinksFoldersEls.length; i++) {
         const _block = _shortLinksFoldersEls[i];
         _shortLinksFoldersIds.push(
-          _block.getAttribute('data-folder-id') as string
+          String(_block.getAttribute('data-folder-id'))
         );
       }
 
