@@ -11,7 +11,7 @@ import { useLocation, useParams } from 'react-router';
  * */
 import { Formik } from 'formik';
 import { createOutline } from 'ionicons/icons';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import routeQueryString from 'qs';
 import classNames from 'classnames';
 
@@ -108,6 +108,7 @@ import {
 import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import ZLinkInBioFormSettingsModal from '@/components/InPageComponents/ZaionsModals/LinkInBio/SettingsModal';
+import { reloadBlockingRStateAtom } from '@/ZaionsStore/AppRStates';
 
 const LinkInBioDesignPage = lazy(
   () => import('@/pages/AdminPanel/LinkInBio/LinkInBioForm/Design')
@@ -158,6 +159,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 
   // Recoil state link-in-bio form state (for editing or creating link-in-bio)
   const setLinkInBioFormState = useSetRecoilState(NewLinkInBioFormState);
+  const reloadBlockingRState = useRecoilValue(reloadBlockingRStateAtom);
   // #endregion
 
   // #region Custom hooks.
@@ -530,8 +532,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
               const stringifyValue = zStringify({
                 linkInBioTitle: values.linkInBioTitle,
                 theme: zStringify(values.theme),
-                settings: zStringify(values.settings),
-                folderId: 1
+                settings: zStringify(values.settings)
               });
 
               setLinkInBioFormState(oldValues => ({
@@ -555,29 +556,44 @@ const ZaionsLinkInBioForm: React.FC = () => {
                             className='flex ion-align-items-center'
                             size='3'>
                             {/* Home btn */}
-                            <ZIonButton
-                              className='ion-text-capitalize ion-no-margin'
-                              color='secondary'
-                              testingselector={
-                                CONSTANTS.testingSelectors.linkInBio.formPage
-                                  .topBar.homeBtn
-                              }
-                              routerLink={replaceRouteParams(
-                                ZaionsRoutes.AdminPanel.LinkInBio.Main,
-                                [
-                                  CONSTANTS.RouteParams.workspace.workspaceId,
-                                  CONSTANTS.RouteParams
-                                    .folderIdToGetShortLinksOrLinkInBio
-                                ],
-                                [
-                                  workspaceId ?? '',
-                                  CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
-                                ]
-                              )}>
-                              <ZIonText className='ion-no-padding text-[16px]'>
-                                Home
-                              </ZIonText>
-                            </ZIonButton>
+                            <div
+                              className={classNames({
+                                'w-max h-max': true,
+                                'cursor-not-allowed':
+                                  reloadBlockingRState?.isBlock
+                              })}>
+                              <ZIonButton
+                                disabled={reloadBlockingRState?.isBlock}
+                                className='ion-text-capitalize ion-no-margin'
+                                color='secondary'
+                                testingselector={
+                                  CONSTANTS.testingSelectors.linkInBio.formPage
+                                    .topBar.homeBtn
+                                }
+                                onClick={() => {
+                                  if (!reloadBlockingRState?.isBlock) {
+                                    zNavigatePushRoute(
+                                      replaceRouteParams(
+                                        ZaionsRoutes.AdminPanel.LinkInBio.Main,
+                                        [
+                                          CONSTANTS.RouteParams.workspace
+                                            .workspaceId,
+                                          CONSTANTS.RouteParams
+                                            .folderIdToGetShortLinksOrLinkInBio
+                                        ],
+                                        [
+                                          workspaceId ?? '',
+                                          CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                                        ]
+                                      )
+                                    );
+                                  }
+                                }}>
+                                <ZIonText className='ion-no-padding text-[16px]'>
+                                  Home
+                                </ZIonText>
+                              </ZIonButton>
+                            </div>
 
                             {/* Title */}
                             <ZIonGrid
@@ -598,45 +614,47 @@ const ZaionsLinkInBioForm: React.FC = () => {
                                     'ion-no-padding ion-no-margin me-2 ion-align-items-start z-inner-padding-end-0':
                                       true
                                   })}>
-                                  <ZIonInput
-                                    aria-label='Link-in-bio title'
-                                    counter={false}
-                                    minHeight='40px'
-                                    name='linkInBioTitle'
-                                    onIonChange={handleChange}
-                                    onIonBlur={handleBlur}
-                                    value={values.linkInBioTitle}
-                                    testingselector={
-                                      CONSTANTS.testingSelectors.linkInBio
-                                        .formPage.topBar.titleInput
-                                    }
-                                    className={classNames(
-                                      classes['link-in-bio-title-field'],
-                                      {
-                                        'text-[18px] z-ion-border-radius-point-8rem':
-                                          true
+                                  <div className='flex w-full'>
+                                    <ZIonInput
+                                      aria-label='Link-in-bio title'
+                                      counter={false}
+                                      minHeight='40px'
+                                      name='linkInBioTitle'
+                                      onIonChange={handleChange}
+                                      onIonBlur={handleBlur}
+                                      value={values.linkInBioTitle}
+                                      testingselector={
+                                        CONSTANTS.testingSelectors.linkInBio
+                                          .formPage.topBar.titleInput
                                       }
-                                    )}
-                                  />
-                                  <ZIonButton
-                                    className='ion-text-capitalize ion-no-margin'
-                                    height='40px'
-                                    expand='full'
-                                    testingselector={
-                                      CONSTANTS.testingSelectors.linkInBio
-                                        .formPage.topBar.titleSaveBtn
-                                    }
-                                    onClick={() => {
-                                      void setFieldValue(
-                                        'enableTitleInput',
-                                        false,
-                                        false
-                                      );
-                                    }}>
-                                    <ZIonText className='text-sm'>
-                                      save
-                                    </ZIonText>
-                                  </ZIonButton>
+                                      className={classNames(
+                                        classes['link-in-bio-title-field'],
+                                        {
+                                          'text-[18px] z-ion-border-radius-point-8rem ion-padding-start-point-8rem':
+                                            true
+                                        }
+                                      )}
+                                    />
+                                    <ZIonButton
+                                      className='ion-text-capitalize ion-no-margin'
+                                      height='40px'
+                                      expand='full'
+                                      testingselector={
+                                        CONSTANTS.testingSelectors.linkInBio
+                                          .formPage.topBar.titleSaveBtn
+                                      }
+                                      onClick={() => {
+                                        void setFieldValue(
+                                          'enableTitleInput',
+                                          false,
+                                          false
+                                        );
+                                      }}>
+                                      <ZIonText className='text-sm'>
+                                        save
+                                      </ZIonText>
+                                    </ZIonButton>
+                                  </div>
                                 </ZIonItem>
                               )}
                               {!values.enableTitleInput && (
@@ -673,45 +691,54 @@ const ZaionsLinkInBioForm: React.FC = () => {
 
                           <ZIonCol size='6'>
                             {/* Segment */}
-                            <ZIonSegment value={linkInBioFromPageState.page}>
+                            <ZIonSegment
+                              value={linkInBioFromPageState.page}
+                              className={classNames({
+                                'cursor-not-allowed':
+                                  reloadBlockingRState?.isBlock
+                              })}>
                               {/* Design */}
                               <ZIonSegmentButton
                                 value='design'
+                                disabled={reloadBlockingRState?.isBlock}
                                 className='ion-text-capitalize'
                                 testingselector={
                                   CONSTANTS.testingSelectors.linkInBio.formPage
                                     .topBar.tab.design
                                 }
                                 onClick={() => {
-                                  zNavigatePushRoute(
-                                    createRedirectRoute({
-                                      url: isZNonEmptyString(workspaceId)
-                                        ? ZaionsRoutes.AdminPanel.LinkInBio.Edit
-                                        : isZNonEmptyString(wsShareId) &&
-                                          isZNonEmptyString(shareWSMemberId)
-                                        ? ZaionsRoutes.AdminPanel.ShareWS
-                                            .Link_in_bio.Main
-                                        : '',
-                                      params: [
-                                        CONSTANTS.RouteParams.workspace
-                                          .workspaceId,
-                                        CONSTANTS.RouteParams.linkInBio
-                                          .linkInBioId
-                                      ],
-                                      values: _getQueryKey({
-                                        keys: [],
-                                        additionalKeys: [
-                                          workspaceId,
-                                          shareWSMemberId,
-                                          linkInBioId
-                                        ]
-                                      }),
-                                      routeSearchParams: {
-                                        page: ZLinkInBioPageEnum.design,
-                                        step: ZLinkInBioRHSComponentEnum.theme
-                                      }
-                                    })
-                                  );
+                                  if (!reloadBlockingRState?.isBlock) {
+                                    zNavigatePushRoute(
+                                      createRedirectRoute({
+                                        url: isZNonEmptyString(workspaceId)
+                                          ? ZaionsRoutes.AdminPanel.LinkInBio
+                                              .Edit
+                                          : isZNonEmptyString(wsShareId) &&
+                                            isZNonEmptyString(shareWSMemberId)
+                                          ? ZaionsRoutes.AdminPanel.ShareWS
+                                              .Link_in_bio.Main
+                                          : '',
+                                        params: [
+                                          CONSTANTS.RouteParams.workspace
+                                            .workspaceId,
+                                          CONSTANTS.RouteParams.linkInBio
+                                            .linkInBioId
+                                        ],
+                                        values: _getQueryKey({
+                                          keys: [],
+                                          additionalKeys: [
+                                            workspaceId,
+                                            shareWSMemberId,
+                                            linkInBioId
+                                          ]
+                                        }),
+                                        routeSearchParams: {
+                                          page: ZLinkInBioPageEnum.design,
+                                          step: ZLinkInBioRHSComponentEnum.theme
+                                        }
+                                      })
+                                    );
+                                  }
                                 }}>
                                 <ZIonLabel className='font-bold tracking-normal'>
                                   Design
@@ -720,6 +747,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 
                               {/* Share settings */}
                               <ZIonSegmentButton
+                                disabled={reloadBlockingRState?.isBlock}
                                 value='shareSettings'
                                 className='ion-text-capitalize'
                                 testingselector={
@@ -727,34 +755,37 @@ const ZaionsLinkInBioForm: React.FC = () => {
                                     .topBar.tab.shareSettings
                                 }
                                 onClick={() => {
-                                  zNavigatePushRoute(
-                                    createRedirectRoute({
-                                      url: isZNonEmptyString(workspaceId)
-                                        ? ZaionsRoutes.AdminPanel.LinkInBio.Edit
-                                        : isZNonEmptyString(wsShareId) &&
-                                          isZNonEmptyString(shareWSMemberId)
-                                        ? ZaionsRoutes.AdminPanel.ShareWS
-                                            .Link_in_bio.Main
-                                        : '',
-                                      params: [
-                                        CONSTANTS.RouteParams.workspace
-                                          .workspaceId,
-                                        CONSTANTS.RouteParams.linkInBio
-                                          .linkInBioId
-                                      ],
-                                      values: _getQueryKey({
-                                        keys: [],
-                                        additionalKeys: [
-                                          workspaceId,
-                                          shareWSMemberId,
-                                          linkInBioId
-                                        ]
-                                      }),
-                                      routeSearchParams: {
-                                        page: ZLinkInBioPageEnum.shareSettings
-                                      }
-                                    })
-                                  );
+                                  if (!reloadBlockingRState?.isBlock) {
+                                    zNavigatePushRoute(
+                                      createRedirectRoute({
+                                        url: isZNonEmptyString(workspaceId)
+                                          ? ZaionsRoutes.AdminPanel.LinkInBio
+                                              .Edit
+                                          : isZNonEmptyString(wsShareId) &&
+                                            isZNonEmptyString(shareWSMemberId)
+                                          ? ZaionsRoutes.AdminPanel.ShareWS
+                                              .Link_in_bio.Main
+                                          : '',
+                                        params: [
+                                          CONSTANTS.RouteParams.workspace
+                                            .workspaceId,
+                                          CONSTANTS.RouteParams.linkInBio
+                                            .linkInBioId
+                                        ],
+                                        values: _getQueryKey({
+                                          keys: [],
+                                          additionalKeys: [
+                                            workspaceId,
+                                            shareWSMemberId,
+                                            linkInBioId
+                                          ]
+                                        }),
+                                        routeSearchParams: {
+                                          page: ZLinkInBioPageEnum.shareSettings
+                                        }
+                                      })
+                                    );
+                                  }
                                 }}>
                                 <ZIonLabel className='font-bold tracking-normal'>
                                   Share settings
@@ -763,6 +794,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 
                               {/* Page analytics */}
                               <ZIonSegmentButton
+                                disabled={reloadBlockingRState?.isBlock}
                                 value='pageAnalytics'
                                 className='ion-text-capitalize'
                                 testingselector={
@@ -770,34 +802,37 @@ const ZaionsLinkInBioForm: React.FC = () => {
                                     .topBar.tab.pageAnalytics
                                 }
                                 onClick={() => {
-                                  zNavigatePushRoute(
-                                    createRedirectRoute({
-                                      url: isZNonEmptyString(workspaceId)
-                                        ? ZaionsRoutes.AdminPanel.LinkInBio.Edit
-                                        : isZNonEmptyString(wsShareId) &&
-                                          isZNonEmptyString(shareWSMemberId)
-                                        ? ZaionsRoutes.AdminPanel.ShareWS
-                                            .Link_in_bio.Main
-                                        : '',
-                                      params: [
-                                        CONSTANTS.RouteParams.workspace
-                                          .workspaceId,
-                                        CONSTANTS.RouteParams.linkInBio
-                                          .linkInBioId
-                                      ],
-                                      values: _getQueryKey({
-                                        keys: [],
-                                        additionalKeys: [
-                                          workspaceId,
-                                          shareWSMemberId,
-                                          linkInBioId
-                                        ]
-                                      }),
-                                      routeSearchParams: {
-                                        page: ZLinkInBioPageEnum.pageAnalytics
-                                      }
-                                    })
-                                  );
+                                  if (!reloadBlockingRState?.isBlock) {
+                                    zNavigatePushRoute(
+                                      createRedirectRoute({
+                                        url: isZNonEmptyString(workspaceId)
+                                          ? ZaionsRoutes.AdminPanel.LinkInBio
+                                              .Edit
+                                          : isZNonEmptyString(wsShareId) &&
+                                            isZNonEmptyString(shareWSMemberId)
+                                          ? ZaionsRoutes.AdminPanel.ShareWS
+                                              .Link_in_bio.Main
+                                          : '',
+                                        params: [
+                                          CONSTANTS.RouteParams.workspace
+                                            .workspaceId,
+                                          CONSTANTS.RouteParams.linkInBio
+                                            .linkInBioId
+                                        ],
+                                        values: _getQueryKey({
+                                          keys: [],
+                                          additionalKeys: [
+                                            workspaceId,
+                                            shareWSMemberId,
+                                            linkInBioId
+                                          ]
+                                        }),
+                                        routeSearchParams: {
+                                          page: ZLinkInBioPageEnum.pageAnalytics
+                                        }
+                                      })
+                                    );
+                                  }
                                 }}>
                                 <ZIonLabel className='font-bold tracking-normal'>
                                   Page Analytics
@@ -806,6 +841,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 
                               {/* Lead */}
                               <ZIonSegmentButton
+                                disabled={reloadBlockingRState?.isBlock}
                                 value='lead'
                                 className='ion-text-capitalize'
                                 testingselector={
@@ -813,34 +849,37 @@ const ZaionsLinkInBioForm: React.FC = () => {
                                     .topBar.tab.lead
                                 }
                                 onClick={() => {
-                                  zNavigatePushRoute(
-                                    createRedirectRoute({
-                                      url: isZNonEmptyString(workspaceId)
-                                        ? ZaionsRoutes.AdminPanel.LinkInBio.Edit
-                                        : isZNonEmptyString(wsShareId) &&
-                                          isZNonEmptyString(shareWSMemberId)
-                                        ? ZaionsRoutes.AdminPanel.ShareWS
-                                            .Link_in_bio.Main
-                                        : '',
-                                      params: [
-                                        CONSTANTS.RouteParams.workspace
-                                          .workspaceId,
-                                        CONSTANTS.RouteParams.linkInBio
-                                          .linkInBioId
-                                      ],
-                                      values: _getQueryKey({
-                                        keys: [],
-                                        additionalKeys: [
-                                          workspaceId,
-                                          shareWSMemberId,
-                                          linkInBioId
-                                        ]
-                                      }),
-                                      routeSearchParams: {
-                                        page: ZLinkInBioPageEnum.lead
-                                      }
-                                    })
-                                  );
+                                  if (!reloadBlockingRState?.isBlock) {
+                                    zNavigatePushRoute(
+                                      createRedirectRoute({
+                                        url: isZNonEmptyString(workspaceId)
+                                          ? ZaionsRoutes.AdminPanel.LinkInBio
+                                              .Edit
+                                          : isZNonEmptyString(wsShareId) &&
+                                            isZNonEmptyString(shareWSMemberId)
+                                          ? ZaionsRoutes.AdminPanel.ShareWS
+                                              .Link_in_bio.Main
+                                          : '',
+                                        params: [
+                                          CONSTANTS.RouteParams.workspace
+                                            .workspaceId,
+                                          CONSTANTS.RouteParams.linkInBio
+                                            .linkInBioId
+                                        ],
+                                        values: _getQueryKey({
+                                          keys: [],
+                                          additionalKeys: [
+                                            workspaceId,
+                                            shareWSMemberId,
+                                            linkInBioId
+                                          ]
+                                        }),
+                                        routeSearchParams: {
+                                          page: ZLinkInBioPageEnum.lead
+                                        }
+                                      })
+                                    );
+                                  }
                                 }}>
                                 <ZIonLabel className='font-bold tracking-normal'>
                                   Lead
@@ -850,6 +889,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
                               {/* Block analytics */}
                               <ZIonSegmentButton
                                 value='block-analytics'
+                                disabled={reloadBlockingRState?.isBlock}
                                 className='ion-text-capitalize'
                                 testingselector={
                                   CONSTANTS.testingSelectors.linkInBio.formPage

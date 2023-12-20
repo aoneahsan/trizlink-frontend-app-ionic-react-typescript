@@ -1437,6 +1437,8 @@ const ZLinkInBioActionPopover: React.FC<{
               updateHoleData: true
             });
 
+            dismissZIonPopover();
+
             showSuccessNotification(MESSAGES.LINK_IN_BIO.DELETE);
           }
         }

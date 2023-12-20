@@ -39,7 +39,7 @@ import {
   LinkInBioCardStyleEnum
 } from '@/types/AdminPanel/linkInBioType/blockTypes';
 import { ZMediaEnum } from '@/types/zaionsAppSettings.type';
-import ZReactMediaPlayer from '../ZCustomAudio';
+// import ZReactMediaPlayer from '../ZCustomAudio';
 import { useRecoilValue } from 'recoil';
 import { NewLinkInBioFormState } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioFormState.recoil';
 import ZCountdown from '../ZCountDown';
@@ -94,6 +94,12 @@ interface ZCustomCardInterface {
   animationType?: LinkInBioBlockAnimationEnum;
 }
 
+enum audioPlatforms {
+  spotify = 'spotify.com',
+  soundCloud = 'soundcloud.com',
+  amazonPrime = 'amazon'
+}
+
 /**
  * Functional Component
  * About: Generic card...
@@ -124,9 +130,9 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
         type === LinkInBioCardStyleEnum.vertical
           ? '100%'
           : type === LinkInBioCardStyleEnum.thumbRound
-          ? '202px'
+          ? '10rem'
           : type === LinkInBioCardStyleEnum.thumbCircle
-          ? '115px'
+          ? '12rem'
           : type === LinkInBioCardStyleEnum.thumbStrip
           ? '56%'
           : '100%',
@@ -149,6 +155,9 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
           ? '330px'
           : type === LinkInBioCardStyleEnum.thumbStrip
           ? 'auto'
+          : type === LinkInBioCardStyleEnum.thumbRound ||
+            type === LinkInBioCardStyleEnum.thumbCircle
+          ? '10rem'
           : '15rem',
       position: 'relative',
       borderRadius: type === LinkInBioCardStyleEnum.thumbRound && '15px',
@@ -177,11 +186,32 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
     objectFit: 'cover'
   };
 
-  const ZMediaPlayerStyle = useMemo(
-    () => ({ url: mediaLink, width: '100%', height: '100%' }),
-    [mediaLink]
-  );
+  // const ZMediaPlayerStyle = useMemo(
+  //   () => ({ url: mediaLink, width: '100%', height: '100%' }),
+  //   [mediaLink]
+  // );
   // #endregion
+  // https://open.spotify.com/album/5AivaZj0CiQJoDWqVH2pbh?si=68ac3e8ecd90485d
+
+  const audioLink = useMemo(() => {
+    let _mediaLink = mediaLink;
+    if (
+      mediaType === ZMediaEnum.iframe &&
+      _mediaLink !== null &&
+      _mediaLink !== undefined
+    ) {
+      if (_mediaLink?.trim()?.includes(audioPlatforms.spotify)) {
+        _mediaLink = _mediaLink.replace(
+          audioPlatforms.spotify,
+          `${audioPlatforms.spotify}/embed`
+        );
+      } else if (_mediaLink?.trim()?.includes(audioPlatforms.soundCloud)) {
+        _mediaLink = `https://w.soundcloud.com/player/?url=${_mediaLink}&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true`;
+      }
+    }
+
+    return _mediaLink;
+  }, [mediaLink, mediaType]);
 
   return (
     <ZIonCol
@@ -271,12 +301,12 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
             )}
 
           {/* For Video */}
-          {isZNonEmptyString(mediaLink) && mediaType === ZMediaEnum.video && (
+          {/* {isZNonEmptyString(mediaLink) && mediaType === ZMediaEnum.video && (
             <ZReactMediaPlayer
               playerProps={ZMediaPlayerStyle}
               mediaType='video'
             />
-          )}
+          )} */}
 
           {isZNonEmptyString(mapId) &&
             mediaType === ZMediaEnum.map &&
@@ -306,7 +336,7 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
                   frameBorder='0'
                   allow='encrypted-media'
                   height='100%'
-                  src={mediaLink}
+                  src={audioLink}
                 />
               </ZIonCol>
             )}

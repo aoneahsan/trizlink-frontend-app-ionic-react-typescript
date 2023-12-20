@@ -83,8 +83,10 @@ const LinkInBioLinkField: React.FC<LinkInBioLinkFieldInterface> = ({
 
       <ZIonInput
         aria-label='url'
+        type='url'
         name={name}
         minHeight='40px'
+        counter={false}
         placeholder={placeholder}
         onIonChange={onIonChange}
         onIonBlur={onIonBlur}

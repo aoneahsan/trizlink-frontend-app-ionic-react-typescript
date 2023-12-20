@@ -177,7 +177,11 @@ export interface ZaionsShortUrlOptionFieldsValuesInterface {
   shortUrl: ShortUrlInterface;
   linkPixelsAccount: string[];
   UTMTags: UTMTagInfoInterface;
-  favicon: string;
+  favicon: {
+    path: string;
+    url: string;
+    file: File;
+  };
   shortUrlDomain?: string;
   shortUrlPath?: string;
   formMode?: FormMode;

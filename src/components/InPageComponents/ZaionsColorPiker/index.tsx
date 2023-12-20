@@ -94,36 +94,38 @@ const ZaionsColorPiker: React.FC<ZaionsColorPikerType> = ({
       minHeight={minHeight}
       testingselector={testingselector}
       testinglistselector={testinglistselector}>
-      <input
-        type='color'
-        name={name}
-        className='zaions-color-piker'
-        value={value}
-        onChange={({ target }) => {
-          setFieldValueFn !== undefined &&
-            setFieldValueFn(name, target?.value ?? setDefaultColor, false);
-        }}
-      />
-      <ZIonInput
-        type='text'
-        className='ms-2 text-[18px] zaions__bg_white'
-        value={value}
-        label=''
-        fill='outline'
-        minHeight={minHeight}
-        onIonChange={({ target }) => {
-          setFieldValueFn !== undefined &&
-            setFieldValueFn(name, target?.value ?? setDefaultColor, false);
-        }}
-      />
-      {showCloseIcon && (
-        <ZIonIcon
-          icon={closeCircleOutline}
-          color='primary'
-          className='w-8 h-8 mt-1 cursor-pointer ms-2'
-          onClick={closeIconOnChangeFn}
+      <div className='flex w-full'>
+        <input
+          type='color'
+          name={name}
+          className='zaions-color-piker'
+          value={value}
+          onChange={({ target }) => {
+            setFieldValueFn !== undefined &&
+              setFieldValueFn(name, target?.value ?? setDefaultColor, false);
+          }}
         />
-      )}
+        <ZIonInput
+          type='text'
+          className='ms-2 text-[18px] zaions__bg_white'
+          value={value}
+          label=''
+          fill='outline'
+          minHeight={minHeight}
+          onIonChange={({ target }) => {
+            setFieldValueFn !== undefined &&
+              setFieldValueFn(name, target?.value ?? setDefaultColor, false);
+          }}
+        />
+        {showCloseIcon && (
+          <ZIonIcon
+            icon={closeCircleOutline}
+            color='primary'
+            className='w-8 h-8 mt-1 cursor-pointer ms-2'
+            onClick={closeIconOnChangeFn}
+          />
+        )}
+      </div>
     </ZIonItem>
   );
 };

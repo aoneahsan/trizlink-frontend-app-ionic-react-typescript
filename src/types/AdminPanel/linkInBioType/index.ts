@@ -165,7 +165,13 @@ export interface LinkInBioType {
   blocks?: LinkInBioBlockFromType[];
 
   // form data - for creation/updating
-  featureImg?: string;
+  // featureImg?: string;
+  featureImg: {
+    featureImgFile?: File;
+    featureImgPath?: string;
+    featureImgUrl?: string;
+  };
+  // featureImgPath?: string;
   title?: string;
   linkInBioTitle?: string;
   description?: string;
@@ -179,6 +185,8 @@ export interface LinkInBioType {
   geoLocationRotatorLinks?: GeoLocationRotatorInterface[];
   linkExpirationInfo?: LinkExpirationInfoInterface;
   password?: PasswordInterface;
+  shortUrlDomain?: string;
+  shortUrlPath?: string;
   // favicon?: {
   //   url?: string;
   //   type?: string;
@@ -186,7 +194,13 @@ export interface LinkInBioType {
   //   size?: string;
   // };
 
-  favicon?: string;
+  // favicon?: string;
+  // faviconPath?: string;
+  favicon: {
+    path: string;
+    url: string;
+    file: File;
+  };
 
   // computed data - due to other events or calculations
   totalClicks?: number;

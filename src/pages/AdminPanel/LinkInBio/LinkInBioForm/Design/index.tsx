@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React, { lazy, Suspense, useState } from 'react';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
 
 /**
  * Packages Imports go down
@@ -59,7 +59,7 @@ import {
   isZNonEmptyStrings,
   zStringify
 } from '@/utils/helpers';
-import { useParams } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import { API_URL_ENUM, ZWSTypeEum } from '@/utils/enums';
 import { reportCustomError } from '@/utils/customErrorType';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
@@ -87,6 +87,9 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
  * ? Import of style sheet is a style import
  * */
 import classes from './styles.module.css';
+import { useRecoilState } from 'recoil';
+import { reloadBlockingRStateAtom } from '@/ZaionsStore/AppRStates';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 
 const ZLinkInBioBlocksSection = lazy(
   () =>
@@ -157,10 +160,15 @@ const LinkInBioDesignPage: React.FC = () => {
     }
   });
   // #endregion
+  const [reloadBlockingRState, setReloadBlockingRState] = useRecoilState(
+    reloadBlockingRStateAtom
+  );
 
   // #region Custom hooks.
   // validate the request. this hook will show success notification if the request->success is true and show error notification if request->success is false.
   const { validateRequestResponse } = useZValidateRequestResponse();
+  const location = useLocation();
+  const { zNavigatePushRoute } = useZNavigate();
   // #endregion
 
   // #region APIS
@@ -226,9 +234,7 @@ const LinkInBioDesignPage: React.FC = () => {
       const _linkInBioBlocksIds: string[] = [];
       for (let i = 0; i < _linkInBioBlocksEls.length; i++) {
         const _block = _linkInBioBlocksEls[i];
-        _linkInBioBlocksIds.push(
-          _block.getAttribute('data-block-id') as string
-        );
+        _linkInBioBlocksIds.push(String(_block.getAttribute('data-block-id')));
       }
 
       if (_linkInBioBlocksIds.length > 0) {
@@ -276,10 +282,37 @@ const LinkInBioDesignPage: React.FC = () => {
   };
   // #endregion
 
+  useEffect(() => {
+    try {
+      if (
+        dirty &&
+        values.designPageCurrentTab === ZLinkInBioRHSComponentEnum.theme
+      ) {
+        setReloadBlockingRState(_oldValues => ({
+          ..._oldValues,
+          isBlock: true,
+          pageUrl: location.pathname
+        }));
+      } else if (
+        !dirty &&
+        values.designPageCurrentTab === ZLinkInBioRHSComponentEnum.theme
+      ) {
+        setReloadBlockingRState(_oldValues => ({
+          ..._oldValues,
+          isBlock: false
+        }));
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dirty]);
+
   const isZFetching = isSelectedLinkInBioBlocksFetching;
 
   const ZIonColStyle = {
     ...generatePredefinedThemeBackgroundValue(
+      // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
       values.theme.background as LinkInBioThemeBackgroundType
     )
   };
@@ -296,9 +329,7 @@ const LinkInBioDesignPage: React.FC = () => {
               sizeSm='12'
               sizeXs='12'
               className='h-full'>
-              <ZCustomScrollable
-                scrollY
-                className='w-full h-full'>
+              <div className='w-full h-full overflow-y-scroll zaions_pretty_scrollbar'>
                 <ZIonRow className='ion-padding-horizontal ion-margin-horizontal'>
                   {values.designPageCurrentTab !==
                     ZLinkInBioRHSComponentEnum.blockForm && (
@@ -404,7 +435,7 @@ const LinkInBioDesignPage: React.FC = () => {
                     ''
                   )}
                 </ZIonRow>
-              </ZCustomScrollable>
+              </div>
             </ZIonCol>
 
             <ZIonCol
@@ -518,126 +549,180 @@ const LinkInBioDesignPage: React.FC = () => {
               size='6'
               className='flex ion-justify-content-between'>
               {/* Theme button */}
-              <ZIonButton
-                title='Theme'
-                className='ion-text-capitalize'
-                fill={
-                  values.designPageCurrentTab ===
-                  ZLinkInBioRHSComponentEnum.theme
-                    ? 'solid'
-                    : 'outline'
-                }
-                testingselector={
-                  CONSTANTS.testingSelectors.linkInBio.formPage.design
-                    .bottomTabs.theme
-                }
-                routerLink={createRedirectRoute({
-                  url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
-                  params: [
-                    CONSTANTS.RouteParams.workspace.workspaceId,
-                    CONSTANTS.RouteParams.linkInBio.linkInBioId
-                  ],
-                  values: [workspaceId ?? '', linkInBioId ?? ''],
-                  routeSearchParams: {
-                    page: ZLinkInBioPageEnum.design,
-                    step: ZLinkInBioRHSComponentEnum.theme
-                  }
+              <div
+                className={classNames({
+                  'w-max h-max': true,
+                  'cursor-not-allowed': reloadBlockingRState?.isBlock
                 })}>
-                <ZIonText className='me-2'>Theme</ZIonText>
-                <ZIonIcon icon={colorPaletteOutline} />
-              </ZIonButton>
+                <ZIonButton
+                  title='Theme'
+                  disabled={reloadBlockingRState?.isBlock}
+                  className='ion-text-capitalize'
+                  fill={
+                    values.designPageCurrentTab ===
+                    ZLinkInBioRHSComponentEnum.theme
+                      ? 'solid'
+                      : 'outline'
+                  }
+                  testingselector={
+                    CONSTANTS.testingSelectors.linkInBio.formPage.design
+                      .bottomTabs.theme
+                  }
+                  onClick={() => {
+                    if (!reloadBlockingRState?.isBlock) {
+                      zNavigatePushRoute(
+                        createRedirectRoute({
+                          url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
+                          params: [
+                            CONSTANTS.RouteParams.workspace.workspaceId,
+                            CONSTANTS.RouteParams.linkInBio.linkInBioId
+                          ],
+                          values: [workspaceId ?? '', linkInBioId ?? ''],
+                          routeSearchParams: {
+                            page: ZLinkInBioPageEnum.design,
+                            step: ZLinkInBioRHSComponentEnum.theme
+                          }
+                        })
+                      );
+                    }
+                  }}>
+                  <ZIonText className='me-2'>Theme</ZIonText>
+                  <ZIonIcon icon={colorPaletteOutline} />
+                </ZIonButton>
+              </div>
 
               {/* Blocks button */}
-              <ZIonButton
-                title='Blocks'
-                className='ion-text-capitalize'
-                testingselector={
-                  CONSTANTS.testingSelectors.linkInBio.formPage.design
-                    .bottomTabs.blocks
-                }
-                fill={
-                  values.designPageCurrentTab ===
-                    ZLinkInBioRHSComponentEnum.blocks ||
-                  values.designPageCurrentTab ===
-                    ZLinkInBioRHSComponentEnum.blockForm
-                    ? 'solid'
-                    : 'outline'
-                }
-                routerLink={createRedirectRoute({
-                  url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
-                  params: [
-                    CONSTANTS.RouteParams.workspace.workspaceId,
-                    CONSTANTS.RouteParams.linkInBio.linkInBioId
-                  ],
-                  values: [workspaceId ?? '', linkInBioId ?? ''],
-                  routeSearchParams: {
-                    page: ZLinkInBioPageEnum.design,
-                    step: ZLinkInBioRHSComponentEnum.blocks
-                  }
+              <div
+                className={classNames({
+                  'w-max h-max': true,
+                  'cursor-not-allowed': reloadBlockingRState?.isBlock
                 })}>
-                <ZIonText className='me-2'>Blocks</ZIonText>
-                <ZIonIcon icon={albumsOutline} />
-              </ZIonButton>
+                <ZIonButton
+                  title='Blocks'
+                  disabled={reloadBlockingRState?.isBlock}
+                  className='ion-text-capitalize'
+                  testingselector={
+                    CONSTANTS.testingSelectors.linkInBio.formPage.design
+                      .bottomTabs.blocks
+                  }
+                  fill={
+                    values.designPageCurrentTab ===
+                      ZLinkInBioRHSComponentEnum.blocks ||
+                    values.designPageCurrentTab ===
+                      ZLinkInBioRHSComponentEnum.blockForm
+                      ? 'solid'
+                      : 'outline'
+                  }
+                  onClick={() => {
+                    if (!reloadBlockingRState?.isBlock) {
+                      zNavigatePushRoute(
+                        createRedirectRoute({
+                          url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
+                          params: [
+                            CONSTANTS.RouteParams.workspace.workspaceId,
+                            CONSTANTS.RouteParams.linkInBio.linkInBioId
+                          ],
+                          values: [workspaceId ?? '', linkInBioId ?? ''],
+                          routeSearchParams: {
+                            page: ZLinkInBioPageEnum.design,
+                            step: ZLinkInBioRHSComponentEnum.blocks
+                          }
+                        })
+                      );
+                    }
+                  }}>
+                  <ZIonText className='me-2'>Blocks</ZIonText>
+                  <ZIonIcon icon={albumsOutline} />
+                </ZIonButton>
+              </div>
 
               {/* Setting button */}
-              <ZIonButton
-                title='Setting'
-                className='ion-text-capitalize'
-                testingselector={
-                  CONSTANTS.testingSelectors.linkInBio.formPage.design
-                    .bottomTabs.settings
-                }
-                fill={
-                  values.designPageCurrentTab ===
-                  ZLinkInBioRHSComponentEnum.settings
-                    ? 'solid'
-                    : 'outline'
-                }
-                routerLink={createRedirectRoute({
-                  url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
-                  params: [
-                    CONSTANTS.RouteParams.workspace.workspaceId,
-                    CONSTANTS.RouteParams.linkInBio.linkInBioId
-                  ],
-                  values: [workspaceId ?? '', linkInBioId ?? ''],
-                  routeSearchParams: {
-                    page: ZLinkInBioPageEnum.design,
-                    step: ZLinkInBioRHSComponentEnum.settings
-                  }
+              <div
+                className={classNames({
+                  'w-max h-max': true,
+                  'cursor-not-allowed': reloadBlockingRState?.isBlock
                 })}>
-                <ZIonText className='me-2'>Setting</ZIonText>
-                <ZIonIcon icon={settingsOutline} />
-              </ZIonButton>
+                <ZIonButton
+                  title='Setting'
+                  disabled={reloadBlockingRState?.isBlock}
+                  className='ion-text-capitalize'
+                  testingselector={
+                    CONSTANTS.testingSelectors.linkInBio.formPage.design
+                      .bottomTabs.settings
+                  }
+                  fill={
+                    values.designPageCurrentTab ===
+                    ZLinkInBioRHSComponentEnum.settings
+                      ? 'solid'
+                      : 'outline'
+                  }
+                  onClick={() => {
+                    if (!reloadBlockingRState?.isBlock) {
+                      zNavigatePushRoute(
+                        createRedirectRoute({
+                          url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
+                          params: [
+                            CONSTANTS.RouteParams.workspace.workspaceId,
+                            CONSTANTS.RouteParams.linkInBio.linkInBioId
+                          ],
+                          values: [workspaceId ?? '', linkInBioId ?? ''],
+                          routeSearchParams: {
+                            page: ZLinkInBioPageEnum.design,
+                            step: ZLinkInBioRHSComponentEnum.settings
+                          }
+                        })
+                      );
+                    }
+                  }}>
+                  <ZIonText className='me-2'>Setting</ZIonText>
+                  <ZIonIcon icon={settingsOutline} />
+                </ZIonButton>
+              </div>
 
               {/* Powered by button */}
-              <ZIonButton
-                title={`Powered by ${PRODUCT_NAME} `}
-                className='ion-text-capitalize'
-                testingselector={
-                  CONSTANTS.testingSelectors.linkInBio.formPage.design
-                    .bottomTabs.poweredBy
-                }
-                fill={
-                  values.designPageCurrentTab ===
-                  ZLinkInBioRHSComponentEnum.poweredBy
-                    ? 'solid'
-                    : 'outline'
-                }
-                routerLink={createRedirectRoute({
-                  url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
-                  params: [
-                    CONSTANTS.RouteParams.workspace.workspaceId,
-                    CONSTANTS.RouteParams.linkInBio.linkInBioId
-                  ],
-                  values: [workspaceId ?? '', linkInBioId ?? ''],
-                  routeSearchParams: {
-                    page: ZLinkInBioPageEnum.design,
-                    step: ZLinkInBioRHSComponentEnum.poweredBy
-                  }
+              <div
+                className={classNames({
+                  'w-max h-max': true,
+                  'cursor-not-allowed': reloadBlockingRState?.isBlock
                 })}>
-                <ZIonText className='me-2'>Powered by {PRODUCT_NAME}</ZIonText>
-                <ZIonIcon icon={heartOutline} />
-              </ZIonButton>
+                <ZIonButton
+                  title={`Powered by ${PRODUCT_NAME} `}
+                  className='ion-text-capitalize'
+                  disabled={reloadBlockingRState?.isBlock}
+                  testingselector={
+                    CONSTANTS.testingSelectors.linkInBio.formPage.design
+                      .bottomTabs.poweredBy
+                  }
+                  fill={
+                    values.designPageCurrentTab ===
+                    ZLinkInBioRHSComponentEnum.poweredBy
+                      ? 'solid'
+                      : 'outline'
+                  }
+                  onClick={() => {
+                    if (!reloadBlockingRState?.isBlock) {
+                      zNavigatePushRoute(
+                        createRedirectRoute({
+                          url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
+                          params: [
+                            CONSTANTS.RouteParams.workspace.workspaceId,
+                            CONSTANTS.RouteParams.linkInBio.linkInBioId
+                          ],
+                          values: [workspaceId ?? '', linkInBioId ?? ''],
+                          routeSearchParams: {
+                            page: ZLinkInBioPageEnum.design,
+                            step: ZLinkInBioRHSComponentEnum.poweredBy
+                          }
+                        })
+                      );
+                    }
+                  }}>
+                  <ZIonText className='me-2'>
+                    Powered by {PRODUCT_NAME}
+                  </ZIonText>
+                  <ZIonIcon icon={heartOutline} />
+                </ZIonButton>
+              </div>
             </ZIonCol>
 
             <ZIonCol></ZIonCol>

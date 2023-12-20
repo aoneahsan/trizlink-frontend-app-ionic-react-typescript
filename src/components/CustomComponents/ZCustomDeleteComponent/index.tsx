@@ -37,6 +37,8 @@ import {
   type ZIonColorType
 } from '@/types/zaionsAppSettings.type';
 import classNames from 'classnames';
+import { useRecoilValue } from 'recoil';
+import { reloadBlockingRStateAtom } from '@/ZaionsStore/AppRStates';
 
 /**
  * Style files Imports go down
@@ -89,6 +91,7 @@ const ZCustomDeleteComponent: React.FC<ZCustomDeleteComponentInterface> = ({
 }) => {
   // IonActionSheet present went user went to delete a block.
   const { presentZIonActionSheet } = useZIonActionSheet();
+  const reloadBlockingRState = useRecoilValue(reloadBlockingRStateAtom);
 
   // #region comp constants
   const _style = {
@@ -100,6 +103,7 @@ const ZCustomDeleteComponent: React.FC<ZCustomDeleteComponentInterface> = ({
     <ZIonButton
       slot={slot}
       className={className}
+      disabled={reloadBlockingRState?.isBlock}
       fill='clear'
       minHeight={btnMinHeight}
       size='small'
@@ -107,31 +111,33 @@ const ZCustomDeleteComponent: React.FC<ZCustomDeleteComponentInterface> = ({
       testinglistselector={testinglistselector}
       style={_style}
       onClick={() => {
-        void presentZIonActionSheet({
-          header: actionSheetHeader,
-          subHeader: actionSheetSubHeader,
-          buttons: [
-            {
-              text: 'Delete',
-              role: 'destructive',
-              data: {
-                action: 'delete',
-                ...data
+        if (!reloadBlockingRState?.isBlock) {
+          void presentZIonActionSheet({
+            header: actionSheetHeader,
+            subHeader: actionSheetSubHeader,
+            buttons: [
+              {
+                text: 'Delete',
+                role: 'destructive',
+                data: {
+                  action: 'delete',
+                  ...data
+                }
+              },
+              {
+                text: 'Cancel',
+                role: 'cancel',
+                data: {
+                  action: 'cancel'
+                }
               }
-            },
-            {
-              text: 'Cancel',
-              role: 'cancel',
-              data: {
-                action: 'cancel'
-              }
+            ],
+            mode: 'ios',
+            onDidDismiss: ({ detail }) => {
+              void (deleteFn !== undefined && deleteFn(detail));
             }
-          ],
-          mode: 'ios',
-          onDidDismiss: ({ detail }) => {
-            void (deleteFn !== undefined && deleteFn(detail));
-          }
-        });
+          });
+        }
       }}>
       <ZIonIcon
         icon={iconName}

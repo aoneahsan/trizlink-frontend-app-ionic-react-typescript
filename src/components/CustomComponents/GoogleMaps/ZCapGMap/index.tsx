@@ -32,7 +32,16 @@ const ZCapGMap: React.FC<IZCapGMapProps> = props => {
             lat: props?.coordinates?.lat ?? GM_CONSTANTS.DEFAULT_COORS.LAT,
             lng: props?.coordinates?.lng ?? GM_CONSTANTS.DEFAULT_COORS.LNG
           },
-          zoom: props?.zoomLevel ?? GM_CONSTANTS.ZOOM_LEVEL
+          zoom: props?.zoomLevel ?? GM_CONSTANTS.ZOOM_LEVEL,
+          fullscreenControl: false,
+          scrollwheel: false,
+          panControl: false,
+          zoomControl: false,
+          scaleControl: false,
+          streetViewControl: false,
+          rotateControl: false,
+          disableDoubleClickZoom: true,
+          draggable: false
         }
       });
     })();

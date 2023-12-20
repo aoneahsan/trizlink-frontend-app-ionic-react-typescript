@@ -256,6 +256,7 @@ const ZLinkInBioAddBlockModal: React.FC<{
                   blockType:
                     LinkInBioBlockEnum[_data?.blockType as LinkInBioBlockEnum],
                   blockContent:
+                    // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
                     _data?.blockContent as LinkInBioSingleBlockContentType,
                   // icon: 'string',
                   isActive: _data?.isActive,
@@ -276,6 +277,7 @@ const ZLinkInBioAddBlockModal: React.FC<{
                   blockType:
                     LinkInBioBlockEnum[_data?.blockType as LinkInBioBlockEnum],
                   blockContent:
+                    // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
                     _data?.blockContent as LinkInBioSingleBlockContentType, // icon: 'string',
                   isActive: _data?.isActive,
                   orderNo: '100000' // as in API we always set orderNo from 0, so setting it, 100000 mean this will have the highest orderNo (hopefully)
@@ -408,8 +410,7 @@ const ZLinkInBioAddBlockModal: React.FC<{
           </ZIonText>
         </div>
 
-        {(getLinkInBioFiltersData?.settings?.addBlockModal?.Ui ??
-          addBlockModalUIEnum.minimalistic) ===
+        {getLinkInBioFiltersData?.settings?.addBlockModal?.Ui ===
           addBlockModalUIEnum.minimalistic && (
           <div className='flex flex-col ion-text-center ion-justify-content-center ion-margin-top'>
             <ZIonButton
@@ -441,8 +442,7 @@ const ZLinkInBioAddBlockModal: React.FC<{
         )}
 
         {!isLinkInBioFiltersDataFetching &&
-          (getLinkInBioFiltersData?.settings?.addBlockModal?.Ui ??
-            addBlockModalUIEnum.minimalistic) ===
+          getLinkInBioFiltersData?.settings?.addBlockModal?.Ui ===
             addBlockModalUIEnum.advance && (
             <div className=''>
               <ZIonRadioGroup
@@ -492,8 +492,7 @@ const ZLinkInBioAddBlockModal: React.FC<{
           </ZIonCol>
 
           {!isLinkInBioFiltersDataFetching &&
-            (getLinkInBioFiltersData?.settings?.addBlockModal?.Ui ??
-              addBlockModalUIEnum.minimalistic) ===
+            getLinkInBioFiltersData?.settings?.addBlockModal?.Ui ===
               addBlockModalUIEnum.advance && (
               <ZIonCol className='flex gap-2 ion-justify-content-end ion-align-items-center'>
                 <ZIonButton

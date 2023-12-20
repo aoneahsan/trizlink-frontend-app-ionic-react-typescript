@@ -73,7 +73,10 @@ const ZDragAndDrop: React.FC<ZDragAndDropType> = ({
         presentZFileUploadModal({
           _cssClass: 'file-upload-modal-size',
           _onWillDismiss: (ev: CustomEvent<OverlayEventDetail>) => {
-            if (ev.detail.role === ZIonModalActionEnum.success) {
+            if (
+              ev.detail.role === ZIonModalActionEnum.success &&
+              ev.detail.data !== undefined
+            ) {
               // Getting file data from fileUploadModal and parse it.
               const fileData = zJsonParse(String(ev.detail.data)) as {
                 fileUrl: string;

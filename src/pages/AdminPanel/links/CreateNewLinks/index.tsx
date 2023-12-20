@@ -65,7 +65,8 @@ import {
   zGenerateShortLink,
   replaceRouteParams,
   validateField,
-  zStringify
+  zStringify,
+  isZNonEmptyString
 } from '@/utils/helpers';
 import {
   API_URL_ENUM,
@@ -1130,10 +1131,21 @@ const AdminCreateNewLinkPages: React.FC = () => {
         (swsSelectedShortLink?.utmTagInfo as UTMTagInfoInterface)?.utmContent ??
         ''
     },
-
+    // favicon: {
+    //   featureImgPath:
+    //     selectedShortLink?.favicon?.featureImgPath ??
+    //     '',
+    //   featureImgUrl:
+    //     selectedShortLink?.favicon?.featureImgUrl ??
+    //     '',
+    //   featureImgFile:
+    //     selectedShortLink?.favicon?.featureImgFile ??
+    //     null
+    // }
     favicon: selectedShortLink?.favicon ?? swsSelectedShortLink?.favicon ?? ''
     // complete page fields here
   };
+
   return (
     <ZIonPage pageTitle='Create New Page'>
       {compState?.isProcessing ? (
@@ -1794,7 +1806,10 @@ const AdminCreateNewLinkPages: React.FC = () => {
                               </ZCan>
 
                               {/* Choose Domain Name */}
-                              <DomainName showSkeleton={isZFetching} />
+                              <DomainName
+                                showSkeleton={isZFetching}
+                                isEditMode={isZNonEmptyString(editLinkId)}
+                              />
                             </ZIonCol>
                           </ZIonRow>
                         </ZIonGrid>
