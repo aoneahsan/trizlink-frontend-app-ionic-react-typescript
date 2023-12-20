@@ -18,6 +18,7 @@ interface LinkInBioDescriptionFieldInterface {
   placeholder?: string;
   value?: string | null;
   name?: string;
+  showIconInSlot?: boolean;
   className?: string;
   testinglistselector?: string;
   testingselector?: string;
@@ -31,6 +32,7 @@ const LinkInBioDescriptionField: React.FC<
   placeholder = 'Your Description',
   value,
   name,
+  showIconInSlot = true,
   className,
   testinglistselector,
   testingselector,
@@ -43,18 +45,10 @@ const LinkInBioDescriptionField: React.FC<
       lines='none'
       testingselector={`${testingselector}-item`}
       testinglistselector={`${testinglistselector}-item`}>
-      <ZIonIcon
-        icon={reorderFourOutline}
-        slot='start'
-        className='mt-0 mb-6 w-7 h-7 me-2'
-        testingselector={`${testingselector}-icon`}
-        testinglistselector={`${testinglistselector}-icon`}
-      />
-
       <ZIonTextareaShort
         aria-label='description'
         rows={3}
-        className='ion-padding-start-point-8rem'
+        className='ion-padding-start-point-8rem ion-align-items-center'
         value={value}
         name={name}
         fill='outline'
@@ -62,8 +56,18 @@ const LinkInBioDescriptionField: React.FC<
         onIonChange={onIonChange}
         onIonBlur={onIonBlur}
         testingselector={`${testingselector}-textarea`}
-        testinglistselector={`${testinglistselector}-textarea`}
-      />
+        testinglistselector={`${testinglistselector}-textarea`}>
+        {showIconInSlot && (
+          <ZIonIcon
+            icon={reorderFourOutline}
+            color='medium'
+            slot='start'
+            className='w-6 h-6 pt-3 me-2'
+            testingselector={`${testingselector}-icon`}
+            testinglistselector={`${testinglistselector}-icon`}
+          />
+        )}
+      </ZIonTextareaShort>
     </ZIonItem>
   );
 };

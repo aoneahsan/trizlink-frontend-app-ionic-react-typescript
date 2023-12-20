@@ -196,9 +196,11 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
                 )}
                 {!isLibPDMusicPlatformDataFetching &&
                   linkInBioPredefinedMusicPlatformState?.map(el => {
-                    const _index = values.cardItems?.findIndex(
-                      _el => _el.musicCardType === el.type
-                    ) as number;
+                    const _index = Number(
+                      values.cardItems?.findIndex(
+                        _el => _el.musicCardType === el.type
+                      )
+                    );
                     return (
                       <LinkInBioPDButton
                         key={el.id}
@@ -212,7 +214,7 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
                         onClick={() => {
                           toggleMusicPlatformCardHandler({
                             _type: el.type,
-                            _title: el.title as string
+                            _title: el.title ?? ''
                           });
                         }}
                       />
@@ -325,7 +327,7 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
                               value={values.cardItems?.[_index].title}
                               slotImageUrl={
                                 predefinedMusicPlatformImages[
-                                  _cardItem.musicCardType as LinkInBioMusicPlatformEnum
+                                  _cardItem.musicCardType ?? ''
                                 ]
                               }
                             />

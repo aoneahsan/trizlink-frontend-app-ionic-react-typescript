@@ -13,6 +13,7 @@ import {
   ZIonInput,
   ZIonItem
 } from '@/components/ZIonComponents';
+import { type ZIonPlacementType } from '@/types/zaionsAppSettings.type';
 
 // Styles
 
@@ -20,6 +21,8 @@ import {
 interface LinkInBioTitleFieldInterface {
   placeholder?: string;
   name?: string;
+  labelPlacement?: ZIonPlacementType;
+  label?: string;
   value?: string | number | null;
   className?: string;
   showImageInSlot?: boolean;
@@ -34,6 +37,8 @@ const LinkInBioTitleField: React.FC<LinkInBioTitleFieldInterface> = ({
   placeholder = 'Your Title',
   value,
   name,
+  labelPlacement,
+  label,
   className,
   showImageInSlot = false,
   slotImageUrl,
@@ -48,32 +53,10 @@ const LinkInBioTitleField: React.FC<LinkInBioTitleFieldInterface> = ({
       lines='none'
       testingselector={`${testingselector}-item`}
       testinglistselector={`${testinglistselector}-item`}>
-      {!showImageInSlot &&
-        slotImageUrl?.trim() === null &&
-        slotImageUrl?.trim() === '' && (
-          <ZIonIcon
-            icon={reorderTwoOutline}
-            slot='start'
-            className='w-7 h-7 me-2'
-            testingselector={`${testingselector}-icon`}
-            testinglistselector={`${testinglistselector}-icon`}
-          />
-        )}
-
-      {showImageInSlot &&
-        slotImageUrl?.trim() !== null &&
-        slotImageUrl?.trim() !== '' && (
-          <ZIonImg
-            src={slotImageUrl}
-            slot='start'
-            className='w-[25px] mt-2 me-3'
-            testingselector={`${testingselector}-image`}
-            testinglistselector={`${testinglistselector}-image`}
-          />
-        )}
-
       <ZIonInput
         aria-label='title'
+        label={label}
+        labelPlacement={labelPlacement}
         minHeight='40px'
         name={name}
         className='ion-padding-start-point-8rem'
@@ -82,8 +65,31 @@ const LinkInBioTitleField: React.FC<LinkInBioTitleFieldInterface> = ({
         onIonBlur={onIonBlur}
         value={value}
         testingselector={`${testingselector}-input`}
-        testinglistselector={`${testinglistselector}-input`}
-      />
+        testinglistselector={`${testinglistselector}-input`}>
+        {!showImageInSlot &&
+          slotImageUrl?.trim() === null &&
+          slotImageUrl?.trim() === '' && (
+            <ZIonIcon
+              icon={reorderTwoOutline}
+              slot='start'
+              className='w-7 h-7 me-2'
+              testingselector={`${testingselector}-icon`}
+              testinglistselector={`${testinglistselector}-icon`}
+            />
+          )}
+
+        {showImageInSlot &&
+          slotImageUrl?.trim() !== null &&
+          slotImageUrl?.trim() !== '' && (
+            <ZIonImg
+              src={slotImageUrl}
+              slot='start'
+              className='w-[25px] me-3'
+              testingselector={`${testingselector}-image`}
+              testinglistselector={`${testinglistselector}-image`}
+            />
+          )}
+      </ZIonInput>
     </ZIonItem>
   );
 };

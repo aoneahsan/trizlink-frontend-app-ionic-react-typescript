@@ -90,6 +90,7 @@ import classes from './styles.module.css';
 import { useRecoilState } from 'recoil';
 import { reloadBlockingRStateAtom } from '@/ZaionsStore/AppRStates';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
+import { reloadBlockingTypeEnum } from '@/types/zaionsAppSettings.type';
 
 const ZLinkInBioBlocksSection = lazy(
   () =>
@@ -291,7 +292,8 @@ const LinkInBioDesignPage: React.FC = () => {
         setReloadBlockingRState(_oldValues => ({
           ..._oldValues,
           isBlock: true,
-          pageUrl: location.pathname
+          pageUrl: location.pathname,
+          type: reloadBlockingTypeEnum.libFormThemeSection
         }));
       } else if (
         !dirty &&
@@ -299,7 +301,8 @@ const LinkInBioDesignPage: React.FC = () => {
       ) {
         setReloadBlockingRState(_oldValues => ({
           ..._oldValues,
-          isBlock: false
+          isBlock: false,
+          type: null
         }));
       }
     } catch (error) {
@@ -499,7 +502,7 @@ const LinkInBioDesignPage: React.FC = () => {
                     )}
                   </ZIonRow>
 
-                  {compState?.linkInBioBlocksReorder?.isEnable === true && (
+                  {/* {compState?.linkInBioBlocksReorder?.isEnable === true && (
                     <ZIonButton
                       slot='fixed'
                       className={classNames(
@@ -516,7 +519,7 @@ const LinkInBioDesignPage: React.FC = () => {
                       }}>
                       save reorder
                     </ZIonButton>
-                  )}
+                  )} */}
                 </ZIonContent>
               </ZCustomScrollable>
             </ZIonCol>
@@ -552,11 +555,26 @@ const LinkInBioDesignPage: React.FC = () => {
               <div
                 className={classNames({
                   'w-max h-max': true,
-                  'cursor-not-allowed': reloadBlockingRState?.isBlock
+                  'cursor-not-allowed':
+                    reloadBlockingRState?.isBlock &&
+                    reloadBlockingRState?.type !== null &&
+                    reloadBlockingRState?.type !== undefined &&
+                    [
+                      reloadBlockingTypeEnum.libBlockFormSection,
+                      reloadBlockingTypeEnum.libFormThemeSection
+                    ].includes(reloadBlockingRState?.type)
                 })}>
                 <ZIonButton
                   title='Theme'
-                  disabled={reloadBlockingRState?.isBlock}
+                  disabled={
+                    reloadBlockingRState?.isBlock &&
+                    reloadBlockingRState?.type !== null &&
+                    reloadBlockingRState?.type !== undefined &&
+                    [
+                      reloadBlockingTypeEnum.libBlockFormSection,
+                      reloadBlockingTypeEnum.libFormThemeSection
+                    ].includes(reloadBlockingRState?.type)
+                  }
                   className='ion-text-capitalize'
                   fill={
                     values.designPageCurrentTab ===
@@ -595,11 +613,26 @@ const LinkInBioDesignPage: React.FC = () => {
               <div
                 className={classNames({
                   'w-max h-max': true,
-                  'cursor-not-allowed': reloadBlockingRState?.isBlock
+                  'cursor-not-allowed':
+                    reloadBlockingRState?.isBlock &&
+                    reloadBlockingRState?.type !== null &&
+                    reloadBlockingRState?.type !== undefined &&
+                    [
+                      reloadBlockingTypeEnum.libBlockFormSection,
+                      reloadBlockingTypeEnum.libFormThemeSection
+                    ].includes(reloadBlockingRState?.type)
                 })}>
                 <ZIonButton
                   title='Blocks'
-                  disabled={reloadBlockingRState?.isBlock}
+                  disabled={
+                    reloadBlockingRState?.isBlock &&
+                    reloadBlockingRState?.type !== null &&
+                    reloadBlockingRState?.type !== undefined &&
+                    [
+                      reloadBlockingTypeEnum.libBlockFormSection,
+                      reloadBlockingTypeEnum.libFormThemeSection
+                    ].includes(reloadBlockingRState?.type)
+                  }
                   className='ion-text-capitalize'
                   testingselector={
                     CONSTANTS.testingSelectors.linkInBio.formPage.design
@@ -640,7 +673,14 @@ const LinkInBioDesignPage: React.FC = () => {
               <div
                 className={classNames({
                   'w-max h-max': true,
-                  'cursor-not-allowed': reloadBlockingRState?.isBlock
+                  'cursor-not-allowed':
+                    reloadBlockingRState?.isBlock &&
+                    reloadBlockingRState?.type !== null &&
+                    reloadBlockingRState?.type !== undefined &&
+                    [
+                      reloadBlockingTypeEnum.libBlockFormSection,
+                      reloadBlockingTypeEnum.libFormThemeSection
+                    ].includes(reloadBlockingRState?.type)
                 })}>
                 <ZIonButton
                   title='Setting'
@@ -683,12 +723,27 @@ const LinkInBioDesignPage: React.FC = () => {
               <div
                 className={classNames({
                   'w-max h-max': true,
-                  'cursor-not-allowed': reloadBlockingRState?.isBlock
+                  'cursor-not-allowed':
+                    reloadBlockingRState?.isBlock &&
+                    reloadBlockingRState?.type !== null &&
+                    reloadBlockingRState?.type !== undefined &&
+                    [
+                      reloadBlockingTypeEnum.libBlockFormSection,
+                      reloadBlockingTypeEnum.libFormThemeSection
+                    ].includes(reloadBlockingRState?.type)
                 })}>
                 <ZIonButton
                   title={`Powered by ${PRODUCT_NAME} `}
                   className='ion-text-capitalize'
-                  disabled={reloadBlockingRState?.isBlock}
+                  disabled={
+                    reloadBlockingRState?.isBlock &&
+                    reloadBlockingRState?.type !== null &&
+                    reloadBlockingRState?.type !== undefined &&
+                    [
+                      reloadBlockingTypeEnum.libBlockFormSection,
+                      reloadBlockingTypeEnum.libFormThemeSection
+                    ].includes(reloadBlockingRState?.type)
+                  }
                   testingselector={
                     CONSTANTS.testingSelectors.linkInBio.formPage.design
                       .bottomTabs.poweredBy

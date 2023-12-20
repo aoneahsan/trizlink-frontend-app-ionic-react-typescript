@@ -91,29 +91,35 @@ const LinkInBioLinkField: React.FC<LinkInBioLinkFieldInterface> = ({
         onIonChange={onIonChange}
         onIonBlur={onIonBlur}
         value={value}
-        className='ion-padding-start-point-8rem'
+        className='ion-padding-start-point-8rem ion-padding-end-point-2rem'
         testingselector={`${testingselector}-input`}
-        testinglistselector={`${testinglistselector}-input`}
-      />
-
-      {showRefreshBtn && (
-        <ZIonButton
-          fill='clear'
-          color='dark'
+        testinglistselector={`${testinglistselector}-input`}>
+        {/* <ZIonIcon
           slot='end'
-          height='35px'
-          className='ion-no-padding ms-2'
-          onClick={RefreshBtnClickFn}
-          testingselector={`${testingselector}-refresh-btn`}
-          testinglistselector={`${testinglistselector}-refresh-btn`}
-          style={refreshBtnStyle}>
-          <ZIonIcon
-            icon={refreshCircleOutline}
-            className='w-7 h-7'
-            color='primary'
-          />
-        </ZIonButton>
-      )}
+          icon={refreshCircleOutline}
+          className='w-7 h-7'
+          aria-hidden='true'
+          color='primary'
+        /> */}
+        {showRefreshBtn && (
+          <ZIonButton
+            fill='clear'
+            color='dark'
+            slot='end'
+            height='100%'
+            className='ion-no-padding ms-2'
+            onClick={RefreshBtnClickFn}
+            testingselector={`${testingselector}-refresh-btn`}
+            testinglistselector={`${testinglistselector}-refresh-btn`}
+            style={refreshBtnStyle}>
+            <ZIonIcon
+              icon={refreshCircleOutline}
+              className='w-7 h-7'
+              color='primary'
+            />
+          </ZIonButton>
+        )}
+      </ZIonInput>
     </ZIonItem>
   );
 };

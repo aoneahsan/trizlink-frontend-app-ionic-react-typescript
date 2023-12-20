@@ -10,7 +10,6 @@ import { type ItemReorderEventDetail } from '@ionic/react';
 import {
   ZIonButton,
   ZIonIcon,
-  ZIonItem,
   ZIonReorder,
   ZIonReorderGroup
 } from '@/components/ZIonComponents';
@@ -93,18 +92,21 @@ const LinkInBioCarouselCardField: React.FC = () => {
                 </ZIonButton>
                 {values.cardItems?.length != null
                   ? values.cardItems.map((_cardItem, _index) => (
-                      <ZIonItem
-                        key={_index}
-                        lines='none'
-                        className='py-3 my-3 border rounded-md shadow-md zaions-linkInBio-block z-ion-bg-transparent'
-                        testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.carouselCard.cardItem}-${_index}`}
-                        testingselector={
-                          CONSTANTS.testingSelectors.linkInBio.formPage.design
-                            .blockForm.fields.carouselCard.cardItem
-                        }>
+                      <div
+                        className='flex px-3 py-3 my-3 border rounded-md shadow-md zaions-linkInBio-block z-ion-bg-transparent ion-align-items-center'
+                        key={_index}>
+                        {/* <ZIonItem
+                          key={_index}
+                          lines='none'
+                          className='py-3 my-3 border rounded-md shadow-md zaions-linkInBio-block z-ion-bg-transparent'
+                          testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.carouselCard.cardItem}-${_index}`}
+                          testingselector={
+                            CONSTANTS.testingSelectors.linkInBio.formPage.design
+                              .blockForm.fields.carouselCard.cardItem
+                          }> */}
                         <ZIonReorder
                           slot='start'
-                          className='ms-3 me-3'>
+                          className='me-4'>
                           <ZIonIcon
                             icon={appsOutline}
                             color='dark'
@@ -112,7 +114,7 @@ const LinkInBioCarouselCardField: React.FC = () => {
                           />
                         </ZIonReorder>
 
-                        <div className='w-full pe-3'>
+                        <div className='w-full'>
                           <LinkInBioLinkField
                             name={`cardItems.${_index}.target.url`}
                             onIonChange={handleChange}
@@ -137,7 +139,7 @@ const LinkInBioCarouselCardField: React.FC = () => {
                           />
 
                           <LinkInBioTitleField
-                            className='mt-2'
+                            className='mt-3'
                             name={`cardItems.${_index}.title`}
                             onIonChange={handleChange}
                             onIonBlur={handleBlur}
@@ -150,7 +152,8 @@ const LinkInBioCarouselCardField: React.FC = () => {
                           />
 
                           <LinkInBioDescriptionField
-                            className='mt-2'
+                            className='mt-2  max-w-[100%]'
+                            showIconInSlot={false}
                             name={`cardItems.${_index}.description`}
                             onIonChange={handleChange}
                             onIonBlur={handleBlur}
@@ -168,7 +171,7 @@ const LinkInBioCarouselCardField: React.FC = () => {
                         <ZCustomDeleteComponent
                           slot='end'
                           iconColor='danger'
-                          className='ion-no-padding ms-3 me-1'
+                          className='ion-no-padding'
                           testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.carouselCard.deleteBtn}-${_index}`}
                           testingselector={
                             CONSTANTS.testingSelectors.linkInBio.formPage.design
@@ -184,7 +187,8 @@ const LinkInBioCarouselCardField: React.FC = () => {
                             }
                           }}
                         />
-                      </ZIonItem>
+                        {/* </ZIonItem> */}
+                      </div>
                     ))
                   : ''}
               </>

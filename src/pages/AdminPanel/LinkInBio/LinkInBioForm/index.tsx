@@ -109,6 +109,7 @@ import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import ZLinkInBioFormSettingsModal from '@/components/InPageComponents/ZaionsModals/LinkInBio/SettingsModal';
 import { reloadBlockingRStateAtom } from '@/ZaionsStore/AppRStates';
+import { reloadBlockingTypeEnum } from '@/types/zaionsAppSettings.type';
 
 const LinkInBioDesignPage = lazy(
   () => import('@/pages/AdminPanel/LinkInBio/LinkInBioForm/Design')
@@ -560,10 +561,24 @@ const ZaionsLinkInBioForm: React.FC = () => {
                               className={classNames({
                                 'w-max h-max': true,
                                 'cursor-not-allowed':
-                                  reloadBlockingRState?.isBlock
+                                  reloadBlockingRState?.isBlock &&
+                                  reloadBlockingRState?.type !== null &&
+                                  reloadBlockingRState?.type !== undefined &&
+                                  [
+                                    reloadBlockingTypeEnum.libBlockFormSection,
+                                    reloadBlockingTypeEnum.libFormThemeSection
+                                  ].includes(reloadBlockingRState?.type)
                               })}>
                               <ZIonButton
-                                disabled={reloadBlockingRState?.isBlock}
+                                disabled={
+                                  reloadBlockingRState?.isBlock &&
+                                  reloadBlockingRState?.type !== null &&
+                                  reloadBlockingRState?.type !== undefined &&
+                                  [
+                                    reloadBlockingTypeEnum.libBlockFormSection,
+                                    reloadBlockingTypeEnum.libFormThemeSection
+                                  ].includes(reloadBlockingRState?.type)
+                                }
                                 className='ion-text-capitalize ion-no-margin'
                                 color='secondary'
                                 testingselector={
@@ -695,19 +710,37 @@ const ZaionsLinkInBioForm: React.FC = () => {
                               value={linkInBioFromPageState.page}
                               className={classNames({
                                 'cursor-not-allowed':
-                                  reloadBlockingRState?.isBlock
+                                  reloadBlockingRState?.isBlock &&
+                                  reloadBlockingRState?.type !== null &&
+                                  reloadBlockingRState?.type !== undefined &&
+                                  [
+                                    reloadBlockingTypeEnum.libBlockFormSection,
+                                    reloadBlockingTypeEnum.libFormThemeSection
+                                  ].includes(reloadBlockingRState?.type)
                               })}>
                               {/* Design */}
                               <ZIonSegmentButton
                                 value='design'
-                                disabled={reloadBlockingRState?.isBlock}
+                                disabled={
+                                  reloadBlockingRState?.isBlock &&
+                                  reloadBlockingRState?.type !== null &&
+                                  reloadBlockingRState?.type !== undefined &&
+                                  [
+                                    reloadBlockingTypeEnum.libBlockFormSection,
+                                    reloadBlockingTypeEnum.libFormThemeSection
+                                  ].includes(reloadBlockingRState?.type)
+                                }
                                 className='ion-text-capitalize'
                                 testingselector={
                                   CONSTANTS.testingSelectors.linkInBio.formPage
                                     .topBar.tab.design
                                 }
                                 onClick={() => {
-                                  if (!reloadBlockingRState?.isBlock) {
+                                  if (
+                                    !reloadBlockingRState?.isBlock &&
+                                    reloadBlockingRState.type !==
+                                      reloadBlockingTypeEnum.libFormThemeSection
+                                  ) {
                                     zNavigatePushRoute(
                                       createRedirectRoute({
                                         url: isZNonEmptyString(workspaceId)
@@ -747,7 +780,15 @@ const ZaionsLinkInBioForm: React.FC = () => {
 
                               {/* Share settings */}
                               <ZIonSegmentButton
-                                disabled={reloadBlockingRState?.isBlock}
+                                disabled={
+                                  reloadBlockingRState?.isBlock &&
+                                  reloadBlockingRState?.type !== null &&
+                                  reloadBlockingRState?.type !== undefined &&
+                                  [
+                                    reloadBlockingTypeEnum.libBlockFormSection,
+                                    reloadBlockingTypeEnum.libFormThemeSection
+                                  ].includes(reloadBlockingRState?.type)
+                                }
                                 value='shareSettings'
                                 className='ion-text-capitalize'
                                 testingselector={
@@ -841,7 +882,15 @@ const ZaionsLinkInBioForm: React.FC = () => {
 
                               {/* Lead */}
                               <ZIonSegmentButton
-                                disabled={reloadBlockingRState?.isBlock}
+                                disabled={
+                                  reloadBlockingRState?.isBlock &&
+                                  reloadBlockingRState?.type !== null &&
+                                  reloadBlockingRState?.type !== undefined &&
+                                  [
+                                    reloadBlockingTypeEnum.libBlockFormSection,
+                                    reloadBlockingTypeEnum.libFormThemeSection
+                                  ].includes(reloadBlockingRState?.type)
+                                }
                                 value='lead'
                                 className='ion-text-capitalize'
                                 testingselector={
@@ -849,7 +898,15 @@ const ZaionsLinkInBioForm: React.FC = () => {
                                     .topBar.tab.lead
                                 }
                                 onClick={() => {
-                                  if (!reloadBlockingRState?.isBlock) {
+                                  if (
+                                    !reloadBlockingRState?.isBlock &&
+                                    reloadBlockingRState?.type !== null &&
+                                    reloadBlockingRState?.type !== undefined &&
+                                    [
+                                      reloadBlockingTypeEnum.libBlockFormSection,
+                                      reloadBlockingTypeEnum.libFormThemeSection
+                                    ].includes(reloadBlockingRState?.type)
+                                  ) {
                                     zNavigatePushRoute(
                                       createRedirectRoute({
                                         url: isZNonEmptyString(workspaceId)
@@ -889,7 +946,15 @@ const ZaionsLinkInBioForm: React.FC = () => {
                               {/* Block analytics */}
                               <ZIonSegmentButton
                                 value='block-analytics'
-                                disabled={reloadBlockingRState?.isBlock}
+                                disabled={
+                                  reloadBlockingRState?.isBlock &&
+                                  reloadBlockingRState?.type !== null &&
+                                  reloadBlockingRState?.type !== undefined &&
+                                  [
+                                    reloadBlockingTypeEnum.libBlockFormSection,
+                                    reloadBlockingTypeEnum.libFormThemeSection
+                                  ].includes(reloadBlockingRState?.type)
+                                }
                                 className='ion-text-capitalize'
                                 testingselector={
                                   CONSTANTS.testingSelectors.linkInBio.formPage

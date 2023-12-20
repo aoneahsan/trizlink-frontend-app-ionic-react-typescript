@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React, { Suspense, useMemo } from 'react';
+import React, { Suspense, useEffect, useMemo } from 'react';
 import { useLocation, useParams } from 'react-router';
 
 /**
@@ -28,7 +28,7 @@ import {
   trashBinOutline,
   wifiOutline
 } from 'ionicons/icons';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
 import { type OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
@@ -97,6 +97,7 @@ import {
   createRedirectRoute,
   extractInnerData,
   formatReactSelectOption,
+  isValidUrl,
   isZNonEmptyString,
   isZNonEmptyStrings,
   zStringify
@@ -130,7 +131,10 @@ import {
 } from '@/types/AdminPanel/linkInBioType/blockTypes';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import { type ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
-import { type ZGenericObject } from '@/types/zaionsAppSettings.type';
+import {
+  reloadBlockingTypeEnum,
+  type ZGenericObject
+} from '@/types/zaionsAppSettings.type';
 
 /**
  * Recoil State Imports go down
@@ -172,6 +176,8 @@ import {
 } from '@/assets/images';
 import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type';
 import LinkInBioDateTimeField from '@/components/LinkInBioComponents/Form/DateTimeField';
+import { zGetPageMetadata } from '@/utils/helpers/apiHelpers';
+import { reloadBlockingRStateAtom } from '@/ZaionsStore/AppRStates';
 
 /**
  * Component props type go down
@@ -217,6 +223,8 @@ const ZLinkInBioBlocksForm: React.FC = () => {
   // const [linkInBioBlockState, setLinkInBioBlockState] = useRecoilState(
   // LinkInBioBlocksRState
   // );
+
+  const setReloadBlockingRState = useSetRecoilState(reloadBlockingRStateAtom);
   // #endregion
 
   // getting search param from url with the help of 'qs' package.
@@ -740,6 +748,25 @@ const ZLinkInBioBlocksForm: React.FC = () => {
           // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
           transform: `rotate(${values?.customAppearance?.background?.bgGradientColors?.direction}deg)`
         };
+
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        useEffect(() => {
+          if (dirty) {
+            setReloadBlockingRState(_oldValues => ({
+              ..._oldValues,
+              isBlock: true,
+              pageUrl: location.pathname,
+              type: reloadBlockingTypeEnum.libBlockFormSection
+            }));
+          } else if (!dirty) {
+            setReloadBlockingRState(_oldValues => ({
+              ..._oldValues,
+              isBlock: false,
+              type: null
+            }));
+          }
+        }, [dirty]);
+
         return (
           <>
             {/* {dirty && (
@@ -1167,6 +1194,25 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                       name='target.url'
                       value={values.target.url}
                       onIonChange={handleChange}
+                      RefreshBtnClickFn={() => {
+                        if (isValidUrl(values.target.url)) {
+                          void (async () => {
+                            const _result = await zGetPageMetadata(
+                              values.target.url
+                            );
+
+                            if (isZNonEmptyString(_result?.title)) {
+                              console.log({ c: _result });
+
+                              void setFieldValue(
+                                'title',
+                                _result?.title,
+                                false
+                              );
+                            }
+                          })();
+                        }
+                      }}
                       testingselector={
                         CONSTANTS.testingSelectors.linkInBio.formPage.design
                           .blockForm.fields.linkInput
@@ -1283,6 +1329,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                     className='mt-2'>
                     <LinkInBioDescriptionField
                       name='description'
+                      showIconInSlot={false}
                       value={values.description}
                       onIonChange={handleChange}
                       testingselector={

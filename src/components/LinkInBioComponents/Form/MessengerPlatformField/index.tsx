@@ -14,7 +14,6 @@ import LinkInBioTitleField from '../TitleField';
 import {
   ZIonButton,
   ZIonIcon,
-  ZIonItem,
   ZIonReorder,
   ZIonReorderGroup,
   ZIonSpinner
@@ -202,9 +201,11 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
                 )}
                 {!isLibPDMessengerPlatformDataFetching &&
                   linkInBioPredefinedMessengerPlatformState?.map(el => {
-                    const _index = values.cardItems?.findIndex(
-                      _el => _el.messengerCardType === el.type
-                    ) as number;
+                    const _index = Number(
+                      values.cardItems?.findIndex(
+                        _el => _el.messengerCardType === el.type
+                      )
+                    );
                     return (
                       <LinkInBioPDButton
                         key={el.id}
@@ -218,7 +219,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
                         onClick={() => {
                           toggleMusicPlatformCardHandler({
                             _type: el.type,
-                            _title: el.title as string
+                            _title: el.title ?? ''
                           });
                         }}
                       />
@@ -288,18 +289,21 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
               values.cardItems?.length !== undefined
                 ? values.cardItems.map((_cardItem, _index) => {
                     return (
-                      <ZIonItem
-                        key={_index}
-                        lines='none'
-                        className='pt-3 pb-3 my-4 border rounded-md shadow-md zaions-linkInBio-block z-ion-bg-transparent'
-                        testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.cardItem}-${_index}`}
-                        testingselector={
-                          CONSTANTS.testingSelectors.linkInBio.formPage.design
-                            .blockForm.fields.messenger.cardItem
-                        }>
+                      <div
+                        className='flex px-3 pt-3 pb-3 my-4 border rounded-md shadow-md ion-align-items-center zaions-linkInBio-block z-ion-bg-transparent'
+                        key={_index}>
+                        {/* <ZIonItem
+                          key={_index}
+                          lines='none'
+                          className='pt-3 pb-3 my-4 border rounded-md shadow-md zaions-linkInBio-block z-ion-bg-transparent'
+                          testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.cardItem}-${_index}`}
+                          testingselector={
+                            CONSTANTS.testingSelectors.linkInBio.formPage.design
+                              .blockForm.fields.messenger.cardItem
+                          }> */}
                         <ZIonReorder
                           slot='start'
-                          className='ms-1 me-5'>
+                          className='me-3'>
                           <ZIonIcon
                             icon={appsOutline}
                             color='dark'
@@ -464,7 +468,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
                         <ZCustomDeleteComponent
                           slot='end'
                           iconColor='danger'
-                          className='ion-no-padding ms-5 me-1'
+                          className='ion-no-padding ms-3'
                           testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.deleteBtn}-${_index}`}
                           testingselector={
                             CONSTANTS.testingSelectors.linkInBio.formPage.design
@@ -480,7 +484,8 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
                             }
                           }}
                         />
-                      </ZIonItem>
+                        {/* </ZIonItem> */}
+                      </div>
                     );
                   })
                 : ''}

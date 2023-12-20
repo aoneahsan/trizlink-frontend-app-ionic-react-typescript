@@ -12,7 +12,6 @@ import LinkInBioTitleField from '../TitleField';
 import {
   ZIonButton,
   ZIonIcon,
-  ZIonItem,
   ZIonReorder,
   ZIonReorderGroup
 } from '@/components/ZIonComponents';
@@ -87,18 +86,21 @@ const LinkInBioQAndACardField: React.FC = () => {
                 </ZIonButton>
                 {values.cardItems !== null && values.cardItems !== undefined
                   ? values.cardItems.map((_cardItem, _index) => (
-                      <ZIonItem
-                        key={_index}
-                        lines='none'
-                        className='pb-3 my-4 border rounded-md shadow-md zaions-linkInBio-block z-ion-bg-transparent'
-                        testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.QAndA.cardItem}-${_index}`}
-                        testingselector={
-                          CONSTANTS.testingSelectors.linkInBio.formPage.design
-                            .blockForm.fields.QAndA.cardItem
-                        }>
+                      <div
+                        className='flex px-3 py-3 my-4 border rounded-md shadow-md ion-align-items-center zaions-linkInBio-block z-ion-bg-transparent'
+                        key={_index}>
+                        {/* <ZIonItem
+                          key={_index}
+                          lines='none'
+                          className='pb-3 my-4 border rounded-md shadow-md zaions-linkInBio-block z-ion-bg-transparent'
+                          testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.QAndA.cardItem}-${_index}`}
+                          testingselector={
+                            CONSTANTS.testingSelectors.linkInBio.formPage.design
+                              .blockForm.fields.QAndA.cardItem
+                          }> */}
                         <ZIonReorder
                           slot='start'
-                          className='ms-3'>
+                          className='me-2'>
                           <ZIonIcon
                             icon={appsOutline}
                             color='dark'
@@ -143,7 +145,7 @@ const LinkInBioQAndACardField: React.FC = () => {
                         <ZCustomDeleteComponent
                           slot='end'
                           iconColor='danger'
-                          className='ion-no-padding me-1'
+                          className='ion-no-padding ms-2'
                           testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.QAndA.deleteBtn}-${_index}`}
                           testingselector={
                             CONSTANTS.testingSelectors.linkInBio.formPage.design
@@ -159,7 +161,8 @@ const LinkInBioQAndACardField: React.FC = () => {
                             }
                           }}
                         />
-                      </ZIonItem>
+                        {/* </ZIonItem> */}
+                      </div>
                     ))
                   : ''}
               </>

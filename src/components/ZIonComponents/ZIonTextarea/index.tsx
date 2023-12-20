@@ -1,5 +1,5 @@
 // Core Import
-import React from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
 import { IonTextarea } from '@ionic/react';
@@ -15,6 +15,7 @@ import { zCreateElementTestingSelector } from '@/utils/helpers';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 import ZInputLengthConstant from '@/utils/constants/InputLenghtConstant';
 interface ZIonTextareaType {
+  children?: ReactNode;
   className?: string;
   autoGrow?: boolean;
   autocapitalize?: 'off' | 'none' | 'on' | 'sentences' | 'words' | 'characters';
@@ -91,8 +92,9 @@ const ZIonTextarea: React.FC<ZIonTextareaType> = (props: ZIonTextareaType) => {
       {...props}
       onIonInput={props.onIonChange}
       {..._testingSelector}
-      {..._testinglistselector}
-    />
+      {..._testinglistselector}>
+      {props.children}
+    </IonTextarea>
   );
 };
 
@@ -103,8 +105,9 @@ export const ZIonTextareaShort: React.FC<ZIonTextareaType> = props => {
       counter={true}
       maxlength={ZInputLengthConstant.defaultShortTextMaxLength}
       rows={3}
-      autoGrow={true}
-    />
+      autoGrow={true}>
+      {props.children}
+    </ZIonTextarea>
   );
 };
 
@@ -115,8 +118,9 @@ export const ZIonTextareaLong: React.FC<ZIonTextareaType> = props => {
       counter={true}
       maxlength={ZInputLengthConstant.defaultLongTextMaxLength}
       rows={5}
-      autoGrow={true}
-    />
+      autoGrow={true}>
+      {props.children}
+    </ZIonTextarea>
   );
 };
 

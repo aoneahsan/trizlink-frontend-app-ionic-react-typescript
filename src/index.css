@@ -436,9 +436,9 @@ span.new {
   background: rgba(var(--ion-color-primary-rgb), 0.6);
 }
 
-.zaions__light_bg_opacity_point_2 {
-  background: rgba(var(--ion-color-light-rgb), 0.2) !important;
-  --background: rgba(var(--ion-color-light-rgb), 0.2) !important;
+.zaions__light_bg_opacity_point_4 {
+  background: rgba(var(--ion-color-light-rgb), 0.4) !important;
+  --background: rgba(var(--ion-color-light-rgb), 0.4) !important;
 }
 
 .zaions__light_bg_opacity_point_8 {
@@ -1022,6 +1022,14 @@ ion-modal.zaions__modal_w100 {
 
 .ion-padding-end-0 {
   --padding-end: 0;
+}
+
+.ion-padding-end-point-2rem {
+  --padding-end: 0.2rem !important;
+}
+
+.ion-padding-end-point-3rem {
+  --padding-end: 0.3rem !important;
 }
 
 .hover\:outline-sand {

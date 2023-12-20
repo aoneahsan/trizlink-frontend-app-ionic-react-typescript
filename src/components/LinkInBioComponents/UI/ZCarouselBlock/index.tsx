@@ -8,20 +8,22 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
+import { Navigation, Pagination, Scrollbar, Grid } from 'swiper/modules';
+import { ZIonLabel, ZIonText } from '@/components/ZIonComponents';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 /**
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
 import ZCustomCard from '@/components/CustomComponents/ZCustomCard';
-import { ZMediaEnum } from '@/types/zaionsAppSettings.type';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Scrollbar, Grid } from 'swiper/modules';
+import classNames from 'classnames';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
+import { isZNonEmptyString } from '@/utils/helpers';
 
 /**
  * Type Imports go down
@@ -30,8 +32,10 @@ import { Navigation, Pagination, Scrollbar, Grid } from 'swiper/modules';
 import {
   LinkInBioCardViewEnum,
   type linkInBioBlockCardItemInterface,
-  type LinkInBioCardStyleEnum
+  type LinkInBioCardStyleEnum,
+  type LinkInBioBlockAnimationEnum
 } from '@/types/AdminPanel/linkInBioType/blockTypes';
+import { ZMediaEnum } from '@/types/zaionsAppSettings.type';
 
 /**
  * Recoil State Imports go down
@@ -43,7 +47,6 @@ import {
  * ? Import of style sheet is a style import
  * */
 import 'swiper/css';
-import { ZIonLabel, ZIonText } from '@/components/ZIonComponents';
 
 /**
  * Images Imports go down
@@ -58,6 +61,7 @@ interface ZCarouselBlockInterface {
   data?: linkInBioBlockCardItemInterface[];
   cardStyle?: LinkInBioCardStyleEnum;
   view?: LinkInBioCardViewEnum;
+  animationType?: LinkInBioBlockAnimationEnum;
 }
 
 /**
@@ -68,20 +72,24 @@ interface ZCarouselBlockInterface {
 const ZCarouselBlock: React.FC<ZCarouselBlockInterface> = ({
   data,
   cardStyle,
-  view
+  view,
+  animationType
 }) => {
   return (
-    <>
-      {view === LinkInBioCardViewEnum.carousel ? (
-        <Swiper
-          spaceBetween={10}
-          modules={[Navigation, Pagination, Scrollbar, Grid]}
-          // slidesPerView={1}
-          // onSlideChange={() => {}}
-          // onSwiper={(_) => {}}
-          className='w-full h-full'>
-          {data !== undefined ? (
-            data?.map((element, index) => {
+    <div
+      className={classNames(animationType, {
+        'animated ': isZNonEmptyString(animationType)
+      })}>
+      {data !== undefined && data !== null && data?.length > 0 ? (
+        view === LinkInBioCardViewEnum.carousel ? (
+          <Swiper
+            spaceBetween={10}
+            modules={[Navigation, Pagination, Scrollbar, Grid]}
+            // slidesPerView={1}
+            // onSlideChange={() => {}}
+            // onSwiper={(_) => {}}
+            className='w-full h-full'>
+            {data?.map((element, index) => {
               return (
                 <SwiperSlide
                   key={index}
@@ -95,17 +103,11 @@ const ZCarouselBlock: React.FC<ZCarouselBlockInterface> = ({
                   />
                 </SwiperSlide>
               );
-            })
-          ) : (
-            <SwiperSlide>
-              <ZCustomCard mediaType={ZMediaEnum.carousel} />
-            </SwiperSlide>
-          )}
-        </Swiper>
-      ) : view === LinkInBioCardViewEnum.list ? (
-        <ZIonLabel className=''>
-          {data !== undefined && data !== undefined && data?.length > 0 ? (
-            data?.map((element, index) => {
+            })}
+          </Swiper>
+        ) : view === LinkInBioCardViewEnum.list ? (
+          <ZIonLabel className=''>
+            {data?.map((element, index) => {
               return (
                 <div
                   className='mt-3'
@@ -120,14 +122,15 @@ const ZCarouselBlock: React.FC<ZCarouselBlockInterface> = ({
                   />
                 </div>
               );
-            })
-          ) : (
-            <ZCustomCard mediaType={ZMediaEnum.carousel} />
-          )}
-        </ZIonLabel>
+            })}
+          </ZIonLabel>
+        ) : (
+          <ZIonText>Not a valid view</ZIonText>
+        )
       ) : (
-        <ZIonText>Not a valid view</ZIonText>
+        <ZCustomCard mediaType={ZMediaEnum.carousel} />
       )}
+      {}
 
       {/* <ZIonLabel className='flex-col w-full gap-3'>
         {data !== undefined ? (
@@ -147,7 +150,7 @@ const ZCarouselBlock: React.FC<ZCarouselBlockInterface> = ({
           <ZCustomCard mediaType={ZMediaEnum.carousel} />
         )}
       </ZIonLabel> */}
-    </>
+    </div>
   );
 };
 

@@ -66,3 +66,12 @@ export interface ZUIAvatarApiDefaultParamsInterface {
   fontSize?: string;
   length?: string;
 }
+
+export interface PageMetadata {
+  title?: string;
+  meta_description?: string;
+  meta_keywords?: string;
+  favicon?: string;
+  social_image?: string;
+  error?: string;
+}

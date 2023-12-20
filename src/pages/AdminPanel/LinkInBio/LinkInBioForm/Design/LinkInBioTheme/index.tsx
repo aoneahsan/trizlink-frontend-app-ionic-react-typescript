@@ -50,7 +50,6 @@ import {
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
-  type LinkInBioBgGradientColorsInterface,
   LinkInBioButtonTypeEnum,
   type LinkInBioPredefinedThemeType,
   LinkInBioThemeBackgroundEnum,
@@ -100,7 +99,6 @@ const ZaionsColorPiker = lazy(
  * */
 
 const ZLinkInBioThemeSection: React.FC = () => {
-  console.count('log count of ZLinkInBioThemeSection');
   const { values, setFieldValue } = useFormikContext<LinkInBioType>();
 
   // #region Recoil state.
@@ -238,8 +236,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                     onClick={() => {
                       const _bg = el.background as LinkInBioThemeBackgroundType;
 
-                      const _bgGradient =
-                        _bg.bgGradientColors as LinkInBioBgGradientColorsInterface;
+                      const _bgGradient = _bg.bgGradientColors;
                       if (
                         values.theme.background?.bgType !== _bg?.bgType ||
                         values.theme.background?.enableBgImage !==
@@ -322,7 +319,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                   <ZaionsColorPiker
                     showSkeleton={isZFetching}
                     name='theme.background.bgSolidColor'
-                    value={values.theme.background.bgSolidColor as string}
+                    value={values.theme.background.bgSolidColor ?? ''}
                     // eslint-disable-next-line @typescript-eslint/no-misused-promises
                     setFieldValueFn={setFieldValue}
                     testingselector={
@@ -346,7 +343,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                       setFieldValueFn={setFieldValue}
                       value={
                         values?.theme.background?.bgGradientColors
-                          ?.startColor as string
+                          ?.startColor ?? ''
                       }
                       testingselector={
                         CONSTANTS.testingSelectors.linkInBio.formPage.design
@@ -396,8 +393,8 @@ const ZLinkInBioThemeSection: React.FC = () => {
                           .theme.bg.gColors.endColorInput
                       }
                       value={
-                        values?.theme?.background?.bgGradientColors
-                          ?.endColor as string
+                        values?.theme?.background?.bgGradientColors?.endColor ??
+                        ''
                       }
                       closeIconOnChangeFn={() => {
                         void setFieldValue(
@@ -421,29 +418,30 @@ const ZLinkInBioThemeSection: React.FC = () => {
           )}
 
           {/* Add gradient btn */}
-          {values?.theme?.background?.bgType ===
-            LinkInBioThemeBackgroundEnum.solidColor && (
-            <ZIonButton
-              className='mt-3 ion-text-capitalize ms-4'
-              height='40px'
-              testingselector={
-                CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.bg
-                  .addGradientBtn
-              }
-              onClick={() => {
-                void setFieldValue(
-                  'theme.background.bgType',
-                  LinkInBioThemeBackgroundEnum.gradient,
-                  false
-                );
-              }}>
-              <ZIonIcon
-                icon={addOutline}
-                className='pe-2'
-              />
-              <ZIonText>Add gradient</ZIonText>
-            </ZIonButton>
-          )}
+          {!isZFetching &&
+            values?.theme?.background?.bgType ===
+              LinkInBioThemeBackgroundEnum.solidColor && (
+              <ZIonButton
+                className='mt-3 ion-text-capitalize ms-4'
+                height='40px'
+                testingselector={
+                  CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.bg
+                    .addGradientBtn
+                }
+                onClick={() => {
+                  void setFieldValue(
+                    'theme.background.bgType',
+                    LinkInBioThemeBackgroundEnum.gradient,
+                    false
+                  );
+                }}>
+                <ZIonIcon
+                  icon={addOutline}
+                  className='pe-2'
+                />
+                <ZIonText>Add gradient</ZIonText>
+              </ZIonButton>
+            )}
         </ZIonGrid>
       </ZIonCol>
       {/* 🖌️ Background */}
@@ -474,9 +472,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
               <ZaionsColorPiker
                 showSkeleton={isZFetching}
                 name='theme.button.background.bgSolidColor'
-                value={
-                  values?.theme?.button?.background?.bgSolidColor as string
-                }
+                value={values?.theme?.button?.background?.bgSolidColor ?? ''}
                 // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 setFieldValueFn={setFieldValue}
                 testingselector={
@@ -505,7 +501,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                   }
                   value={
                     values?.theme?.button?.background?.bgGradientColors
-                      ?.startColor as string
+                      ?.startColor ?? ''
                   }
                 />
               </Suspense>
@@ -550,7 +546,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                   showSkeleton={isZFetching}
                   value={
                     values?.theme?.button?.background?.bgGradientColors
-                      ?.endColor as string
+                      ?.endColor ?? ''
                   }
                   testingselector={
                     CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
@@ -869,7 +865,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                   <ZaionsColorPiker
                     showSkeleton={isZFetching}
                     name='theme.button.shadowColor'
-                    value={values?.theme?.button?.shadowColor as string}
+                    value={values?.theme?.button?.shadowColor ?? ''}
                     // eslint-disable-next-line @typescript-eslint/no-misused-promises
                     setFieldValueFn={setFieldValue}
                     testingselector={

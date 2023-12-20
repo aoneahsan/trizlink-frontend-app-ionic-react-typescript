@@ -66,8 +66,14 @@ export enum ZMediaEnum {
   iframeSrcDoc = 'iframeSrcDoc'
 }
 
+export enum reloadBlockingTypeEnum {
+  libFormThemeSection = 'libFormThemeSection',
+  libBlockFormSection = 'libBlockFormSection'
+}
+
 export interface reloadBlockingInterface {
   // lib => linkInBio.
   pageUrl?: string;
   isBlock: boolean;
+  type?: reloadBlockingTypeEnum | null;
 }

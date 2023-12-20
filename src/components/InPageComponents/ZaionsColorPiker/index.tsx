@@ -107,9 +107,9 @@ const ZaionsColorPiker: React.FC<ZaionsColorPikerType> = ({
         />
         <ZIonInput
           type='text'
-          className='ms-2 text-[18px] zaions__bg_white'
+          className='ms-2 text-[18px] zaions__bg_white ion-padding-start-point-8rem'
           value={value}
-          label=''
+          aria-label='color piker input'
           fill='outline'
           minHeight={minHeight}
           onIonChange={({ target }) => {
@@ -136,17 +136,20 @@ const ZaionsColorPikerSkeleton: React.FC = React.memo(() => {
       className='flex w-full mt-3 ion-no-padding ion-align-items-center z-inner-padding-end-0'
       lines='none'
       minHeight='40px'>
-      <ZIonSkeletonText
-        width='2.5rem'
-        height='40px'
-        className='me-2'
-        animated={true}
-      />
-      <ZIonSkeletonText
-        width='100%'
-        height='40px'
-        animated={true}
-      />
+      <div className='flex w-full'>
+        <ZIonSkeletonText
+          width='2.5rem'
+          height='40px'
+          className='me-2'
+          animated={true}
+        />
+        <ZIonSkeletonText
+          width='35%'
+          height='40px'
+          className='rounded'
+          animated={true}
+        />
+      </div>
     </ZIonItem>
   );
 });

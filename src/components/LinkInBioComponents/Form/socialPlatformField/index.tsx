@@ -160,9 +160,11 @@ const LinkInBioSocialPlatformCardField: React.FC = () => {
                     true
                 })}>
                 {linkInBioPredefinedSocialPlatformState?.map(el => {
-                  const _index = values.cardItems?.findIndex(
-                    _el => _el.socialCardType === el.type
-                  ) as number;
+                  const _index = Number(
+                    values.cardItems?.findIndex(
+                      _el => _el.socialCardType === el.type
+                    )
+                  );
                   return (
                     <ZIonCol
                       size='2.4'
@@ -184,7 +186,7 @@ const LinkInBioSocialPlatformCardField: React.FC = () => {
                           onClick={() => {
                             toggleSocialPlatformCardHandler({
                               _type: el.type,
-                              _title: el.title as string
+                              _title: el.title ?? ''
                             });
                           }}
                         />
@@ -260,7 +262,7 @@ const LinkInBioSocialPlatformCardField: React.FC = () => {
                               value={values.cardItems?.[_index].target?.url}
                               slotImageUrl={
                                 predefinedSocialImages[
-                                  _cardItem.socialCardType as LinkInBioSocialPlatformEnum
+                                  _cardItem.socialCardType ?? ''
                                 ]
                               }
                             />

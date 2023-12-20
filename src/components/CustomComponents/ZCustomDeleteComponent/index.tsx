@@ -33,6 +33,7 @@ import { useZIonActionSheet } from '@/ZaionsHooks/zionic-hooks';
  * ? Import of recoil states is a Recoil State import
  * */
 import {
+  reloadBlockingTypeEnum,
   type ZGenericObject,
   type ZIonColorType
 } from '@/types/zaionsAppSettings.type';
@@ -103,7 +104,15 @@ const ZCustomDeleteComponent: React.FC<ZCustomDeleteComponentInterface> = ({
     <ZIonButton
       slot={slot}
       className={className}
-      disabled={reloadBlockingRState?.isBlock}
+      disabled={
+        reloadBlockingRState?.isBlock &&
+        reloadBlockingRState?.type !== null &&
+        reloadBlockingRState?.type !== undefined &&
+        [
+          reloadBlockingTypeEnum.libBlockFormSection,
+          reloadBlockingTypeEnum.libFormThemeSection
+        ].includes(reloadBlockingRState?.type)
+      }
       fill='clear'
       minHeight={btnMinHeight}
       size='small'
@@ -111,7 +120,11 @@ const ZCustomDeleteComponent: React.FC<ZCustomDeleteComponentInterface> = ({
       testinglistselector={testinglistselector}
       style={_style}
       onClick={() => {
-        if (!reloadBlockingRState?.isBlock) {
+        if (
+          !reloadBlockingRState?.isBlock &&
+          reloadBlockingRState.type !==
+            reloadBlockingTypeEnum.libFormThemeSection
+        ) {
           void presentZIonActionSheet({
             header: actionSheetHeader,
             subHeader: actionSheetSubHeader,

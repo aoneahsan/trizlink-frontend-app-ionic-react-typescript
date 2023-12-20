@@ -11,7 +11,6 @@ import { useLocation, useParams } from 'react-router';
  * */
 import routeQueryString from 'qs';
 import { appsOutline, createOutline } from 'ionicons/icons';
-import { useFormikContext } from 'formik';
 import { type OverlayEventDetail } from '@ionic/core';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
@@ -23,7 +22,7 @@ import {
   ZIonButton,
   ZIonCol,
   ZIonIcon,
-  ZIonItem,
+  ZIonLabel,
   ZIonReorder,
   ZIonText
 } from '@/components/ZIonComponents';
@@ -100,7 +99,10 @@ import ZLinkInBioMapBlock from '../MapBlock';
 import classNames from 'classnames';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import ZCustomCard from '@/components/CustomComponents/ZCustomCard';
-import { ZMediaEnum } from '@/types/zaionsAppSettings.type';
+import {
+  ZMediaEnum,
+  reloadBlockingTypeEnum
+} from '@/types/zaionsAppSettings.type';
 import { reloadBlockingRStateAtom } from '@/ZaionsStore/AppRStates';
 
 /**
@@ -192,7 +194,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
     _extractType: ZRQGetRequestExtractEnum.extractItem
   });
 
-  const { setFieldValue } = useFormikContext<LinkInBioType>();
+  // const { setFieldValue } = useFormikContext<LinkInBioType>();
 
   // delete link-in-bio block api where use went to delete the block on preview panel and click on the delete button in ActionSheet (useZIonActionSheet) the deleteBlockHandler will execute with will hit this api and delete the block.
   const { mutateAsync: deleteLinkInBioBlockMutate } = useZRQDeleteRequest({
@@ -324,7 +326,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
   // Edit block function this will execute when user went to edit the block and click on the pencil button present in every block side by side of delete button, this will navigate the user to block form page where from route the the blockID will be get and the data of that id will fetch from backend and placed as initial value.
   const blockEditHandler = (): void => {
     try {
-      void setFieldValue('LinkInBioBlock', element?.blockType, false);
+      // void setFieldValue('LinkInBioBlock', element?.blockType, false);
 
       zNavigatePushRoute(
         createRedirectRoute({
@@ -437,12 +439,14 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
       ? currentBlockCustomAppearanceButtonOutlineType
         ? _buttonOutlineStyle
         : generatePredefinedThemeBackgroundValue(
+            // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
             element.blockContent?.customAppearance
               .background as LinkInBioThemeBackgroundType
           )
       : linkInBioThemeButtonOutlineType
       ? _buttonOutlineStyle
       : generatePredefinedThemeBackgroundValue(
+          // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
           selectedLinkInBio?.theme?.button
             ?.background as LinkInBioThemeBackgroundType
         );
@@ -462,7 +466,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
     opacity: element.isActive ?? false ? '1' : '0.4'
   };
 
-  const zCustomDeleteComponentData = { id: element?.id as string };
+  const zCustomDeleteComponentData = { id: element?.id ?? '' };
 
   const zLinkInBioButtonBlockStyle = {
     ..._buttonStyle,
@@ -483,341 +487,370 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
   };
 
   const zIonColStyle = {
-    height: `${element.blockContent?.spacing as number}px`
+    height: `${element.blockContent?.spacing}px`
   };
   // #endregion
 
   return (
-    <ZIonItem
+    // <ZIonItem
+    //   className={classNames({
+    //     'my-4 zaions-linkInBio-block z-ion-bg-transparent': true,
+    //     zaions__light_bg_opacity_point_4:
+    //       element.id === (routeQSearchParams as { blockId: string }).blockId
+    //   })}
+    //   style={zIonItemStyle}
+    //   data-block-id={element.id}>
+    <div
       className={classNames({
-        'my-4 zaions-linkInBio-block z-ion-bg-transparent': true,
-        zaions__light_bg_opacity_point_2:
+        'my-4 py-1 zaions-linkInBio-block z-ion-bg-transparent flex ion-align-items-center ion-justify-content-between':
+          true,
+        zaions__light_bg_opacity_point_4:
           element.id === (routeQSearchParams as { blockId: string }).blockId
       })}
       style={zIonItemStyle}
       data-block-id={element.id}>
-      <ZCustomDeleteComponent
-        deleteFn={deleteBlockHandler}
-        data={zCustomDeleteComponentData}
-        className='ion-no-padding me-1 w-[2rem] rounded-full overflow-hidden'
-        btnMinHeight='2rem'
-        slot='start'
-        iconColor='light'
-      />
+      <div className='flex ion-align-items-center'>
+        <ZCustomDeleteComponent
+          deleteFn={deleteBlockHandler}
+          data={zCustomDeleteComponentData}
+          className='ion-no-padding me-1 w-[2rem] rounded-full overflow-hidden'
+          btnMinHeight='2rem'
+          // slot='start'
+          iconColor='light'
+        />
 
-      <ZIonButton
-        className='ion-no-padding ms-1 me-2 w-[2rem] rounded-full overflow-hidden'
-        minHeight='2rem'
-        disabled={reloadBlockingRState?.isBlock}
-        slot='start'
-        fill='clear'
-        size='large'
-        onClick={() => {
-          if (!reloadBlockingRState?.isBlock) {
-            blockEditHandler();
+        <ZIonButton
+          className='ion-no-padding ms-1 me-2 w-[2rem] rounded-full overflow-hidden'
+          minHeight='2rem'
+          disabled={
+            reloadBlockingRState?.isBlock &&
+            reloadBlockingRState?.type !== null &&
+            reloadBlockingRState?.type !== undefined &&
+            [
+              reloadBlockingTypeEnum.libBlockFormSection,
+              reloadBlockingTypeEnum.libFormThemeSection
+            ].includes(reloadBlockingRState?.type)
           }
-        }}>
-        <ZIonText>
+          // slot='start'
+          fill='clear'
+          size='large'
+          onClick={() => {
+            if (!reloadBlockingRState?.isBlock) {
+              blockEditHandler();
+            }
+          }}>
+          <ZIonText>
+            <ZIonIcon
+              icon={createOutline}
+              color='light'
+              className='w-6 h-6'
+            />
+          </ZIonText>
+        </ZIonButton>
+      </div>
+
+      <div className='w-[80%]'>
+        {element?.blockType === LinkInBioBlockEnum.avatar ? (
+          <ZLinkInBioAvatarBlock
+            fontFamily={selectedLinkInBio?.theme?.font}
+            title={element.blockContent?.title}
+            description={element.blockContent?.description}
+            url={element.blockContent?.imageUrl}
+            style={element.blockContent?.style}
+          />
+        ) : element?.blockType === LinkInBioBlockEnum.text ? (
+          <ZLinkInBioTextBlock
+            // eslint-disable-next-line react/no-children-prop
+            children={element.blockContent?.text ?? 'text'}
+            fontFamily={selectedLinkInBio?.theme?.font}
+            animationType={
+              element.blockContent?.animation?.isEnabled === true
+                ? element.blockContent?.animation?.type
+                : undefined
+            }
+          />
+        ) : element?.blockType === LinkInBioBlockEnum.card ? (
+          <ZCustomCard
+            mediaType={ZMediaEnum.image}
+            title={element.blockContent?.title}
+            description={element.blockContent?.description}
+            mediaLink={element.blockContent?.imageUrl}
+            type={element.blockContent?.style}
+            animationType={
+              element.blockContent?.animation?.isEnabled === true
+                ? element.blockContent?.animation?.type
+                : undefined
+            }
+          />
+        ) : element?.blockType === LinkInBioBlockEnum.button ? (
+          <ZLinkInBioButtonBlock
+            fontFamily={selectedLinkInBio?.theme?.font}
+            style={zLinkInBioButtonBlockStyle}
+            title={element.blockContent?.title ?? 'button'}
+            url={element.blockContent?.target?.url}
+            // TODO: make this a option in frontend, so user will be able to select whether to open the link in new tab or not - (will be theme and block wise)
+            target='_blank'
+            animationType={
+              element.blockContent?.animation?.isEnabled === true
+                ? element.blockContent?.animation?.type
+                : undefined
+            }
+            fill={_buttonFillValue}
+            className={classNames({
+              // inlineSquare
+              inlineSquare:
+                element.blockContent?.customAppearance?.isEnabled === true
+                  ? currentBlockCustomAppearanceButtonSquareType
+                  : linkInBioThemeButtonSquareType,
+              // inlineRound
+              inlineRound:
+                element.blockContent?.customAppearance?.isEnabled === true
+                  ? element.blockContent?.customAppearance?.buttonType !=
+                      null &&
+                    [
+                      LinkInBioButtonTypeEnum.inlineRound,
+                      LinkInBioButtonTypeEnum.inlineRoundOutline,
+                      LinkInBioButtonTypeEnum.inlineRoundShadow
+                    ].includes(
+                      element.blockContent?.customAppearance.buttonType
+                    )
+                  : selectedLinkInBio?.theme?.button?.type != null &&
+                    [
+                      LinkInBioButtonTypeEnum.inlineRound,
+                      LinkInBioButtonTypeEnum.inlineRoundOutline,
+                      LinkInBioButtonTypeEnum.inlineRoundShadow
+                    ].includes(selectedLinkInBio?.theme?.button?.type),
+
+              // inlineCircle
+              'border-radius__100vmax':
+                element.blockContent?.customAppearance?.isEnabled === true
+                  ? currentBlockCustomAppearanceButtonCircleType
+                  : linkInBioThemeButtonCircleType
+            })}
+          />
+        ) : element?.blockType === LinkInBioBlockEnum.RSS ? (
+          <ZLinkInBioRSSBlock
+            data={element.blockContent?.cardItems}
+            cardStyle={element.blockContent?.style}
+          />
+        ) : element?.blockType === LinkInBioBlockEnum.calendar ? (
+          <ZLinkInBioCalendarBlock
+            fontFamily={selectedLinkInBio?.theme?.font}
+            mediaLink={element.blockContent?.target?.url}
+            title={element.blockContent?.title}
+          />
+        ) : element?.blockType === LinkInBioBlockEnum.countdown ? (
+          <>
+            {element.blockContent?.imageUrl !== undefined &&
+            element.blockContent?.imageUrl?.trim()?.length > 0 ? (
+              <ZCustomCard
+                mediaType={ZMediaEnum.countDown}
+                title={element.blockContent?.title}
+                description={element.blockContent?.description}
+                mediaLink={element.blockContent?.imageUrl}
+                type={element.blockContent?.style}
+                countDownTime={element.blockContent?.date}
+                animationType={
+                  element.blockContent?.animation?.isEnabled === true
+                    ? element.blockContent?.animation?.type
+                    : undefined
+                }
+              />
+            ) : (
+              <div
+                className={classNames(
+                  element.blockContent?.animation?.isEnabled === true
+                    ? element.blockContent?.animation?.type
+                    : undefined,
+                  {
+                    'w-full h-full': true,
+                    'animated ':
+                      element.blockContent?.animation?.isEnabled === true &&
+                      isZNonEmptyString(element.blockContent?.animation?.type)
+                  }
+                )}>
+                <ZCountdown countDownTime={element.blockContent?.date} />
+              </div>
+            )}
+          </>
+        ) : element?.blockType === LinkInBioBlockEnum.video ? (
+          <ZVideoBlock
+            videoLink={element.blockContent?.target?.url}
+            title={element.blockContent?.title}
+          />
+        ) : element?.blockType === LinkInBioBlockEnum.audio ? (
+          <ZAudioBlock
+            audioLink={element.blockContent?.target?.url}
+            title={element.blockContent?.title}
+          />
+        ) : element?.blockType === LinkInBioBlockEnum.carousel ? (
+          <ZCarouselBlock
+            data={element.blockContent?.cardItems}
+            cardStyle={element.blockContent?.style}
+            view={element.blockContent?.view}
+            animationType={
+              element.blockContent?.animation?.isEnabled === true
+                ? element.blockContent?.animation?.type
+                : undefined
+            }
+          />
+        ) : element?.blockType === LinkInBioBlockEnum.music ? (
+          <ZLinkInBioMusicBlock
+            fontFamily={selectedLinkInBio?.theme?.font}
+            musicBlockData={element.blockContent?.cardItems}
+            animationType={
+              element.blockContent?.animation?.isEnabled === true
+                ? element.blockContent?.animation?.type
+                : undefined
+            }
+          />
+        ) : element?.blockType === LinkInBioBlockEnum.social ? (
+          <ZLinkInBioSocialBlock
+            socialBlockData={element.blockContent?.cardItems}
+          />
+        ) : element?.blockType === LinkInBioBlockEnum.spacing ? (
+          <ZIonCol style={zIonColStyle} />
+        ) : element?.blockType === LinkInBioBlockEnum.separator ? (
+          <ZLinkInBioSeparatorBlock
+            _borderColor={element.blockContent?.separatorColor}
+            _borderStyle={element.blockContent?.separatorType}
+            _marginVertical={element.blockContent?.separatorMargin}
+          />
+        ) : element?.blockType === LinkInBioBlockEnum.messenger ? (
+          <ZLinkInBioMessengerBlock
+            messengerBlockData={element.blockContent?.cardItems}
+            fontFamily={selectedLinkInBio?.theme?.font}
+            animationType={
+              element.blockContent?.animation?.isEnabled === true
+                ? element.blockContent?.animation?.type
+                : undefined
+            }
+          />
+        ) : element?.blockType === LinkInBioBlockEnum.QAndA ? (
+          <ZLinkInBioQAndABlock
+            QAndABlockData={element.blockContent?.cardItems}
+            fontFamily={selectedLinkInBio?.theme?.font}
+            animationType={
+              element.blockContent?.animation?.isEnabled === true
+                ? element.blockContent?.animation?.type
+                : undefined
+            }
+          />
+        ) : element?.blockType === LinkInBioBlockEnum.VCard ? (
+          <ZLinkInBioVCardBlock
+            VCardBlockData={element.blockContent?.vcard}
+            title={element.blockContent?.title}
+            fontFamily={selectedLinkInBio?.theme?.font}
+            btnStyle={zLinkInBioButtonBlockStyle}
+            btnClassName={classNames({
+              // inlineSquare
+              inlineSquare:
+                element.blockContent?.customAppearance?.isEnabled === true
+                  ? currentBlockCustomAppearanceButtonSquareType
+                  : linkInBioThemeButtonSquareType,
+              // inlineRound
+              inlineRound:
+                element.blockContent?.customAppearance?.isEnabled === true
+                  ? element.blockContent?.customAppearance?.buttonType !=
+                      null &&
+                    [
+                      LinkInBioButtonTypeEnum.inlineRound,
+                      LinkInBioButtonTypeEnum.inlineRoundOutline,
+                      LinkInBioButtonTypeEnum.inlineRoundShadow
+                    ].includes(
+                      element.blockContent?.customAppearance.buttonType
+                    )
+                  : selectedLinkInBio?.theme?.button?.type != null &&
+                    [
+                      LinkInBioButtonTypeEnum.inlineRound,
+                      LinkInBioButtonTypeEnum.inlineRoundOutline,
+                      LinkInBioButtonTypeEnum.inlineRoundShadow
+                    ].includes(selectedLinkInBio?.theme?.button?.type),
+
+              // inlineCircle
+              'border-radius__100vmax':
+                element.blockContent?.customAppearance?.isEnabled === true
+                  ? currentBlockCustomAppearanceButtonCircleType
+                  : linkInBioThemeButtonCircleType
+            })}
+            animationType={
+              element.blockContent?.animation?.isEnabled === true
+                ? element.blockContent?.animation?.type
+                : undefined
+            }
+            // icon={element.blockContent?.icon}
+          />
+        ) : element?.blockType === LinkInBioBlockEnum.form ? (
+          <ZLinkInBioFormBlock
+            fromBlockData={element.blockContent?.form}
+            fontFamily={selectedLinkInBio?.theme?.font}
+            btnStyle={zLinkInBioButtonBlockStyle}
+            btnClassName={classNames({
+              // inlineSquare
+              inlineSquare:
+                element.blockContent?.customAppearance?.isEnabled === true
+                  ? currentBlockCustomAppearanceButtonSquareType
+                  : linkInBioThemeButtonSquareType,
+              // inlineRound
+              inlineRound:
+                element.blockContent?.customAppearance?.isEnabled === true
+                  ? element.blockContent?.customAppearance?.buttonType !=
+                      null &&
+                    [
+                      LinkInBioButtonTypeEnum.inlineRound,
+                      LinkInBioButtonTypeEnum.inlineRoundOutline,
+                      LinkInBioButtonTypeEnum.inlineRoundShadow
+                    ].includes(
+                      element.blockContent?.customAppearance.buttonType
+                    )
+                  : selectedLinkInBio?.theme?.button?.type != null &&
+                    [
+                      LinkInBioButtonTypeEnum.inlineRound,
+                      LinkInBioButtonTypeEnum.inlineRoundOutline,
+                      LinkInBioButtonTypeEnum.inlineRoundShadow
+                    ].includes(selectedLinkInBio?.theme?.button?.type),
+
+              // inlineCircle
+              'border-radius__100vmax':
+                element.blockContent?.customAppearance?.isEnabled === true
+                  ? currentBlockCustomAppearanceButtonCircleType
+                  : linkInBioThemeButtonCircleType
+            })}
+            animationType={
+              element.blockContent?.animation?.isEnabled === true
+                ? element.blockContent?.animation?.type
+                : undefined
+            }
+          />
+        ) : element?.blockType === LinkInBioBlockEnum.map ? (
+          <ZLinkInBioMapBlock
+            mapId={`${PRODUCT_NAME}-map-block-${element.id ?? ''}`}
+            latitude={element.blockContent?.map?.lat}
+            longitude={element.blockContent?.map?.lng}
+            title={element.blockContent?.title}
+          />
+        ) : element?.blockType === LinkInBioBlockEnum.Iframe ? (
+          <ZCustomCard
+            mediaType={ZMediaEnum.iframeSrcDoc}
+            iframeSrcDocText={element.blockContent?.iframe}
+            title={element.blockContent?.title}
+          />
+        ) : (
+          ''
+        )}
+      </div>
+
+      <ZIonLabel className='mx-3'>
+        <ZIonReorder className=''>
           <ZIonIcon
-            icon={createOutline}
+            icon={appsOutline}
             color='light'
             className='w-6 h-6'
           />
-        </ZIonText>
-      </ZIonButton>
-
-      {/* <div
-        className={classNames(
-          element.blockContent?.animation?.isEnabled === true
-            ? element.blockContent?.animation?.type
-            : undefined,
-          {
-            'animated ':
-              element.blockContent?.animation?.isEnabled === true &&
-              isZNonEmptyString(element.blockContent?.animation?.type)
-          }
-        )}> */}
-      {element?.blockType === LinkInBioBlockEnum.avatar ? (
-        <ZLinkInBioAvatarBlock
-          fontFamily={selectedLinkInBio?.theme?.font}
-          title={element.blockContent?.title}
-          description={element.blockContent?.description}
-          url={element.blockContent?.imageUrl}
-          style={element.blockContent?.style}
-        />
-      ) : element?.blockType === LinkInBioBlockEnum.text ? (
-        <ZLinkInBioTextBlock
-          // eslint-disable-next-line react/no-children-prop
-          children={element.blockContent?.text ?? 'text'}
-          fontFamily={selectedLinkInBio?.theme?.font}
-          animationType={
-            element.blockContent?.animation?.isEnabled === true
-              ? element.blockContent?.animation?.type
-              : undefined
-          }
-        />
-      ) : element?.blockType === LinkInBioBlockEnum.card ? (
-        <ZCustomCard
-          mediaType={ZMediaEnum.image}
-          title={element.blockContent?.title}
-          description={element.blockContent?.description}
-          mediaLink={element.blockContent?.imageUrl}
-          type={element.blockContent?.style}
-        />
-      ) : element?.blockType === LinkInBioBlockEnum.button ? (
-        <ZLinkInBioButtonBlock
-          fontFamily={selectedLinkInBio?.theme?.font}
-          style={zLinkInBioButtonBlockStyle}
-          title={element.blockContent?.title ?? 'button'}
-          url={element.blockContent?.target?.url}
-          // TODO: make this a option in frontend, so user will be able to select whether to open the link in new tab or not - (will be theme and block wise)
-          target='_blank'
-          animationType={
-            element.blockContent?.animation?.isEnabled === true
-              ? element.blockContent?.animation?.type
-              : undefined
-          }
-          fill={_buttonFillValue}
-          className={classNames({
-            // inlineSquare
-            inlineSquare:
-              element.blockContent?.customAppearance?.isEnabled === true
-                ? currentBlockCustomAppearanceButtonSquareType
-                : linkInBioThemeButtonSquareType,
-            // inlineRound
-            inlineRound:
-              element.blockContent?.customAppearance?.isEnabled === true
-                ? element.blockContent?.customAppearance?.buttonType != null &&
-                  [
-                    LinkInBioButtonTypeEnum.inlineRound,
-                    LinkInBioButtonTypeEnum.inlineRoundOutline,
-                    LinkInBioButtonTypeEnum.inlineRoundShadow
-                  ].includes(element.blockContent?.customAppearance.buttonType)
-                : selectedLinkInBio?.theme?.button?.type != null &&
-                  [
-                    LinkInBioButtonTypeEnum.inlineRound,
-                    LinkInBioButtonTypeEnum.inlineRoundOutline,
-                    LinkInBioButtonTypeEnum.inlineRoundShadow
-                  ].includes(selectedLinkInBio?.theme?.button?.type),
-
-            // inlineCircle
-            'border-radius__100vmax':
-              element.blockContent?.customAppearance?.isEnabled === true
-                ? currentBlockCustomAppearanceButtonCircleType
-                : linkInBioThemeButtonCircleType
-          })}
-        />
-      ) : element?.blockType === LinkInBioBlockEnum.RSS ? (
-        <ZLinkInBioRSSBlock
-          data={element.blockContent?.cardItems}
-          cardStyle={element.blockContent?.style}
-        />
-      ) : element?.blockType === LinkInBioBlockEnum.calendar ? (
-        <ZLinkInBioCalendarBlock
-          fontFamily={selectedLinkInBio?.theme?.font}
-          mediaLink={element.blockContent?.target?.url}
-          title={element.blockContent?.title}
-        />
-      ) : element?.blockType === LinkInBioBlockEnum.countdown ? (
-        <>
-          {element.blockContent?.imageUrl !== undefined &&
-          element.blockContent?.imageUrl?.trim()?.length > 0 ? (
-            <ZCustomCard
-              mediaType={ZMediaEnum.countDown}
-              title={element.blockContent?.title}
-              description={element.blockContent?.description}
-              mediaLink={element.blockContent?.imageUrl}
-              type={element.blockContent?.style}
-              countDownTime={element.blockContent?.date}
-              animationType={
-                element.blockContent?.animation?.isEnabled === true
-                  ? element.blockContent?.animation?.type
-                  : undefined
-              }
-            />
-          ) : (
-            <div
-              className={classNames(
-                element.blockContent?.animation?.isEnabled === true
-                  ? element.blockContent?.animation?.type
-                  : undefined,
-                {
-                  'w-full h-full': true,
-                  'animated ':
-                    element.blockContent?.animation?.isEnabled === true &&
-                    isZNonEmptyString(element.blockContent?.animation?.type)
-                }
-              )}>
-              <ZCountdown countDownTime={element.blockContent?.date} />
-            </div>
-          )}
-        </>
-      ) : element?.blockType === LinkInBioBlockEnum.video ? (
-        <ZVideoBlock
-          videoLink={element.blockContent?.target?.url}
-          title={element.blockContent?.title}
-        />
-      ) : element?.blockType === LinkInBioBlockEnum.audio ? (
-        <ZAudioBlock
-          audioLink={element.blockContent?.target?.url}
-          title={element.blockContent?.title}
-        />
-      ) : element?.blockType === LinkInBioBlockEnum.carousel ? (
-        <ZCarouselBlock
-          data={element.blockContent?.cardItems}
-          cardStyle={element.blockContent?.style}
-          view={element.blockContent?.view}
-        />
-      ) : element?.blockType === LinkInBioBlockEnum.music ? (
-        <ZLinkInBioMusicBlock
-          fontFamily={selectedLinkInBio?.theme?.font}
-          musicBlockData={element.blockContent?.cardItems}
-          animationType={
-            element.blockContent?.animation?.isEnabled === true
-              ? element.blockContent?.animation?.type
-              : undefined
-          }
-        />
-      ) : element?.blockType === LinkInBioBlockEnum.social ? (
-        <ZLinkInBioSocialBlock
-          socialBlockData={element.blockContent?.cardItems}
-        />
-      ) : element?.blockType === LinkInBioBlockEnum.spacing ? (
-        <ZIonCol style={zIonColStyle} />
-      ) : element?.blockType === LinkInBioBlockEnum.separator ? (
-        <ZLinkInBioSeparatorBlock
-          _borderColor={element.blockContent?.separatorColor}
-          _borderStyle={element.blockContent?.separatorType}
-          _marginVertical={element.blockContent?.separatorMargin}
-        />
-      ) : element?.blockType === LinkInBioBlockEnum.messenger ? (
-        <ZLinkInBioMessengerBlock
-          messengerBlockData={element.blockContent?.cardItems}
-          fontFamily={selectedLinkInBio?.theme?.font}
-          animationType={
-            element.blockContent?.animation?.isEnabled === true
-              ? element.blockContent?.animation?.type
-              : undefined
-          }
-        />
-      ) : element?.blockType === LinkInBioBlockEnum.QAndA ? (
-        <ZLinkInBioQAndABlock
-          QAndABlockData={element.blockContent?.cardItems}
-          fontFamily={selectedLinkInBio?.theme?.font}
-          animationType={
-            element.blockContent?.animation?.isEnabled === true
-              ? element.blockContent?.animation?.type
-              : undefined
-          }
-        />
-      ) : element?.blockType === LinkInBioBlockEnum.VCard ? (
-        <ZLinkInBioVCardBlock
-          VCardBlockData={element.blockContent?.vcard}
-          title={element.blockContent?.title}
-          fontFamily={selectedLinkInBio?.theme?.font}
-          btnStyle={zLinkInBioButtonBlockStyle}
-          btnClassName={classNames({
-            // inlineSquare
-            inlineSquare:
-              element.blockContent?.customAppearance?.isEnabled === true
-                ? currentBlockCustomAppearanceButtonSquareType
-                : linkInBioThemeButtonSquareType,
-            // inlineRound
-            inlineRound:
-              element.blockContent?.customAppearance?.isEnabled === true
-                ? element.blockContent?.customAppearance?.buttonType != null &&
-                  [
-                    LinkInBioButtonTypeEnum.inlineRound,
-                    LinkInBioButtonTypeEnum.inlineRoundOutline,
-                    LinkInBioButtonTypeEnum.inlineRoundShadow
-                  ].includes(element.blockContent?.customAppearance.buttonType)
-                : selectedLinkInBio?.theme?.button?.type != null &&
-                  [
-                    LinkInBioButtonTypeEnum.inlineRound,
-                    LinkInBioButtonTypeEnum.inlineRoundOutline,
-                    LinkInBioButtonTypeEnum.inlineRoundShadow
-                  ].includes(selectedLinkInBio?.theme?.button?.type),
-
-            // inlineCircle
-            'border-radius__100vmax':
-              element.blockContent?.customAppearance?.isEnabled === true
-                ? currentBlockCustomAppearanceButtonCircleType
-                : linkInBioThemeButtonCircleType
-          })}
-          animationType={
-            element.blockContent?.animation?.isEnabled === true
-              ? element.blockContent?.animation?.type
-              : undefined
-          }
-          // icon={element.blockContent?.icon}
-        />
-      ) : element?.blockType === LinkInBioBlockEnum.form ? (
-        <ZLinkInBioFormBlock
-          fromBlockData={element.blockContent?.form}
-          fontFamily={selectedLinkInBio?.theme?.font}
-          btnStyle={zLinkInBioButtonBlockStyle}
-          btnClassName={classNames({
-            // inlineSquare
-            inlineSquare:
-              element.blockContent?.customAppearance?.isEnabled === true
-                ? currentBlockCustomAppearanceButtonSquareType
-                : linkInBioThemeButtonSquareType,
-            // inlineRound
-            inlineRound:
-              element.blockContent?.customAppearance?.isEnabled === true
-                ? element.blockContent?.customAppearance?.buttonType != null &&
-                  [
-                    LinkInBioButtonTypeEnum.inlineRound,
-                    LinkInBioButtonTypeEnum.inlineRoundOutline,
-                    LinkInBioButtonTypeEnum.inlineRoundShadow
-                  ].includes(element.blockContent?.customAppearance.buttonType)
-                : selectedLinkInBio?.theme?.button?.type != null &&
-                  [
-                    LinkInBioButtonTypeEnum.inlineRound,
-                    LinkInBioButtonTypeEnum.inlineRoundOutline,
-                    LinkInBioButtonTypeEnum.inlineRoundShadow
-                  ].includes(selectedLinkInBio?.theme?.button?.type),
-
-            // inlineCircle
-            'border-radius__100vmax':
-              element.blockContent?.customAppearance?.isEnabled === true
-                ? currentBlockCustomAppearanceButtonCircleType
-                : linkInBioThemeButtonCircleType
-          })}
-          animationType={
-            element.blockContent?.animation?.isEnabled === true
-              ? element.blockContent?.animation?.type
-              : undefined
-          }
-        />
-      ) : element?.blockType === LinkInBioBlockEnum.map ? (
-        <ZLinkInBioMapBlock
-          mapId={`${PRODUCT_NAME}-map-block-${element.id ?? ''}`}
-          latitude={element.blockContent?.map?.lat}
-          longitude={element.blockContent?.map?.lng}
-          title={element.blockContent?.title}
-        />
-      ) : element?.blockType === LinkInBioBlockEnum.Iframe ? (
-        <ZCustomCard
-          mediaType={ZMediaEnum.iframeSrcDoc}
-          iframeSrcDocText={element.blockContent?.iframe}
-          title={element.blockContent?.title}
-        />
-      ) : (
-        ''
-      )}
-      {/* </div> */}
-
-      <ZIonReorder
-        slot='end'
-        className='ms-3'>
-        <ZIonIcon
-          icon={appsOutline}
-          color='light'
-          className='w-6 h-6'
-        />
-      </ZIonReorder>
-    </ZIonItem>
+        </ZIonReorder>
+      </ZIonLabel>
+    </div>
+    // </ZIonItem>
   );
 };
 

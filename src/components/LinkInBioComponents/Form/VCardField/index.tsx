@@ -36,7 +36,7 @@ const LinkInBioVCardField: React.FC = () => {
           <ZIonInput
             name='vcard.firstName'
             label='First name'
-            labelPlacement='floating'
+            labelPlacement='stacked'
             onIonChange={handleChange}
             onIonBlur={handleBlur}
             value={values.vcard?.firstName}
@@ -49,7 +49,7 @@ const LinkInBioVCardField: React.FC = () => {
           <ZIonInput
             name='vcard.lastName'
             label='Last name'
-            labelPlacement='floating'
+            labelPlacement='stacked'
             onIonChange={handleChange}
             onIonBlur={handleBlur}
             value={values.vcard?.lastName}
@@ -64,7 +64,7 @@ const LinkInBioVCardField: React.FC = () => {
           <ZIonInput
             name='vcard.mobile'
             label='Mobile'
-            labelPlacement='floating'
+            labelPlacement='stacked'
             onIonChange={handleChange}
             onIonBlur={handleBlur}
             value={values.vcard?.mobile}
@@ -79,7 +79,7 @@ const LinkInBioVCardField: React.FC = () => {
           <ZIonInput
             name='vcard.phone'
             label='Phone'
-            labelPlacement='floating'
+            labelPlacement='stacked'
             onIonChange={handleChange}
             onIonBlur={handleBlur}
             value={values.vcard?.phone}
@@ -94,7 +94,7 @@ const LinkInBioVCardField: React.FC = () => {
           <ZIonInput
             name='vcard.fax'
             label='Fax'
-            labelPlacement='floating'
+            labelPlacement='stacked'
             onIonChange={handleChange}
             onIonBlur={handleBlur}
             value={values.vcard?.fax}
@@ -108,7 +108,7 @@ const LinkInBioVCardField: React.FC = () => {
           className='mt-3'>
           <ZIonInput
             label='Email'
-            labelPlacement='floating'
+            labelPlacement='stacked'
             name='vcard.email'
             onIonChange={handleChange}
             onIonBlur={handleBlur}
@@ -123,7 +123,7 @@ const LinkInBioVCardField: React.FC = () => {
           className='mt-3'>
           <ZIonInput
             label='Company'
-            labelPlacement='floating'
+            labelPlacement='stacked'
             name='vcard.company'
             onIonChange={handleChange}
             onIonBlur={handleBlur}
@@ -139,7 +139,7 @@ const LinkInBioVCardField: React.FC = () => {
           <ZIonInput
             name='vcard.job'
             label='Your Job'
-            labelPlacement='floating'
+            labelPlacement='stacked'
             onIonChange={handleChange}
             onIonBlur={handleBlur}
             value={values.vcard?.job}
@@ -154,7 +154,7 @@ const LinkInBioVCardField: React.FC = () => {
           <ZIonInput
             name='vcard.street'
             label='Street'
-            labelPlacement='floating'
+            labelPlacement='stacked'
             onIonChange={handleChange}
             onIonBlur={handleBlur}
             value={values.vcard?.street}
@@ -169,7 +169,7 @@ const LinkInBioVCardField: React.FC = () => {
           <ZIonInput
             name='vcard.city'
             label='City'
-            labelPlacement='floating'
+            labelPlacement='stacked'
             onIonChange={handleChange}
             onIonBlur={handleBlur}
             value={values.vcard?.city}
@@ -184,7 +184,7 @@ const LinkInBioVCardField: React.FC = () => {
           <ZIonInput
             name='vcard.zip'
             label='Zip'
-            labelPlacement='floating'
+            labelPlacement='stacked'
             onIonChange={handleChange}
             onIonBlur={handleBlur}
             value={values.vcard?.zip}
@@ -199,7 +199,7 @@ const LinkInBioVCardField: React.FC = () => {
           <ZIonInput
             name='vcard.state'
             label='State'
-            labelPlacement='floating'
+            labelPlacement='stacked'
             onIonChange={handleChange}
             onIonBlur={handleBlur}
             value={values.vcard?.state}
@@ -214,7 +214,7 @@ const LinkInBioVCardField: React.FC = () => {
           <ZIonInput
             name='vcard.country'
             label='Country'
-            labelPlacement='floating'
+            labelPlacement='stacked'
             onIonChange={handleChange}
             onIonBlur={handleBlur}
             value={values.vcard?.country}
@@ -229,7 +229,7 @@ const LinkInBioVCardField: React.FC = () => {
           <ZIonInput
             name='vcard.website'
             label='Website'
-            labelPlacement='floating'
+            labelPlacement='stacked'
             onIonChange={handleChange}
             onIonBlur={handleBlur}
             value={values.vcard?.website}

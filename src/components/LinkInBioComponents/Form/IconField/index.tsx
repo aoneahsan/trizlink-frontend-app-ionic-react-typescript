@@ -41,11 +41,6 @@ const LinkInBioIconField: React.FC<LinkInBioIconFieldInterface> = ({
       lines='none'
       testingselector={`${testingselector}-item`}
       testinglistselector={`${testinglistselector}-item`}>
-      <ZIonIcon
-        icon={addCircleOutline}
-        slot='start'
-        className='mt-2 w-7 h-7 me-2'
-      />
       <ZIonInput
         aria-label='Icon input'
         minHeight='40px'
@@ -56,8 +51,14 @@ const LinkInBioIconField: React.FC<LinkInBioIconFieldInterface> = ({
         onIonBlur={onIonBlur}
         value={value}
         testingselector={`${testingselector}-input`}
-        testinglistselector={`${testinglistselector}-input`}
-      />
+        testinglistselector={`${testinglistselector}-input`}>
+        <ZIonIcon
+          icon={addCircleOutline}
+          slot='start'
+          color='medium'
+          className='w-7 h-7 me-1'
+        />
+      </ZIonInput>
     </ZIonItem>
   );
 };

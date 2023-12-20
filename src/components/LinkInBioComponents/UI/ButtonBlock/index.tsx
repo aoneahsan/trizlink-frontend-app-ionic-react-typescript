@@ -93,7 +93,7 @@ const ZLinkInBioButtonBlock: React.FC<ZLinkInBioButtonBlockInterface> = ({
       <ZIonButton
         expand='block'
         className={classNames(className, animationType, fontFamily, {
-          'ion-text-capitalize font-bold text-[16px] my-0 animated mx-auto w-[90%] h-[3.5rem]':
+          'ion-text-capitalize font-bold text-[16px] ion-text-wrap my-0 animated mx-auto  h-[3.5rem]':
             true
         })}
         style={style}

@@ -273,6 +273,7 @@ const ZaionsLoginForm: React.FC = () => {
                     CONSTANTS.testingSelectors.loginPage.passwordInput
                   }
                   className={classNames({
+                    'ion-padding-end-point-3rem': true,
                     'ion-touched': touched?.password === true,
                     'ion-invalid':
                       touched?.password === true && errors.password,
@@ -280,9 +281,25 @@ const ZaionsLoginForm: React.FC = () => {
                       touched?.password === true &&
                       (errors.password === undefined ||
                         errors.password?.trim()?.length === 0)
-                  })}
-                />
-                <ZIonButton
+                  })}>
+                  <ZIonButton
+                    fill='default'
+                    slot='end'
+                    className='overflow-hidden rounded-full ion-no-padding ion-no-margin ms-3 w-[2.5rem] h-[2.5rem]'
+                    onClick={() => {
+                      setCanViewPassword(OldVal => !OldVal);
+                    }}
+                    testingselector={
+                      CONSTANTS.testingSelectors.loginPage.canViewPasswordButton
+                    }>
+                    <ZIonIcon
+                      icon={canViewPassword ? eyeOffOutline : eyeOutline}
+                      className='w-7 h-7'
+                      color='primary'
+                    />
+                  </ZIonButton>
+                </ZIonInput>
+                {/* <ZIonButton
                   fill='clear'
                   size='large'
                   className='ion-no-padding ion-no-margin ms-3 w-max'
@@ -295,7 +312,7 @@ const ZaionsLoginForm: React.FC = () => {
                   <ZIonIcon
                     icon={canViewPassword ? eyeOffOutline : eyeOutline}
                   />
-                </ZIonButton>
+                </ZIonButton> */}
               </div>
 
               <div className='ion-text-end'>
