@@ -12,8 +12,6 @@ export const SelectedLinkInBioData = atom<LinkInBioType>({
     theme: {
       button: {}
     },
-    settings: {},
-    featureImg: {},
-    favicon: {}
+    settings: {}
   }
 });
