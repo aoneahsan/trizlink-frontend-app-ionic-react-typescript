@@ -8,6 +8,7 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
+import { PolarArea } from 'react-chartjs-2';
 import {
   type DoughnutControllerChartOptions,
   type ChartData,
@@ -18,7 +19,6 @@ import {
   type ScaleChartOptions
 } from 'chart.js';
 import { type _DeepPartialObject } from 'chart.js/dist/types/utils';
-import { Pie } from 'react-chartjs-2';
 
 /**
  * Custom Imports go down
@@ -60,19 +60,19 @@ import ZChartHOC from '@/components/AdminPanelComponents/ChartHOC';
  * Component props type go down
  * ? Like if you have a type for props it should be please Down
  * */
-interface ZRCPieI {
+interface ZRCPolarAreaI {
   className?: string;
   width?: string | number;
   height?: string | number;
   options?: _DeepPartialObject<
-    CoreChartOptions<'pie'> &
-      ElementChartOptions<'pie'> &
-      PluginChartOptions<'pie'> &
-      DatasetChartOptions<'pie'> &
-      ScaleChartOptions<'pie'> &
+    CoreChartOptions<'polarArea'> &
+      ElementChartOptions<'polarArea'> &
+      PluginChartOptions<'polarArea'> &
+      DatasetChartOptions<'polarArea'> &
+      ScaleChartOptions<'polarArea'> &
       DoughnutControllerChartOptions
   >;
-  data: ChartData<'pie', number[], unknown>;
+  data: ChartData<'polarArea', number[], unknown>;
   onClick?: React.MouseEventHandler<HTMLCanvasElement>;
 }
 
@@ -82,7 +82,7 @@ interface ZRCPieI {
  * @type {*}
  * */
 
-const ZRCPie: React.FC<ZRCPieI> = ({
+const ZRCPolarArea: React.FC<ZRCPolarAreaI> = ({
   data,
   options,
   className,
@@ -92,7 +92,7 @@ const ZRCPie: React.FC<ZRCPieI> = ({
 }) => {
   return (
     <ZChartHOC>
-      <Pie
+      <PolarArea
         className={className}
         options={options}
         data={data}
@@ -104,4 +104,4 @@ const ZRCPie: React.FC<ZRCPieI> = ({
   );
 };
 
-export default ZRCPie;
+export default ZRCPolarArea;

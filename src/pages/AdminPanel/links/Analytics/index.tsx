@@ -82,6 +82,10 @@ import {
 import ZRCBars from '@/components/CustomComponents/Charts/Bars';
 import PACountryBlock from '@/components/AdminPanelComponents/Analytics/PACountryBlock';
 import PAReferersBlock from '@/components/AdminPanelComponents/Analytics/PAReferersBlock';
+import PABrowserBlock from '@/components/AdminPanelComponents/Analytics/PABrowserBlock';
+import PADevicesBlock from '@/components/AdminPanelComponents/Analytics/PADeviceBlock';
+import PAUtmBlock from '@/components/AdminPanelComponents/Analytics/PAUtmBlock';
+import PAPixelBlock from '@/components/AdminPanelComponents/Analytics/PAPixelBlock';
 
 /**
  * Style files Imports go down
@@ -537,12 +541,67 @@ const ZInpageMainContent: React.FC = () => {
         </Suspense>
       </ZIonRow>
 
-      <ZIonRow className='my-4 gap-5'>
-        <ZIonCol>
+      <ZIonRow className='my-4 gap-y-5 ion-justify-content-between'>
+        {/*  */}
+        <ZIonCol
+          sizeXl='5.9'
+          sizeLg='12'
+          sizeMd='12'
+          sizeSm='12'
+          sizeXs='12'
+          className=''>
           <PACountryBlock />
         </ZIonCol>
-        <ZIonCol>
+
+        {/*  */}
+        <ZIonCol
+          sizeXl='5.9'
+          sizeLg='12'
+          sizeMd='12'
+          sizeSm='12'
+          sizeXs='12'
+          className=''>
           <PAReferersBlock />
+        </ZIonCol>
+
+        {/*  */}
+        <ZIonCol
+          sizeXl='5.9'
+          sizeLg='12'
+          sizeMd='12'
+          sizeSm='12'
+          sizeXs='12'>
+          <PABrowserBlock />
+        </ZIonCol>
+
+        {/*  */}
+        <ZIonCol
+          sizeXl='5.9'
+          sizeLg='12'
+          sizeMd='12'
+          sizeSm='12'
+          sizeXs='12'>
+          <PADevicesBlock />
+        </ZIonCol>
+
+        {/*  */}
+        <ZIonCol
+          sizeXl='5.9'
+          sizeLg='12'
+          sizeMd='12'
+          sizeSm='12'
+          sizeXs='12'>
+          <PAUtmBlock />
+        </ZIonCol>
+
+        {/*  */}
+        <ZIonCol
+          sizeXl='5.9'
+          sizeLg='12'
+          sizeMd='12'
+          sizeSm='12'
+          sizeXs='12'>
+          <PAPixelBlock />
         </ZIonCol>
       </ZIonRow>
     </div>

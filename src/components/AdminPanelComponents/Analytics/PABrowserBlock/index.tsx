@@ -8,6 +8,7 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
+import { browsersOutline } from 'ionicons/icons';
 import {
   createColumnHelper,
   flexRender,
@@ -16,19 +17,18 @@ import {
   useReactTable
 } from '@tanstack/react-table';
 import classNames from 'classnames';
-import { earthOutline } from 'ionicons/icons';
 
 /**
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
 import {
   ZIonCol,
   ZIonIcon,
   ZIonRow,
   ZIonText
 } from '@/components/ZIonComponents';
+import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
 
 /**
  * Custom Hooks Imports go down
@@ -46,8 +46,8 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
-  type IAnalyticsModalTable,
-  ZAnalyticsCountryTableColumnIds
+  ZAnalyticsBrowserTableColumnIds,
+  type IAnalyticsModalTable
 } from '@/types/AdminPanel/index.type';
 
 /**
@@ -69,7 +69,7 @@ import {
  * Component props type go down
  * ? Like if you have a type for props it should be please Down
  * */
-interface PACountryBlockI {
+interface PABrowserBlockI {
   data?: IAnalyticsModalTable[];
 }
 
@@ -81,7 +81,7 @@ interface PACountryBlockI {
 
 const emptyArray: never[] = [];
 
-const PACountryBlock: React.FC<PACountryBlockI> = ({ data }) => {
+const PABrowserBlock: React.FC<PABrowserBlockI> = ({ data }) => {
   const { isLgScale } = useZMediaQueryScale();
 
   return (
@@ -91,24 +91,24 @@ const PACountryBlock: React.FC<PACountryBlockI> = ({ data }) => {
           'px-2 py-3 border-b zaions__bg_white': true,
           'ion-text-center': !isLgScale
         })}>
-        <ZIonText className='text-lg'>🌎 Countries</ZIonText>
+        <ZIonText className='text-lg'>🔎 Browsers</ZIonText>
       </div>
       {data !== undefined && data?.length > 0 ? (
-        <PACountryTable data={data} />
+        <PAReferersTable data={data} />
       ) : (
         <div className='flex flex-col gap-3 ion-padding ion-align-items-center ion-justify-content-center'>
           <ZIonIcon
-            icon={earthOutline}
+            icon={browsersOutline}
             className='w-20 h-20'
             color='medium'
           />
           <div className='flex flex-col mt-3 ion-text-center'>
-            <ZIonText className='text-lg'>Discover the World</ZIonText>
+            <ZIonText className='text-lg'>Browser Discovery</ZIonText>
             <ZIonText
               className='mt-2'
               color='medium'>
-              No specific country data found. Your short link is waiting to be
-              explored by the global audience!
+              No browser data available. your short link is ready to be
+              discoverd by a variety of browsers.
             </ZIonText>
           </div>
         </div>
@@ -117,14 +117,15 @@ const PACountryBlock: React.FC<PACountryBlockI> = ({ data }) => {
   );
 };
 
-const PACountryTable: React.FC<PACountryBlockI> = ({ data }) => {
+const PAReferersTable: React.FC<PABrowserBlockI> = ({ data }) => {
   // #region Managing table data with react-table.
   const columnHelper = createColumnHelper<IAnalyticsModalTable>();
+
   const defaultColumns = [
     // Countries
     columnHelper.accessor(itemData => itemData.modal, {
-      header: 'Countries',
-      id: ZAnalyticsCountryTableColumnIds.countries,
+      header: 'Browser',
+      id: ZAnalyticsBrowserTableColumnIds.browser,
       cell: row => {
         return (
           <div className=''>
@@ -132,20 +133,20 @@ const PACountryTable: React.FC<PACountryBlockI> = ({ data }) => {
           </div>
         );
       },
-      footer: 'Countries'
+      footer: 'Browser'
     }),
 
     // visits
     columnHelper.accessor(itemData => itemData.visits, {
       header: 'Visits',
-      id: ZAnalyticsCountryTableColumnIds.visits,
+      id: ZAnalyticsBrowserTableColumnIds.visits,
       footer: 'Visits'
     }),
 
     // unique
     columnHelper.accessor(itemData => itemData.unique, {
       header: 'Unique',
-      id: ZAnalyticsCountryTableColumnIds.unique,
+      id: ZAnalyticsBrowserTableColumnIds.unique,
       footer: 'Unique',
       cell: row => {
         return (
@@ -160,7 +161,7 @@ const PACountryTable: React.FC<PACountryBlockI> = ({ data }) => {
 
     // visitsPercentage
     columnHelper.accessor(itemData => itemData.visitsPercentage, {
-      id: ZAnalyticsCountryTableColumnIds.visitsPercentage,
+      id: ZAnalyticsBrowserTableColumnIds.visitsPercentage,
       header: '% Visits',
       footer: '% Visits',
       cell: row => {
@@ -172,9 +173,8 @@ const PACountryTable: React.FC<PACountryBlockI> = ({ data }) => {
       }
     })
   ];
-  // #endregion
 
-  const zCountriesTable = useReactTable({
+  const zBrowserTable = useReactTable({
     columns: defaultColumns,
     data: data ?? emptyArray,
     getCoreRowModel: getCoreRowModel(),
@@ -183,13 +183,14 @@ const PACountryTable: React.FC<PACountryBlockI> = ({ data }) => {
     debugHeaders: false,
     debugColumns: false
   });
+  // #endregion
 
   return (
     <ZCustomScrollable
       className='w-full border h-max ion-no-padding'
       scrollX={true}>
       <div className='min-w-[55rem]'>
-        {zCountriesTable.getHeaderGroups().map((_headerInfo, _headerIndex) => {
+        {zBrowserTable.getHeaderGroups().map((_headerInfo, _headerIndex) => {
           return (
             <ZIonRow
               key={_headerIndex}
@@ -210,12 +211,11 @@ const PACountryTable: React.FC<PACountryBlockI> = ({ data }) => {
             </ZIonRow>
           );
         })}
-
         <ZIonRow className='rounded-b-lg'>
           <ZIonCol
             size='12'
             className='w-full ion-no-padding'>
-            {zCountriesTable.getRowModel().rows.map((_rowInfo, _rowIndex) => {
+            {zBrowserTable.getRowModel().rows.map((_rowInfo, _rowIndex) => {
               return (
                 <ZIonRow
                   key={_rowIndex}
@@ -251,4 +251,4 @@ const PACountryTable: React.FC<PACountryBlockI> = ({ data }) => {
   );
 };
 
-export default PACountryBlock;
+export default PABrowserBlock;

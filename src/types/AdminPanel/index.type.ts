@@ -169,6 +169,28 @@ export enum ZAnalyticsReferersTableColumnIds {
   verifiedAt = '__z_analytic_referers_verified_at__'
 }
 
+export enum ZAnalyticsBrowserTableColumnIds {
+  id = '__z_analytic_browser_id__',
+  createAt = '__z_analytic_browser_create_at__',
+  formattedCreateAt = '__z_analytic_browser_formatted_create_at__',
+  browser = '__z_analytic_browser__',
+  visits = '__z_analytic_browser_visits__',
+  unique = '__z_analytic_browser_unique__',
+  visitsPercentage = '__z_analytic_browser_visits_percentage__',
+  verifiedAt = '__z_analytic_browser_verified_at__'
+}
+
+export enum ZAnalyticsDeviceTableColumnIds {
+  id = '__z_analytic_device_id__',
+  createAt = '__z_analytic_device_create_at__',
+  formattedCreateAt = '__z_analytic_device_formatted_create_at__',
+  device = '__z_analytic_device__',
+  visits = '__z_analytic_device_visits__',
+  unique = '__z_analytic_device_unique__',
+  visitsPercentage = '__z_analytic_device_visits_percentage__',
+  verifiedAt = '__z_analytic_device_verified_at__'
+}
+
 // Interfaces
 export interface UTMTagInfoInterface {
   templateId?: string;
@@ -189,17 +211,9 @@ export interface IFilterOptions {
   platform?: string;
 }
 
-export interface ICountryTable {
+export interface IAnalyticsModalTable {
   id?: string;
-  countries: string;
-  visits: string;
-  unique: string;
-  visitsPercentage: string;
-}
-
-export interface IReferersTable {
-  id?: string;
-  referers: string;
+  modal: string;
   visits: string;
   unique: string;
   visitsPercentage: string;

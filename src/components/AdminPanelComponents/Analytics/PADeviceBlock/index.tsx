@@ -8,8 +8,7 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { compassOutline } from 'ionicons/icons';
-import classNames from 'classnames';
+import { laptopOutline } from 'ionicons/icons';
 import {
   createColumnHelper,
   flexRender,
@@ -17,6 +16,7 @@ import {
   getPaginationRowModel,
   useReactTable
 } from '@tanstack/react-table';
+import classNames from 'classnames';
 
 /**
  * Custom Imports go down
@@ -29,7 +29,7 @@ import {
   ZIonText
 } from '@/components/ZIonComponents';
 import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
-import ZRCPie from '@/components/CustomComponents/Charts/Pie';
+import ZRCPolarArea from '@/components/CustomComponents/Charts/PolarArea';
 
 /**
  * Custom Hooks Imports go down
@@ -47,7 +47,7 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
-  ZAnalyticsReferersTableColumnIds,
+  ZAnalyticsDeviceTableColumnIds,
   type IAnalyticsModalTable
 } from '@/types/AdminPanel/index.type';
 
@@ -70,7 +70,7 @@ import {
  * Component props type go down
  * ? Like if you have a type for props it should be please Down
  * */
-interface PAReferersBlockI {
+interface PABrowserBlockI {
   data?: IAnalyticsModalTable[];
 }
 
@@ -82,7 +82,7 @@ interface PAReferersBlockI {
 
 const emptyArray: never[] = [];
 
-const PAReferersBlock: React.FC<PAReferersBlockI> = ({ data }) => {
+const PADevicesBlock: React.FC<PABrowserBlockI> = ({ data }) => {
   const { isLgScale } = useZMediaQueryScale();
 
   return (
@@ -92,23 +92,24 @@ const PAReferersBlock: React.FC<PAReferersBlockI> = ({ data }) => {
           'px-2 py-3 border-b zaions__bg_white': true,
           'ion-text-center': !isLgScale
         })}>
-        <ZIonText className='text-lg'>🧭 Referers</ZIonText>
+        <ZIonText className='text-lg'>💻 Device type</ZIonText>
       </div>
       {data !== undefined && data?.length > 0 ? (
-        <PAReferersTable data={data} />
+        <PADeviceTable data={data} />
       ) : (
         <div className='flex flex-col gap-3 ion-padding ion-align-items-center ion-justify-content-center'>
           <ZIonIcon
-            icon={compassOutline}
+            icon={laptopOutline}
             className='w-20 h-20'
             color='medium'
           />
           <div className='flex flex-col mt-3 ion-text-center'>
-            <ZIonText className='text-lg'>Link Unexplored</ZIonText>
+            <ZIonText className='text-lg'>Device Discovery</ZIonText>
             <ZIonText
               className='mt-2'
               color='medium'>
-              No referers data available.
+              No device data available. your short link is ready to be discoverd
+              by a variety of devices.
             </ZIonText>
           </div>
         </div>
@@ -117,14 +118,15 @@ const PAReferersBlock: React.FC<PAReferersBlockI> = ({ data }) => {
   );
 };
 
-const PAReferersTable: React.FC<PAReferersBlockI> = ({ data }) => {
+const PADeviceTable: React.FC<PABrowserBlockI> = ({ data }) => {
   // #region Managing table data with react-table.
   const columnHelper = createColumnHelper<IAnalyticsModalTable>();
+
   const defaultColumns = [
     // Countries
     columnHelper.accessor(itemData => itemData.modal, {
-      header: 'Referers',
-      id: ZAnalyticsReferersTableColumnIds.referers,
+      header: 'Device',
+      id: ZAnalyticsDeviceTableColumnIds.device,
       cell: row => {
         return (
           <div className=''>
@@ -132,20 +134,20 @@ const PAReferersTable: React.FC<PAReferersBlockI> = ({ data }) => {
           </div>
         );
       },
-      footer: 'Referers'
+      footer: 'Device'
     }),
 
     // visits
     columnHelper.accessor(itemData => itemData.visits, {
       header: 'Visits',
-      id: ZAnalyticsReferersTableColumnIds.visits,
+      id: ZAnalyticsDeviceTableColumnIds.visits,
       footer: 'Visits'
     }),
 
     // unique
     columnHelper.accessor(itemData => itemData.unique, {
       header: 'Unique',
-      id: ZAnalyticsReferersTableColumnIds.unique,
+      id: ZAnalyticsDeviceTableColumnIds.unique,
       footer: 'Unique',
       cell: row => {
         return (
@@ -160,7 +162,7 @@ const PAReferersTable: React.FC<PAReferersBlockI> = ({ data }) => {
 
     // visitsPercentage
     columnHelper.accessor(itemData => itemData.visitsPercentage, {
-      id: ZAnalyticsReferersTableColumnIds.visitsPercentage,
+      id: ZAnalyticsDeviceTableColumnIds.visitsPercentage,
       header: '% Visits',
       footer: '% Visits',
       cell: row => {
@@ -173,7 +175,7 @@ const PAReferersTable: React.FC<PAReferersBlockI> = ({ data }) => {
     })
   ];
 
-  const zReferersTable = useReactTable({
+  const zDeviceTable = useReactTable({
     columns: defaultColumns,
     data: data ?? emptyArray,
     getCoreRowModel: getCoreRowModel(),
@@ -183,47 +185,39 @@ const PAReferersTable: React.FC<PAReferersBlockI> = ({ data }) => {
     debugColumns: false
   });
   // #endregion
-
+  const _chartDomeData = {
+    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+    datasets: [
+      {
+        label: '# of Votes',
+        data: [12, 19, 3, 5, 2, 3],
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.5)',
+          'rgba(54, 162, 235, 0.5)',
+          'rgba(255, 206, 86, 0.5)',
+          'rgba(75, 192, 192, 0.5)',
+          'rgba(153, 102, 255, 0.5)',
+          'rgba(255, 159, 64, 0.5)'
+        ],
+        borderWidth: 1
+      }
+    ]
+  };
   return (
     <>
-      <div className='h-[15rem] my-3'>
-        <ZRCPie
+      <div className='h-[20rem] my-3'>
+        <ZRCPolarArea
           width='100%'
           height='100%'
           options={{ maintainAspectRatio: false }}
-          data={{
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-            datasets: [
-              {
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                  'rgba(255, 99, 132, 0.2)',
-                  'rgba(54, 162, 235, 0.2)',
-                  'rgba(255, 206, 86, 0.2)',
-                  'rgba(75, 192, 192, 0.2)',
-                  'rgba(153, 102, 255, 0.2)',
-                  'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                  'rgba(255, 99, 132, 1)',
-                  'rgba(54, 162, 235, 1)',
-                  'rgba(255, 206, 86, 1)',
-                  'rgba(75, 192, 192, 1)',
-                  'rgba(153, 102, 255, 1)',
-                  'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-              }
-            ]
-          }}
+          data={_chartDomeData}
         />
       </div>
       <ZCustomScrollable
         className='w-full border h-max ion-no-padding'
         scrollX={true}>
         <div className='min-w-[55rem]'>
-          {zReferersTable.getHeaderGroups().map((_headerInfo, _headerIndex) => {
+          {zDeviceTable.getHeaderGroups().map((_headerInfo, _headerIndex) => {
             return (
               <ZIonRow
                 key={_headerIndex}
@@ -248,7 +242,7 @@ const PAReferersTable: React.FC<PAReferersBlockI> = ({ data }) => {
             <ZIonCol
               size='12'
               className='w-full ion-no-padding'>
-              {zReferersTable.getRowModel().rows.map((_rowInfo, _rowIndex) => {
+              {zDeviceTable.getRowModel().rows.map((_rowInfo, _rowIndex) => {
                 return (
                   <ZIonRow
                     key={_rowIndex}
@@ -285,4 +279,4 @@ const PAReferersTable: React.FC<PAReferersBlockI> = ({ data }) => {
   );
 };
 
-export default PAReferersBlock;
+export default PADevicesBlock;

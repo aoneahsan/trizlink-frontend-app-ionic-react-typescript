@@ -16,7 +16,8 @@ import {
   Title,
   Tooltip,
   Legend,
-  ArcElement
+  ArcElement,
+  RadialLinearScale
 } from 'chart.js';
 
 /**
@@ -42,6 +43,7 @@ import {
 
 const ZChartHOC: React.FC<{ children: ReactNode }> = ({ children }) => {
   ChartJS.register(
+    RadialLinearScale,
     CategoryScale,
     LinearScale,
     BarElement,
