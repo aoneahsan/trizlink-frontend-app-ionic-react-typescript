@@ -251,7 +251,8 @@ export enum apiTypeToValidateEnum {
 
 export enum zCreateElementTestingSelectorKeyEnum {
   selector = 'selector',
-  listSelector = 'listSelector'
+  listSelector = 'listSelector',
+  dateIdSelector = 'dateIdSelector'
 }
 
 export enum ZSetPasswordTabEnum {

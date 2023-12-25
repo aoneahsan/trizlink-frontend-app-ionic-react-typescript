@@ -1430,6 +1430,11 @@ export const zCreateElementTestingSelector = ({
         'cy-els': _attributeValue
       };
 
+    case zCreateElementTestingSelectorKeyEnum.dateIdSelector:
+      return {
+        'data-trz-leid': _attributeValue
+      };
+
     default:
       return {
         'cy-es': _attributeValue
@@ -2121,4 +2126,49 @@ export const shouldBlockReload = (shouldBlock: boolean = false): void => {
   } catch (error) {
     reportCustomError(error);
   }
+};
+
+export const zComponentTestingSelectorMaker = ({
+  testinglistselector,
+  testingselector,
+  testingidselector
+}: {
+  testinglistselector?: string;
+  testingselector?: string;
+  testingidselector?: string;
+}): {
+  _testinglistselector: ZGenericObject;
+  _testingSelector: ZGenericObject;
+  _idSelector: ZGenericObject;
+} => {
+  const _testinglistselector =
+    testinglistselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: testinglistselector,
+            _key: zCreateElementTestingSelectorKeyEnum.listSelector
+          })
+        }
+      : {};
+
+  const _testingSelector =
+    testingselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: testingselector
+          })
+        }
+      : {};
+
+  const _idSelector =
+    testingidselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: testingidselector,
+            _key: zCreateElementTestingSelectorKeyEnum.dateIdSelector
+          })
+        }
+      : {};
+
+  return { _testinglistselector, _testingSelector, _idSelector };
 };
