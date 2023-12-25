@@ -68,7 +68,8 @@ export enum ZMediaEnum {
 
 export enum reloadBlockingTypeEnum {
   libFormThemeSection = 'libFormThemeSection',
-  libBlockFormSection = 'libBlockFormSection'
+  libBlockFormSection = 'libBlockFormSection',
+  signUpPage = 'signUpPage'
 }
 
 export interface reloadBlockingInterface {

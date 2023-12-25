@@ -40,11 +40,7 @@ import {
 import { ZFallbackIonSpinner2 } from '@/components/CustomComponents/FallbackSpinner';
 import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
 
-import {
-  useZRQGetRequest,
-  useZRQUpdateRequest
-} from '@/ZaionsHooks/zreactquery-hooks';
-import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 
 /**
  * Global Constants Imports go down
@@ -56,8 +52,7 @@ import {
   createRedirectRoute,
   generatePredefinedThemeBackgroundValue,
   isZNonEmptyString,
-  isZNonEmptyStrings,
-  zStringify
+  isZNonEmptyStrings
 } from '@/utils/helpers';
 import { useLocation, useParams } from 'react-router';
 import { API_URL_ENUM, ZWSTypeEum } from '@/utils/enums';
@@ -150,6 +145,7 @@ const LinkInBioDesignPage: React.FC = () => {
   const { values, dirty, submitForm } = useFormikContext<LinkInBioType>();
 
   // #region Component states
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [compState, setCompState] = useState<{
     linkInBioBlocksReorder: {
       Ids?: string[];
@@ -167,21 +163,21 @@ const LinkInBioDesignPage: React.FC = () => {
 
   // #region Custom hooks.
   // validate the request. this hook will show success notification if the request->success is true and show error notification if request->success is false.
-  const { validateRequestResponse } = useZValidateRequestResponse();
+  // const { validateRequestResponse } = useZValidateRequestResponse();
   const location = useLocation();
   const { zNavigatePushRoute } = useZNavigate();
   // #endregion
 
   // #region APIS
   // Update Link-in-bio blocks reorder API
-  const { mutateAsync: UpdateLinkInBioBlocksReorder } = useZRQUpdateRequest({
-    _url: API_URL_ENUM.linkInBioBlocks_reorder,
-    _queriesKeysToInvalidate: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
-      workspaceId,
-      linkInBioId
-    ]
-  });
+  // const { mutateAsync: UpdateLinkInBioBlocksReorder } = useZRQUpdateRequest({
+  //   _url: API_URL_ENUM.linkInBioBlocks_reorder,
+  //   _queriesKeysToInvalidate: [
+  //     CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
+  //     workspaceId,
+  //     linkInBioId
+  //   ]
+  // });
 
   // fetching link-in-bio - blocks with the linkInBioId data from backend.
   const {
@@ -250,37 +246,37 @@ const LinkInBioDesignPage: React.FC = () => {
   };
 
   // blocks reorder function
-  const linkInBioBlocksReOrderHandler = async (): Promise<void> => {
-    try {
-      // The update api...
-      const _result = await UpdateLinkInBioBlocksReorder({
-        itemIds: [workspaceId ?? '', linkInBioId ?? ''],
-        urlDynamicParts: [
-          CONSTANTS.RouteParams.workspace.workspaceId,
-          CONSTANTS.RouteParams.linkInBio.linkInBioId
-        ],
-        requestData: zStringify({
-          items: compState.linkInBioBlocksReorder.Ids
-        })
-      });
+  // const linkInBioBlocksReOrderHandler = async (): Promise<void> => {
+  //   try {
+  //     // The update api...
+  //     const _result = await UpdateLinkInBioBlocksReorder({
+  //       itemIds: [workspaceId ?? '', linkInBioId ?? ''],
+  //       urlDynamicParts: [
+  //         CONSTANTS.RouteParams.workspace.workspaceId,
+  //         CONSTANTS.RouteParams.linkInBio.linkInBioId
+  //       ],
+  //       requestData: zStringify({
+  //         items: compState.linkInBioBlocksReorder.Ids
+  //       })
+  //     });
 
-      // if _result of the UpdateLinkInBioBlocksReorder api is success this showing success notification else not success then error notification.
-      await validateRequestResponse({
-        resultObj: _result
-      });
+  //     // if _result of the UpdateLinkInBioBlocksReorder api is success this showing success notification else not success then error notification.
+  //     await validateRequestResponse({
+  //       resultObj: _result
+  //     });
 
-      // hiding the reorder button by assigning isEnable to false
-      setCompState(oldValues => ({
-        ...oldValues,
-        linkInBioBlocksReorder: {
-          Ids: oldValues.linkInBioBlocksReorder.Ids,
-          isEnable: false
-        }
-      }));
-    } catch (error) {
-      reportCustomError(error);
-    }
-  };
+  //     // hiding the reorder button by assigning isEnable to false
+  //     setCompState(oldValues => ({
+  //       ...oldValues,
+  //       linkInBioBlocksReorder: {
+  //         Ids: oldValues.linkInBioBlocksReorder.Ids,
+  //         isEnable: false
+  //       }
+  //     }));
+  //   } catch (error) {
+  //     reportCustomError(error);
+  //   }
+  // };
   // #endregion
 
   useEffect(() => {

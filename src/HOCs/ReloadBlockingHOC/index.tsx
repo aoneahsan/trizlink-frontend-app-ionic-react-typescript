@@ -18,11 +18,9 @@ const ReloadBlockingHOC: React.FC<IReloadBlockingHOC> = ({ children }) => {
   );
   //
   const isSamePage = useRouteMatch(_pageUrl)?.isExact;
-
+  console.log({ c: reloadBlockingRState.isBlock });
   useEffect(() => {
-    if (isSamePage === true) {
-      shouldBlockReload(reloadBlockingRState?.isBlock);
-    }
+    shouldBlockReload(reloadBlockingRState?.isBlock);
   }, [isSamePage, reloadBlockingRState.isBlock]);
 
   return <>{children}</>;

@@ -1021,7 +1021,7 @@ ion-modal.zaions__modal_w100 {
 }
 
 .ion-padding-end-0 {
-  --padding-end: 0;
+  --padding-end: 0 !important;
 }
 
 .ion-padding-end-point-2rem {

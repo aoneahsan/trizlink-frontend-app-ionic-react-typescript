@@ -64,7 +64,7 @@ const PageAnalyticsInfoBlocks: React.FC = () => {
       })}>
       {/* Click Info Block */}
       <ZIonCol
-        className='flex py-4 border zaions__bg_white ion-align-items-center ion-justify-content-center'
+        className='flex py-4 border zaions__light_bg shadow-md rounded-lg ion-align-items-center ion-justify-content-center'
         sizeXl='2.2'
         sizeLg='2.9'
         sizeMd='3.9'
@@ -83,7 +83,7 @@ const PageAnalyticsInfoBlocks: React.FC = () => {
 
       {/* Users Info Block */}
       <ZIonCol
-        className='flex py-4 border zaions__bg_white ion-align-items-center ion-justify-content-center'
+        className='flex py-4 border zaions__light_bg shadow-md rounded-lg ion-align-items-center ion-justify-content-center'
         sizeXl='2.2'
         sizeLg='2.9'
         sizeMd='3.9'
@@ -102,7 +102,7 @@ const PageAnalyticsInfoBlocks: React.FC = () => {
 
       {/* Referrers Info Block */}
       <ZIonCol
-        className='flex py-4 border zaions__bg_white ion-align-items-center ion-justify-content-center'
+        className='flex py-4 border zaions__light_bg shadow-md rounded-lg ion-align-items-center ion-justify-content-center'
         sizeXl='2.2'
         sizeLg='2.9'
         sizeMd='3.9'
@@ -121,7 +121,7 @@ const PageAnalyticsInfoBlocks: React.FC = () => {
 
       {/* Conversion Info Block */}
       <ZIonCol
-        className='flex py-4 border zaions__bg_white ion-align-items-center ion-justify-content-center'
+        className='flex py-4 border zaions__light_bg shadow-md rounded-lg ion-align-items-center ion-justify-content-center'
         sizeXl='2.2'
         sizeLg='2.9'
         sizeMd='3.9'
@@ -140,7 +140,7 @@ const PageAnalyticsInfoBlocks: React.FC = () => {
 
       {/* Conversion Info Block */}
       <ZIonCol
-        className='flex py-4 border zaions__bg_white ion-align-items-center ion-justify-content-center'
+        className='flex py-4 border zaions__light_bg shadow-md rounded-lg ion-align-items-center ion-justify-content-center'
         sizeXl='2.2'
         sizeLg='2.9'
         sizeMd='3.9'

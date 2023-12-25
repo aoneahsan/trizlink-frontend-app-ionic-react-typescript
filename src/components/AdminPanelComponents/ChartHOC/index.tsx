@@ -15,7 +15,8 @@ import {
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ArcElement
 } from 'chart.js';
 
 /**
@@ -46,7 +47,8 @@ const ZChartHOC: React.FC<{ children: ReactNode }> = ({ children }) => {
     BarElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    ArcElement
   );
   return <>{children}</>;
 };

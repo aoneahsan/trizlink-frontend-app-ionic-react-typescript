@@ -5,8 +5,6 @@ import React from 'react';
 
 // Custom Imports
 import ZIonPage from '@/components/ZIonPage';
-import ZaionsSeparator from '@/components/InPageComponents/ZaionsSepatator/ZaionsSeparator';
-import ZaionsSignUpOptions from '@/components/ZaionsSignUpPage/ZaionsSignUpOptions';
 import ZaionsSignUpForm from '@/components/ZaionsSignUpPage/ZaionsSignUpForm';
 import { ZIonContent, ZIonGrid } from '@/components/ZIonComponents';
 import ZaionsSecondaryHeader from '@/components/InPageComponents/ZaionsSecondaryHeader';
@@ -18,15 +16,6 @@ const SignUp: React.FC = () => {
       <ZIonContent fullscreen>
         <ZaionsSecondaryHeader />
         <ZIonGrid>
-          <ZaionsSignUpOptions />
-          <ZaionsSeparator
-            sizeXl='5'
-            sizeLg='5.7'
-            sizeMd='6.5'
-            sizeSm='10'
-            sizeXs='12'
-            className='my-5'
-          />
           <ZaionsSignUpForm />
         </ZIonGrid>
       </ZIonContent>

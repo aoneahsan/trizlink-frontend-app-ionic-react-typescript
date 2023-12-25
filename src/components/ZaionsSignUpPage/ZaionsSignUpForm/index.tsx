@@ -1,10 +1,15 @@
 // Core Imports
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 // Package Imports
 import { Form, Formik, useFormikContext } from 'formik';
 import classNames from 'classnames';
-import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
+import {
+  eyeOffOutline,
+  eyeOutline,
+  logoGoogle,
+  refreshOutline
+} from 'ionicons/icons';
 import { useSetRecoilState } from 'recoil';
 
 // Custom Imports
@@ -15,7 +20,9 @@ import {
   ZIonInput,
   ZIonRow,
   ZIonNote,
-  ZIonButton
+  ZIonButton,
+  ZIonRouterLink,
+  ZIonImg
 } from '@/components/ZIonComponents';
 
 // Global Constants
@@ -27,7 +34,8 @@ import {
   STORAGE,
   validateFields,
   zStringify,
-  extractInnerData
+  extractInnerData,
+  isZNonEmptyString
 } from '@/utils/helpers';
 import {
   API_URL_ENUM,
@@ -53,12 +61,18 @@ import {
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { useZIonErrorAlert, useZIonLoading } from '@/ZaionsHooks/zionic-hooks';
-import { type UserAuthData } from '@/types/ZaionsApis.type';
+import {
+  type ZLinkMutateApiType,
+  type UserAuthData
+} from '@/types/ZaionsApis.type';
 import {
   type FormikSetErrorsType,
   type resetFormType
 } from '@/types/ZaionsFormik.type';
-import { type ZGenericObject } from '@/types/zaionsAppSettings.type';
+import {
+  reloadBlockingTypeEnum,
+  type ZGenericObject
+} from '@/types/zaionsAppSettings.type';
 import {
   useZRQCreateRequest,
   useZRQUpdateRequest
@@ -70,6 +84,10 @@ import {
 } from '@/types/UserAccount/index.type';
 import dayjs from 'dayjs';
 import ZCountdown from '@/components/CustomComponents/ZCountDown';
+import { reloadBlockingRStateAtom } from '@/ZaionsStore/AppRStates';
+import { useLocation } from 'react-router';
+import { ProductFavicon } from '@/assets/images';
+import ZaionsSeparator from '@/components/InPageComponents/ZaionsSepatator/ZaionsSeparator';
 
 // Style
 
@@ -106,7 +124,7 @@ const ZaionsSignUpForm: React.FC = props => {
         _method: 'post',
         _isAuthenticatedRequest: false,
         _data: zStringify({
-          username: _values.username,
+          displayName: _values.displayName,
           email: _values.emailAddress,
           password: _values.password,
           password_confirmation: _values.confirm_password
@@ -176,7 +194,7 @@ const ZaionsSignUpForm: React.FC = props => {
         const _apiErrors = (error.response?.data as { errors: ZGenericObject })
           ?.errors;
         const _errors = formatApiRequestErrorForFormikFormField(
-          ['username', 'emailAddress', 'password'],
+          ['displayName', 'emailAddress', 'password'],
           ['name', 'email', 'password'],
           _apiErrors
         );
@@ -215,95 +233,190 @@ const ZaionsSignUpForm: React.FC = props => {
   }, []);
 
   const formikInitialValues = {
-    username: '',
+    displayName: '',
     emailAddress: compState?.email ?? '',
     password: '',
     otp: '',
     confirm_password: '',
 
+    isDisplayNameApiError: false,
+    isDisplayNameApiSuccess: true,
+    displayNameApiErrorText: '',
+    displayNameApiSuccessText: '',
     isOTPApiError: false,
     OTPApiErrorText: '',
     OTPCodeValidTill: compState?.OTPCodeValidTill ?? '',
     resendOTPValidCheck: compState?.resendOTPValidCheck ?? false,
+    OTPValidCheckExecuted: false,
 
     tab: compState?.tab ?? ZSetPasswordTabEnum.sendOptTab
   };
 
   return (
-    <ZIonRow className='ion-justify-content-center'>
-      <ZIonCol
-        className='ion-text-start'
-        size='4.2'
-        sizeLg='5'
-        sizeMd='6.2'
-        sizeSm='8.2'
-        sizeXs='11.5'>
-        <Formik
-          // Initial Values of sign up form fields
-          initialValues={formikInitialValues}
-          // Validations of sign up form fields
-          validate={values => {
-            try {
-              // Error object
-              const errors: {
-                username?: string;
-                emailAddress?: string;
-                password?: string;
-                confirm_password?: string;
-              } = {};
+    <Formik
+      // Initial Values of sign up form fields
+      initialValues={formikInitialValues}
+      // Validations of sign up form fields
+      validate={values => {
+        try {
+          // Error object
+          const errors: {
+            displayName?: string;
+            emailAddress?: string;
+            password?: string;
+            confirm_password?: string;
+          } = {};
 
-              // validating the fields and checking for error and error ? setting the errors : validated
-              validateFields(
-                ['username', 'emailAddress', 'password', 'confirm_password'],
-                values,
-                errors,
-                [
-                  VALIDATION_RULE.username,
-                  VALIDATION_RULE.email,
-                  VALIDATION_RULE.password,
-                  VALIDATION_RULE.confirm_password
-                ]
-              );
+          // validating the fields and checking for error and error ? setting the errors : validated
+          validateFields(
+            ['displayName', 'emailAddress', 'password', 'confirm_password'],
+            values,
+            errors,
+            [
+              VALIDATION_RULE.username,
+              VALIDATION_RULE.email,
+              VALIDATION_RULE.password,
+              VALIDATION_RULE.confirm_password
+            ]
+          );
 
-              // checking the confirm password is === password ? validated : setting an error + invalidate
-              if (values.confirm_password !== values.password) {
-                errors.confirm_password =
-                  MESSAGES.GENERAL.FORM.PASSWORD_NOT_MATCH;
-              }
+          // checking the confirm password is === password ? validated : setting an error + invalidate
+          if (values.confirm_password !== values.password) {
+            errors.confirm_password = MESSAGES.GENERAL.FORM.PASSWORD_NOT_MATCH;
+          }
 
-              // returning errors object
-              return errors;
-            } catch (error) {
-              console.error({
-                errorPlacement:
-                  'From components - InPageComponents - ZaionsSignUpPage - ZaionsSignUpForm Formik validate Catch',
-                error
-              });
-            }
-          }}
-          enableReinitialize
-          // Submit function
-          onSubmit={async (_values, { resetForm, setErrors }) => {
-            await FormikSubmissionHandler(_values, resetForm, setErrors);
-          }}>
-          {({ values }) => (
-            <Form>
-              {values.tab === ZSetPasswordTabEnum.sendOptTab ? (
-                <ZSendOtpTab />
-              ) : values.tab === ZSetPasswordTabEnum.confirmOptTab ? (
-                <ZConfirmOptTab />
-              ) : values.tab === ZSetPasswordTabEnum.newPasswordTab ? (
-                <ZNewPasswordTab />
-              ) : null}
-            </Form>
+          // returning errors object
+          return errors;
+        } catch (error) {
+          console.error({
+            errorPlacement:
+              'From components - InPageComponents - ZaionsSignUpPage - ZaionsSignUpForm Formik validate Catch',
+            error
+          });
+        }
+      }}
+      enableReinitialize
+      // Submit function
+      onSubmit={async (_values, { resetForm, setErrors }) => {
+        await FormikSubmissionHandler(_values, resetForm, setErrors);
+      }}>
+      {({ values }) => (
+        <>
+          <ZIonRow>
+            <ZIonCol
+              className='flex mx-auto ion-justify-content-center'
+              sizeXl='6'
+              sizeLg='6.7'
+              sizeMd='7.5'
+              sizeSm='10'
+              sizeXs='12'>
+              <div className='w-full ion-text-center'>
+                <ZIonImg
+                  src={ProductFavicon}
+                  className='w-[6rem] h-[6rem] mx-auto mb-6'
+                />
+
+                <ZIonText
+                  className={classNames({
+                    'block mb-3 text-2xl font-bold': true
+                  })}>
+                  Sign up and start shortening
+                </ZIonText>
+
+                <ZIonText
+                  className={classNames({
+                    block: true,
+                    'mb-5': values.tab === ZSetPasswordTabEnum.confirmOptTab
+                  })}>
+                  <ZIonText>
+                    {values.tab === ZSetPasswordTabEnum.sendOptTab
+                      ? 'Already have an account? '
+                      : values.tab === ZSetPasswordTabEnum.confirmOptTab
+                      ? 'Confirm OPT(One Time Password) send to your email.'
+                      : ''}
+                  </ZIonText>
+                  {values.tab === ZSetPasswordTabEnum.sendOptTab && (
+                    <ZIonRouterLink
+                      className='underline'
+                      routerLink={ZaionsRoutes.LoginRoute}
+                      testingselector={
+                        CONSTANTS.testingSelectors.signupPage.loginButton
+                      }>
+                      Login
+                    </ZIonRouterLink>
+                  )}
+                </ZIonText>
+              </div>
+            </ZIonCol>
+          </ZIonRow>
+          {values.tab === ZSetPasswordTabEnum.sendOptTab && (
+            <>
+              <ZIonRow>
+                {/* <ZIonCol className="ion-text-center" size="3.6"> */}
+                {/* </ZIonCol> */}
+                <ZIonCol
+                  className='mx-auto mt-3 ion-text-center'
+                  sizeXl='5'
+                  sizeLg='5.7'
+                  sizeMd='6.5'
+                  sizeSm='10'
+                  sizeXs='12'>
+                  <ZIonButton
+                    className='me-2 ion-text-capitalize'
+                    color='tertiary'
+                    expand='block'
+                    testingselector={
+                      CONSTANTS.testingSelectors.signupPage.googleSignupButton
+                    }>
+                    <ZIonIcon
+                      icon={logoGoogle}
+                      className='font-bold me-1'
+                    />
+                    Sign Up with Google
+                  </ZIonButton>
+                </ZIonCol>
+                {/* <ZIonCol className="ion-text-center" size="3.6"></ZIonCol> */}
+              </ZIonRow>
+
+              <ZaionsSeparator
+                sizeXl='5'
+                sizeLg='5.7'
+                sizeMd='6.5'
+                sizeSm='10'
+                sizeXs='12'
+                className='my-5'
+              />
+            </>
           )}
-        </Formik>
-      </ZIonCol>
-    </ZIonRow>
+
+          <ZIonRow className='ion-justify-content-center'>
+            <ZIonCol
+              className='ion-text-start'
+              size='4.2'
+              sizeLg='5'
+              sizeMd='6.2'
+              sizeSm='8.2'
+              sizeXs='11.5'>
+              <Form>
+                {values.tab === ZSetPasswordTabEnum.sendOptTab ? (
+                  <ZSendOtpTab />
+                ) : values.tab === ZSetPasswordTabEnum.confirmOptTab ? (
+                  <ZConfirmOptTab />
+                ) : values.tab === ZSetPasswordTabEnum.newPasswordTab ? (
+                  <ZNewPasswordTab />
+                ) : null}
+              </Form>
+            </ZIonCol>
+          </ZIonRow>
+        </>
+      )}
+    </Formik>
   );
 };
 
 const ZSendOtpTab: React.FC = () => {
+  const setReloadBlockingRState = useSetRecoilState(reloadBlockingRStateAtom);
+  const location = useLocation();
   const {
     handleChange,
     handleBlur,
@@ -345,13 +458,13 @@ const ZSendOtpTab: React.FC = () => {
         });
 
         const _response = await zSendOtpAsyncMutate(_stringifyData);
-        if (_response !== undefined) {
+        if (_response !== undefined && _response !== null) {
           const _data = extractInnerData<{
             success: boolean;
             OTPCodeValidTill: string;
           }>(_response, extractInnerDataOptionsEnum.createRequestResponseItem);
 
-          if (_data !== undefined && _data?.success) {
+          if (_data !== null && _data !== undefined && _data?.success) {
             void setFieldValue(
               'OTPCodeValidTill',
               _data?.OTPCodeValidTill,
@@ -365,6 +478,13 @@ const ZSendOtpTab: React.FC = () => {
             };
 
             await STORAGE.SET(LOCALSTORAGE_KEYS.SIGNUP_USER_DATA, userData);
+
+            setReloadBlockingRState(_oldValues => ({
+              ..._oldValues,
+              isBlock: true,
+              pageUrl: location.pathname,
+              type: reloadBlockingTypeEnum.signUpPage
+            }));
 
             void setFieldValue('tab', ZSetPasswordTabEnum.confirmOptTab, false);
 
@@ -459,6 +579,8 @@ const ZSendOtpTab: React.FC = () => {
 };
 
 const ZConfirmOptTab: React.FC = () => {
+  const setReloadBlockingRState = useSetRecoilState(reloadBlockingRStateAtom);
+
   const { handleChange, handleBlur, setFieldValue, values, touched } =
     useFormikContext<{
       emailAddress: string;
@@ -466,6 +588,7 @@ const ZConfirmOptTab: React.FC = () => {
       tab: ZSetPasswordTabEnum;
       OTPCodeValidTill: string;
       resendOTPValidCheck: boolean;
+      OTPValidCheckExecuted: boolean;
 
       isEmailAddressApiError: boolean;
       emailAddressApiErrorText: string;
@@ -615,6 +738,16 @@ const ZConfirmOptTab: React.FC = () => {
   };
   // #endregion
 
+  useEffect(() => {
+    setReloadBlockingRState(_oldValues => ({
+      ..._oldValues,
+      isBlock: true,
+      pageUrl: location.pathname,
+      type: reloadBlockingTypeEnum.signUpPage
+    }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <>
       {/* OTP Field */}
@@ -648,7 +781,8 @@ const ZConfirmOptTab: React.FC = () => {
             if (
               dayjs().isAfter(
                 dayjs(values?.OTPCodeValidTill).subtract(4, 'minute')
-              )
+              ) &&
+              !values.OTPValidCheckExecuted
             ) {
               void (async () => {
                 const userData = {
@@ -661,6 +795,7 @@ const ZConfirmOptTab: React.FC = () => {
                 await STORAGE.SET(LOCALSTORAGE_KEYS.SIGNUP_USER_DATA, userData);
               })();
               void setFieldValue('resendOTPValidCheck', true, false);
+              void setFieldValue('OTPValidCheckExecuted', true, false);
             }
           }}
           countDownTime={values?.OTPCodeValidTill}
@@ -721,6 +856,7 @@ const ZConfirmOptTab: React.FC = () => {
 };
 
 const ZNewPasswordTab: React.FC = () => {
+  const setReloadBlockingRState = useSetRecoilState(reloadBlockingRStateAtom);
   // #region Custom hooks.
   const {
     handleChange,
@@ -738,10 +874,14 @@ const ZNewPasswordTab: React.FC = () => {
     inviteToken: string;
 
     password: string;
-    username: string;
+    displayName: string;
     canViewPassword: boolean;
     confirm_password: string;
     canViewConfirmPassword: boolean;
+    isDisplayNameApiError: boolean;
+    isDisplayNameApiSuccess: boolean;
+    displayNameApiErrorText: string;
+    displayNameApiSuccessText: string;
   }>();
   const { zNavigatePushRoute } = useZNavigate();
   const { presentZIonErrorAlert } = useZIonErrorAlert();
@@ -754,6 +894,14 @@ const ZNewPasswordTab: React.FC = () => {
     authenticated: false,
     _loaderMessage: 'Setting password...'
   });
+
+  const { mutateAsync: zCheckIfUsernameIsAvailableAsyncMutate } =
+    useZRQCreateRequest({
+      _url: API_URL_ENUM.checkIfUsernameIsAvailable,
+      _showAlertOnError: false,
+      _authenticated: false,
+      _loaderMessage: 'Checking...'
+    });
   // #endregion
 
   // #region Recoil states.
@@ -764,7 +912,7 @@ const ZNewPasswordTab: React.FC = () => {
   // #endregion
 
   // #region Functions.
-  const ZSetUsernamePassword = async (): Promise<void> => {
+  const ZSetDisplayNamePassword = async (): Promise<void> => {
     try {
       if (
         values?.password?.length > 0 &&
@@ -772,7 +920,7 @@ const ZNewPasswordTab: React.FC = () => {
       ) {
         const _stringifyData = zStringify({
           email: values.emailAddress,
-          username: values.username,
+          username: values.displayName,
           password: values.password,
           password_confirmation: values.confirm_password
         });
@@ -783,7 +931,7 @@ const ZNewPasswordTab: React.FC = () => {
           urlDynamicParts: []
         });
 
-        if (_response !== undefined) {
+        if (_response !== undefined && _response !== null) {
           const _data = extractInnerData<{
             user: UserAccountType;
             token: AuthTokenResponseType;
@@ -803,6 +951,13 @@ const ZNewPasswordTab: React.FC = () => {
 
             // Set user data && user token to localstorage.
             if (userData !== undefined && userToken.token !== undefined) {
+              setReloadBlockingRState(_oldValues => ({
+                ..._oldValues,
+                isBlock: false,
+                pageUrl: '',
+                type: null
+              }));
+
               // store User token.
               void STORAGE.SET(LOCALSTORAGE_KEYS.USERDATA, userData);
               // store auth token.
@@ -848,8 +1003,8 @@ const ZNewPasswordTab: React.FC = () => {
 
         if (_apiErrorCode === ZErrorCodeEnum.serverError) {
           const _errors = formatApiRequestErrorForFormikFormField(
-            ['password', 'confirm_password'],
-            ['password', 'password_confirmation'],
+            ['displayName', 'password', 'confirm_password'],
+            ['username', 'password', 'password_confirmation'],
             _apiErrors as ZGenericObject
           );
 
@@ -865,33 +1020,130 @@ const ZNewPasswordTab: React.FC = () => {
       reportCustomError(error);
     }
   };
+
+  const checkIfUsernameIsAvailableHandler = useCallback(
+    async (_value: string) => {
+      try {
+        const _response = await zCheckIfUsernameIsAvailableAsyncMutate(_value);
+
+        if (
+          _response !== undefined &&
+          _response !== null &&
+          (_response as ZLinkMutateApiType<{ username: string }>).success
+        ) {
+          const _data = extractInnerData<{ username: string }>(
+            _response,
+            extractInnerDataOptionsEnum.createRequestResponseItem
+          );
+          void setFieldValue('isDisplayNameApiError', false, false);
+          void setFieldValue('displayNameApiErrorText', '', false);
+
+          //
+          void setFieldValue('isDisplayNameApiSuccess', true, false);
+          void setFieldValue(
+            'displayNameApiSuccessText',
+            _data?.username,
+            false
+          );
+        }
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          const _error = (
+            error?.response?.data as { errors: { username: string[] } }
+          )?.errors;
+
+          if (isZNonEmptyString(_error?.username[0])) {
+            void setFieldValue('isDisplayNameApiError', true, false);
+            void setFieldValue(
+              'displayNameApiErrorText',
+              _error?.username[0],
+              false
+            );
+          }
+        }
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+
   // #endregion
+
+  useEffect(() => {
+    setReloadBlockingRState(_oldValues => ({
+      ..._oldValues,
+      isBlock: true,
+      pageUrl: location.pathname,
+      type: reloadBlockingTypeEnum.signUpPage
+    }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
       <ZIonInput
-        name='username'
-        label='username*'
+        name='displayName'
+        label='Display Name*'
         labelPlacement='floating'
-        onIonChange={handleChange}
+        onIonChange={e => {
+          handleChange(e);
+          if (values.isDisplayNameApiError) {
+            void setFieldValue('isDisplayNameApiError', false, false);
+            void setFieldValue('displayNameApiErrorText', '', false);
+          }
+
+          if (values.isDisplayNameApiSuccess) {
+            void setFieldValue('isDisplayNameApiSuccess', false, false);
+            void setFieldValue('displayNameApiSuccessText', '', false);
+          }
+        }}
         onIonBlur={handleBlur}
-        value={values.username}
-        errorText={touched?.username === true ? errors.username : undefined}
+        value={values.displayName}
+        // errorText={
+        //   touched?.displayName === true ? errors.displayName : undefined
+        // }
+        errorText={
+          touched?.displayName === true && values?.isDisplayNameApiError
+            ? values?.displayNameApiErrorText
+            : errors.displayName
+        }
+        helperText={values.displayNameApiSuccessText}
         type='text'
         clearOnEdit={false}
         testingselector={CONSTANTS.testingSelectors.signupPage.passwordInput}
         className={classNames({
-          'ion-touched': touched?.username === true,
-          'ion-invalid': touched?.username === true && errors.username,
+          'ion-padding-end-0': true,
+          'ion-touched': touched?.displayName === true,
+          'ion-invalid':
+            touched?.displayName === true &&
+            (isZNonEmptyString(errors.displayName) ||
+              values?.isDisplayNameApiError),
           'ion-valid':
-            touched?.username === true &&
-            (errors.username === undefined ||
-              errors.username?.trim()?.length === 0)
-        })}
-      />
+            touched?.displayName === true &&
+            (!isZNonEmptyString(errors.displayName) ||
+              values?.isDisplayNameApiSuccess)
+        })}>
+        <ZIonButton
+          fill='clear'
+          slot='end'
+          size='large'
+          className='w-[3rem] ion-no-padding ion-no-margin ms-3'
+          testingselector={
+            CONSTANTS.testingSelectors.signupPage.checkDisplayNameAvailableBtn
+          }
+          onClick={() => {
+            void checkIfUsernameIsAvailableHandler(
+              zStringify({
+                username: values.displayName
+              })
+            );
+          }}>
+          <ZIonIcon icon={refreshOutline} />
+        </ZIonButton>
+      </ZIonInput>
 
       {/* Password Field */}
-      <div className='flex mt-4 mb-1 ion-align-items-start'>
+      <div className='flex pt-1 mt-5 ion-align-items-start'>
         <ZIonInput
           name='password'
           label='Password*'
@@ -912,39 +1164,41 @@ const ZNewPasswordTab: React.FC = () => {
           clearOnEdit={false}
           testingselector={CONSTANTS.testingSelectors.signupPage.passwordInput}
           className={classNames({
+            'ion-padding-end-0': true,
             'ion-touched': touched?.password === true,
             'ion-invalid': touched.password === true && errors.password,
             'ion-valid':
               touched?.password === true &&
               (errors?.password === undefined ||
                 errors?.password?.trim()?.length === 0)
-          })}
-        />
-
-        <ZIonButton
-          slot='end'
-          fill='clear'
-          size='large'
-          className='ion-no-padding ion-no-margin ms-3 w-max'
-          testingselector={
-            CONSTANTS.testingSelectors.signupPage.canViewPasswordButton
-          }
-          onClick={() => {
-            void setFieldValue(
-              'canViewPassword',
-              !values.canViewPassword,
-              false
-            );
-          }}>
-          <ZIonIcon
-            icon={values.canViewPassword ? eyeOffOutline : eyeOutline}
-          />
-        </ZIonButton>
+          })}>
+          <ZIonButton
+            slot='end'
+            fill='clear'
+            size='large'
+            className='w-[3rem] ion-no-padding ion-no-margin ms-3'
+            testingselector={
+              CONSTANTS.testingSelectors.signupPage.canViewPasswordButton
+            }
+            onClick={() => {
+              void setFieldValue(
+                'canViewPassword',
+                !values.canViewPassword,
+                false
+              );
+            }}>
+            <ZIonIcon
+              icon={values.canViewPassword ? eyeOffOutline : eyeOutline}
+            />
+          </ZIonButton>
+        </ZIonInput>
       </div>
 
       <ZIonNote className='w-full'>
         <ZIonRow>
-          <ZIonCol size='6'>
+          <ZIonCol
+            size='6'
+            className='pt-0'>
             <ZIonText
               color={
                 touched?.password === true
@@ -956,7 +1210,9 @@ const ZNewPasswordTab: React.FC = () => {
               8 or more characters
             </ZIonText>
           </ZIonCol>
-          <ZIonCol size='6'>
+          <ZIonCol
+            size='6'
+            className='pt-0'>
             <ZIonText
               color={
                 touched?.password === true
@@ -996,14 +1252,14 @@ const ZNewPasswordTab: React.FC = () => {
       </ZIonNote>
 
       {/* Confirm Password Field */}
-      <div className='flex mt-4 ion-align-items-start'>
+      <div className='flex pt-2 mt-5 ion-align-items-start'>
         <ZIonInput
           label='Confirm Password*'
+          name='confirm_password'
           labelPlacement='floating'
           onIonChange={handleChange}
           onIonBlur={handleBlur}
           value={values.confirm_password}
-          name='confirm_password'
           clearOnEdit={false}
           type={values?.canViewConfirmPassword ? 'text' : 'password'}
           testingselector={
@@ -1015,6 +1271,7 @@ const ZNewPasswordTab: React.FC = () => {
               : undefined
           }
           className={classNames({
+            'ion-padding-end-0': true,
             'ion-touched': touched?.confirm_password === true,
             'ion-invalid':
               touched?.confirm_password === true && errors.confirm_password,
@@ -1022,26 +1279,27 @@ const ZNewPasswordTab: React.FC = () => {
               touched?.confirm_password === true &&
               (errors?.confirm_password === undefined ||
                 errors?.confirm_password?.trim()?.length === 0)
-          })}
-        />
-        <ZIonButton
-          fill='clear'
-          size='large'
-          className='ion-no-padding ion-no-margin ms-3 w-max'
-          testingselector={
-            CONSTANTS.testingSelectors.signupPage.canViewConfirmPasswordButton
-          }
-          onClick={() => {
-            void setFieldValue(
-              'canViewConfirmPassword',
-              !values.canViewConfirmPassword,
-              false
-            );
-          }}>
-          <ZIonIcon
-            icon={values?.canViewConfirmPassword ? eyeOffOutline : eyeOutline}
-          />
-        </ZIonButton>
+          })}>
+          <ZIonButton
+            fill='clear'
+            slot='end'
+            size='large'
+            className='w-[3rem] ion-no-padding ion-no-margin ms-3'
+            testingselector={
+              CONSTANTS.testingSelectors.signupPage.canViewConfirmPasswordButton
+            }
+            onClick={() => {
+              void setFieldValue(
+                'canViewConfirmPassword',
+                !values.canViewConfirmPassword,
+                false
+              );
+            }}>
+            <ZIonIcon
+              icon={values?.canViewConfirmPassword ? eyeOffOutline : eyeOutline}
+            />
+          </ZIonButton>
+        </ZIonInput>
       </div>
 
       {/* Confirm OTP Button */}
@@ -1049,22 +1307,22 @@ const ZNewPasswordTab: React.FC = () => {
         className={classNames({
           'w-full': true,
           'cursor-not-allowed':
-            (errors?.password?.trim()?.length !== undefined &&
-              errors?.password?.trim()?.length > 0) ||
-            (errors?.confirm_password?.trim()?.length !== undefined &&
-              errors?.confirm_password?.trim()?.length > 0)
+            isZNonEmptyString(errors?.password) ||
+            isZNonEmptyString(errors?.confirm_password) ||
+            isZNonEmptyString(errors?.displayName) ||
+            values?.isDisplayNameApiError
         })}>
         <ZIonButton
           expand='block'
           disabled={
-            (errors?.password?.trim()?.length !== undefined &&
-              errors?.password?.trim()?.length > 0) ||
-            (errors?.confirm_password?.trim()?.length !== undefined &&
-              errors?.confirm_password?.trim()?.length > 0)
+            isZNonEmptyString(errors?.password) ||
+            isZNonEmptyString(errors?.confirm_password) ||
+            isZNonEmptyString(errors?.displayName) ||
+            values?.isDisplayNameApiError
           }
           className='mt-4 ion-text-capitalize'
           onClick={() => {
-            void ZSetUsernamePassword();
+            void ZSetDisplayNamePassword();
           }}
           testingselector={
             CONSTANTS.testingSelectors.setPasswordPage.confirmOtpBtn

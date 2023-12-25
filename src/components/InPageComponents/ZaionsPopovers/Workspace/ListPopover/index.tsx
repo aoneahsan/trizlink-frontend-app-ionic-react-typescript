@@ -213,14 +213,14 @@ const ZWorkspacesListPopover: React.FC<{
             </ZIonItem>
           ))}
 
-          {workspacesList?.length === 0 && (
+          {/* {workspacesList?.length === 0 && (
             <ZIonItem minHeight='2.2rem'>
               <ZCreateWorkspaceBtn
                 className='w-full ion-no-margin'
                 height='2rem'
               />
             </ZIonItem>
-          )}
+          )} */}
         </ZIonItemGroup>
 
         <ZIonItemGroup>
@@ -289,11 +289,20 @@ const ZWorkspacesListPopover: React.FC<{
 
           {sharedWorkspacesList?.length === 0 && (
             <ZIonItem minHeight='2.2rem'>
-              <ZIonText className='w-full text-sm'>
+              <ZIonText className='w-full text-sm ps-1'>
                 No Share workspace found.
               </ZIonText>
             </ZIonItem>
           )}
+
+          <ZIonItem
+            minHeight='2.2rem'
+            className='pt-2 mt-1 border-t'>
+            <ZCreateWorkspaceBtn
+              className='w-full ion-no-margin'
+              height='2rem'
+            />
+          </ZIonItem>
         </ZIonItemGroup>
       </ZIonList>
     </div>

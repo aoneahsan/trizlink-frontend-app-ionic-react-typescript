@@ -7,7 +7,6 @@ export enum VALIDATION_RULE {
   password = 'password',
   confirm_password = 'confirm_password',
   // Login and sign-up fields end
-
   // Short link Form Fields start
   url = 'url',
   phoneNumber = 'phoneNumber',
@@ -48,6 +47,7 @@ export enum API_URL_ENUM {
   delete = 'delete',
   register = 'register',
   getUserRolePermission = 'getUserRolePermission',
+  checkIfUsernameIsAvailable = 'checkIfUsernameIsAvailable',
   updateUserAccountInfo = 'updateUserAccountInfo',
   updatePassword = 'updatePassword',
   validateCurrentPassword = 'validateCurrentPassword',
@@ -135,6 +135,10 @@ export enum API_URL_ENUM {
   shortLink_check_target_password = 'shortLink_check_target_password',
   FolderShortLinks = 'FolderShortLinks',
   ShortLinks_folders_reorder = 'ShortLinks_folders_reorder',
+
+  // Short links Analytics
+  // /user/{type}/{wsUniqueId}/sl/{slUniqueId}/analytics/{itemId}
+  sl_analytics_get = 'sl_analytics_get',
 
   // Share workspace short links
   sws_sl_create_list = 'sws_sl_create_list',

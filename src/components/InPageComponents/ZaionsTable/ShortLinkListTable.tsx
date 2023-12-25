@@ -9,6 +9,7 @@ import {
   ellipsisVerticalOutline,
   playBackOutline,
   playForwardOutline,
+  statsChartOutline,
   trashBinOutline
 } from 'ionicons/icons';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
@@ -188,13 +189,6 @@ const ZaionsShortLinkTable: React.FC<{
     _extractType: ZRQGetRequestExtractEnum.extractData
   });
   // #endregion
-  console.log({
-    ShortLinksData,
-    swsShortLinksData,
-    c:
-      (ShortLinksData?.items?.length ?? 0) > 0 ||
-      (swsShortLinksData?.items?.length ?? 0) > 0
-  });
 
   // #region Functions.
   const resetShortLinkFormHandler = (): void => {
@@ -1676,6 +1670,7 @@ export const ZShortLinkActionPopover: React.FC<{
     <ZIonList
       lines='none'
       className='ion-no-padding'>
+      {/* Edit */}
       <ZCan
         shareWSId={wsShareId}
         permissionType={
@@ -1764,6 +1759,66 @@ export const ZShortLinkActionPopover: React.FC<{
         </ZIonItem>
       </ZCan>
 
+      {/* Analytics */}
+      <ZIonItem
+        button={true}
+        detail={false}
+        minHeight='2.5rem'
+        onClick={() => {
+          if ((workspaceId?.trim()?.length ?? 0) > 0) {
+            zNavigatePushRoute(
+              createRedirectRoute({
+                url: ZaionsRoutes.AdminPanel.ShortLinks.Analytic,
+                params: [
+                  CONSTANTS.RouteParams.workspace.workspaceId,
+                  CONSTANTS.RouteParams.editShortLinkIdParam
+                ],
+                values: [workspaceId ?? '', shortLinkId]
+              })
+            );
+          } else if (
+            (wsShareId?.trim()?.length ?? 0) > 0 &&
+            (shareWSMemberId?.trim()?.length ?? 0) > 0
+          ) {
+            zNavigatePushRoute(
+              createRedirectRoute({
+                url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Analytic,
+                params: [
+                  CONSTANTS.RouteParams.workspace.wsShareId,
+                  CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                  CONSTANTS.RouteParams.editShortLinkIdParam
+                ],
+                values: [wsShareId ?? '', shareWSMemberId ?? '', shortLinkId]
+              })
+            );
+          }
+
+          dismissZIonPopover('', '');
+        }}
+        testingselector={
+          CONSTANTS.testingSelectors.shortLink.listPage.table.analyticBtn
+        }
+        testinglistselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.analyticBtn}-${shortLinkId}`}>
+        <ZIonButton
+          size='small'
+          expand='full'
+          fill='clear'
+          color='light'
+          className='ion-text-capitalize'>
+          <ZIonIcon
+            icon={statsChartOutline}
+            className='w-4 h-4 me-2'
+            color='primary'
+          />
+          <ZIonText
+            color='primary'
+            className='text-[.9rem] pt-1'>
+            Stats
+          </ZIonText>
+        </ZIonButton>
+      </ZIonItem>
+
+      {/* Delete */}
       <ZCan
         shareWSId={wsShareId}
         permissionType={

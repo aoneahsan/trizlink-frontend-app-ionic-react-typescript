@@ -71,8 +71,8 @@ const PageAnalyticsTimeFilter: React.FC = () => {
   return (
     <ZIonRow
       className={classNames({
-        'zaions__bg_white ion-align-items-center mt-4': true,
-        'ion-padding rounded border': isSmScale,
+        'zaions__light_bg shadow-md ion-align-items-center mt-4': true,
+        'ion-padding rounded-lg border': isSmScale,
         'ion-padding-vertical': !isSmScale
       })}>
       <ZIonCol
@@ -85,8 +85,10 @@ const PageAnalyticsTimeFilter: React.FC = () => {
         sizeMd='6'
         sizeSm='12'
         sizeXs='12'>
-        <ZIonText color='dark'>
-          <h5 className='font-bold ion-no-margin'>⌚ Filters</h5>
+        <ZIonText
+          color='dark'
+          className='text-lg'>
+          ⌚ Filters
         </ZIonText>
       </ZIonCol>
 
@@ -105,6 +107,7 @@ const PageAnalyticsTimeFilter: React.FC = () => {
         <ZIonButton
           fill='outline'
           className={classNames({
+            'zaions__bg_white ': true,
             'me-3': isLgScale,
             'w-full': !isMdScale
           })}

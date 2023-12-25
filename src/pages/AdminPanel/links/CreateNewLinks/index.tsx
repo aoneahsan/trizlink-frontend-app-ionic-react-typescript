@@ -128,15 +128,15 @@ import { type workspaceInterface } from '@/types/AdminPanel/workspace';
 import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type';
 
 const AddNotes = lazy(() => import('@/components/UserDashboard/AddNotes'));
-const EmbedWidget = lazy(
-  () => import('@/components/UserDashboard/EmbedWidget')
-);
-const DeepLinking = lazy(
-  () => import('@/components/UserDashboard/DeepLinking')
-);
-const LinkCloaking = lazy(
-  () => import('@/components/UserDashboard/LinkCloaking')
-);
+// const EmbedWidget = lazy(
+//   () => import('@/components/UserDashboard/EmbedWidget')
+// );
+// const DeepLinking = lazy(
+//   () => import('@/components/UserDashboard/DeepLinking')
+// );
+// const LinkCloaking = lazy(
+//   () => import('@/components/UserDashboard/LinkCloaking')
+// );
 const Tags = lazy(() => import('@/components/UserDashboard/Tags'));
 const RotatorABTesting = lazy(
   () => import('@/components/UserDashboard/RotatorABTesting')
@@ -1915,8 +1915,9 @@ const AdminCreateNewLinkPages: React.FC = () => {
                                       {/* Add Notes */}
                                       <AddNotes showSkeleton={isZFetching} />
 
+                                      {/* Commented embed widget, link cloaking, and deep links until we properly integrate them. Approve by Sir Ahsan */}
                                       {/* Add Embed Widget */}
-                                      <ZCan
+                                      {/* <ZCan
                                         returnPermissionDeniedView={true}
                                         shareWSId={wsShareId}
                                         permissionType={
@@ -1938,13 +1939,13 @@ const AdminCreateNewLinkPages: React.FC = () => {
                                               ]
                                         }>
                                         <EmbedWidget />
-                                      </ZCan>
+                                      </ZCan> */}
 
                                       {/* Deep Linking */}
-                                      <DeepLinking />
+                                      {/* <DeepLinking /> */}
 
                                       {/* Link Cloaking */}
-                                      <LinkCloaking />
+                                      {/* <LinkCloaking /> */}
 
                                       {/* Tags */}
                                       <Tags />

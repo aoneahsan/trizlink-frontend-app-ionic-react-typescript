@@ -15,12 +15,12 @@ import classNames from 'classnames';
  * ? Like import of custom components is a custom import
  * */
 import { ZIonContent, ZIonGrid } from '@/components/ZIonComponents';
-import PageAnalyticsHeader from '@/pages/AdminPanel/LinkInBio/LinkInBioForm/PageAnalytics/PAHeader';
-import PageAnalyticsTimeFilter from '@/pages/AdminPanel/LinkInBio/LinkInBioForm/PageAnalytics/PATimeFilter';
+import PageAnalyticsHeader from '@/components/AdminPanelComponents/Analytics/PAHeader';
+import PageAnalyticsTimeFilter from '@/components/AdminPanelComponents/Analytics/PATimeFilter';
 
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import PageAnalyticsStateBlock from '@/pages/AdminPanel/LinkInBio/LinkInBioForm/PageAnalytics/PAStateBlock';
-import PageAnalyticsInfoBlocks from '@/pages/AdminPanel/LinkInBio/LinkInBioForm/PageAnalytics/PAInfoBlocks';
+import PageAnalyticsInfoBlocks from '@/components/AdminPanelComponents/Analytics/PAInfoBlocks';
 
 /**
  * Global Constants Imports go down

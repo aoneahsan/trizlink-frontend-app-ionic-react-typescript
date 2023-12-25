@@ -29,7 +29,7 @@ import {
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import { PRODUCT_NAME } from '../../utils/constants';
+import CONSTANTS, { PRODUCT_NAME } from '../../utils/constants';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
@@ -61,6 +61,9 @@ import { ProductLogo } from '@/assets/images';
 import ZaionsDropDown from '@/components/InPageComponents/ZaionsDropdown';
 import ZIonTitle from '@/components/ZIonComponents/ZIonTitle';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { useRecoilValue } from 'recoil';
+import { IsAuthenticatedRStateSelector } from '@/ZaionsStore/UserAccount/index.recoil';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 
 /**
  * Functional Component
@@ -70,6 +73,8 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 const Header: React.FC = () => {
   const { is1200pxScale, isXlScale, isLgScale, isMdScale } =
     useZMediaQueryScale();
+  const loggedIn = useRecoilValue(IsAuthenticatedRStateSelector);
+  const { zNavigatePushRoute } = useZNavigate();
 
   return (
     <>
@@ -142,32 +147,44 @@ const Header: React.FC = () => {
                 className={`${
                   is1200pxScale ? classes.zaions__nav_col_two_space : 'pe-5'
                 } flex ion-justify-content-end ion-align-items-center`}>
-                {isMdScale && (
-                  <ZIonRouterLink
-                    routerLink={ZaionsRoutes.LoginRoute}
-                    color='dark'>
-                    <ZIonTitle className={`${classes.zaions_nav_button} mb-4`}>
-                      Login
-                    </ZIonTitle>
-                  </ZIonRouterLink>
-                )}
-                {isMdScale && (
-                  <ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
-                    <ZIonTitle
-                      className={`${classes.zaions_nav_button} ${
-                        isXlScale ? '' : 'ms-1 ps-1'
-                      } mb-4`}>
-                      Sign up Free
-                    </ZIonTitle>
-                  </ZIonRouterLink>
-                )}
-                {isMdScale && (
-                  <ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
-                    <ZIonButton
-                      className={`${classes.zaions_nav_button} ion-text-capitalize ms-2 mb-4`}>
-                      Get a Quote
-                    </ZIonButton>
-                  </ZIonRouterLink>
+                {isMdScale && loggedIn ? (
+                  <ZIonButton
+                    onClick={() => {
+                      zNavigatePushRoute(
+                        ZaionsRoutes.AdminPanel.AppStartupPage
+                      );
+                    }}
+                    className={`${classes.zaions_nav_button} ion-text-capitalize ms-2 mb-4`}>
+                    {/* Account btn */}
+                    {CONSTANTS.ZHomePageAccountBtnText}
+                  </ZIonButton>
+                ) : (
+                  <>
+                    <ZIonRouterLink
+                      routerLink={ZaionsRoutes.LoginRoute}
+                      color='dark'>
+                      <ZIonTitle
+                        className={`${classes.zaions_nav_button} mb-4`}>
+                        Login
+                      </ZIonTitle>
+                    </ZIonRouterLink>
+
+                    <ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
+                      <ZIonTitle
+                        className={`${classes.zaions_nav_button} ${
+                          isXlScale ? '' : 'ms-1 ps-1'
+                        } mb-4`}>
+                        Sign up Free
+                      </ZIonTitle>
+                    </ZIonRouterLink>
+
+                    <ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
+                      <ZIonButton
+                        className={`${classes.zaions_nav_button} ion-text-capitalize ms-2 mb-4`}>
+                        Get a Quote
+                      </ZIonButton>
+                    </ZIonRouterLink>
+                  </>
                 )}
               </ZIonCol>
             </ZIonRow>

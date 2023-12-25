@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { Bar } from 'react-chartjs-2';
-
 import {
   ZIonButton,
   ZIonCol,
@@ -13,7 +11,7 @@ import {
   ZIonTitle
 } from '@/components/ZIonComponents';
 import ZIonPage from '@/components/ZIonPage';
-import ZChartHOC from '@/components/AdminPanelComponents/ChartHOC';
+import ZRCBars from '@/components/CustomComponents/Charts/Bars';
 
 const ChartsExamples: React.FC = () => {
   const options = {
@@ -54,7 +52,7 @@ const ChartsExamples: React.FC = () => {
     datasets: [
       {
         // fill: true,
-        label: 'Dataset 1',
+        label: 'clicks',
         data: [1, 2, 3],
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
         stack: 'Stack 1'
@@ -87,14 +85,12 @@ const ChartsExamples: React.FC = () => {
         </ZIonTitle>
         <ZIonGrid>
           <ZIonRow>
-            <ZChartHOC>
-              <ZIonCol>
-                <Bar
-                  options={options}
-                  data={data}
-                />
-              </ZIonCol>
-            </ZChartHOC>
+            <ZIonCol>
+              <ZRCBars
+                options={options}
+                data={data}
+              />
+            </ZIonCol>
           </ZIonRow>
         </ZIonGrid>
       </ZIonContent>

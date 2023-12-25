@@ -116,6 +116,10 @@ const AdminCreateNewLinkPages = lazy(
   () => import('@/pages/AdminPanel/links/CreateNewLinks')
 );
 
+const ZShortLinkAnalytics = lazy(
+  () => import('@/pages/AdminPanel/links/Analytics')
+);
+
 const ZaionsTermsOfService = lazy(() => import('@/pages/Legal/TermsOfService'));
 const ZDashboard = lazy(() => import('@/pages/AdminPanel/ZDashboard'));
 const ZaionsPasswordResetConfirm = lazy(
@@ -304,6 +308,12 @@ const AppRoutes = (): JSX.Element => {
           exact
           path={ZaionsRoutes.AdminPanel.ShortLinks.Edit}
           Component={AdminCreateNewLinkPages}
+        />
+
+        <PrivateRoute
+          exact
+          path={ZaionsRoutes.AdminPanel.ShortLinks.Analytic}
+          Component={ZShortLinkAnalytics}
         />
 
         <PrivateRoute

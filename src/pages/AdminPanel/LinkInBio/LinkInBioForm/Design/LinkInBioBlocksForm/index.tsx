@@ -1454,7 +1454,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                       value={
                         formatReactSelectOption(
                           values?.timezone,
-                          TIMEZONES as ZGenericObject[],
+                          TIMEZONES as unknown as ZGenericObject[],
                           'value',
                           'label'
                         ) ?? []

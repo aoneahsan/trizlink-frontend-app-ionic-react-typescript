@@ -43,7 +43,11 @@ import ZShortLinkOptionsPopover from '@/components/InPageComponents/ZaionsPopove
 import CONSTANTS, { ZaionsBusinessDetails } from '@/utils/constants';
 import { API_URL_ENUM } from '@/utils/enums';
 import { reportCustomError } from '@/utils/customErrorType';
-import { parseZQueryString, zAddUrlProtocol } from '@/utils/helpers';
+import {
+  isZNonEmptyString,
+  parseZQueryString,
+  zAddUrlProtocol
+} from '@/utils/helpers';
 import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
@@ -176,11 +180,11 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
     try {
       let selectedTypeOptionData: ShortUrlLinkOptionType | undefined;
 
-      if (workspaceId !== undefined) {
+      if (isZNonEmptyString(workspaceId)) {
         selectedTypeOptionData = LinkTypeOptionsData.find(
           el => el.type === selectedShortLink?.type
         );
-      } else if (wsShareId !== undefined) {
+      } else if (isZNonEmptyString(wsShareId)) {
         selectedTypeOptionData = LinkTypeOptionsData.find(
           el => el.type === swsSelectedShortLink?.type
         );
@@ -191,6 +195,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
         selectedTypeOptionData?.id !== null
       ) {
         setNewShortLinkTypeOptionDataAtom(_ => ({
+          // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
           ...(selectedTypeOptionData as ShortUrlLinkOptionType)
         }));
       }

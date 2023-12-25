@@ -123,7 +123,8 @@ const ZaionsRoutes = {
     ShortLinks: {
       Main: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/short-links/list/${CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
       Create: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/short-links/create`,
-      Edit: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/short-links/edit/${CONSTANTS.RouteParams.editShortLinkIdParam}`
+      Edit: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/short-links/edit/${CONSTANTS.RouteParams.editShortLinkIdParam}`,
+      Analytic: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/short-links/analytics/${CONSTANTS.RouteParams.editShortLinkIdParam}`
     },
 
     LinkInBio: {
@@ -149,7 +150,8 @@ const ZaionsRoutes = {
       Short_link: {
         Main: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/short-links/list/${CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
         Create: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/short-links/create`,
-        Edit: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/short-links/edit/${CONSTANTS.RouteParams.editShortLinkIdParam}`
+        Edit: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/short-links/edit/${CONSTANTS.RouteParams.editShortLinkIdParam}`,
+        Analytic: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/short-links/analytics/${CONSTANTS.RouteParams.editShortLinkIdParam}`
       },
       Link_in_bio: {
         Main: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/link-in-bio/list/${CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio}`,

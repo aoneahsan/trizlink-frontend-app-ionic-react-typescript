@@ -4,10 +4,11 @@ import React, { type ReactNode } from 'react';
 // Packages Import
 import { IonRefresher, type RefresherEventDetail } from '@ionic/react';
 import { type IonRefresherCustomEvent } from '@ionic/core/dist/types/components';
+import ZIonRefresherContent from '../ZIonRefresherContent';
 
 // Type
 interface ZIonRefresherType {
-  children: ReactNode;
+  children?: ReactNode;
   className?: string;
   closeDuration?: string;
   disabled?: boolean;
@@ -27,7 +28,7 @@ const ZIonRefresher: React.FC<ZIonRefresherType> = (
     <IonRefresher
       {...props}
       slot='fixed'>
-      {props.children}
+      {props.children ?? <ZIonRefresherContent />}
     </IonRefresher>
   );
 };

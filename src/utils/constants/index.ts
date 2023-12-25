@@ -40,6 +40,9 @@ const ZOptResendAfter = 5;
 // This minutes will added to time in every api request in time variable current time + ZRequestTimeAddM.
 const ZRequestTimeAddM = 3;
 
+// in user logged in then except showing login etc. btn's we are showing account btn and this is the text of that btn. in future if we went to change it.
+const ZHomePageAccountBtnText = 'My Account';
+
 // we are using this in "FetchRequiredAppDataHOCAsync" component, here 1 means 1s in time, and we are using this to call the user "updateUserStatus" api on interval, with interval set to run on this variable * with 1000 (as to convert millisecond to seconds)
 const ZLastSeenInterval = 60;
 
@@ -96,7 +99,8 @@ const RouteParams = {
 
   shortLink: {
     shortLinkId: ':shortLinkId',
-    path: ':path'
+    path: ':path',
+    slAnalyticsId: ':slAnalyticsId'
   },
 
   linkInBio: {
@@ -114,7 +118,7 @@ const RouteParams = {
   }
 
   // folderIdToGetShortLinksOrLinkInBio: 'all',
-};
+} as const;
 
 // left here as it will mess up many imports, we can move this when we have some free time (i know that will add more imports to correct but we don't have time for it right now)
 export const API_URLS = {
@@ -126,6 +130,7 @@ export const API_URLS = {
   getUserRolePermission: '/user/role/permissions',
   updateUserAccountInfo: '/user/update-account-info',
   updatePassword: '/user/update-password',
+  checkIfUsernameIsAvailable: '/user/username/check',
   validateCurrentPassword: '/user/validate-password',
   resendPasswordOtp: '/user/password-resend-otp',
   updateUserStatus: '/user/update-user-status',
@@ -210,6 +215,9 @@ export const API_URLS = {
   ShortLinks_folders_reorder: '/user/shortLinks/folders/reorder',
   shortLink_get_target_url_info: `/public/s/${RouteParams.urlPath}`,
   shortLink_check_target_password: `/public/s/${RouteParams.urlPath}/check-password`,
+
+  // Short links Analytics
+  sl_analytics_get: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/sl/${RouteParams.shortLink.shortLinkId}/analytics`,
 
   // Share workspace short links
   sws_sl_create_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/short-links`,
@@ -298,23 +306,23 @@ export const API_URLS = {
   // UI Avatars API
   uiAvatarAPI:
     'https://ui-avatars.com/api/?name=:name&rounded=:rounded&bold=:bold&size=:size&background=:background&color=:color&font-size=:fontSize&length=:length'
-};
+} as const;
 
 // Site
 export const PRODUCT_NAME = 'zaions_tappk';
 export const PRODUCT_DOMAIN = 'prettylinks.zaions.com';
 export const CurrentProductDetails = {
   Name: ''
-};
+} as const;
 
 export const ExternalURL = {
   GenericExternalURL: 'https://prettylinks.zaions.com',
   FacebookUrl: 'https://www.facebook.com/'
-};
+} as const;
 
 export const ZaionsInfo = {
   name: 'Zaions'
-};
+} as const;
 
 // @Medias BrackPoint:
 export const BRACKPOINT_2XL = '1400px';
@@ -406,21 +414,21 @@ const PIXEL_ACCOUNTS = {
     WORD_COUNT: 17
     // WORD_COUNT: 6,
   }
-};
+} as const;
 
 const ION_LOADER_DEFAULTS = {
   animated: true,
   spinner: IonLoaderEnum.circles, // convert to enum with all values
   duration: 1500
-};
+} as const;
 
 const ION_TOAST = {
   TOAST_DURATION: 1500
-};
+} as const;
 
 export const ZaionsBusinessDetails = {
   WebsiteUrl: 'https://zaions.com'
-};
+} as const;
 
 const ZaionsRHelmetDefaults = {
   title: 'Zaions Url Shortener Web & Mobile App - Zaions',
@@ -449,17 +457,17 @@ const ZaionsRHelmetDefaults = {
   copyRight: 'Copyright 2021',
   roboto: 'index,follow'
   // ...
-};
+} as const;
 
 const SocialLinks = {
   twitter: `${ZaionsBusinessDetails.WebsiteUrl}/twitter`,
   instagram: `${ZaionsBusinessDetails.WebsiteUrl}/instagram`,
   linkdin: `${ZaionsBusinessDetails.WebsiteUrl}/linkdin`
-};
+} as const;
 
 const DateTime = {
   iso8601DateTime: 'YYYY-MM-DDTHH:mm:ssZ'
-};
+} as const;
 
 // Default Values
 const DEFAULT_VALUES = {
@@ -473,7 +481,7 @@ const DEFAULT_VALUES = {
   ZAIONS_DASHBOARD_SPLIT_PANEL: 'ZAIONS_DASHBOARD_PAGE_PANEL',
   API_TOKEN_PRIMARY_KEY: 'Bearer',
   FOLDER_ROUTE: 'all'
-};
+} as const;
 
 export const LOCALSTORAGE_KEYS = {
   USERDATA: 'udhsaf38h_3g-23g-c',
@@ -483,13 +491,13 @@ export const LOCALSTORAGE_KEYS = {
   FORGET_PASSWORD_USER_DATA: 'ziomkliy-rthng-r',
   SET_PASSWORD_DATA: 'zplkithfns-wolf-s',
   ERROR_DATA: 'asdgcvbv_cbert-k'
-};
+} as const;
 
 export const encryptKeys = {
   encryptedEncodeData: 'zinrekg_mke_z',
   accessToken: 'acmkfdr_aset_k',
   time: 'tzasd_iasdm_e'
-};
+} as const;
 
 export const Platforms = {
   facebook: facebookSvgLogo,
@@ -507,7 +515,7 @@ export const Platforms = {
   nexus: nexusSvgLogo,
   tiktok: tiktokSvgLogo,
   vk: vkSvgLogo
-};
+} as const;
 
 export const brandColors = {
   facebook: '#1877F2',
@@ -518,11 +526,11 @@ export const brandColors = {
   linkedin: '#0966C1',
   pinterest: '#cc0100',
   youtube: '#FF0000'
-};
+} as const;
 
 const ZTooltipIds = {
   ZUserAvatarButton_default_tooltip_id: 'z-workspace-ZUserAvatarButton-tooltip'
-};
+} as const;
 
 // abbrivations comment
 /**
@@ -574,7 +582,8 @@ const testingSelectors = {
     passwordInput: 'sp-password-input',
     canViewPasswordButton: 'sp-see-password-btn',
     confirmPasswordInput: 'sp-confirm-password-input',
-    canViewConfirmPasswordButton: 'sp-see-confirm-password-btn'
+    canViewConfirmPasswordButton: 'sp-see-confirm-password-btn',
+    checkDisplayNameAvailableBtn: 'sp-check-display-name-available-btn'
   },
   // #endregion
 
@@ -729,6 +738,7 @@ const testingSelectors = {
         actionPopoverBtn: 'slp-t-ap-btn',
         editBtn: 'slp-t-edit-btn',
         deleteBtn: 'slp-t-delete-btn',
+        analyticBtn: 'slp-t-analytic-btn',
         previousButton: 'slp-t-previous-page-btn',
         getFirstPageButton: 'slp-t-first-page-btn',
         nextButton: 'slp-t-next-page-btn',
@@ -1500,7 +1510,7 @@ const testingSelectors = {
     }
   }
   // #endregion
-};
+} as const;
 
 export const TIMEZONES = [
   { label: '(UTC-12:00) International Date Line West', value: 'Etc/GMT+12' },
@@ -1537,7 +1547,7 @@ export const TIMEZONES = [
   { label: '(UTC+10:00) Brisbane, Sydney', value: 'Australia/Brisbane' },
   { label: '(UTC+11:00) Solomon Islands', value: 'Pacific/Guadalcanal' },
   { label: '(UTC+12:00) Auckland, Wellington', value: 'Pacific/Auckland' }
-];
+] as const;
 
 // Modal Id's
 export const ZAIONS_MODALS_IDS = {
@@ -1545,7 +1555,7 @@ export const ZAIONS_MODALS_IDS = {
   ADD_NEW_UTM_TAG: 'add-new-utm-tag-template',
   ADD_NEW_PIXEL_ID: 'add-new-pixel-account',
   GENERATE_API_KEY: 'generate-api-key'
-};
+} as const;
 
 export const NOTIFICATIONS = {
   MODAL_FORM_ERROR_TOAST: {
@@ -1564,7 +1574,7 @@ export const NOTIFICATIONS = {
       ROLE: 'cancel_dismiss'
     }
   }
-};
+} as const;
 
 /**
  * ------  REACT_QUERY -------
@@ -1598,6 +1608,7 @@ const REACT_QUERY = {
     SHORT_LINKS: {
       MAIN: 'rq-short-links-list-key',
       GET: 'rq-short-link-get-key',
+      ANALYTICS: 'rq-short-link-analytics-get-key',
       IS_PATH_AVAILABLE: 'rq-short-link-is-path-available-key',
 
       SWS_MAIN: 'rq-sws-short-link-list-key',
@@ -1713,7 +1724,7 @@ const REACT_QUERY = {
       }
     }
   }
-};
+} as const;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const LINK_In_BIO = {
@@ -1725,20 +1736,20 @@ const LINK_In_BIO = {
     BUTTON_COLOR: '#11ee1f',
     BUTTON_SHADOW_COLOR: '#aab1c4'
   }
-};
+} as const;
 
 const SHORT_LINK = {
   urlPathLength: 6,
   urlStaticPath: 's',
   invitationSLStaticPath: 'sws'
-};
+} as const;
 
 const toLocaleStringOptions: Intl.DateTimeFormatOptions = {
   weekday: 'short',
   month: 'short',
   day: 'numeric',
   year: 'numeric'
-};
+} as const;
 
 const ZTimeSelectData: ZaionsRSelectOptions[] = [
   {
@@ -1765,7 +1776,7 @@ const ZTimeSelectData: ZaionsRSelectOptions[] = [
     label: 'Custom range',
     value: TimeFilterEnum.customRange
   }
-];
+] as const;
 
 const ZRolesOptions: ZaionsRSelectOptions[] = [
   { label: 'Administrator', value: WSRolesNameEnum.Administrator },
@@ -1775,7 +1786,7 @@ const ZRolesOptions: ZaionsRSelectOptions[] = [
   { label: 'Approver', value: WSRolesNameEnum.Approver },
   { label: 'Commenter', value: WSRolesNameEnum.Commenter },
   { label: 'Guest', value: WSRolesNameEnum.Guest }
-];
+] as const;
 
 const ZPlatformOptions: ZaionsRSelectOptions[] = [
   { label: 'facebook', value: PixelPlatformsEnum.facebook },
@@ -1793,7 +1804,7 @@ const ZPlatformOptions: ZaionsRSelectOptions[] = [
   { label: 'twitter', value: PixelPlatformsEnum.twitter },
   { label: 'VK', value: PixelPlatformsEnum.vk },
   { label: 'google tag manager', value: PixelPlatformsEnum.google_tag_manager }
-];
+] as const;
 
 const ZStatesOptions: ZaionsRSelectOptions[] = [
   { label: 'Accepted', value: ZTeamMemberInvitationEnum.accepted },
@@ -1803,9 +1814,10 @@ const ZStatesOptions: ZaionsRSelectOptions[] = [
   { label: 'Rejected', value: ZTeamMemberInvitationEnum.rejected },
   { label: 'Resend', value: ZTeamMemberInvitationEnum.resend },
   { label: 'Suspended', value: ZTeamMemberInvitationEnum.suspended }
-];
+] as const;
 
 const CONSTANTS = {
+  ZHomePageAccountBtnText,
   ZOptResendAfter,
   ZRequestTimeAddM,
   ZLastSeenInterval,
@@ -1835,6 +1847,6 @@ const CONSTANTS = {
   ZTooltipIds,
   testingSelectors,
   testingSelectorsPrefix
-};
+} as const;
 
 export default CONSTANTS;

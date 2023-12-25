@@ -147,6 +147,28 @@ export enum ZEmailAddressesListPageTableColumnIds {
   verifiedAt = '__z_email_verified_at__'
 }
 
+export enum ZAnalyticsCountryTableColumnIds {
+  id = '__z_analytic_country_id__',
+  createAt = '__z_analytic_country_create_at__',
+  formattedCreateAt = '__z_analytic_country_formatted_create_at__',
+  countries = '__z_analytic_countries__',
+  visits = '__z_analytic_country_visits__',
+  unique = '__z_analytic_country_unique__',
+  visitsPercentage = '__z_analytic_country_visits_percentage__',
+  verifiedAt = '__z_analytic_country_verified_at__'
+}
+
+export enum ZAnalyticsReferersTableColumnIds {
+  id = '__z_analytic_referers_id__',
+  createAt = '__z_analytic_referers_create_at__',
+  formattedCreateAt = '__z_analytic_referers_formatted_create_at__',
+  referers = '__z_analytic_referers__',
+  visits = '__z_analytic_referers_visits__',
+  unique = '__z_analytic_referers_unique__',
+  visitsPercentage = '__z_analytic_referers_visits_percentage__',
+  verifiedAt = '__z_analytic_referers_verified_at__'
+}
+
 // Interfaces
 export interface UTMTagInfoInterface {
   templateId?: string;
@@ -165,6 +187,22 @@ export interface IFilterOptions {
   };
   searchQuery?: string | null;
   platform?: string;
+}
+
+export interface ICountryTable {
+  id?: string;
+  countries: string;
+  visits: string;
+  unique: string;
+  visitsPercentage: string;
+}
+
+export interface IReferersTable {
+  id?: string;
+  referers: string;
+  visits: string;
+  unique: string;
+  visitsPercentage: string;
 }
 
 export interface IPixelsFilterOptions extends IFilterOptions {

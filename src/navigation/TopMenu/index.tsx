@@ -10,17 +10,12 @@ import {
   qrCode,
   tabletPortrait
 } from 'ionicons/icons';
-import { useMediaQuery } from 'react-responsive';
 
 // Custom Imports
 import ZaionsDropDown from '@/components/InPageComponents/ZaionsDropdown';
 
 // Global Constant
-import CONSTANTS, {
-  BRACKPOINT_LG,
-  BRACKPOINT_MD,
-  PRODUCT_NAME
-} from '@/utils/constants';
+import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
 import ZaionsRoutes from '../../utils/constants/RoutesConstants';
 
 // Styles
@@ -39,14 +34,17 @@ import {
   ZIonRow
 } from '@/components/ZIonComponents';
 import ZIonTitle from '@/components/ZIonComponents/ZIonTitle';
+import { useRecoilValue } from 'recoil';
+import { IsAuthenticatedRStateSelector } from '@/ZaionsStore/UserAccount/index.recoil';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 
 const ZaionsTopMenu: React.FC = () => {
-  const isLgScale = useMediaQuery({
-    query: `(min-width: ${BRACKPOINT_LG})`
-  });
-  const isMdScale = useMediaQuery({
-    query: `(min-width: ${BRACKPOINT_MD})`
-  });
+  const { isLgScale, isMdScale } = useZMediaQueryScale();
+
+  const loggedIn = useRecoilValue(IsAuthenticatedRStateSelector);
+  const { zNavigatePushRoute } = useZNavigate();
+
   return (
     <ZIonGrid
       className={classNames(classes.z_index_1000, {
@@ -188,34 +186,51 @@ const ZaionsTopMenu: React.FC = () => {
             sizeMd='5'
             sizeSm='5'
             sizeXs='5'>
-            <ZIonRouterLink
-              routerLink={ZaionsRoutes.LoginRoute}
-              color='dark'
-              testingselector={CONSTANTS.testingSelectors.homePage.loginButton}>
-              <ZIonTitle className={`${classes.zaions_nav_button} mb-4`}>
-                Login
-              </ZIonTitle>
-            </ZIonRouterLink>
-            <ZIonRouterLink
-              routerLink={ZaionsRoutes.SignUpRoute}
-              testingselector={
-                CONSTANTS.testingSelectors.homePage.signupButton
-              }>
-              <ZIonTitle
-                className={classNames({
-                  'mb-4': true,
-                  [classes.zaions_nav_button]: true
-                })}>
-                Sign up Free
-              </ZIonTitle>
-            </ZIonRouterLink>
-            <ZIonRouterLink routerLink={ZaionsRoutes.DiscoverEnterpriseRoute}>
+            {loggedIn ? (
               <ZIonButton
+                onClick={() => {
+                  zNavigatePushRoute(ZaionsRoutes.AdminPanel.AppStartupPage);
+                }}
                 className={`${classes.zaions_nav_button} ion-text-capitalize ms-2 mb-4`}
                 color='tertiary'>
-                Get a Quote
+                {/* Account btn */}
+                {CONSTANTS.ZHomePageAccountBtnText}
               </ZIonButton>
-            </ZIonRouterLink>
+            ) : (
+              <>
+                <ZIonRouterLink
+                  routerLink={ZaionsRoutes.LoginRoute}
+                  color='dark'
+                  testingselector={
+                    CONSTANTS.testingSelectors.homePage.loginButton
+                  }>
+                  <ZIonTitle className={`${classes.zaions_nav_button} mb-4`}>
+                    Login
+                  </ZIonTitle>
+                </ZIonRouterLink>
+                <ZIonRouterLink
+                  routerLink={ZaionsRoutes.SignUpRoute}
+                  testingselector={
+                    CONSTANTS.testingSelectors.homePage.signupButton
+                  }>
+                  <ZIonTitle
+                    className={classNames({
+                      'mb-4': true,
+                      [classes.zaions_nav_button]: true
+                    })}>
+                    Sign up Free
+                  </ZIonTitle>
+                </ZIonRouterLink>
+                <ZIonRouterLink
+                  routerLink={ZaionsRoutes.DiscoverEnterpriseRoute}>
+                  <ZIonButton
+                    className={`${classes.zaions_nav_button} ion-text-capitalize ms-2 mb-4`}
+                    color='tertiary'>
+                    Get a Quote
+                  </ZIonButton>
+                </ZIonRouterLink>
+              </>
+            )}
           </ZIonCol>
         )}
         {!isLgScale && (

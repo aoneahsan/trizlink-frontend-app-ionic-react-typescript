@@ -306,7 +306,7 @@ const ZWorkspaceListPage: React.FC = () => {
                               }>
                               <ZWorkspacesCard
                                 workspaceImage={el.workspaceImage}
-                                workspaceName={el.workspaceName as string}
+                                workspaceName={el.workspaceName ?? ''}
                                 user={el.user}
                                 workspaceId={
                                   el?.accountStatus != null
@@ -425,7 +425,7 @@ const ZWorkspaceListPage: React.FC = () => {
                                   testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.ownedWsCard}-${el.id}`}>
                                   <ZWorkspacesCard
                                     workspaceImage={el.workspaceImage}
-                                    workspaceName={el.workspaceName as string}
+                                    workspaceName={el.workspaceName ?? ''}
                                     user={el.user}
                                     workspaceId={el.id}
                                     createdAt={el.createdAt}
@@ -569,7 +569,7 @@ const ZWorkspaceListPage: React.FC = () => {
                                 }>
                                 <ZWorkspacesCard
                                   workspaceImage={el.workspaceImage}
-                                  workspaceName={el.workspaceName as string}
+                                  workspaceName={el.workspaceName ?? ''}
                                   user={el.user}
                                   workspaceId={el.workspaceId} // workspaceId
                                   createdAt={el.createdAt}

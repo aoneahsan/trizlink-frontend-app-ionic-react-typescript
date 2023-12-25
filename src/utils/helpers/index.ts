@@ -1574,10 +1574,15 @@ export const zGetRoutePermissions = ({
         ];
         break;
 
+      case ZaionsRoutes.AdminPanel.ShortLinks.Analytic:
+        _permissions = [permissionsEnum.viewAny_workspace];
+        break;
+
       case ZaionsRoutes.AdminPanel.LinkInBio.Main:
         _permissions = [
           permissionsEnum.viewAny_workspace,
-          permissionsEnum.viewAny_linkInBio
+          permissionsEnum.viewAny_linkInBio,
+          permissionsEnum.view_shortLink
         ];
         break;
 
