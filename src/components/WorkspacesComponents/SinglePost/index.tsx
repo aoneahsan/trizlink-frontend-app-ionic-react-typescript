@@ -35,7 +35,7 @@ import {
   ZIonImg,
   ZIonText
 } from '@/components/ZIonComponents';
-import ZUserAvatarButton from '@/components/WorkspacesComponents/userButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import ZWorkspacePostActionsPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/PostActionsPopover';
 import ZWorkspacePostDetailModal from '@/components/InPageComponents/ZaionsModals/Workspace/PostDetail';
 

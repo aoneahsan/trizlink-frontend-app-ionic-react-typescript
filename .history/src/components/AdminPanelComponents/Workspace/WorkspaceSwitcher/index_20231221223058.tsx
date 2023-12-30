@@ -15,7 +15,7 @@ import { caretDown } from 'ionicons/icons';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ZUserAvatarButton from '@/components/WorkspacesComponents/userButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import {
   ZIonButton,
   ZIonIcon,

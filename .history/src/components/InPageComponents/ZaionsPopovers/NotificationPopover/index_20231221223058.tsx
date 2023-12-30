@@ -24,7 +24,7 @@ import {
  * */
 import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
 import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
-import ZUserAvatarButton from '@/components/WorkspacesComponents/userButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import {
   ZIonButton,
   ZIonCol,

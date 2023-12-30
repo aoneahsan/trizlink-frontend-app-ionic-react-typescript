@@ -25,7 +25,7 @@ import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 import ZWorkspaceApprovalCards from '@/components/WorkspacesComponents/ApprovalCards';
 import ZWorkspaceApprovalToggler from '@/components/WorkspacesComponents/ApprovalToggler';
 import CONSTANTS from '@/utils/constants';
-import ZUserAvatarButton from '@/components/WorkspacesComponents/userButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 
 /**
  * Custom Hooks Imports go down

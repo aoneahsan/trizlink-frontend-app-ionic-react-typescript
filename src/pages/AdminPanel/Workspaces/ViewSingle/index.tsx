@@ -24,7 +24,7 @@ import { Formik } from 'formik';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ZUserAvatarButton from '@/components/WorkspacesComponents/userButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import ZIonPage from '@/components/ZIonPage';
 import {
   ZIonButton,
