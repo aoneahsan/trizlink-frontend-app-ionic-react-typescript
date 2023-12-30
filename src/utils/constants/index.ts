@@ -217,7 +217,7 @@ export const API_URLS = {
   shortLink_check_target_password: `/public/s/${RouteParams.urlPath}/check-password`,
 
   // Short links Analytics
-  sl_analytics_get: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/sl/${RouteParams.shortLink.shortLinkId}/analytics`,
+  sl_analytics_list: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/sl/${RouteParams.shortLink.shortLinkId}/analytics`,
 
   // Share workspace short links
   sws_sl_create_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/short-links`,
@@ -626,7 +626,12 @@ const testingSelectors = {
       workspaceCardTitle: 'wlp-card-title',
       workspaceCardFavoritesButton: 'wlp-card-favorites-btn',
       workspaceCardUserButton: 'wlp-card-user-btn',
-      workspaceCardActionPopoverButton: 'wlp-card-action-btn'
+      workspaceCardActionPopoverButton: 'wlp-card-action-btn',
+      modals: {
+        cancelBtn: 'wlp-m-cancel-btn',
+        deleteBtn: 'wlp-m-delete-btn',
+        leaveBtn: 'wlp-m-leave-btn'
+      }
     },
 
     createModal: {

@@ -94,7 +94,9 @@ const PAReferersBlock: React.FC<PAReferersBlockI> = ({ data }) => {
         })}>
         <ZIonText className='text-lg'>🧭 Referers</ZIonText>
       </div>
-      {data !== undefined && data?.length > 0 ? (
+      <PAReferersTable data={data} />
+
+      {/* {data !== undefined && data?.length > 0 ? (
         <PAReferersTable data={data} />
       ) : (
         <div className='flex flex-col gap-3 ion-padding ion-align-items-center ion-justify-content-center'>
@@ -112,7 +114,7 @@ const PAReferersBlock: React.FC<PAReferersBlockI> = ({ data }) => {
             </ZIonText>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

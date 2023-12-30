@@ -686,6 +686,7 @@ span.new {
   --width: 700px;
 }
 @media only screen and (max-content: 768px) {
+  /* here it should be max-width not max-content */
   .workspace-sharing-modal-size {
     --width: 95% !important;
   }

@@ -58,14 +58,19 @@ import {
   useZInvalidateReactQueries,
   useZRQGetRequest
 } from '@/ZaionsHooks/zreactquery-hooks';
-import { API_URL_ENUM } from '@/utils/enums';
+import { API_URL_ENUM, ZWSTypeEum } from '@/utils/enums';
 import {
   type LinkTargetType,
   type ShortLinkType
 } from '@/types/AdminPanel/linksType';
 import CONSTANTS from '@/utils/constants';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import { zGenerateShortLink } from '@/utils/helpers';
+import {
+  _getQueryKey,
+  isZNonEmptyString,
+  isZNonEmptyStrings,
+  zGenerateShortLink
+} from '@/utils/helpers';
 import {
   call,
   callOutline,
@@ -310,46 +315,52 @@ const ZInpageMainContent: React.FC = () => {
       _showLoader: false
     });
 
-  //   const { data: selectedShortLinkAnalyticsData } = useZRQGetRequest({
-  //     _url: API_URL_ENUM.sl_analytics_get,
-  //     _key: _getQueryKey({
-  //       keys: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.ANALYTICS],
-  //       additionalKeys: [workspaceId, wsShareId, shareWSMemberId, editLinkId]
-  //     }),
-  //     _itemsIds: _getQueryKey({
-  //       keys: [
-  //         isZNonEmptyString(workspaceId)
-  //           ? ZWSTypeEum.personalWorkspace
-  //           : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
-  //           ? ZWSTypeEum.shareWorkspace
-  //           : ''
-  //       ],
-  //       additionalKeys: [workspaceId, shareWSMemberId, editLinkId]
-  //     }),
-  //     _urlDynamicParts: [
-  //       CONSTANTS.RouteParams.workspace.type,
-  //       CONSTANTS.RouteParams.workspace.workspaceId,
-  //       CONSTANTS.RouteParams.shortLink.shortLinkId
-  //     ],
-  //     _shouldFetchWhenIdPassed: !(
-  //       isZNonEmptyStrings([wsShareId, shareWSMemberId, editLinkId]) ||
-  //       isZNonEmptyStrings([workspaceId, editLinkId])
-  //     ),
-  //     _extractType: ZRQGetRequestExtractEnum.extractItem
-  //   });
+  const { data: selectedShortLinkAnalyticsData } = useZRQGetRequest({
+    _url: API_URL_ENUM.sl_analytics_list,
+    _key: _getQueryKey({
+      keys: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.ANALYTICS],
+      additionalKeys: [workspaceId, wsShareId, shareWSMemberId, editLinkId]
+    }),
+    _itemsIds: _getQueryKey({
+      keys: [
+        isZNonEmptyString(workspaceId)
+          ? ZWSTypeEum.personalWorkspace
+          : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+          ? ZWSTypeEum.shareWorkspace
+          : ''
+      ],
+      additionalKeys: [workspaceId, shareWSMemberId, editLinkId]
+    }),
+    _urlDynamicParts: [
+      CONSTANTS.RouteParams.workspace.type,
+      CONSTANTS.RouteParams.workspace.workspaceId,
+      CONSTANTS.RouteParams.shortLink.shortLinkId
+    ],
+    _shouldFetchWhenIdPassed: !(
+      isZNonEmptyStrings([wsShareId, shareWSMemberId, editLinkId]) ||
+      isZNonEmptyStrings([workspaceId, editLinkId])
+    )
+  });
 
-  //   console.log({ selectedShortLinkAnalyticsData });
+  console.log({ selectedShortLinkAnalyticsData });
+
   // #endregion
 
   //
-  const _shortLink = useMemo(
-    () =>
-      zGenerateShortLink({
+  const _shortLink = useMemo(() => {
+    let _generateShortLink: string | undefined = '';
+    if (
+      isZNonEmptyString(selectedShortLink?.shortUrlDomain) &&
+      isZNonEmptyString(selectedShortLink?.shortUrlPath)
+    ) {
+      _generateShortLink = zGenerateShortLink({
         domain: selectedShortLink?.shortUrlDomain,
         urlPath: selectedShortLink?.shortUrlPath
-      }),
-    [selectedShortLink?.shortUrlDomain, selectedShortLink?.shortUrlPath]
-  );
+      });
+    }
+
+    return _generateShortLink;
+  }, [selectedShortLink?.shortUrlDomain, selectedShortLink?.shortUrlPath]);
 
   const _linkTarget = useMemo(() => {
     let _text;

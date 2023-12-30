@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React from 'react';
+import React, { useMemo } from 'react';
 
 /**
  * Packages Imports go down
@@ -58,6 +58,7 @@ import CONSTANTS from '@/utils/constants';
 import {
   createRedirectRoute,
   extractInnerData,
+  zComponentTestingSelectorMaker,
   zStringify
 } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
@@ -151,7 +152,9 @@ const ZWorkspacesCard: React.FC<{
 
   const { presentZIonPopover: presentWorkspacesActionsPopover } =
     useZIonPopover(ZWorkspacesActionPopover, {
-      workspaceId
+      workspaceId,
+      owned,
+      isFavorite
     }); // popover hook to show UserInfoPopover
   // #endregion
 
@@ -334,6 +337,49 @@ const ZWorkspacesCard: React.FC<{
   };
 
   // when member went to leave workspace and click on the leave button this function will fire and show the confirm alert.
+  const {
+    _testinglistselector: leaveBtnTestinglistselector,
+    _testingSelector: leaveBtnTestingSelector,
+    _idSelector: leaveBtnTestingIdselector
+  } = useMemo(
+    () =>
+      zComponentTestingSelectorMaker({
+        testingidselector: `${
+          isFavorite === true ? 'favorite-' : !owned ? 'share-' : ''
+        }leave-${workspaceId}`,
+        testinglistselector: `${
+          isFavorite === true ? 'favorite-' : !owned ? 'share-' : ''
+        }${CONSTANTS.testingSelectors.workspace.listPage.modals.leaveBtn}`,
+        testingselector: `${
+          isFavorite === true ? 'favorite-' : !owned ? 'share-' : ''
+        }${
+          CONSTANTS.testingSelectors.workspace.listPage.modals.leaveBtn
+        }-${workspaceId}`
+      }),
+    [isFavorite, owned, workspaceId]
+  );
+
+  const {
+    _testinglistselector: cancelBtnTestinglistselector,
+    _testingSelector: cancelBtnTestingSelector,
+    _idSelector: cancelBtnTestingIdselector
+  } = useMemo(
+    () =>
+      zComponentTestingSelectorMaker({
+        testingidselector: `${
+          isFavorite === true ? 'favorite-' : !owned ? 'share-' : ''
+        }cancel-${workspaceId}`,
+        testinglistselector: `${
+          isFavorite === true ? 'favorite-' : !owned ? 'share-' : ''
+        }${CONSTANTS.testingSelectors.workspace.listPage.modals.cancelBtn}`,
+        testingselector: `${
+          isFavorite === true ? 'favorite-' : !owned ? 'share-' : ''
+        }${
+          CONSTANTS.testingSelectors.workspace.listPage.modals.cancelBtn
+        }-${workspaceId}`
+      }),
+    [isFavorite, owned, workspaceId]
+  );
   const LeaveWorkspaceConfirmAlert = async (): Promise<void> => {
     try {
       if (workspaceId !== undefined && memberId !== undefined) {
@@ -344,12 +390,22 @@ const ZWorkspacesCard: React.FC<{
           buttons: [
             {
               text: 'Cancel',
-              role: 'cancel'
+              role: 'cancel',
+              htmlAttributes: {
+                ...cancelBtnTestinglistselector,
+                ...cancelBtnTestingSelector,
+                ...cancelBtnTestingIdselector
+              }
             },
             {
               text: 'Leave',
               cssClass: 'zaions_ion_color_danger',
               role: 'danger',
+              htmlAttributes: {
+                ...leaveBtnTestinglistselector,
+                ...leaveBtnTestingSelector,
+                ...leaveBtnTestingIdselector
+              },
               handler: () => {
                 void leaveWorkspaceHandler();
               }
@@ -376,7 +432,7 @@ const ZWorkspacesCard: React.FC<{
           requestData: ''
         });
 
-        if (_response !== undefined) {
+        if (_response !== undefined && _response !== null) {
           // extracting data from _response.
           const _data = extractInnerData<{ success: boolean }>(
             _response,
@@ -413,6 +469,7 @@ const ZWorkspacesCard: React.FC<{
   };
 
   // #endregion
+
   return (
     <ZIonCard className='h-[11.4rem]'>
       <ZIonRow className='flex-col h-full'>
@@ -443,11 +500,21 @@ const ZWorkspacesCard: React.FC<{
                         CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
                       ]
                     })}
-                    testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardImg}-${workspaceId}`}
-                    testinglistselector={
+                    testingidselector={`${
+                      isFavorite === true ? 'favorite-' : !owned ? 'share-' : ''
+                    }${workspaceId}`}
+                    testingselector={`${
+                      isFavorite === true ? 'favorite-' : !owned ? 'share-' : ''
+                    }${
                       CONSTANTS.testingSelectors.workspace.listPage
                         .workspaceCardImg
-                    }>
+                    }-${workspaceId}`}
+                    testinglistselector={`${
+                      isFavorite === true ? 'favorite-' : !owned ? 'share-' : ''
+                    }${
+                      CONSTANTS.testingSelectors.workspace.listPage
+                        .workspaceCardImg
+                    }`}>
                     <ZIonImg
                       src={
                         workspaceImage ??
@@ -490,11 +557,21 @@ const ZWorkspacesCard: React.FC<{
                           })
                         : undefined
                     }
-                    testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardTitle}-${workspaceId}`}
-                    testinglistselector={
+                    testingidselector={`${
+                      isFavorite === true ? 'favorite-' : !owned ? 'share-' : ''
+                    }${workspaceId}`}
+                    testingselector={`${
+                      isFavorite === true ? 'favorite-' : !owned ? 'share-' : ''
+                    }${
                       CONSTANTS.testingSelectors.workspace.listPage
                         .workspaceCardTitle
-                    }>
+                    }-${workspaceId}`}
+                    testinglistselector={`${
+                      isFavorite === true ? 'favorite-' : !owned ? 'share-' : ''
+                    }${
+                      CONSTANTS.testingSelectors.workspace.listPage
+                        .workspaceCardTitle
+                    }`}>
                     <div className='max-w-[8rem] overflow-hidden line-clamp-1'>
                       <ZIonLabel
                         className='block text-base font-bold'
@@ -517,11 +594,21 @@ const ZWorkspacesCard: React.FC<{
                     fill='clear'
                     minHeight='auto'
                     className='mb-1 overflow-hidden rounded-full w-7 h-7 ion-no-padding ion-no-margin'
-                    testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardFavoritesButton}-${workspaceId}`}
-                    testinglistselector={
+                    testingidselector={`${
+                      isFavorite === true ? 'favorite-' : !owned ? 'share-' : ''
+                    }${workspaceId}`}
+                    testingselector={`${
+                      isFavorite === true ? 'favorite-' : !owned ? 'share-' : ''
+                    }${
                       CONSTANTS.testingSelectors.workspace.listPage
                         .workspaceCardFavoritesButton
-                    }
+                    }-${workspaceId}`}
+                    testinglistselector={`${
+                      isFavorite === true ? 'favorite-' : !owned ? 'share-' : ''
+                    }${
+                      CONSTANTS.testingSelectors.workspace.listPage
+                        .workspaceCardFavoritesButton
+                    }`}
                     onClick={() => {
                       void zUpdateIsFavoriteHandler();
                     }}>
@@ -541,11 +628,33 @@ const ZWorkspacesCard: React.FC<{
                     <ZIonButton
                       color='primary'
                       fill='solid'
-                      testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardUserButton}-${workspaceId}`}
-                      testinglistselector={
+                      testingidselector={`${
+                        isFavorite === true
+                          ? 'favorite-'
+                          : !owned
+                          ? 'share-'
+                          : ''
+                      }${workspaceId}`}
+                      testingselector={`${
+                        isFavorite === true
+                          ? 'favorite-'
+                          : !owned
+                          ? 'share-'
+                          : ''
+                      }${
                         CONSTANTS.testingSelectors.workspace.listPage
                           .workspaceCardUserButton
-                      }
+                      }-${workspaceId}`}
+                      testinglistselector={`${
+                        isFavorite === true
+                          ? 'favorite-'
+                          : !owned
+                          ? 'share-'
+                          : ''
+                      }${
+                        CONSTANTS.testingSelectors.workspace.listPage
+                          .workspaceCardUserButton
+                      }`}
                       className={classNames(
                         classes['workspace-user-avatar-button'],
                         {
@@ -594,11 +703,33 @@ const ZWorkspacesCard: React.FC<{
                         className='normal-case'
                         color='secondary'
                         size='default'
-                        testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.viewWorkspaceButton}-${workspaceId}`}
-                        testinglistselector={
+                        testingidselector={`${
+                          isFavorite === true
+                            ? 'favorite-'
+                            : !owned
+                            ? 'share-'
+                            : ''
+                        }${workspaceId}`}
+                        testingselector={`${
+                          isFavorite === true
+                            ? 'favorite-'
+                            : !owned
+                            ? 'share-'
+                            : ''
+                        }${
                           CONSTANTS.testingSelectors.workspace.listPage
                             .viewWorkspaceButton
-                        }
+                        }-${workspaceId}`}
+                        testinglistselector={`${
+                          isFavorite === true
+                            ? 'favorite-'
+                            : !owned
+                            ? 'share-'
+                            : ''
+                        }${
+                          CONSTANTS.testingSelectors.workspace.listPage
+                            .viewWorkspaceButton
+                        }`}
                         onClick={() => {
                           // Click on card will redirect to view workspace.
                           if (workspaceId !== undefined) {
@@ -645,11 +776,33 @@ const ZWorkspacesCard: React.FC<{
                         minHeight='auto'
                         className='w-6 h-6 overflow-hidden normal-case rounded-full ion-no-padding ion-no-margin'
                         color='dark'
-                        testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardActionPopoverButton}-${workspaceId}`}
-                        testinglistselector={
+                        testingidselector={`${
+                          isFavorite === true
+                            ? 'favorite-'
+                            : !owned
+                            ? 'share-'
+                            : ''
+                        }${workspaceId}`}
+                        testingselector={`${
+                          isFavorite === true
+                            ? 'favorite-'
+                            : !owned
+                            ? 'share-'
+                            : ''
+                        }${
                           CONSTANTS.testingSelectors.workspace.listPage
                             .workspaceCardActionPopoverButton
-                        }
+                        }-${workspaceId}`}
+                        testinglistselector={`${
+                          isFavorite === true
+                            ? 'favorite-'
+                            : !owned
+                            ? 'share-'
+                            : ''
+                        }${
+                          CONSTANTS.testingSelectors.workspace.listPage
+                            .workspaceCardActionPopoverButton
+                        }`}
                         onClick={(event: unknown) => {
                           presentWorkspacesActionsPopover({
                             _event: event as Event,
@@ -664,11 +817,33 @@ const ZWorkspacesCard: React.FC<{
                       <ZIonButton
                         color='danger'
                         size='default'
-                        testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.leaveWorkspaceButton}-${workspaceId}`}
-                        testinglistselector={
+                        testingidselector={`${
+                          isFavorite === true
+                            ? 'favorite-'
+                            : !owned
+                            ? 'share-'
+                            : ''
+                        }${workspaceId}`}
+                        testingselector={`${
+                          isFavorite === true
+                            ? 'favorite-'
+                            : !owned
+                            ? 'share-'
+                            : ''
+                        }${
                           CONSTANTS.testingSelectors.workspace.listPage
                             .leaveWorkspaceButton
-                        }
+                        }-${workspaceId}`}
+                        testinglistselector={`${
+                          isFavorite === true
+                            ? 'favorite-'
+                            : !owned
+                            ? 'share-'
+                            : ''
+                        }${
+                          CONSTANTS.testingSelectors.workspace.listPage
+                            .leaveWorkspaceButton
+                        }`}
                         onClick={() => {
                           void LeaveWorkspaceConfirmAlert();
                         }}>
@@ -687,11 +862,33 @@ const ZWorkspacesCard: React.FC<{
                         className='normal-case '
                         color='success'
                         size='default'
-                        testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.acceptInvitationButton}-${workspaceId}`}
-                        testinglistselector={
+                        testingidselector={`${
+                          isFavorite === true
+                            ? 'favorite-'
+                            : !owned
+                            ? 'share-'
+                            : ''
+                        }${workspaceId}`}
+                        testingselector={`${
+                          isFavorite === true
+                            ? 'favorite-'
+                            : !owned
+                            ? 'share-'
+                            : ''
+                        }${
                           CONSTANTS.testingSelectors.workspace.listPage
                             .acceptInvitationButton
-                        }
+                        }-${workspaceId}`}
+                        testinglistselector={`${
+                          isFavorite === true
+                            ? 'favorite-'
+                            : !owned
+                            ? 'share-'
+                            : ''
+                        }${
+                          CONSTANTS.testingSelectors.workspace.listPage
+                            .acceptInvitationButton
+                        }`}
                         onClick={() => {
                           void zInvitationResponseHandler({
                             _item: ZTeamMemberInvitationEnum.accepted
@@ -708,11 +905,33 @@ const ZWorkspacesCard: React.FC<{
                       className='normal-case'
                       color='danger'
                       size='default'
-                      testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.rejectInvitationButton}-${workspaceId}`}
-                      testinglistselector={
+                      testingidselector={`${
+                        isFavorite === true
+                          ? 'favorite-'
+                          : !owned
+                          ? 'share-'
+                          : ''
+                      }${workspaceId}`}
+                      testingselector={`${
+                        isFavorite === true
+                          ? 'favorite-'
+                          : !owned
+                          ? 'share-'
+                          : ''
+                      }${
                         CONSTANTS.testingSelectors.workspace.listPage
                           .rejectInvitationButton
-                      }
+                      }-${workspaceId}`}
+                      testinglistselector={`${
+                        isFavorite === true
+                          ? 'favorite-'
+                          : !owned
+                          ? 'share-'
+                          : ''
+                      }${
+                        CONSTANTS.testingSelectors.workspace.listPage
+                          .rejectInvitationButton
+                      }`}
                       onClick={() => {
                         void zInvitationResponseHandler({
                           _item: ZTeamMemberInvitationEnum.rejected

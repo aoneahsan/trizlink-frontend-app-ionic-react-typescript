@@ -482,7 +482,8 @@ const PageAnalyticsHeaderSkeleton: React.FC = () => {
         sizeXs='12'>
         <div
           className={classNames({
-            'ion-text-end': isLgScale,
+            'flex ': true,
+            'ion-justify-content-end': isLgScale,
             'ion-text-center flex ion-justify-content-between': !isLgScale,
             'flex-col gap-y-2 px-3 py-2': !isMdScale
           })}>

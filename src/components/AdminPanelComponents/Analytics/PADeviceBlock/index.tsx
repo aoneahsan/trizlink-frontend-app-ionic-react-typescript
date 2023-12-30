@@ -94,7 +94,8 @@ const PADevicesBlock: React.FC<PABrowserBlockI> = ({ data }) => {
         })}>
         <ZIonText className='text-lg'>💻 Device type</ZIonText>
       </div>
-      {data !== undefined && data?.length > 0 ? (
+      <PADeviceTable data={data} />
+      {/* {data !== undefined && data?.length > 0 ? (
         <PADeviceTable data={data} />
       ) : (
         <div className='flex flex-col gap-3 ion-padding ion-align-items-center ion-justify-content-center'>
@@ -113,7 +114,7 @@ const PADevicesBlock: React.FC<PABrowserBlockI> = ({ data }) => {
             </ZIonText>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

@@ -1391,7 +1391,7 @@ export const zGenerateShortLink = ({
   urlPath?: string;
 }): string | undefined => {
   try {
-    if (domain !== undefined && urlPath !== undefined) {
+    if (isZNonEmptyString(domain) && isZNonEmptyString(urlPath)) {
       return `${domain}/${CONSTANTS.SHORT_LINK.urlStaticPath}/${urlPath}`;
     } else {
       throw new ZCustomError({

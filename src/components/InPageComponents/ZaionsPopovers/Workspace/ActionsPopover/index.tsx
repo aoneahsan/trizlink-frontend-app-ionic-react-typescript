@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 /**
  * Packages Imports go down
@@ -55,7 +55,11 @@ import {
   showErrorNotification,
   showSuccessNotification
 } from '@/utils/notification';
-import { extractInnerData, replaceRouteParams } from '@/utils/helpers';
+import {
+  extractInnerData,
+  replaceRouteParams,
+  zComponentTestingSelectorMaker
+} from '@/utils/helpers';
 import MESSAGES from '@/utils/messages';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
@@ -103,11 +107,15 @@ const ZWorkspacesActionPopover: React.FC<{
   showEditWorkspaceOption?: boolean;
   showManageUserOption?: boolean;
   workspaceId?: string;
+  owned?: boolean;
+  isFavorite?: boolean;
 }> = ({
   showDeleteWorkspaceOption = true,
   showEditWorkspaceOption = true,
   showManageUserOption = false,
   workspaceId,
+  isFavorite,
+  owned = true,
   dismissZIonPopover,
   zNavigatePushRoute
 }) => {
@@ -139,6 +147,50 @@ const ZWorkspacesActionPopover: React.FC<{
     _url: API_URL_ENUM.workspace_update_delete
   });
 
+  const {
+    _testinglistselector: deleteBtnTestinglistselector,
+    _testingSelector: deleteBtnTestingSelector,
+    _idSelector: deleteBtnTestingIdselector
+  } = useMemo(
+    () =>
+      zComponentTestingSelectorMaker({
+        testingidselector: `${
+          isFavorite === true ? 'favorite-' : !owned ? 'share-' : ''
+        }delete-${workspaceId}`,
+        testinglistselector: `${
+          isFavorite === true ? 'favorite-' : !owned ? 'share-' : ''
+        }${CONSTANTS.testingSelectors.workspace.listPage.modals.deleteBtn}`,
+        testingselector: `${
+          isFavorite === true ? 'favorite-' : !owned ? 'share-' : ''
+        }${
+          CONSTANTS.testingSelectors.workspace.listPage.modals.deleteBtn
+        }-${workspaceId}`
+      }),
+    [isFavorite, owned, workspaceId]
+  );
+
+  const {
+    _testinglistselector: cancelBtnTestinglistselector,
+    _testingSelector: cancelBtnTestingSelector,
+    _idSelector: cancelBtnTestingIdselector
+  } = useMemo(
+    () =>
+      zComponentTestingSelectorMaker({
+        testingidselector: `${
+          isFavorite === true ? 'favorite-' : !owned ? 'share-' : ''
+        }cancel-${workspaceId}`,
+        testinglistselector: `${
+          isFavorite === true ? 'favorite-' : !owned ? 'share-' : ''
+        }${CONSTANTS.testingSelectors.workspace.listPage.modals.cancelBtn}`,
+        testingselector: `${
+          isFavorite === true ? 'favorite-' : !owned ? 'share-' : ''
+        }${
+          CONSTANTS.testingSelectors.workspace.listPage.modals.cancelBtn
+        }-${workspaceId}`
+      }),
+    [isFavorite, owned, workspaceId]
+  );
+
   // delete Workspace Confirm Modal.
   const deleteWorkspaceConfirmModal = async (): Promise<void> => {
     try {
@@ -150,7 +202,12 @@ const ZWorkspacesActionPopover: React.FC<{
           buttons: [
             {
               text: 'Cancel',
-              role: 'cancel'
+              role: 'cancel',
+              htmlAttributes: {
+                ...cancelBtnTestinglistselector,
+                ...cancelBtnTestingSelector,
+                ...cancelBtnTestingIdselector
+              }
             },
             {
               text: 'Delete',
@@ -158,6 +215,11 @@ const ZWorkspacesActionPopover: React.FC<{
               cssClass: 'zaions_ion_color_danger',
               handler: () => {
                 void removeWorkspace();
+              },
+              htmlAttributes: {
+                ...deleteBtnTestinglistselector,
+                ...deleteBtnTestingSelector,
+                ...deleteBtnTestingIdselector
               }
             }
           ]
