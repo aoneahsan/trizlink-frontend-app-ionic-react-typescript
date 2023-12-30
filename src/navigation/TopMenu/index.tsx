@@ -2,28 +2,14 @@
 import React from 'react';
 
 // Packages Imports
-import {
-  bookOutline,
-  codeOutline,
-  earthOutline,
-  link,
-  qrCode,
-  tabletPortrait
-} from 'ionicons/icons';
-
 // Custom Imports
-import ZaionsDropDown from '@/components/InPageComponents/ZaionsDropdown';
+
+import { useRecoilValue } from 'recoil';
+import classNames from 'classnames';
 
 // Global Constant
 import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
-import ZaionsRoutes from '../../utils/constants/RoutesConstants';
-
-// Styles
-import classes from './styles.module.css';
-
-// Images
-import { ProductLogo } from '@/assets/images';
-import classNames from 'classnames';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import {
   ZIonButton,
   ZIonCol,
@@ -31,13 +17,20 @@ import {
   ZIonImg,
   ZIonMenuButton,
   ZIonRouterLink,
-  ZIonRow
+  ZIonRow,
+  ZIonTitle
 } from '@/components/ZIonComponents';
-import ZIonTitle from '@/components/ZIonComponents/ZIonTitle';
-import { useRecoilValue } from 'recoil';
-import { IsAuthenticatedRStateSelector } from '@/ZaionsStore/UserAccount/index.recoil';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
+
+// Styles
+import classes from './styles.module.css';
+
+// Images
+import { ProductLogo } from '@/assets/images';
+
+// Recoil
+import { IsAuthenticatedRStateSelector } from '@/ZaionsStore/UserAccount/index.recoil';
 
 const ZaionsTopMenu: React.FC = () => {
   const { isLgScale, isMdScale } = useZMediaQueryScale();
