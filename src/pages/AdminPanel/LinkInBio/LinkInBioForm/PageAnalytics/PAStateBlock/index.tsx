@@ -19,7 +19,7 @@ import {
   ZIonRow,
   ZIonText
 } from '@/components/ZIonComponents';
-import LinkInBioPageAnalyticsTable from '@/components/InPageComponents/ZaionsTable/linkInBioTables/PageAnalyticsTable';
+import LinkInBioPageAnalyticsTable from '@/components/InPageComponents/ZaionsTable/LinkInBioTables/PageAnalyticsTable';
 
 /**
  * Global Constants Imports go down

@@ -31,7 +31,7 @@ import {
   ZIonRow,
   ZIonText
 } from '@/components/ZIonComponents';
-import ZUserAvatarButton from '@/components/WorkspacesComponents/userButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
 
 /**

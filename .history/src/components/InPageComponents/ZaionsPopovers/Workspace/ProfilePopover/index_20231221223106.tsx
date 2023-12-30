@@ -60,7 +60,7 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
  * */
 import { ZaionsUserAccountRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
 import MESSAGES from '@/utils/messages';
-import ZUserAvatarButton from '@/components/WorkspacesComponents/userButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 
 /**
  * Style files Imports go down

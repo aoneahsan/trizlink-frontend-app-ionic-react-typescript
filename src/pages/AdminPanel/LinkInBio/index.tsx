@@ -81,7 +81,7 @@ import classes from './styles.module.css';
 const ZaionsLinkInBioLinksTable = lazy(
   () =>
     import(
-      '@/components/InPageComponents/ZaionsTable/linkInBioTables/LinkInBioTable'
+      '@/components/InPageComponents/ZaionsTable/LinkInBioTables/LinkInBioTable'
     )
 );
 const ZDashboardFolderMenu = lazy(
@@ -356,6 +356,7 @@ const ZLinkInBiosListPage: React.FC = () => {
       for (let i = 0; i < _linkInBioFoldersEls.length; i++) {
         const _block = _linkInBioFoldersEls[i];
         _linkInBioFoldersIds.push(
+          // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
           _block.getAttribute('data-folder-id') as string
         );
       }
