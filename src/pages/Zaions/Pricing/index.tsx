@@ -46,6 +46,7 @@ import {
 import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import { API_URL_ENUM } from '@/utils/enums';
 import CONSTANTS from '@/utils/constants';
+import { isZNonEmptyString } from '@/utils/helpers';
 
 // Styles
 
@@ -161,13 +162,21 @@ const ZaionsPricing: React.FC = () => {
                           {/*  */}
                           <ZIonText className='block mt-3 mb-0 text-center'>
                             <span className='text-3xl font-bold ps-3 zaions__color_gray2'>
+                              {plan?.currency}
                               {plan?.monthlyPrice}
                             </span>
                             /month
                           </ZIonText>
-                          <ZIonText className='mb-3 text-xs text-center ms-3'>
-                            {plan?.annualPrice ??
-                              `(annual one-time charge of ${plan?.annualPrice})`}
+                          <ZIonText
+                            className={classNames({
+                              'mb-3 text-xs text-center ms-3': true,
+                              'opacity-0': !isZNonEmptyString(
+                                String(plan?.annualPrice)
+                              )
+                            })}>
+                            {isZNonEmptyString(String(plan?.annualPrice))
+                              ? `(${plan?.annualPrice})`
+                              : '_'}
                           </ZIonText>
                           <ZIonButton
                             className='mx-3'
