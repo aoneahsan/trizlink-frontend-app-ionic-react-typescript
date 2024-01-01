@@ -53,7 +53,7 @@ import {
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import { API_URL_ENUM } from '@/utils/enums';
+import { API_URL_ENUM, ZWSTypeEum } from '@/utils/enums';
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 import CONSTANTS from '@/utils/constants';
 import { reportCustomError } from '@/utils/customErrorType';
@@ -312,6 +312,7 @@ const ZWorkspaceListPage: React.FC = () => {
                                 accountStatus={el?.accountStatus}
                                 createdAt={el.createdAt}
                                 isFavorite={Boolean(el.isFavorite)}
+                                type={ZWSTypeEum.favoriteWorkspace}
                                 memberId={el.id}
                               />
                             </ZIonCol>
@@ -425,6 +426,7 @@ const ZWorkspaceListPage: React.FC = () => {
                                     workspaceId={el.id}
                                     createdAt={el.createdAt}
                                     isFavorite={Boolean(el.isFavorite)}
+                                    type={ZWSTypeEum.personalWorkspace}
                                   />
                                 </ZIonCol>
                               </ZCan>
@@ -572,6 +574,7 @@ const ZWorkspaceListPage: React.FC = () => {
                                   memberId={el.id}
                                   owned={false}
                                   isFavorite={Boolean(el.isFavorite)}
+                                  type={ZWSTypeEum.shareWorkspace}
                                 />
                               </ZIonCol>
                             </ZCan>

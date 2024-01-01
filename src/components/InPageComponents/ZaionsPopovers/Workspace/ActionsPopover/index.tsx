@@ -48,7 +48,11 @@ import {
  * ? Like import of Constant is a global constants import
  * */
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
-import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import {
+  API_URL_ENUM,
+  ZWSTypeEum,
+  extractInnerDataOptionsEnum
+} from '@/utils/enums';
 import CONSTANTS from '@/utils/constants';
 import { reportCustomError } from '@/utils/customErrorType';
 import {
@@ -108,13 +112,13 @@ const ZWorkspacesActionPopover: React.FC<{
   showManageUserOption?: boolean;
   workspaceId?: string;
   owned?: boolean;
-  isFavorite?: boolean;
+  type: ZWSTypeEum;
 }> = ({
   showDeleteWorkspaceOption = true,
   showEditWorkspaceOption = true,
   showManageUserOption = false,
   workspaceId,
-  isFavorite,
+  type = ZWSTypeEum.personalWorkspace,
   owned = true,
   dismissZIonPopover,
   zNavigatePushRoute
@@ -155,18 +159,30 @@ const ZWorkspacesActionPopover: React.FC<{
     () =>
       zComponentTestingSelectorMaker({
         testingidselector: `${
-          isFavorite === true ? 'favorite-' : !owned ? 'share-' : ''
+          type === ZWSTypeEum.favoriteWorkspace
+            ? 'favorite-'
+            : type === ZWSTypeEum.shareWorkspace
+            ? 'share-'
+            : 'owned-'
         }delete-${workspaceId}`,
         testinglistselector: `${
-          isFavorite === true ? 'favorite-' : !owned ? 'share-' : ''
+          type === ZWSTypeEum.favoriteWorkspace
+            ? 'favorite-'
+            : type === ZWSTypeEum.shareWorkspace
+            ? 'share-'
+            : 'owned-'
         }${CONSTANTS.testingSelectors.workspace.listPage.modals.deleteBtn}`,
         testingselector: `${
-          isFavorite === true ? 'favorite-' : !owned ? 'share-' : ''
+          type === ZWSTypeEum.favoriteWorkspace
+            ? 'favorite-'
+            : type === ZWSTypeEum.shareWorkspace
+            ? 'share-'
+            : 'owned-'
         }${
           CONSTANTS.testingSelectors.workspace.listPage.modals.deleteBtn
         }-${workspaceId}`
       }),
-    [isFavorite, owned, workspaceId]
+    [type, workspaceId]
   );
 
   const {
@@ -177,24 +193,36 @@ const ZWorkspacesActionPopover: React.FC<{
     () =>
       zComponentTestingSelectorMaker({
         testingidselector: `${
-          isFavorite === true ? 'favorite-' : !owned ? 'share-' : ''
+          type === ZWSTypeEum.favoriteWorkspace
+            ? 'favorite-'
+            : type === ZWSTypeEum.shareWorkspace
+            ? 'share-'
+            : 'owned-'
         }cancel-${workspaceId}`,
         testinglistselector: `${
-          isFavorite === true ? 'favorite-' : !owned ? 'share-' : ''
+          type === ZWSTypeEum.favoriteWorkspace
+            ? 'favorite-'
+            : type === ZWSTypeEum.shareWorkspace
+            ? 'share-'
+            : 'owned-'
         }${CONSTANTS.testingSelectors.workspace.listPage.modals.cancelBtn}`,
         testingselector: `${
-          isFavorite === true ? 'favorite-' : !owned ? 'share-' : ''
+          type === ZWSTypeEum.favoriteWorkspace
+            ? 'favorite-'
+            : type === ZWSTypeEum.shareWorkspace
+            ? 'share-'
+            : 'owned-'
         }${
           CONSTANTS.testingSelectors.workspace.listPage.modals.cancelBtn
         }-${workspaceId}`
       }),
-    [isFavorite, owned, workspaceId]
+    [type, workspaceId]
   );
 
   // delete Workspace Confirm Modal.
   const deleteWorkspaceConfirmModal = async (): Promise<void> => {
     try {
-      if (workspaceId !== undefined) {
+      if (workspaceId !== undefined && workspaceId !== null) {
         await presentZIonAlert({
           header: MESSAGES.WORKSPACE.DELETE_ALERT.HEADER,
           subHeader: MESSAGES.WORKSPACE.DELETE_ALERT.SUB_HEADER,

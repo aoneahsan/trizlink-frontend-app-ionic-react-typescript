@@ -626,6 +626,7 @@ const testingSelectors = {
       workspaceCardImg: 'wlp-card-image',
       workspaceCardTitle: 'wlp-card-title',
       workspaceCardFavoritesButton: 'wlp-card-favorites-btn',
+      workspaceCardUnFavoritesButton: 'wlp-card-unfavorites-btn',
       workspaceCardUserButton: 'wlp-card-user-btn',
       workspaceCardActionPopoverButton: 'wlp-card-action-btn',
       modals: {
