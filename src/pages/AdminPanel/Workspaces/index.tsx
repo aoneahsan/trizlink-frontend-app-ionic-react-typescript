@@ -250,7 +250,7 @@ const ZWorkspaceListPage: React.FC = () => {
                   {[
                     ...compState?.ownedFavoriteWorkspaces,
                     ...compState?.sharedFavoriteWorkspaces
-                  ]?.length === 0 && (
+                  ]?.length === 0 ? (
                     <ZIonCol
                       size='12'
                       className='flex flex-col py-4 mt-2 rounded-lg ion-align-items-center ion-justify-content-center'
@@ -278,12 +278,7 @@ const ZWorkspaceListPage: React.FC = () => {
                         yet. Start by marking your most used workspaces!
                       </ZIonText>
                     </ZIonCol>
-                  )}
-
-                  {[
-                    ...compState?.ownedFavoriteWorkspaces,
-                    ...compState?.sharedFavoriteWorkspaces
-                  ]?.length > 0 && (
+                  ) : (
                     <>
                       {/* single card */}
                       <Suspense fallback={<ZWorkspacesCardSkeleton />}>
