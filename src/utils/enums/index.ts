@@ -18,7 +18,8 @@ export enum VALIDATION_RULE {
 
 export enum ZWSTypeEum {
   personalWorkspace = 'personalWorkspace',
-  shareWorkspace = 'shareWorkspace'
+  shareWorkspace = 'shareWorkspace',
+  favoriteWorkspace = 'favoriteWorkspace'
 }
 
 export enum PAGE_MENU {
@@ -39,7 +40,10 @@ export enum CONTAINS {
   specialSymbol = 'specialSymbol',
   minCharacter = 'minCharacter'
 }
+
+//
 export enum API_URL_ENUM {
+  zPlans = 'zPlans',
   login = 'login',
   socialLogin = 'socialLogin',
   logout = 'logout',

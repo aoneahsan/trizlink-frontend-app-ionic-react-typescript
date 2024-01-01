@@ -2,7 +2,8 @@
 import React, { useCallback } from 'react';
 
 // Packages Imports
-import { IonPopover } from '@ionic/react';
+import classNames from 'classnames';
+import { informationCircleOutline } from 'ionicons/icons';
 import { useRecoilValue } from 'recoil';
 
 // Custom Imports
@@ -13,7 +14,6 @@ import ZaionsTopMenu from '@/navigation/TopMenu';
 import {
   ZIonCol,
   ZIonText,
-  ZIonRouterLink,
   ZIonRow,
   ZIonGrid,
   ZIonContent,
@@ -21,32 +21,39 @@ import {
   ZIonCard,
   ZIonCardHeader,
   ZIonCardContent,
-  ZIonButton
+  ZIonButton,
+  ZIonRadioGroup,
+  ZIonRadio,
+  ZIonIcon
 } from '@/components/ZIonComponents';
+import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
+import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
 
 // Recoil State
 import { ZaionsPricingSubscriptionsState } from '@/ZaionsStore/PricingPage/PricingSubscriptionsData';
 import { ZaionsPricingFeatureDetailState } from '@/ZaionsStore/PricingPage/ZaionsPricingFeatureDetail.recoil';
 
 // Global Imports
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 // Types
 import {
+  type ZaionsPricingI,
   type ZaionsPricingFeatureDetailType,
   type ZaionsPricingFeaturePlanType,
   type ZaionsPricingSubscriptionsType
 } from '@/types/WhyZaions/PricingPage';
-import { getRandomKey } from '@/utils/helpers';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import { API_URL_ENUM } from '@/utils/enums';
+import CONSTANTS from '@/utils/constants';
 
 // Styles
-import classes from './styles.module.css';
 
 // Images
-import { iconInfo } from '@/assets/images';
-import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 
 const ZaionsPricing: React.FC = () => {
+  const { isXlScale, isLgScale, is2XlScale, isMdScale } = useZMediaQueryScale();
+
   const subscriptionPricingData = useRecoilValue<
     ZaionsPricingSubscriptionsType[]
   >(ZaionsPricingSubscriptionsState);
@@ -67,6 +74,17 @@ const ZaionsPricing: React.FC = () => {
     },
     []
   );
+
+  // #region APIs
+  const { data: ZPlansData } = useZRQGetRequest<ZaionsPricingI[]>({
+    _url: API_URL_ENUM.zPlans,
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PLANS.MAIN],
+    _authenticated: false,
+    _checkPermissions: false
+  });
+
+  console.log({ ZPlansData });
+  // #endregion
 
   return (
     <ZIonPage pageTitle='Integration Api Page'>
@@ -123,7 +141,7 @@ const ZaionsPricing: React.FC = () => {
               sizeMd='12'
               className='mx-auto'>
               <ZIonRow>
-                {subscriptionPricingData.map(el => {
+                {ZPlansData?.map(plan => {
                   return (
                     <ZIonCol
                       sizeXl='2.4'
@@ -131,32 +149,31 @@ const ZaionsPricing: React.FC = () => {
                       sizeMd='6'
                       sizeSm='6'
                       sizeXs='12'
-                      key={el.id}>
+                      key={plan.id}>
                       <ZIonCard className='h-full mx-0 '>
                         <ZIonCardHeader className='px-0 pb-2'>
                           <ZIonText
                             className='block pb-1 text-xl font-bold text-center border-b'
                             color='dark'>
-                            {el.label}
+                            {plan.displayName}
                           </ZIonText>
 
                           {/*  */}
                           <ZIonText className='block mt-3 mb-0 text-center'>
                             <span className='text-3xl font-bold ps-3 zaions__color_gray2'>
-                              {el?.price ?? 0}
+                              {plan?.monthlyPrice}
                             </span>
-                            {el?.priceDuration ?? '-'}
+                            /month
                           </ZIonText>
                           <ZIonText className='mb-3 text-xs text-center ms-3'>
-                            {el.annualCharge ??
-                              `(annual one-time charge of ${el.annualCharge})`}
+                            {plan?.annualPrice ??
+                              `(annual one-time charge of ${plan?.annualPrice})`}
                           </ZIonText>
                           <ZIonButton
                             className='mx-3'
                             expand='block'
                             color='tertiary'
-                            height='2.5rem'
-                            routerLink={el.link}>
+                            height='2.5rem'>
                             Get Started
                           </ZIonButton>
                           {/* <ZIonText className='block my-2 text-base text-center limits'>
@@ -164,7 +181,7 @@ const ZaionsPricing: React.FC = () => {
                           </ZIonText> */}
                         </ZIonCardHeader>
                         <ZIonCardContent className='mx-3 ps-1 pe-0'>
-                          <ZIonText className='mb-0 text-lg font-extrabold zaions__color_gray2'>
+                          {/* <ZIonText className='mb-0 text-lg font-extrabold zaions__color_gray2'>
                             {el.features_title}
                           </ZIonText>
 
@@ -191,7 +208,7 @@ const ZaionsPricing: React.FC = () => {
                                 </div>
                               );
                             })}
-                          </div>
+                          </div> */}
                         </ZIonCardContent>
                       </ZIonCard>
                     </ZIonCol>
@@ -202,7 +219,272 @@ const ZaionsPricing: React.FC = () => {
           </ZIonRow>
         </ZIonGrid>
 
-        <ZIonGrid>
+        <ZIonGrid className='my-8'>
+          <ZIonText className='block mb-6 text-xl font-bold ion-text-center'>
+            Detailed Feature Comparison
+          </ZIonText>
+          <ZIonRow
+            className={classNames({
+              'w-[85%] mx-auto': is2XlScale
+            })}>
+            <ZIonCol
+              size='3'
+              className='ion-no-padding'>
+              <div className='ion-padding w-full h-[12rem] flex flex-col ion-align-items-start ion-justify-content-center'>
+                <ZIonText
+                  color='medium'
+                  className='block'>
+                  Save up to 34% when you pay annually
+                </ZIonText>
+
+                <ZIonRadioGroup
+                  value='payAnnually'
+                  className='flex flex-col gap-3 mt-3 ion-align-items-start'>
+                  <ZIonRadio
+                    value='payAnnually'
+                    labelPlacement='end'>
+                    Pay Annually
+                  </ZIonRadio>
+
+                  <ZIonRadio
+                    value='payMonthly'
+                    labelPlacement='end'>
+                    Pay Monthly
+                  </ZIonRadio>
+                </ZIonRadioGroup>
+              </div>
+
+              <div className='mb-2 mt-7'>
+                <ZIonText className='block px-2 pb-1 text-lg font-semibold border-bottom-medium-point-5'>
+                  Link Management
+                </ZIonText>
+
+                <ZIonText className='flex w-full px-2 py-2 ion-align-items-center text-md border-bottom-medium-point-5'>
+                  Link Management
+                  <div className='flex h-max w-max'>
+                    <ZIonIcon
+                      id='infoIconPlanLimit'
+                      icon={informationCircleOutline}
+                      className='w-5 h-5 cursor-pointer ms-1'
+                      color='medium'
+                    />
+                  </div>
+                  <ZRTooltip
+                    anchorSelect='#infoIconPlanLimit'
+                    place='right'
+                    className='w-[14rem!important] text-xs p-[.3rem!important]'>
+                    <ZIonText className='text-xs'>
+                      Total number of URLs you can shorten on a monthly basis
+                    </ZIonText>
+                  </ZRTooltip>
+                </ZIonText>
+              </div>
+            </ZIonCol>
+            {/* Feature list (header) */}
+            <ZIonCol className='zaions__light_bg ion-no-padding'>
+              <div className='ion-padding pt-2 w-full h-[12rem] flex flex-col gap-2 ion-align-items-center ion-justify-content-start'>
+                <ZIonText
+                  color='dark'
+                  className='block text-xl font-semibold uppercase'>
+                  FREE
+                </ZIonText>
+
+                <ZIonText
+                  color='medium'
+                  className='block font-medium'>
+                  <ZIonText className='text-3xl'>$0</ZIonText>
+                  <ZIonText className='text-sm'>/mo</ZIonText>
+                </ZIonText>
+                <ZIonText
+                  color='medium'
+                  className='block text-xs font-semibold'>
+                  _
+                </ZIonText>
+
+                <div className='w-full mt-5'>
+                  <ZIonButton
+                    className='w-full'
+                    height='2.5rem'>
+                    Get Stated
+                  </ZIonButton>
+                </div>
+              </div>
+
+              <div className='mb-2 mt-7'>
+                <ZIonText className='block px-2 pb-1 text-lg font-semibold border-bottom-medium-point-5'>
+                  _
+                </ZIonText>
+
+                <ZIonText className='block w-full px-2 py-2 ion-text-center text-md border-bottom-medium-point-5'>
+                  10/mo
+                </ZIonText>
+              </div>
+            </ZIonCol>
+
+            {/* plans */}
+            <ZIonCol className='ion-no-padding'>
+              <div className='ion-padding pt-2 w-full h-[12rem] flex flex-col gap-2 ion-align-items-center ion-justify-content-start'>
+                <ZIonText
+                  color='dark'
+                  className='block text-xl font-semibold uppercase'>
+                  FREE
+                </ZIonText>
+
+                <ZIonText
+                  color='medium'
+                  className='block font-medium'>
+                  <ZIonText className='text-3xl'>$0</ZIonText>
+                  <ZIonText className='text-sm'>/mo</ZIonText>
+                </ZIonText>
+                <ZIonText
+                  color='medium'
+                  className='block text-xs font-semibold'>
+                  _
+                </ZIonText>
+
+                <div className='w-full mt-5'>
+                  <ZIonButton
+                    className='w-full'
+                    height='2.5rem'>
+                    Get Stated
+                  </ZIonButton>
+                </div>
+              </div>
+
+              <div className='mb-2 mt-7'>
+                <ZIonText className='block px-2 pb-1 text-lg font-semibold border-bottom-medium-point-5'>
+                  _
+                </ZIonText>
+
+                <ZIonText className='block w-full px-2 py-2 ion-text-center text-md border-bottom-medium-point-5'>
+                  10/mo
+                </ZIonText>
+              </div>
+            </ZIonCol>
+
+            <ZIonCol className='zaions__light_bg ion-no-padding'>
+              <div className='ion-padding pt-2 w-full h-[12rem] flex flex-col gap-2 ion-align-items-center ion-justify-content-start'>
+                <ZIonText
+                  color='dark'
+                  className='block text-xl font-semibold uppercase'>
+                  FREE
+                </ZIonText>
+
+                <ZIonText
+                  color='medium'
+                  className='block font-medium'>
+                  <ZIonText className='text-3xl'>$0</ZIonText>
+                  <ZIonText className='text-sm'>/mo</ZIonText>
+                </ZIonText>
+                <ZIonText
+                  color='medium'
+                  className='block text-xs font-semibold'>
+                  _
+                </ZIonText>
+
+                <div className='w-full mt-5'>
+                  <ZIonButton
+                    className='w-full'
+                    height='2.5rem'>
+                    Get Stated
+                  </ZIonButton>
+                </div>
+              </div>
+
+              <div className='mb-2 mt-7'>
+                <ZIonText className='block px-2 pb-1 text-lg font-semibold border-bottom-medium-point-5'>
+                  _
+                </ZIonText>
+
+                <ZIonText className='block w-full px-2 py-2 ion-text-center text-md border-bottom-medium-point-5'>
+                  10/mo
+                </ZIonText>
+              </div>
+            </ZIonCol>
+
+            <ZIonCol className='ion-no-padding'>
+              <div className='ion-padding pt-2 w-full h-[12rem] flex flex-col gap-2 ion-align-items-center ion-justify-content-start'>
+                <ZIonText
+                  color='dark'
+                  className='block text-xl font-semibold uppercase'>
+                  FREE
+                </ZIonText>
+
+                <ZIonText
+                  color='medium'
+                  className='block font-medium'>
+                  <ZIonText className='text-3xl'>$0</ZIonText>
+                  <ZIonText className='text-sm'>/mo</ZIonText>
+                </ZIonText>
+                <ZIonText
+                  color='medium'
+                  className='block text-xs font-semibold'>
+                  _
+                </ZIonText>
+
+                <div className='w-full mt-5'>
+                  <ZIonButton
+                    className='w-full'
+                    height='2.5rem'>
+                    Get Stated
+                  </ZIonButton>
+                </div>
+              </div>
+
+              <div className='mb-2 mt-7'>
+                <ZIonText className='block px-2 pb-1 text-lg font-semibold border-bottom-medium-point-5'>
+                  _
+                </ZIonText>
+
+                <ZIonText className='block w-full px-2 py-2 ion-text-center text-md border-bottom-medium-point-5'>
+                  10/mo
+                </ZIonText>
+              </div>
+            </ZIonCol>
+
+            <ZIonCol className='zaions__light_bg ion-no-padding'>
+              <div className='ion-padding pt-2 w-full h-[12rem] flex flex-col gap-2 ion-align-items-center ion-justify-content-start'>
+                <ZIonText
+                  color='dark'
+                  className='block text-xl font-semibold uppercase'>
+                  FREE
+                </ZIonText>
+
+                <ZIonText
+                  color='medium'
+                  className='block font-medium'>
+                  <ZIonText className='text-3xl'>$0</ZIonText>
+                  <ZIonText className='text-sm'>/mo</ZIonText>
+                </ZIonText>
+                <ZIonText
+                  color='medium'
+                  className='block text-xs font-semibold'>
+                  _
+                </ZIonText>
+
+                <div className='w-full mt-5'>
+                  <ZIonButton
+                    className='w-full'
+                    height='2.5rem'>
+                    Get Stated
+                  </ZIonButton>
+                </div>
+              </div>
+
+              <div className='mb-2 mt-7'>
+                <ZIonText className='block px-2 pb-1 text-lg font-semibold border-bottom-medium-point-5'>
+                  _
+                </ZIonText>
+
+                <ZIonText className='block w-full px-2 py-2 ion-text-center text-md border-bottom-medium-point-5'>
+                  10/mo
+                </ZIonText>
+              </div>
+            </ZIonCol>
+          </ZIonRow>
+        </ZIonGrid>
+
+        {/* <ZIonGrid>
           <ZIonRow>
             <ZIonCol className='mt-5 text-lg text-center'>
               <ZIonText className='font-extrabold'>
@@ -532,8 +814,7 @@ const ZaionsPricing: React.FC = () => {
               <hr />
             </ZIonCol>
           </ZIonRow>
-        </ZIonGrid>
-
+        </ZIonGrid> */}
         <ZIonGrid className='pt-5 mt-5 mb-5'>
           <ZIonRow>
             <ZIonCol className='text-center'>

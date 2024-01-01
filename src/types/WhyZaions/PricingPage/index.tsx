@@ -17,6 +17,19 @@ export interface ZaionsPricingSubscriptionsType {
   extra_data?: unknown;
 }
 
+export interface ZaionsPricingI {
+  id?: string;
+  displayName: string;
+  monthlyPrice: number;
+  annualPrice: number;
+  monthlyDiscountedPrice: number;
+  annualDiscountedPrice: number;
+  currency: string;
+  description: string;
+  isMostPopular: boolean;
+  isActive: boolean;
+}
+
 export type ZaionsPricingFeaturePlanType = string | boolean | null | undefined;
 
 export interface ZaionsPricingFeatureDetailType {

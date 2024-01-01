@@ -122,6 +122,7 @@ const RouteParams = {
 
 // left here as it will mess up many imports, we can move this when we have some free time (i know that will add more imports to correct but we don't have time for it right now)
 export const API_URLS = {
+  zPlans: '/plans',
   login: '/login',
   socialLogin: '/social-login',
   logout: '/logout',
@@ -1592,6 +1593,9 @@ export const NOTIFICATIONS = {
  */
 const REACT_QUERY = {
   QUERIES_KEYS: {
+    PLANS: {
+      MAIN: 'rq-plans-list-key'
+    },
     PIXEL_ACCOUNT: {
       MAIN: 'rq-pixel-account-list-key',
       CREATE: 'rq-pixel-account-create-key',

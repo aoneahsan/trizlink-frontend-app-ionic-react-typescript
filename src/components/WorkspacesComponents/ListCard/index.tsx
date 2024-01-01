@@ -63,7 +63,11 @@ import {
 } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
-import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import {
+  API_URL_ENUM,
+  extractInnerDataOptionsEnum,
+  ZWSTypeEum
+} from '@/utils/enums';
 import { showSuccessNotification } from '@/utils/notification';
 import { reportCustomError } from '@/utils/customErrorType';
 import MESSAGES from '@/utils/messages';
@@ -120,6 +124,7 @@ const ZWorkspacesCard: React.FC<{
   createdAt?: string;
   updatedAt?: string;
   accountStatus?: ZTeamMemberInvitationEnum;
+  type?: ZWSTypeEum;
 }> = ({
   workspaceId,
   workspaceImage,
@@ -129,7 +134,8 @@ const ZWorkspacesCard: React.FC<{
   owned = true,
   isFavorite,
   accountStatus,
-  memberId
+  memberId,
+  type = ZWSTypeEum.personalWorkspace
 }) => {
   // #region Custom Hooks.
   const { updateRQCDataHandler } = useZUpdateRQCacheData();

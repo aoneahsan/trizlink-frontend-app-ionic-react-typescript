@@ -475,6 +475,11 @@ span.new {
 .border-bottom-danger {
   border-bottom: 1px solid var(--ion-color-danger) !important ;
 }
+
+.border-bottom-medium-point-5 {
+  border-bottom: 1px solid rgba(var(--ion-color-medium-rgb), 0.5) !important ;
+}
+
 .border-bottom-success {
   border-bottom: 1px solid var(--ion-color-success) !important ;
 }
