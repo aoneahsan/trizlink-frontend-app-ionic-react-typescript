@@ -1,5 +1,5 @@
 // Core Imports
-import React, { useCallback } from 'react';
+import React from 'react';
 
 // Packages Imports
 import classNames from 'classnames';
@@ -7,7 +7,6 @@ import {
   checkmarkCircleOutline,
   informationCircleOutline
 } from 'ionicons/icons';
-import { useRecoilValue } from 'recoil';
 
 // Custom Imports
 import ZIonPage from '@/components/ZIonPage';
@@ -20,7 +19,6 @@ import {
   ZIonRow,
   ZIonGrid,
   ZIonContent,
-  ZIonImg,
   ZIonCard,
   ZIonCardHeader,
   ZIonCardContent,
@@ -34,51 +32,44 @@ import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
 
 // Recoil State
-import { ZaionsPricingSubscriptionsState } from '@/ZaionsStore/PricingPage/PricingSubscriptionsData';
-import { ZaionsPricingFeatureDetailState } from '@/ZaionsStore/PricingPage/ZaionsPricingFeatureDetail.recoil';
 
 // Global Imports
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
-
-// Types
-import {
-  type ZaionsPricingI,
-  type ZaionsPricingFeatureDetailType,
-  type ZaionsPricingFeaturePlanType,
-  type ZaionsPricingSubscriptionsType
-} from '@/types/WhyZaions/PricingPage';
 import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import { API_URL_ENUM } from '@/utils/enums';
 import CONSTANTS from '@/utils/constants';
 import { isZNonEmptyString } from '@/utils/helpers';
+
+// Types
+import { type ZaionsPricingI } from '@/types/WhyZaions/PricingPage';
 
 // Styles
 
 // Images
 
 const ZaionsPricing: React.FC = () => {
-  const { isXlScale, isLgScale, is2XlScale, isMdScale } = useZMediaQueryScale();
+  const { is2XlScale } = useZMediaQueryScale();
 
-  const subscriptionPricingData = useRecoilValue<
-    ZaionsPricingSubscriptionsType[]
-  >(ZaionsPricingSubscriptionsState);
-  const pricingFeatureDetailData = useRecoilValue<
-    ZaionsPricingFeatureDetailType[]
-  >(ZaionsPricingFeatureDetailState);
+  // const subscriptionPricingData = useRecoilValue<
+  //   ZaionsPricingSubscriptionsType[]
+  // >(ZaionsPricingSubscriptionsState);
+  // const pricingFeatureDetailData = useRecoilValue<
+  //   ZaionsPricingFeatureDetailType[]
+  // >(ZaionsPricingFeatureDetailState);
 
-  const getPlanFeatureContent = useCallback(
-    (val: ZaionsPricingFeaturePlanType) => {
-      if (typeof val === 'string') {
-        return val;
-      } else if (typeof val === 'boolean' && val) {
-        // return <ZIonIcon name={checkmarkDoneOutline} color='dark'></ZIonIcon>;
-        return '✔';
-      } else {
-        return '-';
-      }
-    },
-    []
-  );
+  // const getPlanFeatureContent = useCallback(
+  //   (val: ZaionsPricingFeaturePlanType) => {
+  //     if (typeof val === 'string') {
+  //       return val;
+  //     } else if (typeof val === 'boolean' && val) {
+  //       // return <ZIonIcon name={checkmarkDoneOutline} color='dark'></ZIonIcon>;
+  //       return '✔';
+  //     } else {
+  //       return '-';
+  //     }
+  //   },
+  //   []
+  // );
 
   // #region APIs
   const { data: ZPlansData, isFetching: isZPlanDataFetching } =
