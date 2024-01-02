@@ -166,6 +166,9 @@ const ZWorkspaceProfilePopover: React.FC<{
       <ZIonRow className='pt-2 ion-align-items-center'>
         <ZIonCol size='max-content'>
           <ZUserAvatarButton
+            testingselector={
+              CONSTANTS.testingSelectors.user.profilePopover.avatar
+            }
             className='w-[40px] h-[40px] me-1 ms-1 border'
             userAvatar={zUserAccountStateAtom?.avatar}
             userAvatarUi={_userAvatarUi}
@@ -173,12 +176,18 @@ const ZWorkspaceProfilePopover: React.FC<{
         </ZIonCol>
         <ZIonCol>
           <ZIonLabel
+            testingselector={
+              CONSTANTS.testingSelectors.user.profilePopover.displayName
+            }
             className={classNames({
               'text-sm font-bold flex': true
             })}>
             {zUserAccountStateAtom?.username}
           </ZIonLabel>
           <ZIonLabel
+            testingselector={
+              CONSTANTS.testingSelectors.user.profilePopover.email
+            }
             className='block text-sm'
             color='medium'>
             {zUserAccountStateAtom?.email}

@@ -324,9 +324,29 @@ const ZWorkspacesActionPopover: React.FC<{
         <ZIonItem
           minHeight='2.3rem'
           className='cursor-pointer ion-activatable ion-focusable'
-          testingselector={
+          testingidselector={`${
+            type === ZWSTypeEum.favoriteWorkspace
+              ? 'favorite-'
+              : type === ZWSTypeEum.shareWorkspace
+              ? 'share-'
+              : 'owned-'
+          }${workspaceId}`}
+          testinglistselector={`${
+            type === ZWSTypeEum.favoriteWorkspace
+              ? 'favorite-'
+              : type === ZWSTypeEum.shareWorkspace
+              ? 'share-'
+              : 'owned-'
+          }${CONSTANTS.testingSelectors.workspace.actionsPopover.manageUsers}`}
+          testingselector={`${
+            type === ZWSTypeEum.favoriteWorkspace
+              ? 'favorite-'
+              : type === ZWSTypeEum.shareWorkspace
+              ? 'share-'
+              : 'owned-'
+          }${
             CONSTANTS.testingSelectors.workspace.actionsPopover.manageUsers
-          }
+          }-${workspaceId}`}
           onClick={() => {
             presentWorkspaceSharingModal({
               _cssClass: 'workspace-sharing-modal-size'
@@ -344,11 +364,34 @@ const ZWorkspacesActionPopover: React.FC<{
       <ZCan havePermissions={[permissionsEnum.viewAny_timeSlot]}>
         <ZIonItem
           minHeight='2.3rem'
-          className='cursor-pointer ion-activatable ion-focusable '
-          testingselector={
+          className='cursor-pointer ion-activatable ion-focusable'
+          testingidselector={`${
+            type === ZWSTypeEum.favoriteWorkspace
+              ? 'favorite-'
+              : type === ZWSTypeEum.shareWorkspace
+              ? 'share-'
+              : 'owned-'
+          }${workspaceId}`}
+          testinglistselector={`${
+            type === ZWSTypeEum.favoriteWorkspace
+              ? 'favorite-'
+              : type === ZWSTypeEum.shareWorkspace
+              ? 'share-'
+              : 'owned-'
+          }${
             CONSTANTS.testingSelectors.workspace.actionsPopover
               .configureTimetable
-          }
+          }`}
+          testingselector={`${
+            type === ZWSTypeEum.favoriteWorkspace
+              ? 'favorite-'
+              : type === ZWSTypeEum.shareWorkspace
+              ? 'share-'
+              : 'owned-'
+          }${
+            CONSTANTS.testingSelectors.workspace.actionsPopover
+              .configureTimetable
+          }-${workspaceId}`}
           onClick={() => {
             // setting the tab with should be active in modal
             setModalTab(workspaceSettingsModalTabEnum.timetable);
@@ -374,10 +417,30 @@ const ZWorkspacesActionPopover: React.FC<{
       <ZCan havePermissions={[permissionsEnum.viewAny_label]}>
         <ZIonItem
           className='cursor-pointer ion-activatable ion-focusable'
+          testingidselector={`${
+            type === ZWSTypeEum.favoriteWorkspace
+              ? 'favorite-'
+              : type === ZWSTypeEum.shareWorkspace
+              ? 'share-'
+              : 'owned-'
+          }${workspaceId}`}
           minHeight='2.3rem'
-          testingselector={
+          testingselector={`${
+            type === ZWSTypeEum.favoriteWorkspace
+              ? 'favorite-'
+              : type === ZWSTypeEum.shareWorkspace
+              ? 'share-'
+              : 'owned-'
+          }${
             CONSTANTS.testingSelectors.workspace.actionsPopover.manageLabels
-          }
+          }-${workspaceId}`}
+          testinglistselector={`${
+            type === ZWSTypeEum.favoriteWorkspace
+              ? 'favorite-'
+              : type === ZWSTypeEum.shareWorkspace
+              ? 'share-'
+              : 'owned-'
+          }${CONSTANTS.testingSelectors.workspace.actionsPopover.manageLabels}`}
           onClick={() => {
             // setting the tab with should be active in modal
             setModalTab(workspaceSettingsModalTabEnum.labels);
@@ -401,6 +464,29 @@ const ZWorkspacesActionPopover: React.FC<{
       <ZIonItem
         minHeight='32px'
         className='cursor-pointer ion-activatable ion-focusable'
+        testingidselector={`${
+          type === ZWSTypeEum.favoriteWorkspace
+            ? 'favorite-'
+            : type === ZWSTypeEum.shareWorkspace
+            ? 'share-'
+            : 'owned-'
+        }${workspaceId}`}
+        testingselector={`${
+          type === ZWSTypeEum.favoriteWorkspace
+            ? 'favorite-'
+            : type === ZWSTypeEum.shareWorkspace
+            ? 'share-'
+            : 'owned-'
+        }${
+          CONSTANTS.testingSelectors.workspace.actionsPopover.inviteMember
+        }-${workspaceId}`}
+        testinglistselector={`${
+          type === ZWSTypeEum.favoriteWorkspace
+            ? 'favorite-'
+            : type === ZWSTypeEum.shareWorkspace
+            ? 'share-'
+            : 'owned-'
+        }${CONSTANTS.testingSelectors.workspace.actionsPopover.inviteMember}`}
         onClick={() => {
           zNavigatePushRoute(
             replaceRouteParams(
@@ -424,9 +510,29 @@ const ZWorkspacesActionPopover: React.FC<{
         <ZIonItem
           minHeight='2.3rem'
           className='cursor-pointer ion-activatable ion-focusable'
-          testingselector={
+          testingidselector={`${
+            type === ZWSTypeEum.favoriteWorkspace
+              ? 'favorite-'
+              : type === ZWSTypeEum.shareWorkspace
+              ? 'share-'
+              : 'owned-'
+          }${workspaceId}`}
+          testingselector={`${
+            type === ZWSTypeEum.favoriteWorkspace
+              ? 'favorite-'
+              : type === ZWSTypeEum.shareWorkspace
+              ? 'share-'
+              : 'owned-'
+          }${
             CONSTANTS.testingSelectors.workspace.actionsPopover.settings
-          }
+          }-${workspaceId}`}
+          testinglistselector={`${
+            type === ZWSTypeEum.favoriteWorkspace
+              ? 'favorite-'
+              : type === ZWSTypeEum.shareWorkspace
+              ? 'share-'
+              : 'owned-'
+          }${CONSTANTS.testingSelectors.workspace.actionsPopover.settings}`}
           onClick={() => {
             // setting the tab with should be active in modal
             setModalTab(workspaceSettingsModalTabEnum.settings);
@@ -450,9 +556,31 @@ const ZWorkspacesActionPopover: React.FC<{
       <ZIonItem
         minHeight='2.3rem'
         className='cursor-pointer ion-activatable ion-focusable'
-        testingselector={
+        testingidselector={`${
+          type === ZWSTypeEum.favoriteWorkspace
+            ? 'favorite-'
+            : type === ZWSTypeEum.shareWorkspace
+            ? 'share-'
+            : 'owned-'
+        }${workspaceId}`}
+        testingselector={`${
+          type === ZWSTypeEum.favoriteWorkspace
+            ? 'favorite-'
+            : type === ZWSTypeEum.shareWorkspace
+            ? 'share-'
+            : 'owned-'
+        }${
           CONSTANTS.testingSelectors.workspace.actionsPopover.approvalSettings
-        }
+        }-${workspaceId}`}
+        testinglistselector={`${
+          type === ZWSTypeEum.favoriteWorkspace
+            ? 'favorite-'
+            : type === ZWSTypeEum.shareWorkspace
+            ? 'share-'
+            : 'owned-'
+        }${
+          CONSTANTS.testingSelectors.workspace.actionsPopover.approvalSettings
+        }`}
         onClick={() => {
           // setting the tab with should be active in modal
           setModalTab(workspaceSettingsModalTabEnum.approvals);
@@ -515,9 +643,29 @@ const ZWorkspacesActionPopover: React.FC<{
           <ZIonItem
             minHeight='2.3rem'
             className='cursor-pointer ion-activatable ion-focusable'
-            testingselector={
+            testingidselector={`${
+              type === ZWSTypeEum.favoriteWorkspace
+                ? 'favorite-'
+                : type === ZWSTypeEum.shareWorkspace
+                ? 'share-'
+                : 'owned-'
+            }${workspaceId}`}
+            testingselector={`${
+              type === ZWSTypeEum.favoriteWorkspace
+                ? 'favorite-'
+                : type === ZWSTypeEum.shareWorkspace
+                ? 'share-'
+                : 'owned-'
+            }${
               CONSTANTS.testingSelectors.workspace.actionsPopover.delete
-            }
+            }-${workspaceId}`}
+            testinglistselector={`${
+              type === ZWSTypeEum.favoriteWorkspace
+                ? 'favorite-'
+                : type === ZWSTypeEum.shareWorkspace
+                ? 'share-'
+                : 'owned-'
+            }${CONSTANTS.testingSelectors.workspace.actionsPopover.delete}`}
             onClick={() => {
               void deleteWorkspaceConfirmModal();
             }}>

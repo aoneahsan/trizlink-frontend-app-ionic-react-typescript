@@ -119,6 +119,16 @@ const ZAdminPanelTopBar: React.FC<{
   );
   // #endregion
 
+  // Workspace list page
+  const isWsListPage = useRouteMatch(
+    ZaionsRoutes.AdminPanel.Workspaces.Main
+  )?.isExact;
+
+  // Workspace short links list page
+  const isWsSlListPage = useRouteMatch(
+    ZaionsRoutes.AdminPanel.Workspaces.Main
+  )?.isExact;
+
   return (
     <ZIonRow
       className={classNames({
@@ -161,7 +171,11 @@ const ZAdminPanelTopBar: React.FC<{
             })}
             onClick={refreshBtnOnClick}
             testingselector={
-              CONSTANTS.testingSelectors.shortLink.listPage.refetchBtn
+              isWsListPage === true
+                ? CONSTANTS.testingSelectors.workspace.listPage.refetchBtn
+                : isWsSlListPage === true
+                ? CONSTANTS.testingSelectors.shortLink.listPage.refetchBtn
+                : ''
             }>
             <ZIonIcon
               slot='start'

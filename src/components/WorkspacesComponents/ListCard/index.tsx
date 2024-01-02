@@ -153,7 +153,12 @@ const ZWorkspacesCard: React.FC<{
   // #region Popover.
   const { presentZIonPopover: presentUserInfoPopover } = useZIonPopover(
     ZUserInfoPopover,
-    { showBadges: true, user: owned ? userAccountStateAtom : user }
+    {
+      showBadges: true,
+      user: owned ? userAccountStateAtom : user,
+      workspaceId,
+      type
+    }
   ); // popover hook to show UserInfoPopover
 
   const { presentZIonPopover: presentWorkspacesActionsPopover } =

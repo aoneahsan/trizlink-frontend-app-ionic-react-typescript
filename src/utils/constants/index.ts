@@ -594,6 +594,7 @@ const testingSelectors = {
       page: 'workspace-list-page',
       favoriteWorkspaces: 'wlp-favorite-ws-section',
       favoriteCard: 'wlp-favorite-ws-card',
+      refetchBtn: 'wlp-refetch-btn',
       fwEmpty: {
         col: 'wlp-fw-no-data-col',
         icon: 'wlp-fw-no-data-col-icon',
@@ -651,7 +652,14 @@ const testingSelectors = {
       settings: 'wap-settings-btn',
       approvalSettings: 'wap-approval-settings-btn',
       edit: 'wap-edit-btn',
-      delete: 'wap-delete-btn'
+      delete: 'wap-delete-btn',
+      inviteMember: 'wap-invite-member-btn'
+    },
+
+    userPopover: {
+      userAvatar: 'ws-up-user-avatar',
+      displayName: 'ws-up-user-display-name',
+      userEmail: 'ws-up-user-email'
     },
 
     settingsModal: {
@@ -712,10 +720,13 @@ const testingSelectors = {
     userProfilePopoverButton: 'user-profile-popover-btn',
 
     profilePopover: {
-      profileSettings: 'profile-popover-profile-settings-btn',
-      notificationSettings: 'profile-popover-profile-settings-btn',
-      logout: 'profile-popover-logout-btn',
-      addNewCompanyAccount: 'profile-popover-add-company-account-btn'
+      avatar: 'pp-user-avatar',
+      displayName: 'pp-display-name',
+      email: 'pp-user-email',
+      profileSettings: 'pp-profile-settings-btn',
+      notificationSettings: 'pp-notification-settings-btn',
+      logout: 'pp-logout-btn',
+      addNewCompanyAccount: 'pp-add-company-account-btn'
     }
   },
   // #endregion
@@ -1293,13 +1304,24 @@ const testingSelectors = {
     workspaceSwitcherBtn: 'tb-ws-btn', // top-bar-workspace-switcher-btn.
     workspaceSwitcherPopover: {
       singleWorkspace: 'tb-wsp-single-workspace', // top-bar-workspace-switcher-popover-...
+      wsCreateBtn: 'tb-wsp-create-workspace-btn',
+      noData: {
+        ownedWS: {
+          item: 'tb-wsp-owned-ws-no-data-item',
+          text: 'tb-wsp-owned-ws-no-data-text'
+        },
+        shareWS: {
+          item: 'tb-wsp-share-ws-no-data-item',
+          text: 'tb-wsp-share-ws-no-data-text'
+        }
+      },
       actionPopover: {
         // top-bar-workspace-switcher-popover-action-popover-...
         editWorkspace: 'tb-wsp-ap-edit-btn',
         deleteWorkspace: 'tb-wsp-ap-delete-btn'
       }
     },
-    teamInviteBtn: 'tb-ti-btn', // top-bar-team-invite-btn.
+    teamInviteBtn: 'tb-invite-member-btn', // top-bar-.
     teamInviteModal: {
       closeModalBtn: 'tb-ti-modal-close-btn'
     },

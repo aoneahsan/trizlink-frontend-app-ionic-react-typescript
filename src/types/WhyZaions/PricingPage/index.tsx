@@ -24,6 +24,8 @@ export interface ZaionsPricingI {
   annualPrice: number;
   monthlyDiscountedPrice: number;
   annualDiscountedPrice: number;
+  featureListTitle: string;
+  features?: Array<{ text: string }>;
   currency: string;
   description: string;
   isMostPopular: boolean;

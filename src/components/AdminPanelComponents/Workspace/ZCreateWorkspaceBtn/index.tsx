@@ -37,6 +37,7 @@ import { API_URL_ENUM } from '@/utils/enums';
  * */
 import { type workspaceInterface } from '@/types/AdminPanel/workspace';
 import classNames from 'classnames';
+import { isZNonEmptyString } from '@/utils/helpers';
 
 /**
  * Workspace create button
@@ -46,7 +47,8 @@ import classNames from 'classnames';
 const ZCreateWorkspaceBtn: React.FC<{
   className?: string;
   height?: string;
-}> = ({ className, height }) => {
+  testingselector?: string;
+}> = ({ className, height, testingselector }) => {
   // Get workspaces data from backend.
   const { isFetching: isWorkspacesDataFetching } = useZRQGetRequest<
     workspaceInterface[]
@@ -68,7 +70,9 @@ const ZCreateWorkspaceBtn: React.FC<{
         'normal-case ion-no-margin': true
       })}
       testingselector={
-        CONSTANTS.testingSelectors.workspace.listPage.createWorkspaceButton
+        isZNonEmptyString(testingselector)
+          ? testingselector
+          : CONSTANTS.testingSelectors.workspace.listPage.createWorkspaceButton
       }
       onClick={() => {
         if (!isWorkspacesDataFetching) {

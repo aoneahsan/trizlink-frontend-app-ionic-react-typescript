@@ -166,13 +166,15 @@ const ZWorkspacesListPopover: React.FC<{
                   ? 'light'
                   : undefined
               }
-              testinglistselector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.singleWorkspace}-${el.id}`}
-              testingselector={
+              testingselector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.singleWorkspace}-${el.id}`}
+              testinglistselector={
                 CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover
                   .singleWorkspace
               }>
               <ZIonLabel
                 className='w-full text-sm'
+                testingselector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.singleWorkspace}-label-${el.id}`}
+                testinglistselector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.singleWorkspace}-label`}
                 onClick={() => {
                   zNavigatePushRoute(
                     createRedirectRoute({
@@ -193,9 +195,11 @@ const ZWorkspacesListPopover: React.FC<{
               </ZIonLabel>
               <ZIonIcon
                 icon={ellipsisHorizontalOutline}
+                testingselector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.singleWorkspace}-ellipsis-${el.id}`}
+                testinglistselector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.singleWorkspace}-ellipsis`}
                 className='cursor-pointer'
                 onClick={(event: unknown) => {
-                  if (el?.id !== undefined) {
+                  if (el?.id !== undefined && el?.id !== null) {
                     setCompState(oldValues => ({
                       ...oldValues,
                       _workspaceId: el?.id ?? ''
@@ -212,6 +216,24 @@ const ZWorkspacesListPopover: React.FC<{
               />
             </ZIonItem>
           ))}
+
+          {workspacesList?.length === 0 && (
+            <ZIonItem
+              minHeight='2.2rem'
+              testingselector={
+                CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover
+                  .noData.ownedWS.item
+              }>
+              <ZIonText
+                className='w-full text-sm ps-1'
+                testingselector={
+                  CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover
+                    .noData.ownedWS.text
+                }>
+                No workspace found.
+              </ZIonText>
+            </ZIonItem>
+          )}
 
           {/* {workspacesList?.length === 0 && (
             <ZIonItem minHeight='2.2rem'>
@@ -238,13 +260,15 @@ const ZWorkspacesListPopover: React.FC<{
                   ? 'light'
                   : undefined
               }
-              testinglistselector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.singleWorkspace}-${el.id}`}
-              testingselector={
+              testingselector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.singleWorkspace}-${el.id}`}
+              testinglistselector={
                 CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover
                   .singleWorkspace
               }>
               <ZIonLabel
                 className='w-full text-sm'
+                testingselector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.singleWorkspace}-label-${el.id}`}
+                testinglistselector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.singleWorkspace}-label`}
                 onClick={() => {
                   zNavigatePushRoute(
                     createRedirectRoute({
@@ -269,7 +293,7 @@ const ZWorkspacesListPopover: React.FC<{
                 icon={ellipsisHorizontalOutline}
                 className='cursor-pointer'
                 onClick={(event: unknown) => {
-                  if (el?.id !== undefined || el?.id !== null) {
+                  if (el?.id !== undefined && el?.id !== null) {
                     setCompState(oldValues => ({
                       ...oldValues,
                       _workspaceId: el.id ?? ''
@@ -288,8 +312,18 @@ const ZWorkspacesListPopover: React.FC<{
           ))}
 
           {sharedWorkspacesList?.length === 0 && (
-            <ZIonItem minHeight='2.2rem'>
-              <ZIonText className='w-full text-sm ps-1'>
+            <ZIonItem
+              minHeight='2.2rem'
+              testingselector={
+                CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover
+                  .noData.shareWS.item
+              }>
+              <ZIonText
+                className='w-full text-sm ps-1'
+                testingselector={
+                  CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover
+                    .noData.shareWS.text
+                }>
                 No Share workspace found.
               </ZIonText>
             </ZIonItem>
@@ -301,6 +335,10 @@ const ZWorkspacesListPopover: React.FC<{
             <ZCreateWorkspaceBtn
               className='w-full ion-no-margin'
               height='2rem'
+              testingselector={
+                CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover
+                  .wsCreateBtn
+              }
             />
           </ZIonItem>
         </ZIonItemGroup>
@@ -351,7 +389,7 @@ const ZWorkspaceActionPopover: React.FC<{
   // delete Workspace Confirm Modal.
   const deleteWorkspaceConfirmModal = async (): Promise<void> => {
     try {
-      if (workspaceId !== undefined) {
+      if (workspaceId !== undefined && workspaceId !== null) {
         await presentZIonAlert({
           header: MESSAGES.WORKSPACE.DELETE_ALERT.HEADER,
           subHeader: MESSAGES.WORKSPACE.DELETE_ALERT.SUB_HEADER,
@@ -382,14 +420,14 @@ const ZWorkspaceActionPopover: React.FC<{
   // removeWorkspace will hit delete workspace folder api
   const removeWorkspace = async (): Promise<void> => {
     try {
-      if (workspaceId !== undefined) {
+      if (workspaceId !== undefined && workspaceId !== null) {
         // hitting the delete api.
         const _response = await deleteWorkspaceMutate({
           itemIds: [workspaceId],
           urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
         });
 
-        if (_response !== undefined) {
+        if (_response !== undefined && _response !== null) {
           const _data = extractInnerData<{ success: boolean }>(
             _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
@@ -455,11 +493,11 @@ const ZWorkspaceActionPopover: React.FC<{
       <ZIonItem
         minHeight='2.1rem'
         className='cursor-pointer ion-activatable'
-        testingselector={
+        testinglistselector={
           CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover
             .actionPopover.editWorkspace
         }
-        testinglistselector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.actionPopover.editWorkspace}-${workspaceId}`}
+        testingselector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.actionPopover.editWorkspace}-${workspaceId}`}
         onClick={() => {
           // presenting modal
           presentWorkspaceSettingModal({
@@ -480,11 +518,11 @@ const ZWorkspaceActionPopover: React.FC<{
         minHeight='2.1rem'
         lines='none'
         className='cursor-pointer ion-activatable'
-        testingselector={
+        testinglistselector={
           CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover
             .actionPopover.deleteWorkspace
         }
-        testinglistselector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.actionPopover.deleteWorkspace}-${workspaceId}`}
+        testingselector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.actionPopover.deleteWorkspace}-${workspaceId}`}
         onClick={() => {
           void deleteWorkspaceConfirmModal();
         }}>

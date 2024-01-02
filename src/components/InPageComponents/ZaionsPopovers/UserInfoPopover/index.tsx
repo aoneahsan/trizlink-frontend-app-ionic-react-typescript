@@ -8,6 +8,7 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
+import dayjs from 'dayjs';
 
 /**
  * Custom Imports go down
@@ -36,6 +37,7 @@ import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { type UserAccountType } from '@/types/UserAccount/index.type';
+import { ZWSTypeEum } from '@/utils/enums';
 
 /**
  * Recoil State Imports go down
@@ -47,7 +49,7 @@ import { type UserAccountType } from '@/types/UserAccount/index.type';
  * ? Import of style sheet is a style import
  * */
 import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
-import dayjs from 'dayjs';
+import CONSTANTS from '@/utils/constants';
 
 /**
  * Images Imports go down
@@ -61,6 +63,8 @@ import dayjs from 'dayjs';
 interface ZUserInfoPopoverInterface {
   showBadges: boolean;
   user: UserAccountType;
+  type: ZWSTypeEum;
+  workspaceId?: string;
 }
 
 /**
@@ -71,7 +75,9 @@ interface ZUserInfoPopoverInterface {
 
 const ZUserInfoPopover: React.FC<ZUserInfoPopoverInterface> = ({
   showBadges = false,
-  user
+  user,
+  type,
+  workspaceId
 }) => {
   return (
     <ZIonRow className='px-2 my-2 ion-align-items-center'>
@@ -79,6 +85,29 @@ const ZUserInfoPopover: React.FC<ZUserInfoPopoverInterface> = ({
       <ZIonCol size='max-content'>
         <ZUserAvatarButton
           className='w-[50px] h-[50px]'
+          testingidselector={`${
+            type === ZWSTypeEum.favoriteWorkspace
+              ? 'favorite-'
+              : type === ZWSTypeEum.shareWorkspace
+              ? 'share-'
+              : 'owned-'
+          }${workspaceId}`}
+          testinglistselector={`${
+            type === ZWSTypeEum.favoriteWorkspace
+              ? 'favorite-'
+              : type === ZWSTypeEum.shareWorkspace
+              ? 'share-'
+              : 'owned-'
+          }${CONSTANTS.testingSelectors.workspace.userPopover.userAvatar}`}
+          testingselector={`${
+            type === ZWSTypeEum.favoriteWorkspace
+              ? 'favorite-'
+              : type === ZWSTypeEum.shareWorkspace
+              ? 'share-'
+              : 'owned-'
+          }${
+            CONSTANTS.testingSelectors.workspace.userPopover.userAvatar
+          }-${workspaceId}`}
           userAvatar={
             user?.avatar ??
             getUiAvatarApiUrl({
@@ -90,8 +119,60 @@ const ZUserInfoPopover: React.FC<ZUserInfoPopoverInterface> = ({
 
       {/* User info col */}
       <ZIonCol>
-        <ZIonText className='block text-[1rem]'>{user?.username}</ZIonText>
-        <ZIonText className='block text-sm'>{user?.email}</ZIonText>
+        <ZIonText
+          className='block text-[1rem]'
+          testingidselector={`${
+            type === ZWSTypeEum.favoriteWorkspace
+              ? 'favorite-'
+              : type === ZWSTypeEum.shareWorkspace
+              ? 'share-'
+              : 'owned-'
+          }${workspaceId}`}
+          testinglistselector={`${
+            type === ZWSTypeEum.favoriteWorkspace
+              ? 'favorite-'
+              : type === ZWSTypeEum.shareWorkspace
+              ? 'share-'
+              : 'owned-'
+          }${CONSTANTS.testingSelectors.workspace.userPopover.displayName}`}
+          testingselector={`${
+            type === ZWSTypeEum.favoriteWorkspace
+              ? 'favorite-'
+              : type === ZWSTypeEum.shareWorkspace
+              ? 'share-'
+              : 'owned-'
+          }${
+            CONSTANTS.testingSelectors.workspace.userPopover.displayName
+          }-${workspaceId}`}>
+          {user?.username}
+        </ZIonText>
+        <ZIonText
+          className='block text-sm'
+          testingidselector={`${
+            type === ZWSTypeEum.favoriteWorkspace
+              ? 'favorite-'
+              : type === ZWSTypeEum.shareWorkspace
+              ? 'share-'
+              : 'owned-'
+          }${workspaceId}`}
+          testinglistselector={`${
+            type === ZWSTypeEum.favoriteWorkspace
+              ? 'favorite-'
+              : type === ZWSTypeEum.shareWorkspace
+              ? 'share-'
+              : 'owned-'
+          }${CONSTANTS.testingSelectors.workspace.userPopover.userEmail}`}
+          testingselector={`${
+            type === ZWSTypeEum.favoriteWorkspace
+              ? 'favorite-'
+              : type === ZWSTypeEum.shareWorkspace
+              ? 'share-'
+              : 'owned-'
+          }${
+            CONSTANTS.testingSelectors.workspace.userPopover.userEmail
+          }-${workspaceId}`}>
+          {user?.email}
+        </ZIonText>
       </ZIonCol>
 
       {showBadges && (

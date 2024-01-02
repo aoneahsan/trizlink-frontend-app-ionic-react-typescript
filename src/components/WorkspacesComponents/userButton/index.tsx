@@ -11,6 +11,7 @@ import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
 import CONSTANTS from '@/utils/constants';
 import { type ZIonColorType } from '@/types/zaionsAppSettings.type';
 import { type ZUIAvatarApiDefaultParamsInterface } from '@/types/ZaionsApis.type';
+import { isZNonEmptyString } from '@/utils/helpers';
 
 // Style
 
@@ -23,6 +24,9 @@ interface ZUserAvatarButtonInterface {
   showStatus?: boolean;
   id?: string;
   statusIcon?: string;
+  testingselector?: string;
+  testinglistselector?: string;
+  testingidselector?: string;
   statusIconPosition?: 'top' | 'bottom';
   statusIconColor?: ZIonColorType;
   userAvatarUi?: ZUIAvatarApiDefaultParamsInterface;
@@ -44,7 +48,10 @@ const ZUserAvatarButton: React.FC<ZUserAvatarButtonInterface> = ({
   statusIconColor,
   onClick,
   onMouseEnter,
-  onMouseLeave
+  onMouseLeave,
+  testingselector,
+  testingidselector,
+  testinglistselector
 }) => {
   return (
     <ZIonAvatar
@@ -56,8 +63,12 @@ const ZUserAvatarButton: React.FC<ZUserAvatarButtonInterface> = ({
       onMouseLeave={onMouseLeave}
       style={style}
       data-tooltip-id={id}
+      testingidselector={testingidselector}
+      testinglistselector={testinglistselector}
       testingselector={
-        CONSTANTS.testingSelectors.user.userProfilePopoverButton
+        isZNonEmptyString(testingselector)
+          ? testingselector
+          : CONSTANTS.testingSelectors.user.userProfilePopoverButton
       }>
       {showStatus && (
         <div
@@ -68,6 +79,11 @@ const ZUserAvatarButton: React.FC<ZUserAvatarButtonInterface> = ({
             'bottom-[-5%] right-[-1%]': statusIconPosition === 'bottom'
           })}>
           <ZIonIcon
+            testingselector={
+              isZNonEmptyString(testingselector)
+                ? `${testingselector}-status-icon`
+                : `${CONSTANTS.testingSelectors.user.userProfilePopoverButton}-status-icon`
+            }
             className='w-[60%] h-[70%]'
             icon={statusIcon ?? ellipse}
             color={statusIconColor ?? (active ? 'success' : 'light')}
@@ -75,6 +91,11 @@ const ZUserAvatarButton: React.FC<ZUserAvatarButtonInterface> = ({
         </div>
       )}
       <ZIonImg
+        testingselector={
+          isZNonEmptyString(testingselector)
+            ? `${testingselector}-img`
+            : `${CONSTANTS.testingSelectors.user.userProfilePopoverButton}-img`
+        }
         src={userAvatar ?? getUiAvatarApiUrl({ ...userAvatarUi })}
         className='w-full h-full'
       />

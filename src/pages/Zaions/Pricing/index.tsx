@@ -3,7 +3,10 @@ import React, { useCallback } from 'react';
 
 // Packages Imports
 import classNames from 'classnames';
-import { informationCircleOutline } from 'ionicons/icons';
+import {
+  checkmarkCircleOutline,
+  informationCircleOutline
+} from 'ionicons/icons';
 import { useRecoilValue } from 'recoil';
 
 // Custom Imports
@@ -24,7 +27,8 @@ import {
   ZIonButton,
   ZIonRadioGroup,
   ZIonRadio,
-  ZIonIcon
+  ZIonIcon,
+  ZIonSkeletonText
 } from '@/components/ZIonComponents';
 import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
@@ -77,12 +81,13 @@ const ZaionsPricing: React.FC = () => {
   );
 
   // #region APIs
-  const { data: ZPlansData } = useZRQGetRequest<ZaionsPricingI[]>({
-    _url: API_URL_ENUM.zPlans,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PLANS.MAIN],
-    _authenticated: false,
-    _checkPermissions: false
-  });
+  const { data: ZPlansData, isFetching: isZPlanDataFetching } =
+    useZRQGetRequest<ZaionsPricingI[]>({
+      _url: API_URL_ENUM.zPlans,
+      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PLANS.MAIN],
+      _authenticated: false,
+      _checkPermissions: false
+    });
 
   console.log({ ZPlansData });
   // #endregion
@@ -141,88 +146,149 @@ const ZaionsPricing: React.FC = () => {
               sizeLg='11.5'
               sizeMd='12'
               className='mx-auto'>
-              <ZIonRow>
-                {ZPlansData?.map(plan => {
-                  return (
-                    <ZIonCol
-                      sizeXl='2.4'
-                      sizeLg='4'
-                      sizeMd='6'
-                      sizeSm='6'
-                      sizeXs='12'
-                      key={plan.id}>
-                      <ZIonCard className='h-full mx-0 '>
-                        <ZIonCardHeader className='px-0 pb-2'>
-                          <ZIonText
-                            className='block pb-1 text-xl font-bold text-center border-b'
-                            color='dark'>
-                            {plan.displayName}
-                          </ZIonText>
+              <ZIonRow className='ion-justify-content-center'>
+                {isZPlanDataFetching &&
+                  [...Array(4)].map((_, index) => {
+                    return (
+                      <ZIonCol
+                        sizeXl='2.4'
+                        sizeLg='4'
+                        sizeMd='6'
+                        sizeSm='6'
+                        sizeXs='12'
+                        key={index}>
+                        <ZIonCard className='h-full mx-0 '>
+                          <ZIonCardHeader className='px-0 pb-2'>
+                            <ZIonText
+                              className='block pb-1 text-xl font-bold text-center border-b'
+                              color='dark'>
+                              <ZIonSkeletonText className='w-20 h-5 mx-auto' />
+                            </ZIonText>
 
-                          {/*  */}
-                          <ZIonText className='block mt-3 mb-0 text-center'>
-                            <span className='text-3xl font-bold ps-3 zaions__color_gray2'>
-                              {plan?.currency}
-                              {plan?.monthlyPrice}
-                            </span>
-                            /month
-                          </ZIonText>
-                          <ZIonText
-                            className={classNames({
-                              'mb-3 text-xs text-center ms-3': true,
-                              'opacity-0': !isZNonEmptyString(
-                                String(plan?.annualPrice)
-                              )
-                            })}>
-                            {isZNonEmptyString(String(plan?.annualPrice))
-                              ? `(${plan?.annualPrice})`
-                              : '_'}
-                          </ZIonText>
-                          <ZIonButton
-                            className='mx-3'
-                            expand='block'
-                            color='tertiary'
-                            height='2.5rem'>
-                            Get Started
-                          </ZIonButton>
-                          {/* <ZIonText className='block my-2 text-base text-center limits'>
+                            {/*  */}
+                            <ZIonText className='block mb-0 text-center'>
+                              <span className='font-bold ps-3 zaions__color_gray2'>
+                                <ZIonSkeletonText className='w-20 h-5 mx-auto' />
+                              </span>
+                            </ZIonText>
+                            <ZIonText
+                              className={classNames({
+                                'mb-3 text-xs text-center ms-3': true
+                              })}>
+                              <ZIonSkeletonText className='w-[10rem] mx-auto' />
+                            </ZIonText>
+                            <ZIonSkeletonText className='w-[93%] rounded-md h-[2.5rem] mx-auto' />
+                          </ZIonCardHeader>
+                          <ZIonCardContent className='mx-3 ps-1 pe-0'>
+                            <ZIonText className='mb-0 text-lg font-extrabold zaions__color_gray2'>
+                              <ZIonSkeletonText className='w-[8rem] h-4' />
+                            </ZIonText>
+
+                            <div className='flex flex-col mt-2'>
+                              {[...Array(3)]?.map((_, index) => {
+                                return (
+                                  <div
+                                    className='flex my-2 mt-2 ion-align-items-start'
+                                    key={index}>
+                                    <ZIonSkeletonText className='w-3 me-1' />
+
+                                    <ZIonSkeletonText className='w-[90%]' />
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </ZIonCardContent>
+                        </ZIonCard>
+                      </ZIonCol>
+                    );
+                  })}
+                {!isZPlanDataFetching &&
+                  ZPlansData?.map(plan => {
+                    return (
+                      <ZIonCol
+                        sizeXl='2.4'
+                        sizeLg='4'
+                        sizeMd='6'
+                        sizeSm='6'
+                        sizeXs='12'
+                        key={plan.id}>
+                        <ZIonCard className='h-full mx-0 '>
+                          <ZIonCardHeader className='px-0 pb-2'>
+                            <ZIonText
+                              className='block pb-1 text-xl font-bold text-center border-b'
+                              color='dark'>
+                              {plan.displayName}
+                            </ZIonText>
+
+                            {/*  */}
+                            <ZIonText className='block mt-3 mb-0 text-center'>
+                              <span className='text-3xl font-bold ps-3 zaions__color_gray2'>
+                                {plan?.currency}
+                                {plan?.monthlyPrice}
+                              </span>
+                              /month
+                            </ZIonText>
+                            <ZIonText
+                              className={classNames({
+                                'mb-3 text-xs text-center ms-3': true,
+                                'opacity-0': !isZNonEmptyString(
+                                  String(plan?.annualPrice)
+                                )
+                              })}>
+                              {isZNonEmptyString(String(plan?.annualPrice))
+                                ? `(${plan?.annualPrice})`
+                                : '_'}
+                            </ZIonText>
+                            <ZIonButton
+                              className='mx-3'
+                              expand='block'
+                              color='tertiary'
+                              height='2.5rem'>
+                              Get Started
+                            </ZIonButton>
+                            {/* <ZIonText className='block my-2 text-base text-center limits'>
                             {el.limit_text}
                           </ZIonText> */}
-                        </ZIonCardHeader>
-                        <ZIonCardContent className='mx-3 ps-1 pe-0'>
-                          {/* <ZIonText className='mb-0 text-lg font-extrabold zaions__color_gray2'>
-                            {el.features_title}
-                          </ZIonText>
+                          </ZIonCardHeader>
+                          <ZIonCardContent className='mx-3 ps-1 pe-0'>
+                            <ZIonText className='mb-0 text-lg font-extrabold zaions__color_gray2'>
+                              {plan.featureListTitle}
+                            </ZIonText>
 
-                          <div className='flex flex-col mt-2'>
-                            {el.features_included.map(featureItem => {
-                              return (
-                                <div
-                                  className='flex my-2 ion-align-items-start'
-                                  key={featureItem.feature_id}>
-                                  <ZIonImg
+                            <div className='flex flex-col mt-2'>
+                              {plan.features?.map((featureItem, index) => {
+                                return (
+                                  <div
+                                    className='flex my-2 ion-align-items-start'
+                                    key={index}>
+                                    {/* <ZIonImg
                                     className='mt-1 me-1'
                                     src={featureItem.icon}
-                                  />
-                                  <ZIonText>
-                                    {featureItem.text}
-                                    {featureItem.new === true ? (
+                                  /> */}
+                                    <ZIonIcon
+                                      color='success'
+                                      icon={checkmarkCircleOutline}
+                                      className='mt-[3px] me-1'
+                                    />
+                                    <ZIonText>
+                                      {featureItem.text}
+                                      {/* {featureItem.new === true ? (
                                       <ZIonText className='zaions__new_tag'>
                                         New
                                       </ZIonText>
                                     ) : (
                                       ''
-                                    )}
-                                  </ZIonText>
-                                </div>
-                              );
-                            })}
-                          </div> */}
-                        </ZIonCardContent>
-                      </ZIonCard>
-                    </ZIonCol>
-                  );
-                })}
+                                    )} */}
+                                    </ZIonText>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </ZIonCardContent>
+                        </ZIonCard>
+                      </ZIonCol>
+                    );
+                  })}
               </ZIonRow>
             </ZIonCol>
           </ZIonRow>

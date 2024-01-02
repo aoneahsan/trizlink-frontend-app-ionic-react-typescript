@@ -7,7 +7,7 @@ import {
   type ZIonColorType,
   type ZIonModeType
 } from '@/types/zaionsAppSettings.type';
-import { zCreateElementTestingSelector } from '@/utils/helpers';
+import { zComponentTestingSelectorMaker } from '@/utils/helpers';
 
 // Type
 interface ZIonAvatarType {
@@ -26,15 +26,24 @@ interface ZIonAvatarType {
 
   //
   testingselector?: string;
+  testingidselector?: string;
+  testinglistselector?: string;
 }
 
 const ZIonAvatar: React.FC<ZIonAvatarType> = (props: ZIonAvatarType) => {
+  const { _idSelector, _testingSelector, _testinglistselector } =
+    zComponentTestingSelectorMaker({
+      testingidselector: props.testingidselector,
+      testinglistselector: props.testinglistselector,
+      testingselector: props.testingselector
+    });
+
   return (
     <IonAvatar
       {...props}
-      {...zCreateElementTestingSelector({
-        _value: props.testingselector ?? ''
-      })}>
+      {..._idSelector}
+      {..._testingSelector}
+      {..._testinglistselector}>
       {props.children}
     </IonAvatar>
   );

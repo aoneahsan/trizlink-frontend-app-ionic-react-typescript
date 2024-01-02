@@ -137,9 +137,9 @@ const ZWorkspaceSwitcher: React.FC<{
 
   let isZFetching = isWorkspacesDataFetching;
 
-  if (workspaceId !== undefined) {
+  if (workspaceId !== undefined && workspaceId !== null) {
     isZFetching = isZFetching && isCurrentWorkspaceFetching;
-  } else if (wsShareId !== undefined) {
+  } else if (wsShareId !== undefined && wsShareId !== null) {
     isZFetching = isZFetching && isGetShareWSInfoDataFetching;
   }
 
@@ -174,18 +174,18 @@ const ZWorkspaceSwitcher: React.FC<{
       style={_style}>
       <ZUserAvatarButton
         userAvatar={
-          workspaceId !== undefined
+          workspaceId !== undefined && workspaceId !== null
             ? currentWorkspaceData?.workspaceImage
-            : wsShareId !== undefined
+            : wsShareId !== undefined && wsShareId !== null
             ? getShareWSInfoData?.workspaceImage
             : ''
         }
         userAvatarUi={
-          workspaceId !== undefined
+          workspaceId !== undefined && workspaceId !== null
             ? {
                 name: currentWorkspaceData?.workspaceName
               }
-            : wsShareId !== undefined
+            : wsShareId !== undefined && wsShareId !== null
             ? {
                 name: getShareWSInfoData?.workspaceName
               }
@@ -204,9 +204,9 @@ const ZWorkspaceSwitcher: React.FC<{
           'w-auto': !isLgScale
         })}>
         <ZIonLabel>
-          {workspaceId !== undefined
+          {workspaceId !== undefined && workspaceId !== null
             ? currentWorkspaceData?.workspaceName
-            : wsShareId !== undefined
+            : wsShareId !== undefined && wsShareId !== null
             ? getShareWSInfoData?.workspaceName
             : null}
         </ZIonLabel>
