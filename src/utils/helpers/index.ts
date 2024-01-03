@@ -582,12 +582,14 @@ export const validateFields = (
 };
 
 export const encryptData = (val: unknown): string => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   return AES.encrypt(JSON.stringify(val), ENVS.cryptoSecret).toString();
 };
 
 export const decryptData = <T>(val: string): T | undefined => {
   try {
     return zJsonParse<T | undefined>(
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       AES.decrypt(val, ENVS.cryptoSecret).toString(enc.Utf8)
     );
   } catch (err) {
@@ -992,14 +994,18 @@ export const generatePredefinedThemeBackgroundValue = (
       } else if (
         _backgroundData.bgType === LinkInBioThemeBackgroundEnum.solidColor
       ) {
+        // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
         const _solidColorValue = _backgroundData.bgSolidColor as string;
         value['--background'] = _solidColorValue;
         value.background = _solidColorValue;
       } else if (
         _backgroundData.bgType === LinkInBioThemeBackgroundEnum.image
       ) {
+        // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
         value['--background'] = `url(${_backgroundData.bgImageUrl as string})`;
+        // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
         value.background = `url(${_backgroundData.bgImageUrl as string})`;
+        // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
         value.backgroundImage = `url(${_backgroundData.bgImageUrl as string})`;
       }
       // value.backgroundSize = CSS_BACKGROUND_OPTION.cover;
@@ -1634,6 +1640,10 @@ export const zGetRoutePermissions = ({
 
       case ZaionsRoutes.AdminPanel.Setting.UserAccount.ProfileSettings:
         _permissions = [permissionsEnum.viewAny_emails];
+        break;
+
+      case ZaionsRoutes.AdminPanel.Setting.UserAccount.AccountPlansSettings:
+        _permissions = [permissionsEnum.view_workspace];
         break;
 
       case ZaionsRoutes.AdminPanel.Setting.UserAccount.WSNotificationSettings:

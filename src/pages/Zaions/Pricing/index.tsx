@@ -1,5 +1,5 @@
 // Core Imports
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 
 // Packages Imports
 import classNames from 'classnames';
@@ -26,9 +26,9 @@ import {
   ZIonRadioGroup,
   ZIonRadio,
   ZIonIcon,
-  ZIonSkeletonText
+  ZIonSkeletonText,
+  ZIonBadge
 } from '@/components/ZIonComponents';
-import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
 
 // Recoil State
@@ -37,18 +37,31 @@ import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import { API_URL_ENUM } from '@/utils/enums';
-import CONSTANTS from '@/utils/constants';
-import { isZNonEmptyString } from '@/utils/helpers';
+import CONSTANTS, { LOCALSTORAGE_KEYS } from '@/utils/constants';
+import { STORAGE, isZNonEmptyString } from '@/utils/helpers';
 
 // Types
-import { type ZaionsPricingI } from '@/types/WhyZaions/PricingPage';
+import {
+  ZPlanTimeLine,
+  type ZPlansEnum,
+  type ZaionsPricingI
+} from '@/types/WhyZaions/PricingPage';
+import { reportCustomError } from '@/utils/customErrorType';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Styles
 
 // Images
 
 const ZaionsPricing: React.FC = () => {
-  const { is2XlScale } = useZMediaQueryScale();
+  const { is2XlScale, isMdScale } = useZMediaQueryScale();
+
+  const [compState, setCompState] = useState<{
+    timeDuration: ZPlanTimeLine;
+  }>({
+    timeDuration: ZPlanTimeLine.monthly
+  });
 
   // const subscriptionPricingData = useRecoilValue<
   //   ZaionsPricingSubscriptionsType[]
@@ -79,8 +92,32 @@ const ZaionsPricing: React.FC = () => {
       _authenticated: false,
       _checkPermissions: false
     });
+  // #endregion
 
-  console.log({ ZPlansData });
+  // #region
+  const { zNavigatePushRoute } = useZNavigate();
+  // #endregion
+
+  // #region Functions
+  const getStartedClickHandler = useCallback(
+    (plan: ZPlansEnum, selectedTimeLine: ZPlanTimeLine) => {
+      try {
+        const _selectedPlanData = {
+          plan,
+          selectedTimeLine
+        };
+        // store selected plan info.
+        void STORAGE.SET(LOCALSTORAGE_KEYS.SELECTED_PLAN, _selectedPlanData);
+
+        // redirect to sign up page
+        zNavigatePushRoute(ZaionsRoutes.SignUpRoute);
+      } catch (error) {
+        reportCustomError(error);
+      }
+    },
+    // eslint-disable-next-line
+    []
+  );
   // #endregion
 
   return (
@@ -96,12 +133,16 @@ const ZaionsPricing: React.FC = () => {
               sizeMd='12'
               sizeSm='12'
               sizeXs='12'
-              className='my-5'>
-              <div className='mx-auto w-max'>
-                <ZIonText className='block text-4xl font-extrabold zaions__color_dark'>
+              className='flex my-5 ion-align-items-center'>
+              <div
+                className={classNames({
+                  'flex flex-col gap-2 mx-auto w-max': true,
+                  'ion-text-center': !isMdScale
+                })}>
+                <ZIonText className='text-4xl font-extrabold zaions__color_dark'>
                   Pricing for brands and businesses of all sizes
                 </ZIonText>
-                <ZIonText className='block text-xl zaions__color_gray2'>
+                <ZIonText className='text-xl zaions__color_gray2'>
                   Connect to your audience with branded links, QR Codes, and a
                   Link-in-bio that will get their attention.
                 </ZIonText>
@@ -123,15 +164,34 @@ const ZaionsPricing: React.FC = () => {
                 Save up to 34% when you pay annually
               </ZIonText>
               <div className='flex ion-align-items-center'>
-                <ZIonText>Pay annually</ZIonText>
-                <ZIonText className='mx-2'>
-                  <ZRCSwitch />
-                </ZIonText>
-                <ZIonText>Pay monthly</ZIonText>
+                <ZIonRadioGroup
+                  value={compState.timeDuration}
+                  className='flex mt-3 gap-7 ion-align-items-start'
+                  onIonChange={({ target }) => {
+                    if (isZNonEmptyString(target?.value as string)) {
+                      setCompState(oldValues => ({
+                        ...oldValues,
+                        timeDuration: target?.value
+                      }));
+                    }
+                  }}>
+                  <ZIonRadio
+                    value={ZPlanTimeLine.annual}
+                    labelPlacement='end'>
+                    Pay Annually
+                  </ZIonRadio>
+
+                  <ZIonRadio
+                    value={ZPlanTimeLine.monthly}
+                    labelPlacement='end'>
+                    Pay Monthly
+                  </ZIonRadio>
+                </ZIonRadioGroup>
               </div>
             </ZIonCol>
           </ZIonRow>
-          <ZIonRow>
+
+          <ZIonRow className='mt-4'>
             <ZIonCol
               sizeXl='11'
               sizeLg='11.5'
@@ -148,7 +208,7 @@ const ZaionsPricing: React.FC = () => {
                         sizeSm='6'
                         sizeXs='12'
                         key={index}>
-                        <ZIonCard className='h-full mx-0 '>
+                        <ZIonCard className='h-full mx-0'>
                           <ZIonCardHeader className='px-0 pb-2'>
                             <ZIonText
                               className='block pb-1 text-xl font-bold text-center border-b'
@@ -195,6 +255,10 @@ const ZaionsPricing: React.FC = () => {
                   })}
                 {!isZPlanDataFetching &&
                   ZPlansData?.map(plan => {
+                    // eslint-disable-next-line react-hooks/rules-of-hooks
+                    const _planDisabled =
+                      compState.timeDuration === ZPlanTimeLine.annual &&
+                      plan?.isAnnualOnly;
                     return (
                       <ZIonCol
                         sizeXl='2.4'
@@ -203,8 +267,23 @@ const ZaionsPricing: React.FC = () => {
                         sizeSm='6'
                         sizeXs='12'
                         key={plan.id}>
-                        <ZIonCard className='h-full mx-0 '>
-                          <ZIonCardHeader className='px-0 pb-2'>
+                        <ZIonCard
+                          className={classNames({
+                            'h-full mx-0': true,
+                            'border-2': plan?.isMostPopular,
+                            'z_border_color_success ': !_planDisabled,
+                            'z_border_color_medium opacity-80': _planDisabled
+                          })}>
+                          <ZIonCardHeader className='relative px-0 pb-2'>
+                            {plan?.isMostPopular ? (
+                              <ZIonBadge
+                                className='absolute px-2 py-1 font-normal tracking-wide shadow-md top-1 right-1'
+                                color={_planDisabled ? 'medium' : 'success'}>
+                                Most Popular
+                              </ZIonBadge>
+                            ) : (
+                              ''
+                            )}
                             <ZIonText
                               className='block pb-1 text-xl font-bold text-center border-b'
                               color='dark'>
@@ -213,33 +292,59 @@ const ZaionsPricing: React.FC = () => {
 
                             {/*  */}
                             <ZIonText className='block mt-3 mb-0 text-center'>
-                              <span className='text-3xl font-bold ps-3 zaions__color_gray2'>
-                                {plan?.currency}
-                                {plan?.monthlyPrice}
-                              </span>
-                              /month
+                              {_planDisabled ? (
+                                <span className='text-2xl font-bold ps-3 zaions__color_gray2'>
+                                  Annual plan only
+                                </span>
+                              ) : (
+                                <>
+                                  <span className='text-3xl font-bold ps-3 zaions__color_gray2'>
+                                    {plan?.currency}
+                                    {plan?.monthlyPrice}
+                                  </span>
+                                  /month
+                                </>
+                              )}
                             </ZIonText>
                             <ZIonText
                               className={classNames({
                                 'mb-3 text-xs text-center ms-3': true,
-                                'opacity-0': !isZNonEmptyString(
-                                  String(plan?.annualPrice)
-                                )
+                                'opacity-0':
+                                  !isZNonEmptyString(
+                                    String(plan?.annualPrice)
+                                  ) || _planDisabled
                               })}>
                               {isZNonEmptyString(String(plan?.annualPrice))
                                 ? `(${plan?.annualPrice})`
                                 : '_'}
                             </ZIonText>
-                            <ZIonButton
-                              className='mx-3'
-                              expand='block'
-                              color='tertiary'
-                              height='2.5rem'>
-                              Get Started
-                            </ZIonButton>
-                            {/* <ZIonText className='block my-2 text-base text-center limits'>
-                            {el.limit_text}
-                          </ZIonText> */}
+
+                            <ZIonText className='block my-1 text-sm text-center limits w-[50%] mx-auto'>
+                              {plan.description}
+                            </ZIonText>
+
+                            <div
+                              className={classNames({
+                                'w-full h-max': true,
+                                'cursor-not-allowed': _planDisabled
+                              })}>
+                              <ZIonButton
+                                className='mx-3'
+                                expand='block'
+                                color='tertiary'
+                                height='2.5rem'
+                                disabled={_planDisabled}
+                                onClick={() => {
+                                  if (!_planDisabled) {
+                                    getStartedClickHandler(
+                                      plan?.name,
+                                      ZPlanTimeLine.monthly
+                                    );
+                                  }
+                                }}>
+                                Get Started
+                              </ZIonButton>
+                            </div>
                           </ZIonCardHeader>
                           <ZIonCardContent className='mx-3 ps-1 pe-0'>
                             <ZIonText className='mb-0 text-lg font-extrabold zaions__color_gray2'>

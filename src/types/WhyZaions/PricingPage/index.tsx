@@ -1,3 +1,30 @@
+// Enums
+export enum ZPlansEnum {
+  free = 'free',
+  core = 'core',
+  growth = 'growth',
+  premium = 'premium',
+  enterprise = 'enterprise'
+}
+
+export enum ZPlanTimeLine {
+  monthly = 'monthly',
+  annual = 'annual'
+}
+
+export interface ZUserSubscriptionI {
+  id?: string;
+  startedAt?: string;
+  endedAt?: string;
+  renewedAt?: string;
+  canceledAt?: string;
+  amount?: number;
+  currency?: string;
+  duration?: string;
+  name?: string;
+}
+
+// Interfaces
 export interface ZaionsPricingSubscriptionsType {
   id?: string;
   label: string;
@@ -19,6 +46,7 @@ export interface ZaionsPricingSubscriptionsType {
 
 export interface ZaionsPricingI {
   id?: string;
+  name: ZPlansEnum;
   displayName: string;
   monthlyPrice: number;
   annualPrice: number;
@@ -29,6 +57,7 @@ export interface ZaionsPricingI {
   currency: string;
   description: string;
   isMostPopular: boolean;
+  isAnnualOnly: boolean;
   isActive: boolean;
 }
 

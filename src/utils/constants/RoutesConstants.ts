@@ -114,6 +114,7 @@ const ZaionsRoutes = {
       UserAccount: {
         Main: `${ZPrivateRoutePath}/user-account`,
         ProfileSettings: `${ZPrivateRoutePath}/user-account/profile-settings`,
+        AccountPlansSettings: `${ZPrivateRoutePath}/user-account/plans`,
         NotificationSettings: `${ZPrivateRoutePath}/user-account/notification-settings`,
         WSNotificationSettings: `${ZPrivateRoutePath}/user-account/workspaces-notification-settings`,
         WorkspaceNotifications: `${ZPrivateRoutePath}/user-account/workspace/${workspaceIdParam}/notifications`

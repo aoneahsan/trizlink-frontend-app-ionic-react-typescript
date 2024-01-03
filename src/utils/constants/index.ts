@@ -60,6 +60,8 @@ const RouteParams = {
   pageNumber: ':pageNumber',
   paginationLimit: ':paginationLimit',
 
+  planType: ':planType',
+
   // workspace
   workspace: {
     workspaceId: ':workspaceId',
@@ -129,6 +131,9 @@ export const API_URLS = {
   verifyAuthenticationStatus: '/verify-authentication-status',
   register: '/register',
   getUserRolePermission: '/user/role/permissions',
+  getUserSubscription: '/user-subscription',
+  makeUserSubscription: `/user/subscribe/${RouteParams.planType}`,
+  upgradeUserSubscription: `/user/upgrade/subscribe/${RouteParams.planType}`,
   updateUserAccountInfo: '/user/update-account-info',
   updatePassword: '/user/update-password',
   checkIfUsernameIsAvailable: '/user/username/check',
@@ -486,6 +491,7 @@ const DEFAULT_VALUES = {
 
 export const LOCALSTORAGE_KEYS = {
   USERDATA: 'udhsaf38h_3g-23g-c',
+  SELECTED_PLAN: 'mkdlwsrds2_33-23s-q',
   AUTHTOKEN: 'cewiuh4ggb284ghg',
   INVITEE_USER_DATA: 'zoirjf_hflmn-e',
   SIGNUP_USER_DATA: 'zmkftr-lokgyr-d',
@@ -1450,11 +1456,13 @@ const testingSelectors = {
       // us-im => userAccount-ionMenu
       closeMenuBtn: 'ua-im-close-btn',
       notificationSettings: 'ua-im-ns-btn', // us-im-ns => userAccount-ionMenu-notificationSettings
-      profileSettings: 'ua-im-ps-btn' // us-im-ns => userAccount-ionMenu-profileSettings
+      profileSettings: 'ua-im-ps-btn', // us-im-ns => userAccount-ionMenu-profileSettings
+      accountPlanSettings: 'ua-im-aps-btn' // us-im-ns => userAccount-ionMenu-accountPlanSetting
     },
     menuBar: {
       notificationSettings: 'ua-mb-ns-btn', // us-mb-ns => userAccount-menuBar-notificationSettings
-      profileSettings: 'ua-mb-ps-btn' // us-mb-ns => userAccount-menuBar-profileSettings
+      profileSettings: 'ua-mb-ps-btn', // us-mb-ns => userAccount-menuBar-profileSettings
+      accountPlanSettings: 'ua-mb-aps-btn' // us-mb-ns => userAccount-menuBar-accountPlanSetting
     },
     notificationSettingsTab: {
       // nst => notificationSettingsTab
@@ -1737,6 +1745,7 @@ const REACT_QUERY = {
     USER: {
       EMAILS: 'rq-user-emails-key',
       ROLE_PERMISSIONS: 'rq-user-roles-and-permissions-key',
+      SUBSCRIPTION: 'rq-user-subscription-key',
       WS_ROLES: 'rq-user-ws-roles-key',
       NOTIFICATION: {
         MAIN: 'rq-user-notification-main-key'

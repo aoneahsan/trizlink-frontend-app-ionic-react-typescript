@@ -123,7 +123,7 @@ enum EChangePasswordTab {
  * @type {*}
  * */
 
-const ZProfileSettingsSettings: React.FC = () => {
+const ZProfileSettings: React.FC = () => {
   // #region component useState
   const [compState, setCompState] = useState<{
     profileFile?: File;
@@ -1619,4 +1619,4 @@ const ZChangePassword: React.FC = () => {
   );
 };
 
-export default ZProfileSettingsSettings;
+export default ZProfileSettings;

@@ -15,7 +15,6 @@ import { useSetRecoilState } from 'recoil';
  * ? Like import of custom components is a custom import
  * */
 import ZIonPage from '@/components/ZIonPage';
-import { ZIonContent, ZIonLoading } from '@/components/ZIonComponents';
 
 /**
  * Custom Hooks Imports go down
@@ -38,13 +37,17 @@ import { reportCustomError } from '@/utils/customErrorType';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import { type UserRoleAndPermissionsInterface } from '@/types/UserAccount/index.type';
+import {
+  type userSubscriptionI,
+  type UserRoleAndPermissionsInterface
+} from '@/types/UserAccount/index.type';
 
 /**
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
 import { currentLoggedInUserRoleAndPermissionsRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
+import ZPageLoader from '@/components/InPageComponents/ZPageLoader';
 
 /**
  * Style files Imports go down
@@ -101,6 +104,14 @@ const ZAppStartupPage: React.FC = () => {
     _checkPermissions: false
   });
 
+  const { isFetching: isUserSubscriptionFetching } =
+    useZRQGetRequest<userSubscriptionI>({
+      _url: API_URL_ENUM.getUserSubscription,
+      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SUBSCRIPTION],
+      _extractType: ZRQGetRequestExtractEnum.extractItem,
+      _checkPermissions: false
+    });
+
   //
   // const { data: getUserSetting, isFetching: isUserSettingFetching } =
   //   useZRQGetRequest({
@@ -112,7 +123,8 @@ const ZAppStartupPage: React.FC = () => {
   //   });
 
   // storing the role & permissions in recoil state
-  const isZFetching = isUserRoleAndPermissionsFetching;
+  const isZFetching =
+    isUserRoleAndPermissionsFetching && isUserSubscriptionFetching;
 
   useEffect(() => {
     try {
@@ -141,12 +153,11 @@ const ZAppStartupPage: React.FC = () => {
 
   return (
     <ZIonPage pageTitle='zaions startup page'>
-      <ZIonContent>
-        <ZIonLoading
-          isOpen={isZFetching}
-          message='Loading dashboard please await a second!'
-        />
-      </ZIonContent>
+      <ZPageLoader>
+        {isUserRoleAndPermissionsFetching && isUserSubscriptionFetching
+          ? 'Fetching Permissions'
+          : 'Loading dashboard please await a second!'}
+      </ZPageLoader>
     </ZIonPage>
   );
 };

@@ -357,6 +357,13 @@ const AppRoutes = (): JSX.Element => {
 
         <PrivateRoute
           path={
+            ZaionsRoutes.AdminPanel.Setting.UserAccount.AccountPlansSettings
+          }
+          Component={ZUserAccount}
+        />
+
+        <PrivateRoute
+          path={
             ZaionsRoutes.AdminPanel.Setting.UserAccount.WorkspaceNotifications
           }
           Component={ZUserAccount}

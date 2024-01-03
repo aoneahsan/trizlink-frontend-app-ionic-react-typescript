@@ -73,6 +73,15 @@ export interface IUSNotificationSetting {
   };
 }
 
+export interface userSubscriptionI {
+  id?: string;
+  startedAt?: string;
+  endedAt?: string;
+  amount?: number;
+  duration?: string;
+  isActive?: boolean;
+}
+
 export interface IWSNotificationSetting {
   id?: string;
   notificationOnProfile: boolean;

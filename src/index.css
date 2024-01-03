@@ -526,6 +526,12 @@ span.new {
 
 .z_border_color_success {
   --border-color: var(--ion-color-success) !important;
+  border-color: var(--ion-color-success) !important;
+}
+
+.z_border_color_medium {
+  --border-color: var(--ion-color-medium) !important;
+  border-color: var(--ion-color-medium) !important;
 }
 
 .z_border_color_danger {

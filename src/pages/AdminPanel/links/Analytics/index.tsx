@@ -54,10 +54,7 @@ import {
  * ? Import of recoil states is a Recoil State import
  * */
 import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
-import {
-  useZInvalidateReactQueries,
-  useZRQGetRequest
-} from '@/ZaionsHooks/zreactquery-hooks';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import { API_URL_ENUM, ZWSTypeEum } from '@/utils/enums';
 import {
   type LinkTargetType,
@@ -135,7 +132,7 @@ const PageAnalyticsInfoBlocks = lazy(
 
 const ZShortLinkAnalytics: React.FC = () => {
   // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
-  const { workspaceId, shareWSMemberId, wsShareId, editLinkId } = useParams<{
+  const { workspaceId } = useParams<{
     editLinkId?: string;
     workspaceId?: string;
     shareWSMemberId?: string;
@@ -286,8 +283,8 @@ const ZInpageMainContent: React.FC = () => {
   }>();
 
   // #region Custom hooks.
-  const { isXlScale, isMdScale, isLgScale, isSmScale } = useZMediaQueryScale(); // media query hook.
-  const { zInvalidateReactQueries } = useZInvalidateReactQueries();
+  const { isMdScale, isSmScale } = useZMediaQueryScale(); // media query hook.
+  // const { zInvalidateReactQueries } = useZInvalidateReactQueries();
   // #endregion
 
   // #region Apis.

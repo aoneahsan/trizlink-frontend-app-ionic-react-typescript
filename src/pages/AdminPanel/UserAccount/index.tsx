@@ -14,6 +14,7 @@ import { type RefresherEventDetail } from '@ionic/core';
 import { menuController } from '@ionic/core/components';
 import {
   albumsOutline,
+  cardOutline,
   closeOutline,
   notificationsOutline,
   personOutline
@@ -44,7 +45,7 @@ import {
 import ZIonPage from '@/components/ZIonPage';
 import { ZFallbackIonSpinner2 } from '@/components/CustomComponents/FallbackSpinner';
 import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
-import ZProfileSettingsSettings from './ProfileSettings';
+import ZProfileSettings from './ProfileSettings';
 import ZPersonalSettings from './PersonalSettings';
 import ZSingleWSNotificationSettings from './SingleWSNotificationSettings';
 
@@ -62,6 +63,7 @@ import { reportCustomError } from '@/utils/customErrorType';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import CONSTANTS from '@/utils/constants';
 import WorkspacesSettings from './WorkspacesSettings';
+import ZAccountPlansSettings from './Plans';
 const ZAdminPanelTopBar = lazy(
   () => import('@/components/AdminPanelComponents/TopBar')
 );
@@ -118,6 +120,10 @@ const ZUserAccount: React.FC = () => {
 
   const isSingleWorkspaceNotificationPage = useRouteMatch(
     ZaionsRoutes.AdminPanel.Setting.UserAccount.WorkspaceNotifications
+  )?.isExact;
+
+  const isAccountPlansSettingsPage = useRouteMatch(
+    ZaionsRoutes.AdminPanel.Setting.UserAccount.AccountPlansSettings
   )?.isExact;
   // #endregion
 
@@ -202,6 +208,31 @@ const ZUserAccount: React.FC = () => {
                     />
                     <ZIonText className='block mt-1 font-semibold'>
                       Profile settings
+                    </ZIonText>
+                  </ZIonItem>
+
+                  {/* Billing */}
+                  <ZIonItem
+                    minHeight='2.2rem'
+                    testingselector={
+                      CONSTANTS.testingSelectors.userAccount.ionMenu
+                        .accountPlanSettings
+                    }
+                    routerLink={
+                      ZaionsRoutes.AdminPanel.Setting.UserAccount
+                        .AccountPlansSettings
+                    }
+                    className={classNames({
+                      'mt-2': true,
+                      zaions__light_bg: isAccountPlansSettingsPage
+                    })}>
+                    <ZIonIcon
+                      icon={cardOutline}
+                      className='w-6 h-6 me-2'
+                      color='dark'
+                    />
+                    <ZIonText className='block mt-1 font-semibold'>
+                      Billing
                     </ZIonText>
                   </ZIonItem>
 
@@ -357,6 +388,31 @@ const ZUserAccount: React.FC = () => {
                         </ZIonText>
                       </ZIonItem>
 
+                      {/* Billing */}
+                      <ZIonItem
+                        minHeight='2.2rem'
+                        testingselector={
+                          CONSTANTS.testingSelectors.userAccount.menuBar
+                            .accountPlanSettings
+                        }
+                        routerLink={
+                          ZaionsRoutes.AdminPanel.Setting.UserAccount
+                            .AccountPlansSettings
+                        }
+                        className={classNames({
+                          'mt-2': true,
+                          zaions__light_bg: isAccountPlansSettingsPage
+                        })}>
+                        <ZIonIcon
+                          icon={cardOutline}
+                          className='w-6 h-6 me-2'
+                          color='dark'
+                        />
+                        <ZIonText className='block mt-1 font-semibold'>
+                          Billing
+                        </ZIonText>
+                      </ZIonItem>
+
                       {/* Notifications settings */}
                       <ZIonItemGroup className='mt-2'>
                         <ZIonItemDivider>
@@ -462,6 +518,10 @@ const ZInpageMainContent: React.FC = () => {
     ZaionsRoutes.AdminPanel.Setting.UserAccount.ProfileSettings
   )?.isExact;
 
+  const isAccountPlansSettingsPage = useRouteMatch(
+    ZaionsRoutes.AdminPanel.Setting.UserAccount.AccountPlansSettings
+  )?.isExact;
+
   const isNotificationSettings = useRouteMatch(
     ZaionsRoutes.AdminPanel.Setting.UserAccount.NotificationSettings
   )?.isExact;
@@ -488,7 +548,8 @@ const ZInpageMainContent: React.FC = () => {
             <ZFallbackIonSpinner2 />
           </ZIonCol>
         }>
-        {isProfileSettingsPage === true ? <ZProfileSettingsSettings /> : null}
+        {isProfileSettingsPage === true ? <ZProfileSettings /> : null}
+        {isAccountPlansSettingsPage === true ? <ZAccountPlansSettings /> : null}
         {isNotificationSettings === true ? <ZPersonalSettings /> : null}
         {isWorkspacesNotificationPage === true ? <WorkspacesSettings /> : null}
         {isSingleWorkspaceNotificationPage === true ? (
