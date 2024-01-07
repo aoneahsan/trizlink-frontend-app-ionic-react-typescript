@@ -59,7 +59,9 @@ import {
   extractInnerData,
   zGenerateShortLink,
   replaceRouteParams,
-  replaceParams
+  replaceParams,
+  isZNonEmptyString,
+  _getQueryKey
 } from '@/utils/helpers';
 import {
   API_URL_ENUM,
@@ -113,6 +115,7 @@ import {
   NewShortLinkSelectTypeOption
 } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
 import { LinkTypeOptionsData } from '@/data/UserDashboard/Links';
+import { ZUserCurrentLimitsRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
 
 // Styles
 
@@ -307,6 +310,7 @@ const ZaionsShortLinkTable: React.FC<{
 };
 
 //
+const emptyArray: never[] = [];
 const ZInpageTable: React.FC = () => {
   // #region Component state.
   const [compState, setCompState] = useState<{
@@ -363,8 +367,8 @@ const ZInpageTable: React.FC = () => {
       _url: API_URL_ENUM.shortLinks_list,
       _key: [
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
-        workspaceId ?? '',
-        String(pageindex)
+        workspaceId ?? ''
+        // String(pageindex)
         // String(pagesize)
       ],
       _shouldFetchWhenIdPassed: !((workspaceId?.trim()?.length ?? 0) > 0),
@@ -715,7 +719,7 @@ const ZInpageTable: React.FC = () => {
 
   const zShortLinksTable = useReactTable({
     columns: defaultColumns,
-    data: _filteredShortLinkDataSelector ?? [],
+    data: _filteredShortLinkDataSelector ?? emptyArray,
     state: {
       columnOrder: getShortLinkFiltersData?.settings?.columnOrderIds ?? []
     },
@@ -843,7 +847,7 @@ const ZInpageTable: React.FC = () => {
       reportCustomError(error);
     }
     // eslint-disable-next-line
-  }, [ShortLinksData, swsShortLinksData]);
+  }, [ShortLinksData?.items?.length, swsShortLinksData]);
 
   useEffect(() => {
     if (!isShortLinksDataFetching) {
@@ -1498,6 +1502,9 @@ export const ZShortLinkActionPopover: React.FC<{
   const _filteredShortLinkDataSelector = useRecoilValue(
     FilteredShortLinkDataSelector
   );
+  const setZUserCurrentLimitsRState = useSetRecoilState(
+    ZUserCurrentLimitsRStateAtom
+  );
 
   const { presentZIonErrorAlert } = useZIonErrorAlert();
   const { presentZIonAlert } = useZIonAlert();
@@ -1581,7 +1588,7 @@ export const ZShortLinkActionPopover: React.FC<{
           });
         }
 
-        if (_response !== undefined) {
+        if (_response !== undefined && _response !== null) {
           const _data = extractInnerData<{ success: boolean }>(
             _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
@@ -1589,30 +1596,22 @@ export const ZShortLinkActionPopover: React.FC<{
 
           if (_data !== undefined && _data?.success) {
             // getting all the shortLinks from RQ cache.
-            let _rqShortlinkData;
-
-            if ((workspaceId?.trim()?.length ?? 0) > 0) {
-              _rqShortlinkData = getRQCDataHandler<ShortLinkType[]>({
-                key: [
-                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
-                  workspaceId
-                ]
-              }) as ShortLinkType[];
-            } else if (
-              (wsShareId?.trim()?.length ?? 0) > 0 &&
-              (shareWSMemberId?.trim()?.length ?? 0) > 0
-            ) {
-              _rqShortlinkData = getRQCDataHandler<ShortLinkType[]>({
-                key: [
-                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN,
-                  wsShareId
-                ]
-              }) as ShortLinkType[];
-            }
-
             const _oldShortLinks =
               extractInnerData<ShortLinkType[]>(
-                _rqShortlinkData,
+                getRQCDataHandler<ShortLinkType[]>({
+                  key: _getQueryKey({
+                    keys: [
+                      isZNonEmptyString(workspaceId)
+                        ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN
+                        : isZNonEmptyString(wsShareId) &&
+                          isZNonEmptyString(shareWSMemberId)
+                        ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS
+                            .SWS_MAIN
+                        : ''
+                    ],
+                    additionalKeys: [workspaceId, shareWSMemberId]
+                  })
+                }),
                 extractInnerDataOptionsEnum.createRequestResponseItems
               ) ?? [];
 
@@ -1620,34 +1619,31 @@ export const ZShortLinkActionPopover: React.FC<{
             const _updatedShortLinks = _oldShortLinks.filter(
               el => el.id !== shortLinkId
             );
-
+            console.log({ _updatedShortLinks });
             // Updating data in RQ cache.
-            if ((workspaceId?.trim()?.length ?? 0) > 0) {
-              await updateRQCDataHandler<ShortLinkType[] | undefined>({
-                key: [
-                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
-                  workspaceId
+            await updateRQCDataHandler<ShortLinkType[] | undefined>({
+              key: _getQueryKey({
+                keys: [
+                  isZNonEmptyString(workspaceId)
+                    ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN
+                    : isZNonEmptyString(wsShareId) &&
+                      isZNonEmptyString(shareWSMemberId)
+                    ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN
+                    : ''
                 ],
-                data: _updatedShortLinks,
-                id: '',
-                extractType: ZRQGetRequestExtractEnum.extractItems,
-                updateHoleData: true
-              });
-            } else if (
-              (wsShareId?.trim()?.length ?? 0) > 0 &&
-              (shareWSMemberId?.trim()?.length ?? 0) > 0
-            ) {
-              await updateRQCDataHandler<ShortLinkType[] | undefined>({
-                key: [
-                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN,
-                  wsShareId
-                ],
-                data: [..._updatedShortLinks] as ShortLinkType[],
-                id: '',
-                extractType: ZRQGetRequestExtractEnum.extractItems,
-                updateHoleData: true
-              });
-            }
+                additionalKeys: [workspaceId, shareWSMemberId]
+              }),
+              data: _updatedShortLinks,
+              id: '',
+              extractType: ZRQGetRequestExtractEnum.extractItems,
+              updateHoleData: true
+            });
+
+            // Updating short link in UserCurrentLimits.
+            setZUserCurrentLimitsRState(oldValues => ({
+              ...oldValues,
+              currentShortLinks: _updatedShortLinks?.length
+            }));
 
             showSuccessNotification(MESSAGES.SHORT_LINKS.DELETE);
 

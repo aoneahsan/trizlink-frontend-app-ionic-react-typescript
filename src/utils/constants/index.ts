@@ -132,6 +132,7 @@ export const API_URLS = {
   register: '/register',
   getUserRolePermission: '/user/role/permissions',
   getUserSubscription: '/user-subscription',
+  getUserServicesLimits: '/user/limits',
   makeUserSubscription: `/user/subscribe/${RouteParams.planType}`,
   upgradeUserSubscription: `/user/upgrade/subscribe/${RouteParams.planType}`,
   updateUserAccountInfo: '/user/update-account-info',
@@ -1746,6 +1747,7 @@ const REACT_QUERY = {
       EMAILS: 'rq-user-emails-key',
       ROLE_PERMISSIONS: 'rq-user-roles-and-permissions-key',
       SUBSCRIPTION: 'rq-user-subscription-key',
+      LIMITS: 'rq-user-services-limits-key',
       WS_ROLES: 'rq-user-ws-roles-key',
       NOTIFICATION: {
         MAIN: 'rq-user-notification-main-key'

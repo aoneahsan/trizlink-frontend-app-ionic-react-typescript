@@ -11,7 +11,7 @@ import React, { lazy, Suspense, useEffect, useState } from 'react';
 import VALIDATOR from 'validator';
 import { refresh, settingsOutline } from 'ionicons/icons';
 import { Formik, useFormikContext } from 'formik';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import classNames from 'classnames';
 import { useParams } from 'react-router';
 import { AxiosError } from 'axios';
@@ -66,7 +66,9 @@ import {
   replaceRouteParams,
   validateField,
   zStringify,
-  isZNonEmptyString
+  isZNonEmptyString,
+  createRedirectRoute,
+  _getQueryKey
 } from '@/utils/helpers';
 import {
   API_URL_ENUM,
@@ -77,7 +79,10 @@ import {
   reportCustomError,
   throwZCustomErrorRequestFailed
 } from '@/utils/customErrorType';
-import { showSuccessNotification } from '@/utils/notification';
+import {
+  showErrorNotification,
+  showSuccessNotification
+} from '@/utils/notification';
 import CONSTANTS from '@/utils/constants';
 import { ENVS } from '@/utils/envKeys';
 import {
@@ -126,6 +131,9 @@ import { type ZLinkMutateApiType } from '@/types/ZaionsApis.type';
 import { type ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { type workspaceInterface } from '@/types/AdminPanel/workspace';
 import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type';
+import { ZUserCurrentLimitsRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
+import { errorCodes } from '@/utils/constants/apiConstants';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 
 const AddNotes = lazy(() => import('@/components/UserDashboard/AddNotes'));
 // const EmbedWidget = lazy(
@@ -222,6 +230,9 @@ const AdminCreateNewLinkPages: React.FC = () => {
     NewShortLinkFormState
   );
   // Recoil state that control the dashboard.
+  const setZUserCurrentLimitsRState = useSetRecoilState(
+    ZUserCurrentLimitsRStateAtom
+  );
   const ZDashboardState = useRecoilValue(ZDashboardRState);
   // #endregion
 
@@ -230,6 +241,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
   const { getRQCDataHandler } = useZGetRQCacheData();
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
   const { zInvalidateReactQueries } = useZInvalidateReactQueries();
+  const { zNavigatePushRoute } = useZNavigate();
   // #endregion
 
   // #region APIs.
@@ -282,14 +294,16 @@ const AdminCreateNewLinkPages: React.FC = () => {
   const { mutateAsync: createShortLink } = useZRQCreateRequest({
     _url: API_URL_ENUM.shortLinks_create_list,
     _itemsIds: [workspaceId ?? ''],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+    _showAlertOnError: false
   });
 
   // If owned-workspace then this api will create short link.
   const { mutateAsync: swsCreateShortLink } = useZRQCreateRequest({
     _url: API_URL_ENUM.sws_sl_create_list,
     _itemsIds: [shareWSMemberId ?? ''],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId]
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+    _showAlertOnError: false
   });
 
   // If owned-workspace then this api will update short link.
@@ -757,33 +771,22 @@ const AdminCreateNewLinkPages: React.FC = () => {
               ...oldValues,
               shortUrl: _generatedShortLink
             }));
-
-            let _shortlinkCacheData;
-
-            if ((workspaceId?.trim()?.length ?? 0) > 0) {
-              _shortlinkCacheData =
-                (getRQCDataHandler<ShortLinkType[]>({
-                  key: [
-                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
-                    workspaceId ?? ''
-                  ]
-                }) as ShortLinkType[]) ?? [];
-            } else if (
-              (wsShareId?.trim()?.length ?? 0) > 0 &&
-              (shareWSMemberId?.trim()?.length ?? 0) > 0
-            ) {
-              _shortlinkCacheData =
-                (getRQCDataHandler<ShortLinkType[]>({
-                  key: [
-                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN,
-                    wsShareId ?? ''
-                  ]
-                }) as ShortLinkType[]) ?? [];
-            }
-
             const _oldShortLinks =
               extractInnerData<ShortLinkType[]>(
-                _shortlinkCacheData,
+                (getRQCDataHandler<ShortLinkType[]>({
+                  key: _getQueryKey({
+                    keys: [
+                      isZNonEmptyString(workspaceId)
+                        ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN
+                        : isZNonEmptyString(wsShareId) &&
+                          isZNonEmptyString(shareWSMemberId)
+                        ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS
+                            .SWS_MAIN
+                        : ''
+                    ],
+                    additionalKeys: [workspaceId, shareWSMemberId]
+                  })
+                }) as ShortLinkType[]) ?? [],
                 extractInnerDataOptionsEnum.createRequestResponseItems
               ) ?? [];
 
@@ -791,32 +794,29 @@ const AdminCreateNewLinkPages: React.FC = () => {
             const _updatedShortLinks = [..._oldShortLinks, _data];
 
             // Updating all shortLinks data in RQ cache.
-            if ((workspaceId?.trim()?.length ?? 0) > 0) {
-              await updateRQCDataHandler<ShortLinkType[] | undefined>({
-                key: [
-                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
-                  workspaceId ?? ''
+            await updateRQCDataHandler<ShortLinkType[] | undefined>({
+              key: _getQueryKey({
+                keys: [
+                  isZNonEmptyString(workspaceId)
+                    ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN
+                    : isZNonEmptyString(wsShareId) &&
+                      isZNonEmptyString(shareWSMemberId)
+                    ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN
+                    : ''
                 ],
-                data: _updatedShortLinks,
-                id: '',
-                extractType: ZRQGetRequestExtractEnum.extractItems,
-                updateHoleData: true
-              });
-            } else if (
-              (wsShareId?.trim()?.length ?? 0) > 0 &&
-              (shareWSMemberId?.trim()?.length ?? 0) > 0
-            ) {
-              await updateRQCDataHandler<ShortLinkType[] | undefined>({
-                key: [
-                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN,
-                  wsShareId ?? ''
-                ],
-                data: _updatedShortLinks,
-                id: '',
-                extractType: ZRQGetRequestExtractEnum.extractItems,
-                updateHoleData: true
-              });
-            }
+                additionalKeys: [workspaceId, shareWSMemberId]
+              }),
+              data: _updatedShortLinks,
+              id: '',
+              extractType: ZRQGetRequestExtractEnum.extractItems,
+              updateHoleData: true
+            });
+
+            // Updating short link in UserCurrentLimits.
+            setZUserCurrentLimitsRState(oldValues => ({
+              ...oldValues,
+              currentShortLinks: _updatedShortLinks?.length
+            }));
 
             showSuccessNotification(MESSAGES.SHORT_LINKS.CREATED);
           }
@@ -954,6 +954,29 @@ const AdminCreateNewLinkPages: React.FC = () => {
       // );
     } catch (error) {
       if (error instanceof AxiosError) {
+        const _apiErrorsCode = error.response?.status;
+
+        if (_apiErrorsCode === errorCodes.reachedLimit) {
+          const _apiErrorsMessage = (
+            error.response?.data as { errors: { item: string[] } }
+          )?.errors?.item[0];
+
+          showErrorNotification(_apiErrorsMessage);
+
+          zNavigatePushRoute(
+            createRedirectRoute({
+              url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+              params: [
+                CONSTANTS.RouteParams.workspace.workspaceId,
+                CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+              ],
+              values: [
+                workspaceId ?? shareWSMemberId ?? '',
+                CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+              ]
+            })
+          );
+        }
         const _apiErrors = (error.response?.data as { errors: ZGenericObject })
           ?.errors;
 

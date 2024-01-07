@@ -52,6 +52,7 @@ export enum API_URL_ENUM {
   register = 'register',
   getUserRolePermission = 'getUserRolePermission',
   getUserSubscription = 'getUserSubscription',
+  getUserServicesLimits = 'getUserServicesLimits',
   makeUserSubscription = 'makeUserSubscription',
   upgradeUserSubscription = 'upgradeUserSubscription',
   checkIfUsernameIsAvailable = 'checkIfUsernameIsAvailable',

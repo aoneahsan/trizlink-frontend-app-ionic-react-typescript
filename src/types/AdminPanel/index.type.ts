@@ -19,6 +19,51 @@ export enum folderState {
   linkInBio = 'linkInBio'
 }
 
+export enum planFeatureTypeEnum {
+  linkManagement = 'linkManagement',
+  qrCodes = 'qrCodes',
+  linkInBio = 'linkInBio',
+  customDomainEssentials = 'customDomainEssentials',
+  AnalyticsAndReporting = 'AnalyticsAndReporting',
+  campaignManagement = 'campaignManagement',
+  dataDelivery = 'dataDelivery',
+  platformAccess = 'platformAccess',
+  adminFeatures = 'adminFeatures',
+  customerSuccess = 'customerSuccess'
+}
+
+export enum subscriptionTimeLine {
+  monthly = 'monthly',
+  yearly = 'yearly'
+}
+
+export enum planFeaturesEnum {
+  shortLinks = 'shortLinks',
+  redirects = 'redirects',
+  brandedLinks = 'brandedLinks',
+  autoBrandedLinks = 'autoBrandedLinks',
+  customBackHalves = 'customBackHalves',
+  linkClicks = 'linkClicks',
+  mobileDeepLinks = 'mobileDeepLinks',
+  bulkShortening = 'bulkShortening',
+  qrCodes = 'qrCodes',
+  customLogo = 'customLogo',
+  colorOptions = 'colorOptions',
+  frames = 'frames',
+  patternCustomizations = 'patternCustomizations',
+  downloadFormat = 'downloadFormat',
+  scans = 'scans',
+  quantity = 'quantity',
+  branding = 'branding',
+  preDesignedThemes = 'preDesignedThemes',
+  customBackgroundColors = 'customBackgroundColors',
+  buttonAndFontStyles = 'buttonAndFontStyles',
+  buttonThumbnails = 'buttonThumbnails',
+  profileAndBackgroundImageUpload = 'profileAndBackgroundImageUpload',
+  linkInBioSocialIcons = 'linkInBioSocialIcons',
+  linkInBioQRCode = 'linkInBioQRCode'
+}
+
 export enum messengerPlatformsBlockEnum {
   email = 'email',
   link = 'link',

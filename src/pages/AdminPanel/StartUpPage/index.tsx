@@ -112,6 +112,13 @@ const ZAppStartupPage: React.FC = () => {
       _checkPermissions: false
     });
 
+  // const { isFetching: isUserServicesLimitsFetching } = useZRQGetRequest({
+  //   _url: API_URL_ENUM.getUserServicesLimits,
+  //   _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.LIMITS],
+  //   _extractType: ZRQGetRequestExtractEnum.extractItems,
+  //   _checkPermissions: false
+  // });
+
   //
   // const { data: getUserSetting, isFetching: isUserSettingFetching } =
   //   useZRQGetRequest({

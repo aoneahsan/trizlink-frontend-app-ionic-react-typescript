@@ -2,10 +2,12 @@ import {
   type UserAccountType,
   type UserAccountAuthTokenType,
   type UserRoleAndPermissionsInterface,
-  type UserAccountEmailType
+  type UserAccountEmailType,
+  type ZUserCurrentLimitsI,
+  type userServicesLimitI
 } from '@/types/UserAccount/index.type';
 // Packages Imports
-import { atom, selector } from 'recoil';
+import { atom, selector, selectorFamily } from 'recoil';
 
 // Data
 import { userAccountEmailsData } from '@/data/UserAccount';
@@ -13,6 +15,13 @@ import { userAccountEmailsData } from '@/data/UserAccount';
 // Custom Imports
 import { STORAGE } from '@/utils/helpers';
 import { LOCALSTORAGE_KEYS } from '@/utils/constants';
+import { reportCustomError } from '@/utils/customErrorType';
+import {
+  subscriptionTimeLine,
+  type planFeaturesEnum
+} from '@/types/AdminPanel/index.type';
+import { type ZUserSubscriptionI } from '@/types/WhyZaions/PricingPage';
+import dayjs from 'dayjs';
 
 export const ZaionsUserAccountRStateAtom = atom<UserAccountType | null>({
   key: 'ZaionsUserAccountRStateAtom_Key',
@@ -76,4 +85,77 @@ export const IsAuthenticatedRStateSelector = selector({
       currentUserEmail !== null
     );
   }
+});
+
+export const ZUserServicesLimitsRStateAtom = atom<userServicesLimitI[]>({
+  key: 'ZUserServicesLimitsRStateAtom_key',
+  default: []
+});
+
+export const ZCurrentUserSubscriptionRStateAtom = atom<ZUserSubscriptionI>({
+  key: 'ZCurrentUserSubscriptionRStateAtom_key',
+  default: {}
+});
+
+export const ZUserCurrentLimitsRStateAtom = atom<ZUserCurrentLimitsI>({
+  key: 'ZUserCurrentLimitsRStateAtom_key',
+  default: {
+    currentShortLinks: 0
+  }
+});
+
+export const ZUserCurrentLimitsRStateSelectorFamily = selectorFamily({
+  key: 'ZUserCurrentLimitsRStateSelectorFamily_key',
+  get:
+    (name: planFeaturesEnum) =>
+    async ({ get }) => {
+      try {
+        const ZUserCurrentLimits = get(ZUserCurrentLimitsRStateAtom);
+        const ZCurrentUserServiceLimits = get(ZUserServicesLimitsRStateAtom);
+        const ZCurrentUserSubscription = get(
+          ZCurrentUserSubscriptionRStateAtom
+        );
+        if (
+          ZCurrentUserServiceLimits !== undefined &&
+          ZCurrentUserServiceLimits !== null
+        ) {
+          const _selectService = ZCurrentUserServiceLimits?.find(
+            el => el?.name === name
+          );
+
+          if (_selectService !== undefined && _selectService !== null) {
+            let endDate = null;
+
+            if (
+              ZCurrentUserSubscription.duration === subscriptionTimeLine.monthly
+            ) {
+              endDate = dayjs(ZCurrentUserSubscription?.startedAt).add(
+                30,
+                'day'
+              );
+            } else if (
+              ZCurrentUserSubscription.duration === subscriptionTimeLine.yearly
+            ) {
+              endDate = dayjs(ZCurrentUserSubscription?.startedAt).add(
+                1,
+                'year'
+              );
+            }
+
+            if (
+              (_selectService?.maxLimit ?? 0) > 0 &&
+              dayjs().isAfter(dayjs(ZCurrentUserSubscription?.startedAt)) &&
+              dayjs().isBefore(dayjs(endDate)) &&
+              ZUserCurrentLimits.currentShortLinks <
+                (_selectService?.maxLimit ?? 0)
+            ) {
+              return true;
+            }
+            return false;
+          }
+        }
+      } catch (error) {
+        reportCustomError(error);
+      }
+    }
 });

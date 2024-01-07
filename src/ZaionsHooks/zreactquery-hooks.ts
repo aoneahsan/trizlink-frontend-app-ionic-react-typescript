@@ -262,7 +262,7 @@ export const useZRQGetRequest = <T>({
     })();
   }
 
-  if (_response?.data !== null) {
+  if (_response?.data !== null && _response?.data !== undefined) {
     // onSucceed dismissing loader...
     void (
       zAppWiseIonicLoaderIsOpenedRSelector &&

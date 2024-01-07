@@ -41,6 +41,7 @@ import { ZErrorCodeEnum } from '@/utils/enums/ErrorsCodes';
  * */
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import {
+  type userServicesLimitI,
   type UserAccountType,
   type UserRoleAndPermissionsInterface
 } from '@/types/UserAccount/index.type';
@@ -52,7 +53,9 @@ import {
 import {
   currentLoggedInUserRoleAndPermissionsRStateAtom,
   IsAuthenticatedRStateSelector,
-  ZaionsUserAccountRStateAtom
+  ZaionsUserAccountRStateAtom,
+  ZCurrentUserSubscriptionRStateAtom,
+  ZUserServicesLimitsRStateAtom
 } from '@/ZaionsStore/UserAccount/index.recoil';
 import { reportCustomError } from '@/utils/customErrorType';
 import { useRouteMatch } from 'react-router';
@@ -63,6 +66,7 @@ import {
   STORAGE
 } from '@/utils/helpers';
 import { App } from '@capacitor/app';
+import { type ZUserSubscriptionI } from '@/types/WhyZaions/PricingPage';
 
 interface IFetchRequiredAppDataHOCProps {
   children?: React.ReactNode;
@@ -129,9 +133,35 @@ const FetchRequiredAppDataHOCAsync: React.FC<IFetchRequiredAppDataHOCProps> = ({
     currentLoggedInUserRoleAndPermissionsRStateAtom
   );
 
+  // recoil state for storing current user services.
+  const setUserServicesLimits = useSetRecoilState(
+    ZUserServicesLimitsRStateAtom
+  );
+
+  const setZCurrentUserSubscription = useSetRecoilState(
+    ZCurrentUserSubscriptionRStateAtom
+  );
+
   const { zIsPrivateRoute } = useZPrivateRouteChecker();
 
   // #region APIS.
+  const { data: _userServicesLimits } = useZRQGetRequest<userServicesLimitI[]>({
+    _url: API_URL_ENUM.getUserServicesLimits,
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.LIMITS],
+    _extractType: ZRQGetRequestExtractEnum.extractItems,
+    _shouldFetchWhenIdPassed: !loggedIn || !zIsPrivateRoute,
+    _checkPermissions: false,
+    _showLoader: false
+  });
+
+  const { data: userSubscriptionData } = useZRQGetRequest<ZUserSubscriptionI>({
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SUBSCRIPTION],
+    _url: API_URL_ENUM.getUserSubscription,
+    _extractType: ZRQGetRequestExtractEnum.extractItem,
+    _checkPermissions: false,
+    _showLoader: false
+  });
+
   // getting the role & permissions of the current log in user.
   const { data: getUserRoleAndPermissions } = useZRQGetRequest<{
     isSuccess: boolean;
@@ -267,6 +297,31 @@ const FetchRequiredAppDataHOCAsync: React.FC<IFetchRequiredAppDataHOCProps> = ({
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    try {
+      if (_userServicesLimits !== null && _userServicesLimits !== undefined) {
+        setUserServicesLimits(_ => _userServicesLimits);
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+    // eslint-disable-next-line
+  }, [_userServicesLimits]);
+
+  useEffect(() => {
+    try {
+      if (userSubscriptionData !== null && userSubscriptionData !== undefined) {
+        setZCurrentUserSubscription(oldValues => ({
+          ...oldValues,
+          ...userSubscriptionData
+        }));
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+    // eslint-disable-next-line
+  }, [userSubscriptionData]);
 
   // #endregion
 

@@ -1,4 +1,8 @@
-import { type WSRolesNameEnum } from '../AdminPanel/workspace';
+import {
+  type planFeatureTypeEnum,
+  type planFeaturesEnum
+} from '@/types/AdminPanel/index.type';
+import { type WSRolesNameEnum } from '@/types/AdminPanel/workspace';
 
 // Enums
 export enum WSRoleType {
@@ -82,6 +86,18 @@ export interface userSubscriptionI {
   isActive?: boolean;
 }
 
+export interface userServicesLimitI {
+  id?: string;
+  type?: planFeatureTypeEnum;
+  version?: string;
+  displayName?: string;
+  name?: planFeaturesEnum;
+  maxLimit?: number;
+  timeLine?: string;
+  description?: string;
+  isActive?: boolean;
+}
+
 export interface IWSNotificationSetting {
   id?: string;
   notificationOnProfile: boolean;
@@ -115,6 +131,10 @@ export interface UserAccountEmailType {
   isPrimary?: boolean;
   isVerified?: boolean;
   makePrimary?: boolean;
+}
+
+export interface ZUserCurrentLimitsI {
+  currentShortLinks: number;
 }
 
 export interface UserAccountAuthTokenType {

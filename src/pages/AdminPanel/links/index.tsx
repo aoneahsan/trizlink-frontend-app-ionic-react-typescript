@@ -102,7 +102,8 @@ import {
   AdminPanelSidebarMenuPageEnum,
   folderState,
   FormMode,
-  messengerPlatformsBlockEnum
+  messengerPlatformsBlockEnum,
+  planFeaturesEnum
 } from '@/types/AdminPanel/index.type';
 import { type workspaceInterface } from '@/types/AdminPanel/workspace';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
@@ -124,6 +125,11 @@ import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil
  * ? Import of style sheet is a style import
  * */
 import classes from './styles.module.css';
+import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
+import {
+  ZUserCurrentLimitsRStateAtom,
+  ZUserCurrentLimitsRStateSelectorFamily
+} from '@/ZaionsStore/UserAccount/index.recoil';
 
 const ZDashboardFolderMenu = lazy(
   () => import('@/components/AdminPanelComponents/Sidebar/FolderMenu')
@@ -875,9 +881,18 @@ const ZInpageMainContent: React.FC = () => {
   // #region Custom hooks.
   const { isXlScale, isMdScale, isLgScale, isSmScale } = useZMediaQueryScale(); // media query hook.
   const { zInvalidateReactQueries } = useZInvalidateReactQueries();
+  // const { limitChecker } = useUserServicesLimitChecker();
   // #endregion
 
   // #region Recoils.
+  const setZUserCurrentLimitsRState = useSetRecoilState(
+    ZUserCurrentLimitsRStateAtom
+  );
+
+  const ZUserCurrentLimitsRState = useRecoilValue(
+    ZUserCurrentLimitsRStateSelectorFamily(planFeaturesEnum.shortLinks)
+  );
+
   // Recoil state for storing filter options for short-links.
   // Recoil state for shortLinks.
   //
@@ -886,6 +901,7 @@ const ZInpageMainContent: React.FC = () => {
   const setNewShortLinkTypeOptionDataAtom = useSetRecoilState(
     NewShortLinkSelectTypeOption
   );
+
   // #endregion
 
   // #region APIS requests.
@@ -1027,7 +1043,7 @@ const ZInpageMainContent: React.FC = () => {
   // #region Functions.
   const invalidedQueries = async (): Promise<void> => {
     try {
-      if (workspaceId !== undefined) {
+      if (workspaceId !== undefined && workspaceId !== null) {
         // Workspace.
         await zInvalidateReactQueries([
           CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET,
@@ -1046,7 +1062,11 @@ const ZInpageMainContent: React.FC = () => {
           workspaceId,
           folderState.shortlink
         ]);
-      } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
+      } else if (
+        wsShareId !== undefined &&
+        wsShareId !== null &&
+        shareWSMemberId !== undefined
+      ) {
         // Share workspace.
         await zInvalidateReactQueries([
           CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
@@ -1107,12 +1127,22 @@ const ZInpageMainContent: React.FC = () => {
   };
   // #endregion
 
+  useEffect(() => {
+    if (shortLinksData !== undefined && shortLinksData !== null) {
+      setZUserCurrentLimitsRState(oldValues => ({
+        ...oldValues,
+        currentShortLinks: shortLinksData?.items?.length
+      }));
+    }
+    // eslint-disable-next-line
+  }, []);
+
   let isZFetching =
     isShortLinksFoldersDataFetching ||
     isShortLinksDataFetching ||
     isSelectedWorkspaceFetching;
 
-  if (wsShareId !== undefined) {
+  if (wsShareId !== undefined && wsShareId !== null) {
     isZFetching =
       isSWSShortLinksFoldersDataFetching ||
       isSWSShortLinksDataFetching ||
@@ -1356,42 +1386,62 @@ const ZInpageMainContent: React.FC = () => {
                   ? [shareWSPermissionEnum.create_sws_shortLink]
                   : [permissionsEnum.create_shortLink]
               }>
-              <ZIonButton
-                fill='solid'
-                color='primary'
-                expand={!isSmScale ? 'block' : undefined}
-                height={isLgScale ? '39px' : '20px'}
+              <div
                 className={classNames({
-                  'my-2 normal-case': true,
-                  'text-xs w-[25%]': !isLgScale,
-                  'w-full': !isSmScale
+                  'w-max h-max': true,
+                  'cursor-not-allowed': ZUserCurrentLimitsRState === false
                 })}
-                onClick={() => {
-                  resetShortLinkFormHandler();
-                }}
-                routerLink={
-                  workspaceId !== undefined
-                    ? replaceParams(
-                        ZaionsRoutes.AdminPanel.ShortLinks.Create,
-                        CONSTANTS.RouteParams.workspace.workspaceId,
-                        workspaceId
-                      )
-                    : wsShareId !== undefined
-                    ? createRedirectRoute({
-                        url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Create,
-                        params: [
-                          CONSTANTS.RouteParams.workspace.wsShareId,
-                          CONSTANTS.RouteParams.workspace.shareWSMemberId
-                        ],
-                        values: [wsShareId, shareWSMemberId ?? '']
-                      })
-                    : ''
-                }
-                testingselector={
-                  CONSTANTS.testingSelectors.shortLink.listPage.createBtn
-                }>
-                Create a new link
-              </ZIonButton>
+                id={ZUserCurrentLimitsRState === false ? 'createSLBtnTt' : ''}>
+                <ZIonButton
+                  fill='solid'
+                  color='primary'
+                  disabled={ZUserCurrentLimitsRState === false}
+                  expand={!isSmScale ? 'block' : undefined}
+                  height={isLgScale ? '39px' : '20px'}
+                  className={classNames({
+                    'my-2 normal-case': true,
+                    'text-xs w-[25%]': !isLgScale,
+                    'w-full': !isSmScale
+                  })}
+                  onClick={() => {
+                    resetShortLinkFormHandler();
+                  }}
+                  routerLink={
+                    workspaceId !== undefined
+                      ? replaceParams(
+                          ZaionsRoutes.AdminPanel.ShortLinks.Create,
+                          CONSTANTS.RouteParams.workspace.workspaceId,
+                          workspaceId
+                        )
+                      : wsShareId !== undefined
+                      ? createRedirectRoute({
+                          url: ZaionsRoutes.AdminPanel.ShareWS.Short_link
+                            .Create,
+                          params: [
+                            CONSTANTS.RouteParams.workspace.wsShareId,
+                            CONSTANTS.RouteParams.workspace.shareWSMemberId
+                          ],
+                          values: [wsShareId, shareWSMemberId ?? '']
+                        })
+                      : ''
+                  }
+                  testingselector={
+                    CONSTANTS.testingSelectors.shortLink.listPage.createBtn
+                  }>
+                  Create a new link
+                </ZIonButton>
+              </div>
+              {ZUserCurrentLimitsRState === false ? (
+                <ZRTooltip
+                  anchorSelect='#createSLBtnTt'
+                  place='top'
+                  variant='info'
+                  className='p-[.3rem!important]'>
+                  <ZIonText className='text-md'>
+                    You have reached your limit.
+                  </ZIonText>
+                </ZRTooltip>
+              ) : null}
             </ZCan>
           </ZIonButtons>
         </ZIonCol>
