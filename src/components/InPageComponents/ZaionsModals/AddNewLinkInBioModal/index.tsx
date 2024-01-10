@@ -51,6 +51,9 @@ import {
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { ENVS } from '@/utils/envKeys';
+import { planFeaturesEnum } from '@/types/AdminPanel/index.type';
+import { useSetRecoilState } from 'recoil';
+import { ZUserCurrentLimitsRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
 
 // Styles
 
@@ -74,7 +77,10 @@ const ZaionsAddLinkInBioModal: React.FC<{
 }) => {
   const { getRQCDataHandler } = useZGetRQCacheData();
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
-  console.log({ workspaceId, wsShareId, shareWSMemberId });
+
+  const setZUserCurrentLimitsRState = useSetRecoilState(
+    ZUserCurrentLimitsRStateAtom
+  );
 
   // Create new link-in-bio API.
   const { mutateAsync: createLinkInBioMutate } =
@@ -172,6 +178,11 @@ const ZaionsAddLinkInBioModal: React.FC<{
               updateHoleData: true
             });
 
+            setZUserCurrentLimitsRState(oldValues => ({
+              ...oldValues,
+              [planFeaturesEnum.linkInBio]: _updatedLinkInBios?.length
+            }));
+
             // after dismissing redirecting to edit link-in-bio-page
             zNavigatePushRoute !== undefined &&
               zNavigatePushRoute(
@@ -225,7 +236,7 @@ const ZaionsAddLinkInBioModal: React.FC<{
         <div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter'>
           <ZIonImg
             src={ProductFavicon}
-            className='w-10 h-10 mx-auto'
+            className='w-12 h-12 mx-auto'
           />
         </div>
 

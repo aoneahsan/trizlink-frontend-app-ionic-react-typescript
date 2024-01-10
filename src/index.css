@@ -628,12 +628,17 @@ span.new {
   --height: 50vh;
 }
 
-.link-in-bio-folder-modal {
-  --height: 50vh;
+.folder-form-modal {
+  /* --height: 50vh;
   --min-height: 330px;
   --max-height: 40vh;
   --width: 33vw;
-  --max-width: 29vw;
+  --max-width: 29vw; */
+  --height: 19rem;
+  --max-height: 40vh;
+  --min-height: 19rem;
+  --width: 30rem;
+  --max-width: 95%;
 }
 
 .short-link-modal {
@@ -713,10 +718,22 @@ span.new {
   --width: 755px;
 }
 
-.folder-modal-size,
 .api-key-modal-size {
   --height: 50vh;
   --width: 33vw;
+}
+.lib-create-modal-size {
+  --height: 19rem;
+  --width: 28rem;
+  --max-width: 95%;
+  --max-height: 89%;
+}
+
+.reached-limit-modal-size {
+  --height: 18rem;
+  --width: 33rem;
+  --max-width: 95%;
+  --max-height: 89%;
 }
 
 .create-workspace-modal-size {

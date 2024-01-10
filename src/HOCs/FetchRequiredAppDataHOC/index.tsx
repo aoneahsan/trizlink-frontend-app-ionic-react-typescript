@@ -145,32 +145,38 @@ const FetchRequiredAppDataHOCAsync: React.FC<IFetchRequiredAppDataHOCProps> = ({
   const { zIsPrivateRoute } = useZPrivateRouteChecker();
 
   // #region APIS.
-  const { data: _userServicesLimits } = useZRQGetRequest<userServicesLimitI[]>({
-    _url: API_URL_ENUM.getUserServicesLimits,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.LIMITS],
-    _extractType: ZRQGetRequestExtractEnum.extractItems,
-    _shouldFetchWhenIdPassed: !loggedIn || !zIsPrivateRoute,
-    _checkPermissions: false,
-    _showLoader: false
-  });
+  const { data: userSubscriptionData, refetch: refetchUserSubscriptionData } =
+    useZRQGetRequest<ZUserSubscriptionI>({
+      _url: API_URL_ENUM.getUserSubscription,
+      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SUBSCRIPTION],
+      _extractType: ZRQGetRequestExtractEnum.extractItem,
+      _shouldFetchWhenIdPassed: !loggedIn,
+      _checkPermissions: false,
+      _showLoader: false
+    });
 
-  const { data: userSubscriptionData } = useZRQGetRequest<ZUserSubscriptionI>({
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SUBSCRIPTION],
-    _url: API_URL_ENUM.getUserSubscription,
-    _extractType: ZRQGetRequestExtractEnum.extractItem,
-    _checkPermissions: false,
-    _showLoader: false
-  });
+  const { data: _userServicesLimits, refetch: refetchUserServicesLimits } =
+    useZRQGetRequest<userServicesLimitI[]>({
+      _url: API_URL_ENUM.getUserServicesLimits,
+      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.LIMITS],
+      _extractType: ZRQGetRequestExtractEnum.extractItems,
+      _shouldFetchWhenIdPassed: !loggedIn,
+      _checkPermissions: false,
+      _showLoader: false
+    });
 
   // getting the role & permissions of the current log in user.
-  const { data: getUserRoleAndPermissions } = useZRQGetRequest<{
+  const {
+    data: getUserRoleAndPermissions,
+    refetch: refetchGetUserRoleAndPermissions
+  } = useZRQGetRequest<{
     isSuccess: boolean;
     result: UserRoleAndPermissionsInterface;
   }>({
     _url: API_URL_ENUM.getUserRolePermission,
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.ROLE_PERMISSIONS],
     _extractType: ZRQGetRequestExtractEnum.extractItem,
-    _shouldFetchWhenIdPassed: !loggedIn || !zIsPrivateRoute,
+    _shouldFetchWhenIdPassed: !loggedIn,
     _checkPermissions: false,
     _showLoader: false
   });
@@ -323,6 +329,14 @@ const FetchRequiredAppDataHOCAsync: React.FC<IFetchRequiredAppDataHOCProps> = ({
     // eslint-disable-next-line
   }, [userSubscriptionData]);
 
+  useEffect(() => {
+    if (loggedIn && zIsPrivateRoute) {
+      void refetchUserSubscriptionData();
+      void refetchUserServicesLimits();
+      void refetchGetUserRoleAndPermissions();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loggedIn, zIsPrivateRoute]);
   // #endregion
 
   if (compState.isProcessing) {

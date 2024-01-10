@@ -79,6 +79,12 @@ import { type FormikSetErrorsType } from '@/types/ZaionsFormik.type';
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import { ProductFaviconSmall } from '@/assets/images';
+import { errorCodes } from '@/utils/constants/apiConstants';
+import ZReachedLimitModal from '@/components/InPageComponents/ZaionsModals/UpgradeModals/ReachedLimit';
+import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
+import { planFeaturesEnum } from '@/types/AdminPanel/index.type';
+import { useSetRecoilState } from 'recoil';
+import { ZUserCurrentLimitsRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
 
 /**
  * Component props type go down
@@ -100,8 +106,16 @@ const ZAddNewWorkspaceModal: React.FC<{
 
   // Create new workspace API.
   const { mutateAsync: createWorkspaceMutate } = useZRQCreateRequest({
-    _url: API_URL_ENUM.workspace_create_list
+    _url: API_URL_ENUM.workspace_create_list,
+    _showAlertOnError: false
   });
+
+  const { presentZIonModal: presentZReachedLimitModal } =
+    useZIonModal(ZReachedLimitModal);
+
+  const setZUserCurrentLimitsRState = useSetRecoilState(
+    ZUserCurrentLimitsRStateAtom
+  );
 
   // Formik submit handler
   const formikSubmitHandler = async (
@@ -120,7 +134,7 @@ const ZAddNewWorkspaceModal: React.FC<{
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (_data?.id !== undefined) {
+          if (_data?.id !== undefined && _data?.id !== null) {
             // getting all the workspace from RQ cache.
             const _oldWorkspaces =
               extractInnerData<workspaceInterface[]>(
@@ -142,6 +156,11 @@ const ZAddNewWorkspaceModal: React.FC<{
               updateHoleData: true
             });
 
+            setZUserCurrentLimitsRState(oldValues => ({
+              ...oldValues,
+              [planFeaturesEnum.workspace]: updatedWorkspaces?.length
+            }));
+
             showSuccessNotification(MESSAGES.WORKSPACE.CREATED);
 
             // After updating cache dismissing modal.
@@ -151,6 +170,15 @@ const ZAddNewWorkspaceModal: React.FC<{
       }
     } catch (error) {
       if (error instanceof AxiosError) {
+        const _apiErrorsCode = error.response?.status;
+        if (_apiErrorsCode === errorCodes.reachedLimit) {
+          presentZReachedLimitModal({
+            _cssClass: 'reached-limit-modal-size'
+          });
+
+          dismissZIonModal();
+        }
+
         const _apiErrors = (error.response?.data as { errors: ZGenericObject })
           ?.errors;
         const _errors = formatApiRequestErrorForFormikFormField(

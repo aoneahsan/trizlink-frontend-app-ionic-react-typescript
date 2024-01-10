@@ -67,22 +67,20 @@ import {
   validateField,
   zStringify,
   isZNonEmptyString,
-  createRedirectRoute,
-  _getQueryKey
+  _getQueryKey,
+  isZNonEmptyStrings
 } from '@/utils/helpers';
 import {
   API_URL_ENUM,
   extractInnerDataOptionsEnum,
-  VALIDATION_RULE
+  VALIDATION_RULE,
+  ZWSTypeEum
 } from '@/utils/enums';
 import {
   reportCustomError,
   throwZCustomErrorRequestFailed
 } from '@/utils/customErrorType';
-import {
-  showErrorNotification,
-  showSuccessNotification
-} from '@/utils/notification';
+import { showSuccessNotification } from '@/utils/notification';
 import CONSTANTS from '@/utils/constants';
 import { ENVS } from '@/utils/envKeys';
 import {
@@ -119,7 +117,8 @@ import {
   type ABTestingRotatorInterface,
   type GeoLocationRotatorInterface,
   type LinkExpirationInfoInterface,
-  type PasswordInterface
+  type PasswordInterface,
+  planFeaturesEnum
 } from '@/types/AdminPanel/index.type';
 import {
   type FormikSetErrorsType,
@@ -133,7 +132,7 @@ import { type workspaceInterface } from '@/types/AdminPanel/workspace';
 import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type';
 import { ZUserCurrentLimitsRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
 import { errorCodes } from '@/utils/constants/apiConstants';
-import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
+import ZReachedLimitModal from '@/components/InPageComponents/ZaionsModals/UpgradeModals/ReachedLimit';
 
 const AddNotes = lazy(() => import('@/components/UserDashboard/AddNotes'));
 // const EmbedWidget = lazy(
@@ -241,7 +240,6 @@ const AdminCreateNewLinkPages: React.FC = () => {
   const { getRQCDataHandler } = useZGetRQCacheData();
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
   const { zInvalidateReactQueries } = useZInvalidateReactQueries();
-  const { zNavigatePushRoute } = useZNavigate();
   // #endregion
 
   // #region APIs.
@@ -290,47 +288,68 @@ const AdminCreateNewLinkPages: React.FC = () => {
       _showLoader: false
     });
 
-  // If owned-workspace then this api will create short link.
+  // create short link api.
   const { mutateAsync: createShortLink } = useZRQCreateRequest({
     _url: API_URL_ENUM.shortLinks_create_list,
-    _itemsIds: [workspaceId ?? ''],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-    _showAlertOnError: false
-  });
-
-  // If owned-workspace then this api will create short link.
-  const { mutateAsync: swsCreateShortLink } = useZRQCreateRequest({
-    _url: API_URL_ENUM.sws_sl_create_list,
-    _itemsIds: [shareWSMemberId ?? ''],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+    _itemsIds: _getQueryKey({
+      keys: [
+        isZNonEmptyString(workspaceId)
+          ? ZWSTypeEum.personalWorkspace
+          : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+          ? ZWSTypeEum.shareWorkspace
+          : ''
+      ],
+      additionalKeys: [workspaceId, shareWSMemberId]
+    }),
+    _urlDynamicParts: [
+      CONSTANTS.RouteParams.workspace.type,
+      CONSTANTS.RouteParams.workspace.workspaceId
+    ],
     _showAlertOnError: false
   });
 
   // If owned-workspace then this api will update short link.
   const { mutateAsync: updateShortLink } = useZRQUpdateRequest({
-    _url: API_URL_ENUM.shortLinks_update_delete,
-    _queriesKeysToInvalidate: []
-  });
-
-  // If owned-workspace then this api will update short link.
-  const { mutateAsync: swsUpdateShortLink } = useZRQUpdateRequest({
-    _url: API_URL_ENUM.sws_sl_get_update_delete
+    _url: API_URL_ENUM.shortLinks_update_delete
   });
 
   // Request for getting short links data.
   const { isFetching: isShortLinksFetching, isError: isShortLinksError } =
-    useZRQGetRequest<ShortLinkType[]>({
-      _url: API_URL_ENUM.shortLinks_create_list,
-      _key: [
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
-        workspaceId ?? ''
+    useZRQGetRequest<{
+      items: ShortLinkType[];
+      itemsCount: string;
+    }>({
+      _url: API_URL_ENUM.shortLinks_list,
+      _key: _getQueryKey({
+        keys: [
+          isZNonEmptyString(workspaceId)
+            ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN
+            : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+            ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN
+            : ''
+        ],
+        additionalKeys: [workspaceId, wsShareId, shareWSMemberId]
+      }),
+      _itemsIds: _getQueryKey({
+        keys: [
+          isZNonEmptyString(workspaceId)
+            ? ZWSTypeEum.personalWorkspace
+            : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+            ? ZWSTypeEum.shareWorkspace
+            : ''
+        ],
+        additionalKeys: [workspaceId, shareWSMemberId]
+      }),
+      _urlDynamicParts: [
+        CONSTANTS.RouteParams.workspace.type,
+        CONSTANTS.RouteParams.workspace.workspaceId
       ],
-      _itemsIds: [workspaceId ?? ''],
-      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
       _shouldFetchWhenIdPassed: !(
-        workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
+        isZNonEmptyString(workspaceId) ||
+        isZNonEmptyStrings([wsShareId, shareWSMemberId])
       ),
-      _showLoader: false
+      _showLoader: false,
+      _extractType: ZRQGetRequestExtractEnum.extractData
     });
 
   // get short link data api.
@@ -340,97 +359,67 @@ const AdminCreateNewLinkPages: React.FC = () => {
     isError: isSelectedShortLinkError
   } = useZRQGetRequest<ShortLinkType>({
     _url: API_URL_ENUM.shortLinks_update_delete,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.GET,
-      workspaceId ?? '',
-      editLinkId ?? ''
-    ],
-    _authenticated: true,
-    _itemsIds: [workspaceId ?? '', editLinkId ?? ''],
+    _key: _getQueryKey({
+      keys: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.GET],
+      additionalKeys: [workspaceId, wsShareId, shareWSMemberId, editLinkId]
+    }),
+    _itemsIds: _getQueryKey({
+      keys: [
+        isZNonEmptyString(workspaceId)
+          ? ZWSTypeEum.personalWorkspace
+          : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+          ? ZWSTypeEum.shareWorkspace
+          : ''
+      ],
+      additionalKeys: [workspaceId, shareWSMemberId, editLinkId]
+    }),
     _urlDynamicParts: [
+      CONSTANTS.RouteParams.workspace.type,
       CONSTANTS.RouteParams.workspace.workspaceId,
       CONSTANTS.RouteParams.shortLink.shortLinkId
     ],
     _shouldFetchWhenIdPassed: !(
-      editLinkId !== undefined &&
-      (editLinkId?.trim()?.length ?? 0) > 0 &&
-      workspaceId !== undefined &&
-      (workspaceId?.trim()?.length ?? 0) > 0
+      isZNonEmptyStrings([workspaceId, editLinkId]) ||
+      isZNonEmptyStrings([wsShareId, shareWSMemberId, editLinkId])
     ),
     _extractType: ZRQGetRequestExtractEnum.extractItem,
     _showLoader: false
   });
 
-  // If share-workspace then this api will fetch share-workspace-current-short-link data.
-  const {
-    data: swsSelectedShortLink,
-    isFetching: isSWSSelectedShortLinkFetching,
-    isError: isSWSSelectedShortLinkError
-  } = useZRQGetRequest<ShortLinkType>({
-    _url: API_URL_ENUM.sws_sl_get_update_delete,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_GET,
-      wsShareId ?? '',
-      editLinkId ?? ''
-    ],
-    _authenticated: true,
-    _itemsIds: [shareWSMemberId ?? '', editLinkId ?? ''],
-    _urlDynamicParts: [
-      CONSTANTS.RouteParams.workspace.shareWSMemberId,
-      CONSTANTS.RouteParams.shortLink.shortLinkId
-    ],
-    _shouldFetchWhenIdPassed: !(
-      wsShareId !== undefined &&
-      (wsShareId?.trim()?.length ?? 0) > 0 &&
-      shareWSMemberId !== undefined &&
-      (shareWSMemberId?.trim()?.length ?? 0) > 0 &&
-      editLinkId !== undefined &&
-      (editLinkId?.trim()?.length ?? 0) > 0
-    ),
-    _extractType: ZRQGetRequestExtractEnum.extractItem,
-    _showLoader: false
-  });
-
-  // If owned-workspace then this api will fetch owned-workspace-short-links data.
+  // fetch workspace-short-links data.
   const {
     data: shortLinksFoldersData,
     isFetching: isShortLinksFoldersDataFetching,
     isError: isShortLinksFoldersDataError
   } = useZRQGetRequest<LinkFolderType[]>({
     _url: API_URL_ENUM.ShortLink_folders_create_list,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
-      workspaceId ?? '',
-      folderState.shortlink
+    _key: _getQueryKey({
+      keys: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
+      additionalKeys: [
+        workspaceId,
+        wsShareId,
+        shareWSMemberId,
+        folderState.shortlink
+      ]
+    }),
+    _itemsIds: _getQueryKey({
+      keys: [
+        isZNonEmptyString(workspaceId)
+          ? ZWSTypeEum.personalWorkspace
+          : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+          ? ZWSTypeEum.shareWorkspace
+          : ''
+      ],
+      additionalKeys: [workspaceId, shareWSMemberId]
+    }),
+    _urlDynamicParts: [
+      CONSTANTS.RouteParams.workspace.type,
+      CONSTANTS.RouteParams.workspace.workspaceId
     ],
-    _itemsIds: [workspaceId ?? ''],
     _shouldFetchWhenIdPassed: !(
-      workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
+      isZNonEmptyString(workspaceId) ||
+      isZNonEmptyStrings([wsShareId, shareWSMemberId])
     ),
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-    _showLoader: false
-  });
-
-  // If share-workspace then this api will fetch share-workspace-short-links-folders data.
-  const {
-    data: swsShortLinksFoldersData,
-    isFetching: isSWSShortLinksFoldersDataFetching,
-    isError: isSWSShortLinksFoldersDataError
-  } = useZRQGetRequest<LinkFolderType[]>({
-    _url: API_URL_ENUM.ws_share_folder_sl_list,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
-      wsShareId ?? '',
-      folderState.shortlink
-    ],
-    _itemsIds: [shareWSMemberId ?? ''],
-    _shouldFetchWhenIdPassed: !(
-      wsShareId !== undefined &&
-      (wsShareId?.trim()?.length ?? 0) > 0 &&
-      shareWSMemberId !== undefined &&
-      (shareWSMemberId?.trim()?.length ?? 0) > 0
-    ),
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _showLoader: false
   });
 
@@ -548,10 +537,10 @@ const AdminCreateNewLinkPages: React.FC = () => {
         (wsShareId?.trim()?.length ?? 0) > 0 &&
         !isSWSFetching &&
         !isSWSError &&
-        !isSWSShortLinksFoldersDataFetching &&
-        !isSWSShortLinksFoldersDataError &&
-        !isSWSSelectedShortLinkFetching &&
-        !isSWSSelectedShortLinkError &&
+        !isShortLinksFoldersDataFetching &&
+        !isShortLinksFoldersDataError &&
+        !isSelectedShortLinkFetching &&
+        !isSelectedShortLinkError &&
         !isSWSPixelAccountsDataFetching &&
         !isSWSPixelAccountsDataError &&
         !isGetMemberRolePermissionsFetching &&
@@ -571,10 +560,10 @@ const AdminCreateNewLinkPages: React.FC = () => {
     wsShareId,
     isSWSFetching,
     isSWSError,
-    isSWSShortLinksFoldersDataFetching,
-    isSWSShortLinksFoldersDataError,
-    isSWSSelectedShortLinkFetching,
-    isSWSSelectedShortLinkError,
+    isShortLinksFoldersDataFetching,
+    isShortLinksFoldersDataError,
+    isSelectedShortLinkFetching,
+    isSelectedShortLinkError,
     isGetMemberRolePermissionsFetching,
     isGetMemberRolePermissionsError,
     isSWSPixelAccountsDataFetching,
@@ -631,6 +620,9 @@ const AdminCreateNewLinkPages: React.FC = () => {
       wsShareId
     }
   );
+
+  const { presentZIonModal: presentZReachedLimitModal } =
+    useZIonModal(ZReachedLimitModal);
   // #endregion
 
   // #region Functions.
@@ -741,16 +733,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
     try {
       if ((editLinkId?.trim()?.length ?? 0) === 0) {
         // Making an api call creating new short link
-        let _response;
-
-        if ((workspaceId?.trim()?.length ?? 0) > 0) {
-          _response = await createShortLink(_values);
-        } else if (
-          (wsShareId?.trim()?.length ?? 0) > 0 &&
-          (shareWSMemberId?.trim()?.length ?? 0) > 0
-        ) {
-          _response = await swsCreateShortLink(_values);
-        }
+        const _response = await createShortLink(_values);
 
         if ((_response as ZLinkMutateApiType<ShortLinkType>)?.success) {
           // if we have a successful response then...
@@ -784,7 +767,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
                             .SWS_MAIN
                         : ''
                     ],
-                    additionalKeys: [workspaceId, shareWSMemberId]
+                    additionalKeys: [workspaceId, wsShareId, shareWSMemberId]
                   })
                 }) as ShortLinkType[]) ?? [],
                 extractInnerDataOptionsEnum.createRequestResponseItems
@@ -804,7 +787,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
                     ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN
                     : ''
                 ],
-                additionalKeys: [workspaceId, shareWSMemberId]
+                additionalKeys: [workspaceId, wsShareId, shareWSMemberId]
               }),
               data: _updatedShortLinks,
               id: '',
@@ -815,7 +798,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
             // Updating short link in UserCurrentLimits.
             setZUserCurrentLimitsRState(oldValues => ({
               ...oldValues,
-              currentShortLinks: _updatedShortLinks?.length
+              [planFeaturesEnum.shortLinks]: _updatedShortLinks?.length
             }));
 
             showSuccessNotification(MESSAGES.SHORT_LINKS.CREATED);
@@ -827,30 +810,25 @@ const AdminCreateNewLinkPages: React.FC = () => {
           );
         }
       } else if ((editLinkId?.trim()?.length ?? 0) > 0) {
-        let _response;
-
-        if ((workspaceId?.trim()?.length ?? 0) > 0) {
-          _response = await updateShortLink({
-            requestData: _values,
-            itemIds: [workspaceId ?? '', editLinkId ?? ''],
-            urlDynamicParts: [
-              CONSTANTS.RouteParams.workspace.workspaceId,
-              CONSTANTS.RouteParams.shortLink.shortLinkId
-            ]
-          });
-        } else if (
-          (shareWSMemberId?.trim()?.length ?? 0) > 0 &&
-          (wsShareId?.trim()?.length ?? 0) > 0
-        ) {
-          _response = await swsUpdateShortLink({
-            requestData: _values,
-            itemIds: [shareWSMemberId ?? '', editLinkId ?? ''],
-            urlDynamicParts: [
-              CONSTANTS.RouteParams.workspace.shareWSMemberId,
-              CONSTANTS.RouteParams.shortLink.shortLinkId
-            ]
-          });
-        }
+        const _response = await updateShortLink({
+          requestData: _values,
+          itemIds: _getQueryKey({
+            keys: [
+              isZNonEmptyString(workspaceId)
+                ? ZWSTypeEum.personalWorkspace
+                : isZNonEmptyString(wsShareId) &&
+                  isZNonEmptyString(shareWSMemberId)
+                ? ZWSTypeEum.shareWorkspace
+                : ''
+            ],
+            additionalKeys: [workspaceId, shareWSMemberId, editLinkId]
+          }),
+          urlDynamicParts: [
+            CONSTANTS.RouteParams.workspace.type,
+            CONSTANTS.RouteParams.workspace.workspaceId,
+            CONSTANTS.RouteParams.shortLink.shortLinkId
+          ]
+        });
 
         if (_response !== undefined && _response !== null) {
           // extract Data from _response.
@@ -957,25 +935,29 @@ const AdminCreateNewLinkPages: React.FC = () => {
         const _apiErrorsCode = error.response?.status;
 
         if (_apiErrorsCode === errorCodes.reachedLimit) {
-          const _apiErrorsMessage = (
-            error.response?.data as { errors: { item: string[] } }
-          )?.errors?.item[0];
+          // const _apiErrorsMessage = (
+          //   error.response?.data as { errors: { item: string[] } }
+          // )?.errors?.item[0];
 
-          showErrorNotification(_apiErrorsMessage);
+          // showErrorNotification(_apiErrorsMessage);
 
-          zNavigatePushRoute(
-            createRedirectRoute({
-              url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
-              params: [
-                CONSTANTS.RouteParams.workspace.workspaceId,
-                CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
-              ],
-              values: [
-                workspaceId ?? shareWSMemberId ?? '',
-                CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
-              ]
-            })
-          );
+          presentZReachedLimitModal({
+            _cssClass: 'reached-limit-modal-size'
+          });
+
+          // zNavigatePushRoute(
+          //   createRedirectRoute({
+          //     url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+          //     params: [
+          //       CONSTANTS.RouteParams.workspace.workspaceId,
+          //       CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+          //     ],
+          //     values: [
+          //       workspaceId ?? shareWSMemberId ?? '',
+          //       CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+          //     ]
+          //   })
+          // );
         }
         const _apiErrors = (error.response?.data as { errors: ZGenericObject })
           ?.errors;
@@ -994,165 +976,88 @@ const AdminCreateNewLinkPages: React.FC = () => {
 
   // is fetching.
 
-  let isZFetching = isSelectedShortLinkFetching || isShortLinksFetching;
+  const isZFetching = isSelectedShortLinkFetching || isShortLinksFetching;
 
-  if ((wsShareId?.trim()?.length ?? 0) > 0) {
-    isZFetching = isSWSSelectedShortLinkFetching;
-  }
   const formikInitialValues = {
     target: {
       url:
         (selectedShortLink?.target as LinkTargetType)?.url ??
-        (swsSelectedShortLink?.target as LinkTargetType)?.url ??
         (newShortLinkFormState?.target as LinkTargetType)?.url ??
         'https://',
       phoneNumber:
-        (selectedShortLink?.target as LinkTargetType)?.phoneNumber ??
-        (swsSelectedShortLink?.target as LinkTargetType)?.phoneNumber ??
-        '',
-      username:
-        (selectedShortLink?.target as LinkTargetType)?.username ??
-        (swsSelectedShortLink?.target as LinkTargetType)?.username ??
-        '',
-      email:
-        (selectedShortLink?.target as LinkTargetType)?.email ??
-        (swsSelectedShortLink?.target as LinkTargetType)?.email ??
-        '',
-      accountId:
-        (selectedShortLink?.target as LinkTargetType)?.accountId ??
-        (swsSelectedShortLink?.target as LinkTargetType)?.accountId ??
-        '',
-      subject:
-        (selectedShortLink?.target as LinkTargetType)?.subject ??
-        (swsSelectedShortLink?.target as LinkTargetType)?.subject ??
-        '',
-      message:
-        (selectedShortLink?.target as LinkTargetType)?.message ??
-        (swsSelectedShortLink?.target as LinkTargetType)?.message ??
-        ''
+        (selectedShortLink?.target as LinkTargetType)?.phoneNumber ?? '',
+      username: (selectedShortLink?.target as LinkTargetType)?.username ?? '',
+      email: (selectedShortLink?.target as LinkTargetType)?.email ?? '',
+      accountId: (selectedShortLink?.target as LinkTargetType)?.accountId ?? '',
+      subject: (selectedShortLink?.target as LinkTargetType)?.subject ?? '',
+      message: (selectedShortLink?.target as LinkTargetType)?.message ?? ''
     },
-    title: selectedShortLink?.title ?? swsSelectedShortLink?.title ?? '',
-    linkDescription:
-      selectedShortLink?.description ?? swsSelectedShortLink?.description ?? '',
+    title: selectedShortLink?.title ?? '',
+    linkDescription: selectedShortLink?.description ?? '',
     featureImg: {
-      featureImgPath:
-        selectedShortLink?.featureImg?.featureImgPath ??
-        swsSelectedShortLink?.featureImg?.featureImgPath ??
-        '',
-      featureImgUrl:
-        selectedShortLink?.featureImg?.featureImgUrl ??
-        swsSelectedShortLink?.featureImg?.featureImgUrl ??
-        '',
-      featureImgFile:
-        selectedShortLink?.featureImg?.featureImgFile ??
-        swsSelectedShortLink?.featureImg?.featureImgFile ??
-        null
+      featureImgPath: selectedShortLink?.featureImg?.featureImgPath ?? '',
+      featureImgUrl: selectedShortLink?.featureImg?.featureImgUrl ?? '',
+      featureImgFile: selectedShortLink?.featureImg?.featureImgFile ?? null
     },
     password: {
-      value:
-        (selectedShortLink?.password as PasswordInterface)?.password ??
-        (swsSelectedShortLink?.password as PasswordInterface)?.password ??
-        '',
+      value: (selectedShortLink?.password as PasswordInterface)?.password ?? '',
       enabled:
-        (selectedShortLink?.password as PasswordInterface)?.enabled ??
-        (swsSelectedShortLink?.password as PasswordInterface)?.enabled ??
-        false
+        (selectedShortLink?.password as PasswordInterface)?.enabled ?? false
     },
     folderId:
-      selectedShortLink?.folderId ??
-      swsSelectedShortLink?.folderId ??
-      CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
-    linkNote: selectedShortLink?.notes ?? swsSelectedShortLink?.notes ?? '',
+      selectedShortLink?.folderId ?? CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
+    linkNote: selectedShortLink?.notes ?? '',
     tags:
       selectedShortLink?.tags !== undefined && selectedShortLink?.tags !== null
         ? (selectedShortLink?.tags as string[])
-        : swsSelectedShortLink?.tags !== undefined &&
-          swsSelectedShortLink?.tags !== null
-        ? (swsSelectedShortLink?.tags as string[])
         : [],
     linkExpiration: {
       enabled:
         (selectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface)
-          ?.enabled ??
-        (
-          swsSelectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface
-        )?.enabled ??
-        false,
+          ?.enabled ?? false,
       expirationDate:
         (selectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface)
-          ?.expirationDate ??
-        (
-          swsSelectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface
-        )?.expirationDate ??
-        '',
+          ?.expirationDate ?? '',
       timezone:
         (selectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface)
-          ?.timezone ??
-        (
-          swsSelectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface
-        )?.timezone ??
-        CONSTANTS.DEFAULT_VALUES.TIMEZONE_DEFAULT,
+          ?.timezone ?? CONSTANTS.DEFAULT_VALUES.TIMEZONE_DEFAULT,
       redirectionLink:
         (selectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface)
-          ?.redirectionLink ??
-        (
-          swsSelectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface
-        )?.redirectionLink ??
-        'https://'
+          ?.redirectionLink ?? 'https://'
     },
     rotatorABTesting:
       (selectedShortLink?.abTestingRotatorLinks as ABTestingRotatorInterface[]) ??
-      (swsSelectedShortLink?.abTestingRotatorLinks as ABTestingRotatorInterface[]) ??
       [],
     geoLocation:
       (selectedShortLink?.geoLocationRotatorLinks as GeoLocationRotatorInterface[]) ??
-      (swsSelectedShortLink?.geoLocationRotatorLinks as GeoLocationRotatorInterface[]) ??
       [],
 
     //
     shortUrlDomain:
-      selectedShortLink?.shortUrlDomain ??
-      swsSelectedShortLink?.shortUrlDomain ??
-      ENVS.defaultShortUrlDomain,
-    shortUrlPath:
-      selectedShortLink?.shortUrlPath ??
-      swsSelectedShortLink?.shortUrlPath ??
-      '',
+      selectedShortLink?.shortUrlDomain ?? ENVS.defaultShortUrlDomain,
+    shortUrlPath: selectedShortLink?.shortUrlPath ?? '',
     isShortUrlPathValid: true,
     //
 
     linkPixelsAccount:
       (selectedShortLink?.pixelIds !== undefined &&
         (JSON.parse(selectedShortLink?.pixelIds as string) as string[])) ??
-      (swsSelectedShortLink?.pixelIds !== undefined &&
-        (JSON.parse(swsSelectedShortLink?.pixelIds as string) as string[])) ??
       [],
     UTMTags: {
       templateId:
         (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)?.templateId ??
-        (swsSelectedShortLink?.utmTagInfo as UTMTagInfoInterface)?.templateId ??
         '',
       utmCampaign:
         (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)?.utmCampaign ??
-        (swsSelectedShortLink?.utmTagInfo as UTMTagInfoInterface)
-          ?.utmCampaign ??
         '',
       utmMedium:
-        (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)?.utmMedium ??
-        (swsSelectedShortLink?.utmTagInfo as UTMTagInfoInterface)?.utmMedium ??
-        '',
+        (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)?.utmMedium ?? '',
       utmSource:
-        (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)?.utmSource ??
-        (swsSelectedShortLink?.utmTagInfo as UTMTagInfoInterface)?.utmSource ??
-        '',
+        (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)?.utmSource ?? '',
       utmTerm:
-        (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)?.utmTerm ??
-        (swsSelectedShortLink?.utmTagInfo as UTMTagInfoInterface)?.utmTerm ??
-        '',
+        (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)?.utmTerm ?? '',
       utmContent:
-        (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)?.utmContent ??
-        (swsSelectedShortLink?.utmTagInfo as UTMTagInfoInterface)?.utmContent ??
-        ''
+        (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)?.utmContent ?? ''
     },
     // favicon: {
     //   featureImgPath:
@@ -1165,7 +1070,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
     //     selectedShortLink?.favicon?.featureImgFile ??
     //     null
     // }
-    favicon: selectedShortLink?.favicon ?? swsSelectedShortLink?.favicon ?? ''
+    favicon: selectedShortLink?.favicon ?? ''
     // complete page fields here
   };
 
@@ -1192,13 +1097,13 @@ const AdminCreateNewLinkPages: React.FC = () => {
                 ? 'Getting & setting your permissions in this workspace'
                 : isSWSFetching
                 ? 'Setting share workspace data'
-                : isSWSSelectedShortLinkFetching
+                : isSelectedShortLinkFetching
                 ? 'Fetching share workspace short links'
                 : isSWSPixelAccountsDataFetching
                 ? 'Fetching share workspace pixels'
                 : isSWSUTMTagsDataFetching
                 ? 'Fetching share workspace utm tags'
-                : isSWSShortLinksFoldersDataFetching
+                : isShortLinksFoldersDataFetching
                 ? 'Fetching share workspace short links folders'
                 : null
               : null}
@@ -1548,38 +1453,22 @@ const AdminCreateNewLinkPages: React.FC = () => {
               let _filePath = values?.featureImg?.featureImgPath;
 
               if (
-                ((workspaceId?.trim()?.length ?? 0) > 0 &&
-                  values?.featureImg?.featureImgUrl.trim().length > 0 &&
-                  values?.featureImg?.featureImgUrl !==
-                    selectedShortLink?.featureImg?.featureImgUrl) ||
-                ((wsShareId?.trim()?.length ?? 0) > 0 &&
-                  (shareWSMemberId?.trim()?.length ?? 0) > 0 &&
-                  values?.featureImg?.featureImgUrl.trim().length > 0 &&
-                  values?.featureImg?.featureImgUrl !==
-                    swsSelectedShortLink?.featureImg?.featureImgUrl)
+                (isZNonEmptyString(workspaceId) ||
+                  isZNonEmptyStrings([wsShareId, shareWSMemberId])) &&
+                values?.featureImg?.featureImgUrl.trim().length > 0 &&
+                values?.featureImg?.featureImgUrl !==
+                  selectedShortLink?.featureImg?.featureImgUrl
               ) {
                 if (
-                  ((wsShareId?.trim()?.length ?? 0) > 0 &&
-                    (shareWSMemberId?.trim()?.length ?? 0) > 0 &&
-                    swsSelectedShortLink?.featureImg?.featureImgPath !==
-                      undefined &&
-                    swsSelectedShortLink?.featureImg?.featureImgPath?.trim()
-                      ?.length > 0) ??
-                  ((workspaceId?.trim()?.length ?? 0) > 0 &&
-                    selectedShortLink?.featureImg?.featureImgPath !==
-                      undefined &&
-                    selectedShortLink?.featureImg?.featureImgPath?.trim()
-                      ?.length > 0)
+                  (isZNonEmptyString(workspaceId) ||
+                    isZNonEmptyStrings([wsShareId, shareWSMemberId])) &&
+                  selectedShortLink?.featureImg?.featureImgPath !== undefined &&
+                  selectedShortLink?.featureImg?.featureImgPath?.trim()
+                    ?.length > 0
                 ) {
                   await deleteSingleFile({
                     requestData: zStringify({
-                      filePath:
-                        (workspaceId?.trim()?.length ?? 0) > 0
-                          ? selectedShortLink?.featureImg?.featureImgPath
-                          : (wsShareId?.trim()?.length ?? 0) > 0 &&
-                            (shareWSMemberId?.trim()?.length ?? 0) > 0
-                          ? swsSelectedShortLink?.featureImg?.featureImgPath
-                          : ''
+                      filePath: selectedShortLink?.featureImg?.featureImgPath
                     }),
                     itemIds: [],
                     urlDynamicParts: []
@@ -1904,32 +1793,23 @@ const AdminCreateNewLinkPages: React.FC = () => {
                                         <NewLinkFolder
                                           _state={folderState.shortlink}
                                           showSkeleton={
-                                            (workspaceId?.trim()?.length ?? 0) >
-                                            0
+                                            isZNonEmptyString(workspaceId) ||
+                                            isZNonEmptyStrings([
+                                              wsShareId,
+                                              shareWSMemberId
+                                            ])
                                               ? isShortLinksFoldersDataFetching
-                                              : (shareWSMemberId?.trim()
-                                                  ?.length ?? 0) > 0 &&
-                                                (wsShareId?.trim()?.length ??
-                                                  0) > 0
-                                              ? isSWSShortLinksFoldersDataFetching
                                               : undefined
                                           }
                                           _foldersData={
-                                            (workspaceId?.trim()?.length ?? 0) >
-                                              0 &&
-                                            (shortLinksFoldersData !== null ||
-                                              shortLinksFoldersData !==
-                                                undefined)
-                                              ? shortLinksFoldersData ?? []
-                                              : (shareWSMemberId?.trim()
-                                                  ?.length ?? 0) > 0 &&
-                                                (wsShareId?.trim()?.length ??
-                                                  0) > 0 &&
-                                                (swsShortLinksFoldersData !==
-                                                  null ||
-                                                  swsShortLinksFoldersData !==
-                                                    undefined)
-                                              ? swsShortLinksFoldersData ?? []
+                                            (isZNonEmptyString(workspaceId) ||
+                                              isZNonEmptyStrings([
+                                                wsShareId,
+                                                shareWSMemberId
+                                              ])) &&
+                                            shortLinksFoldersData !== null &&
+                                            shortLinksFoldersData !== undefined
+                                              ? shortLinksFoldersData
                                               : []
                                           }
                                         />

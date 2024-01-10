@@ -44,7 +44,8 @@ import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
 // Types
 import {
   AdminPanelSidebarMenuPageEnum,
-  folderState
+  folderState,
+  planFeaturesEnum
 } from '@/types/AdminPanel/index.type';
 import { type LinkInBioType } from '@/types/AdminPanel/linkInBioType';
 import { type workspaceInterface } from '@/types/AdminPanel/workspace';
@@ -64,7 +65,12 @@ import {
 import { useZIonModal, useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 import CONSTANTS from '@/utils/constants';
 import { API_URL_ENUM, ZWSTypeEum } from '@/utils/enums';
-import { _getQueryKey, zStringify } from '@/utils/helpers';
+import {
+  _getQueryKey,
+  isZNonEmptyString,
+  isZNonEmptyStrings,
+  zStringify
+} from '@/utils/helpers';
 import { reportCustomError } from '@/utils/customErrorType';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
@@ -76,6 +82,11 @@ import {
 
 // Styles
 import classes from './styles.module.css';
+import {
+  ZUserCurrentLimitsRStateAtom,
+  ZUserCurrentLimitsRStateSelectorFamily
+} from '@/ZaionsStore/UserAccount/index.recoil';
+import ZReachedLimitModal from '@/components/InPageComponents/ZaionsModals/UpgradeModals/ReachedLimit';
 
 // Lazy loads
 const ZaionsLinkInBioLinksTable = lazy(
@@ -125,6 +136,14 @@ const ZLinkInBiosListPage: React.FC = () => {
 
   // #region Recoils.
   const ZDashboardState = useRecoilValue(ZDashboardRState);
+
+  const setZUserCurrentLimitsRState = useSetRecoilState(
+    ZUserCurrentLimitsRStateAtom
+  );
+
+  const ZUserCurrentLimitsRState = useRecoilValue(
+    ZUserCurrentLimitsRStateSelectorFamily(planFeaturesEnum.linksInBioFolder)
+  );
   // #endregion
 
   // #region APIS requests.
@@ -307,6 +326,9 @@ const ZLinkInBiosListPage: React.FC = () => {
   // #endregion
 
   // #region Modals.
+  const { presentZIonModal: presentZReachedLimitModal } =
+    useZIonModal(ZReachedLimitModal);
+
   const { presentZIonModal: presentFolderModal } = useZIonModal(
     ZaionsAddNewFolder,
     {
@@ -416,6 +438,16 @@ const ZLinkInBiosListPage: React.FC = () => {
   // #endregion
 
   // #region useEffect.
+  useEffect(() => {
+    if (libFoldersData !== undefined && libFoldersData !== null) {
+      setZUserCurrentLimitsRState(oldValues => ({
+        ...oldValues,
+        [planFeaturesEnum.linksInBioFolder]: libFoldersData?.length
+      }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [workspaceId, shareWSMemberId, wsShareId, isLibFoldersDataFetching]);
+
   useEffect(() => {
     try {
       if (
@@ -597,9 +629,15 @@ const ZLinkInBiosListPage: React.FC = () => {
                               }
                               handleFoldersReorder={handleReorder}
                               addNewFolderButtonOnClickHandler={() => {
-                                presentFolderModal({
-                                  _cssClass: 'folder-modal-size'
-                                });
+                                if (ZUserCurrentLimitsRState === false) {
+                                  presentZReachedLimitModal({
+                                    _cssClass: 'reached-limit-modal-size'
+                                  });
+                                } else {
+                                  presentFolderModal({
+                                    _cssClass: 'folder-form-modal'
+                                  });
+                                }
                               }}
                               foldersSaveReorderButtonOnClickHandler={() => {
                                 void linkInBioFoldersReOrderHandler();
@@ -666,6 +704,16 @@ const ZInpageMainContent: React.FC = () => {
   const { zInvalidateReactQueries } = useZInvalidateReactQueries();
   // #endregion
 
+  // #region Recoils.
+  const setZUserCurrentLimitsRState = useSetRecoilState(
+    ZUserCurrentLimitsRStateAtom
+  );
+
+  const ZUserCurrentLimitsRState = useRecoilValue(
+    ZUserCurrentLimitsRStateSelectorFamily(planFeaturesEnum.linkInBio)
+  );
+  // #endregion
+
   // #region Apis.
   // If share-workspace then this api will fetch role & permissions of current user in this share-workspace.
   const { data: getMemberRolePermissions } = useZRQGetRequest<{
@@ -687,7 +735,7 @@ const ZInpageMainContent: React.FC = () => {
     _showLoader: false
   });
 
-  const { data: libData } = useZRQGetRequest<{
+  const { data: libData, isFetching: isLibDataFetching } = useZRQGetRequest<{
     items: LinkInBioType[];
     itemsCount: string;
   }>({
@@ -696,29 +744,26 @@ const ZInpageMainContent: React.FC = () => {
       keys: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN],
       additionalKeys: [workspaceId, wsShareId, shareWSMemberId]
     }),
-    _itemsIds:
-      workspaceId !== undefined &&
-      workspaceId !== null &&
-      workspaceId?.trim()?.length > 0
-        ? [workspaceId, ZWSTypeEum.personalWorkspace]
-        : wsShareId !== undefined &&
-          wsShareId !== null &&
-          wsShareId?.trim()?.length > 0 &&
-          shareWSMemberId !== undefined &&
-          shareWSMemberId !== null &&
-          shareWSMemberId?.trim()?.length > 0
-        ? [shareWSMemberId, ZWSTypeEum.shareWorkspace]
-        : [],
+    _itemsIds: _getQueryKey({
+      keys: [
+        isZNonEmptyString(workspaceId)
+          ? ZWSTypeEum.personalWorkspace
+          : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+          ? ZWSTypeEum.shareWorkspace
+          : ''
+      ],
+      additionalKeys: [workspaceId, shareWSMemberId]
+    }),
     _urlDynamicParts: [
-      CONSTANTS.RouteParams.workspace.workspaceId,
-      CONSTANTS.RouteParams.workspace.type
+      CONSTANTS.RouteParams.workspace.type,
+      CONSTANTS.RouteParams.workspace.workspaceId
     ],
     _shouldFetchWhenIdPassed: !(
-      ((wsShareId?.trim()?.length ?? 0) === 0 &&
-        (shareWSMemberId?.trim()?.length ?? 0) === 0) ||
-      (workspaceId?.trim()?.length ?? 0) === 0
+      isZNonEmptyString(workspaceId) ||
+      isZNonEmptyStrings([wsShareId, shareWSMemberId])
     ),
-    _extractType: ZRQGetRequestExtractEnum.extractData
+    _extractType: ZRQGetRequestExtractEnum.extractData,
+    _showLoader: false
   });
   // #endregion
 
@@ -731,6 +776,9 @@ const ZInpageMainContent: React.FC = () => {
       shareWSMemberId
     }
   );
+
+  const { presentZIonModal: presentZReachedLimitModal } =
+    useZIonModal(ZReachedLimitModal);
   // #endregion
 
   // #region Functions.
@@ -758,6 +806,18 @@ const ZInpageMainContent: React.FC = () => {
       reportCustomError(error);
     }
   };
+  // #endregion
+
+  // #region useEffects
+  useEffect(() => {
+    if (libData?.items !== undefined && libData?.items !== null) {
+      setZUserCurrentLimitsRState(oldValues => ({
+        ...oldValues,
+        [planFeaturesEnum.linkInBio]: libData?.items?.length
+      }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [workspaceId, shareWSMemberId, wsShareId, isLibDataFetching]);
   // #endregion
 
   return (
@@ -1016,9 +1076,15 @@ const ZInpageMainContent: React.FC = () => {
                   CONSTANTS.testingSelectors.linkInBio.listPage.createBtn
                 }
                 onClick={() => {
-                  presentAddLinkInBioModal({
-                    _cssClass: 'folder-modal-size'
-                  });
+                  if (ZUserCurrentLimitsRState === false) {
+                    presentZReachedLimitModal({
+                      _cssClass: 'reached-limit-modal-size'
+                    });
+                  } else {
+                    presentAddLinkInBioModal({
+                      _cssClass: 'lib-create-modal-size'
+                    });
+                  }
                 }}
                 // className={classNames({
                 // 'my-2': true,

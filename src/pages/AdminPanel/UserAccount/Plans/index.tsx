@@ -8,7 +8,9 @@ import React, { useCallback, useMemo, useState } from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
+import { Formik } from 'formik';
 import classNames from 'classnames';
+import { checkmarkCircleOutline } from 'ionicons/icons';
 
 /**
  * Custom Imports go down
@@ -34,44 +36,44 @@ import {
   ZIonText,
   ZIonTitle
 } from '@/components/ZIonComponents';
-import { checkmarkCircleOutline } from 'ionicons/icons';
-import {
-  extractInnerData,
-  isZNonEmptyString,
-  zStringify
-} from '@/utils/helpers';
-import {
-  useZRQCreateRequest,
-  useZRQGetRequest,
-  useZRQUpdateRequest,
-  useZUpdateRQCacheData
-} from '@/ZaionsHooks/zreactquery-hooks';
-import {
-  ZPlanTimeLine,
-  type ZUserSubscriptionI,
-  type ZPlansEnum,
-  type ZaionsPricingI
-} from '@/types/WhyZaions/PricingPage';
-import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
-import CONSTANTS from '@/utils/constants';
-import { Formik } from 'formik';
-import { reportCustomError } from '@/utils/customErrorType';
-import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 /**
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
+import {
+  useZInvalidateReactQueries,
+  useZRQCreateRequest,
+  useZRQGetRequest,
+  useZRQUpdateRequest,
+  useZUpdateRQCacheData
+} from '@/ZaionsHooks/zreactquery-hooks';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
+import {
+  extractInnerData,
+  isZNonEmptyString,
+  zStringify
+} from '@/utils/helpers';
+import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import CONSTANTS from '@/utils/constants';
+import { reportCustomError } from '@/utils/customErrorType';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { type userServicesLimitI } from '@/types/UserAccount/index.type';
+import {
+  ZPlanTimeLine,
+  type ZUserSubscriptionI,
+  ZPlansEnum,
+  type ZaionsPricingI
+} from '@/types/WhyZaions/PricingPage';
 
 /**
  * Recoil State Imports go down
@@ -100,12 +102,15 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
  * */
 
 const ZAccountPlansSettings: React.FC = () => {
-  const [compState, setCompState] = useState<{
+  const [compState] = useState<{
     plan?: ZPlansEnum;
-  }>();
+  }>({
+    plan: ZPlansEnum.free
+  });
   // #region Custom hooks.
   const { isSmScale, isLgScale, isMdScale } = useZMediaQueryScale();
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
+  const { zInvalidateReactQueries } = useZInvalidateReactQueries();
   // #endregion
 
   // #region APIs
@@ -137,6 +142,14 @@ const ZAccountPlansSettings: React.FC = () => {
     _extractType: ZRQGetRequestExtractEnum.extractItem
   });
 
+  const { data: _userServicesLimits } = useZRQGetRequest<userServicesLimitI[]>({
+    _url: API_URL_ENUM.getUserServicesLimits,
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.LIMITS],
+    _extractType: ZRQGetRequestExtractEnum.extractItems,
+    _showLoader: false
+  });
+
+  console.log({ _userServicesLimits });
   // #endregion
 
   // #region Functions
@@ -153,8 +166,8 @@ const ZAccountPlansSettings: React.FC = () => {
         if (isZNonEmptyString(userSubscriptionData?.id)) {
           _response = await upgradePlanSubscriptionAsyncMutate({
             requestData: zStringify(_selectedPlanData),
-            itemIds: [compState?.plan ?? ''],
-            urlDynamicParts: [CONSTANTS.RouteParams.planType]
+            itemIds: [],
+            urlDynamicParts: []
           });
         } else {
           _response = await planSubscriptionAsyncMutate(
@@ -169,6 +182,11 @@ const ZAccountPlansSettings: React.FC = () => {
           );
 
           if (isZNonEmptyString(_data?.id)) {
+            if (_data?.name !== userSubscriptionData?.name) {
+              await zInvalidateReactQueries([
+                CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.LIMITS
+              ]);
+            }
             await updateRQCDataHandler({
               key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SUBSCRIPTION],
               extractType: ZRQGetRequestExtractEnum.extractItem,
@@ -451,7 +469,7 @@ const ZAccountPlansSettings: React.FC = () => {
                   </ZIonCol>
                 </ZIonRow>
 
-                <ZIonRow className='mt-5 border rounded-lg pb-9 ion-justify-content-between zaions__light_bg ion-padding'>
+                <ZIonRow className='mt-5 border rounded-lg pb-9 ion-justify-content-between zaions__light_bg ion-padding gap-y-5'>
                   {isZPlanDataFetching &&
                     isZUserSubscriptionDataFetching &&
                     [...Array(4)].map((_, index) => {
@@ -459,8 +477,8 @@ const ZAccountPlansSettings: React.FC = () => {
                         <ZIonCol
                           sizeXl='2.8'
                           sizeLg='4'
-                          sizeMd='6'
-                          sizeSm='6'
+                          sizeMd='5.9'
+                          sizeSm='5.9'
                           sizeXs='12'
                           key={index}>
                           <ZIonCard className='h-full mx-0'>
@@ -520,8 +538,8 @@ const ZAccountPlansSettings: React.FC = () => {
                         <ZIonCol
                           sizeXl='2.8'
                           sizeLg='4'
-                          sizeMd='6'
-                          sizeSm='6'
+                          sizeMd='5.9'
+                          sizeSm='5.9'
                           sizeXs='12'
                           key={plan.id}>
                           <ZIonCard
@@ -602,10 +620,6 @@ const ZAccountPlansSettings: React.FC = () => {
                                     height='2.5rem'
                                     disabled={_planDisabled}
                                     onClick={() => {
-                                      setCompState(oldValues => ({
-                                        ...oldValues,
-                                        plan: plan.name
-                                      }));
                                       if (!_planDisabled) {
                                         void getStartedClickHandler(
                                           plan?.name,

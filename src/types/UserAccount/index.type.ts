@@ -134,7 +134,35 @@ export interface UserAccountEmailType {
 }
 
 export interface ZUserCurrentLimitsI {
-  currentShortLinks: number;
+  [planFeaturesEnum.shortLinks]?: number;
+  [planFeaturesEnum.members]?: number;
+  [planFeaturesEnum.linkInBio]?: number;
+  [planFeaturesEnum.shortLinksFolder]?: number;
+  [planFeaturesEnum.linksInBioFolder]?: number;
+  [planFeaturesEnum.workspace]?: number;
+  [planFeaturesEnum.redirects]?: number;
+  [planFeaturesEnum.brandedLinks]?: number;
+  [planFeaturesEnum.autoBrandedLinks]?: number;
+  [planFeaturesEnum.customBackHalves]?: number;
+  [planFeaturesEnum.linkClicks]?: number;
+  [planFeaturesEnum.mobileDeepLinks]?: number;
+  [planFeaturesEnum.bulkShortening]?: number;
+  [planFeaturesEnum.qrCodes]?: number;
+  [planFeaturesEnum.customLogo]?: number;
+  [planFeaturesEnum.colorOptions]?: number;
+  [planFeaturesEnum.frames]?: number;
+  [planFeaturesEnum.patternCustomizations]?: number;
+  [planFeaturesEnum.downloadFormat]?: number;
+  [planFeaturesEnum.scans]?: number;
+  [planFeaturesEnum.quantity]?: number;
+  [planFeaturesEnum.branding]?: number;
+  [planFeaturesEnum.preDesignedThemes]?: number;
+  [planFeaturesEnum.customBackgroundColors]?: number;
+  [planFeaturesEnum.buttonAndFontStyles]?: number;
+  [planFeaturesEnum.buttonThumbnails]?: number;
+  [planFeaturesEnum.profileAndBackgroundImageUpload]?: number;
+  [planFeaturesEnum.linkInBioSocialIcons]?: number;
+  [planFeaturesEnum.linkInBioQRCode]?: number;
 }
 
 export interface UserAccountAuthTokenType {

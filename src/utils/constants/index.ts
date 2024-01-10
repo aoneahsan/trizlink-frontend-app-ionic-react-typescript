@@ -134,7 +134,7 @@ export const API_URLS = {
   getUserSubscription: '/user-subscription',
   getUserServicesLimits: '/user/limits',
   makeUserSubscription: `/user/subscribe/${RouteParams.planType}`,
-  upgradeUserSubscription: `/user/upgrade/subscribe/${RouteParams.planType}`,
+  upgradeUserSubscription: '/user/upgrade/subscribe',
   updateUserAccountInfo: '/user/update-account-info',
   updatePassword: '/user/update-password',
   checkIfUsernameIsAvailable: '/user/username/check',
@@ -153,14 +153,14 @@ export const API_URLS = {
   ws_roles_get: '/user/ws-roles',
 
   // Owned workspace members
-  member_sendInvite_list: `/user/workspace/${RouteParams.workspace.workspaceId}/member/send-invitation`,
-  member_getAllInvite_list: `/user/workspace/${RouteParams.workspace.workspaceId}/member`,
-  member_resendInvite_list: `/user/workspace/${RouteParams.workspace.workspaceId}/member/resend-invitation/${RouteParams.workspace.invitationId}`,
-  member_invite_delete: `/user/workspace/${RouteParams.workspace.workspaceId}/member/${RouteParams.workspace.memberInviteId}`,
-  member_invite_get: `/user/workspace/${RouteParams.workspace.workspaceId}/member/${RouteParams.workspace.memberInviteId}`,
-  member_role_update: `/user/workspace/${RouteParams.workspace.workspaceId}/update-role/${RouteParams.workspace.memberInviteId}`,
-  member_update: `/user/workspace/${RouteParams.workspace.workspaceId}/update-invitation/${RouteParams.workspace.memberInviteId}`,
-  member_create_short_url: `/user/workspace/${RouteParams.workspace.workspaceId}/create-short-url/${RouteParams.workspace.memberInviteId}`,
+  member_sendInvite_list: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/member/send-invitation`,
+  member_getAllInvite_list: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/member`,
+  member_resendInvite_list: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/member/resend-invitation/${RouteParams.workspace.invitationId}`,
+  member_invite_delete: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/member/${RouteParams.workspace.memberInviteId}`,
+  member_invite_get: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/member/${RouteParams.workspace.memberInviteId}`,
+  member_role_update: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/update-role/${RouteParams.workspace.memberInviteId}`,
+  member_update: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/update-invitation/${RouteParams.workspace.memberInviteId}`,
+  member_create_short_url: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/create-short-url/${RouteParams.workspace.memberInviteId}`,
   member_check_short_url: `/user/ws-member/short-url/check/${RouteParams.workspace.invitationId}`,
   validate_invitation_status: '/user/validate-and-update-invitation',
 
@@ -198,7 +198,7 @@ export const API_URLS = {
   sws_utm_tag_create_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/utm-tag`,
   sws_utm_tag_update_delete: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/utm-tag/${RouteParams.utmTag.utmTagId}`,
 
-  ShortLink_folders_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/get/shortLink/folders`,
+  ShortLink_folders_create_list: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/get/shortLink/folders`,
   userEmbedWidget_create_list: '/user/embedded-scripts',
   userAccountFolders_update_delete: '/user/folders/:folderId',
   userEmbedWidget_update_delete: '/user/embedded-scripts/:embeddedId',
@@ -215,20 +215,16 @@ export const API_URLS = {
   user_notification_mark_all_as_read: '/user/notification/markAllAsRead',
 
   // Short links
-  shortLinks_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/short-links/page-number/${RouteParams.pageNumber}/limit/${RouteParams.paginationLimit}`,
-  shortLinks_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/short-links`,
-  shortLinks_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}/short-links/${RouteParams.shortLink.shortLinkId}`,
-  shortLinks_is_path_available: `/user/workspaces/${RouteParams.workspace.workspaceId}/sl/is-path-available/${RouteParams.shortLink.path}`,
+  shortLinks_list: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/short-links/page-number/${RouteParams.pageNumber}/limit/${RouteParams.paginationLimit}`,
+  shortLinks_create_list: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/short-links`,
+  shortLinks_update_delete: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/short-links/${RouteParams.shortLink.shortLinkId}`,
+  shortLinks_is_path_available: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/sl/is-path-available/${RouteParams.shortLink.path}`,
   ShortLinks_folders_reorder: '/user/shortLinks/folders/reorder',
   shortLink_get_target_url_info: `/public/s/${RouteParams.urlPath}`,
   shortLink_check_target_password: `/public/s/${RouteParams.urlPath}/check-password`,
 
   // Short links Analytics
   sl_analytics_list: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/sl/${RouteParams.shortLink.shortLinkId}/analytics`,
-
-  // Share workspace short links
-  sws_sl_create_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/short-links`,
-  sws_sl_get_update_delete: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/short-link/${RouteParams.shortLink.shortLinkId}`,
 
   FolderShortLinks: '/user/folders/:folderId/short-links',
   LinkInBio_folders_create_list: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/get/linkInBio/folders`,
@@ -731,6 +727,7 @@ const testingSelectors = {
       displayName: 'pp-display-name',
       email: 'pp-user-email',
       profileSettings: 'pp-profile-settings-btn',
+      billing: 'pp-billing-btn',
       notificationSettings: 'pp-notification-settings-btn',
       logout: 'pp-logout-btn',
       addNewCompanyAccount: 'pp-add-company-account-btn'
@@ -1546,6 +1543,14 @@ const testingSelectors = {
       twoAuthenticationBtn: 'ua-pst-ta-sv-input',
       logoutAllSession: 'ua-pst-logout-all-session'
     }
+  },
+  // #endregion
+
+  // #region Reached limits.
+  reachedLimitModal: {
+    // rlm => reachedLimitModal
+    closeBtn: 'rlm-close-btn',
+    upgradeBtn: 'rlm-upgrade-btn'
   }
   // #endregion
 } as const;

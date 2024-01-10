@@ -82,8 +82,11 @@ import {
 import CONSTANTS from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import {
+  _getQueryKey,
   createRedirectRoute,
   extractInnerData,
+  isZNonEmptyString,
+  isZNonEmptyStrings,
   zStringify
 } from '@/utils/helpers';
 import {
@@ -116,7 +119,8 @@ import {
   ZMembersListPageTableColumnsIds,
   ZTeamMemberInvitationEnum,
   type ZUserSettingInterface,
-  ZUserSettingTypeEnum
+  ZUserSettingTypeEnum,
+  planFeaturesEnum
 } from '@/types/AdminPanel/index.type';
 import { type ZLinkMutateApiType } from '@/types/ZaionsApis.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
@@ -130,6 +134,7 @@ import {
   MembersAccountsRStateAtom,
   MembersFilterOptionsRStateAtom
 } from '@/ZaionsStore/UserDashboard/MemberState/index.recoil';
+import { ZUserCurrentLimitsRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
 
 /**
  * Style files Imports go down
@@ -161,42 +166,39 @@ const ZMembersListTable: React.FC = () => {
   }>();
 
   // #region APIS.
-  // If owned-workspace then this api will fetch members in this owned-workspace.
-  const { data: membersData, isFetching: isMembersFetching } = useZRQGetRequest<
-    WSTeamMembersInterface[]
-  >({
-    _url: API_URL_ENUM.member_getAllInvite_list,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
-      workspaceId ?? ''
-    ],
-    _itemsIds: [workspaceId ?? ''],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-    _shouldFetchWhenIdPassed: !(
-      workspaceId !== undefined &&
-      workspaceId !== null &&
-      (workspaceId?.trim()?.length ?? 0) > 0
-    )
-  });
-
-  // If share-workspace then this api will fetch members in this share-workspace.
-  const { data: swsMembersData, isFetching: isSWSMembersFetching } =
+  // fetch members in this workspace.
+  const { data: wsTeamMembersData, isFetching: isMembersFetching } =
     useZRQGetRequest<WSTeamMembersInterface[]>({
       _url: API_URL_ENUM.member_getAllInvite_list,
-      _key: [
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.SWS_MEMBERS_MAIN,
-        wsShareId ?? ''
+      _key: _getQueryKey({
+        keys: [
+          isZNonEmptyString(workspaceId)
+            ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS
+            : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+            ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.SWS_MEMBERS_MAIN
+            : ''
+        ],
+        additionalKeys: [workspaceId, wsShareId, shareWSMemberId]
+      }),
+      _itemsIds: _getQueryKey({
+        keys: [
+          isZNonEmptyString(workspaceId)
+            ? ZWSTypeEum.personalWorkspace
+            : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+            ? ZWSTypeEum.shareWorkspace
+            : ''
+        ],
+        additionalKeys: [workspaceId, shareWSMemberId]
+      }),
+      _urlDynamicParts: [
+        CONSTANTS.RouteParams.workspace.type,
+        CONSTANTS.RouteParams.workspace.workspaceId
       ],
-      _itemsIds: [shareWSMemberId ?? ''],
-      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
       _shouldFetchWhenIdPassed: !(
-        wsShareId !== undefined &&
-        wsShareId !== null &&
-        wsShareId?.trim()?.length > 0 &&
-        shareWSMemberId !== undefined &&
-        shareWSMemberId !== null &&
-        shareWSMemberId?.trim()?.length > 0
-      )
+        isZNonEmptyString(workspaceId) ||
+        isZNonEmptyStrings([wsShareId, shareWSMemberId])
+      ),
+      _showLoader: false
     });
 
   // If share-workspace then this api will fetch role & permission of current member in this share-workspace.
@@ -235,39 +237,19 @@ const ZMembersListTable: React.FC = () => {
   );
   // #endregion
 
-  let isZFetching = isMembersFetching;
-
-  if (
-    wsShareId !== undefined &&
-    wsShareId !== null &&
-    wsShareId?.trim()?.length > 0 &&
-    shareWSMemberId !== undefined &&
-    shareWSMemberId !== null &&
-    shareWSMemberId?.trim()?.length > 0
-  ) {
-    isZFetching = isSWSMembersFetching;
-  }
+  const isZFetching = isMembersFetching;
 
   return (
     <>
       {isZFetching && <ZaionsMembersTableSkeleton />}
 
       {!isZFetching ? (
-        (workspaceId !== undefined &&
-          workspaceId !== null &&
-          (workspaceId?.trim()?.length ?? 0) > 0 &&
-          membersData !== undefined &&
-          membersData !== null &&
-          membersData?.length > 0) ||
-        (wsShareId !== undefined &&
-          wsShareId !== null &&
-          (wsShareId?.trim()?.length ?? 0) > 0 &&
-          shareWSMemberId !== undefined &&
-          shareWSMemberId !== null &&
-          (shareWSMemberId?.trim()?.length ?? 0) > 0 &&
-          swsMembersData !== undefined &&
-          swsMembersData !== null &&
-          swsMembersData?.length > 0) ? (
+        (isZNonEmptyString(workspaceId) ||
+          isZNonEmptyStrings([wsShareId, shareWSMemberId])) &&
+        (workspaceId?.trim()?.length ?? 0) > 0 &&
+        wsTeamMembersData !== undefined &&
+        wsTeamMembersData !== null &&
+        wsTeamMembersData?.length > 0 ? (
           <ZInpageTable />
         ) : (
           <div className='w-full mb-3 border rounded-lg h-max ion-padding zaions__light_bg'>
@@ -367,39 +349,40 @@ const ZInpageTable: React.FC = () => {
   // #endregion
 
   // #region APIS.
-  // If owned-workspace then this api will fetch members in this owned-workspace.
-  const { data: membersData } = useZRQGetRequest<WSTeamMembersInterface[]>({
+  // fetch members in this workspace.
+  const { data: wsTeamMembersData } = useZRQGetRequest<
+    WSTeamMembersInterface[]
+  >({
     _url: API_URL_ENUM.member_getAllInvite_list,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
-      workspaceId ?? ''
+    _key: _getQueryKey({
+      keys: [
+        isZNonEmptyString(workspaceId)
+          ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS
+          : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+          ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.SWS_MEMBERS_MAIN
+          : ''
+      ],
+      additionalKeys: [workspaceId, wsShareId, shareWSMemberId]
+    }),
+    _itemsIds: _getQueryKey({
+      keys: [
+        isZNonEmptyString(workspaceId)
+          ? ZWSTypeEum.personalWorkspace
+          : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+          ? ZWSTypeEum.shareWorkspace
+          : ''
+      ],
+      additionalKeys: [workspaceId, shareWSMemberId]
+    }),
+    _urlDynamicParts: [
+      CONSTANTS.RouteParams.workspace.type,
+      CONSTANTS.RouteParams.workspace.workspaceId
     ],
-    _itemsIds: [workspaceId ?? ''],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _shouldFetchWhenIdPassed: !(
-      workspaceId !== undefined &&
-      workspaceId !== null &&
-      (workspaceId?.trim()?.length ?? 0) > 0
-    )
-  });
-
-  // If share-workspace then this api will fetch members in this share-workspace.
-  const { data: swsMembersData } = useZRQGetRequest<WSTeamMembersInterface[]>({
-    _url: API_URL_ENUM.member_getAllInvite_list,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.SWS_MEMBERS_MAIN,
-      wsShareId ?? ''
-    ],
-    _itemsIds: [shareWSMemberId ?? ''],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
-    _shouldFetchWhenIdPassed: !(
-      wsShareId !== undefined &&
-      wsShareId !== null &&
-      (wsShareId?.trim()?.length ?? 0) > 0 &&
-      shareWSMemberId !== undefined &&
-      shareWSMemberId !== null &&
-      (shareWSMemberId?.trim()?.length ?? 0) > 0
-    )
+      isZNonEmptyString(workspaceId) ||
+      isZNonEmptyStrings([wsShareId, shareWSMemberId])
+    ),
+    _showLoader: false
   });
 
   const { data: getMemberFiltersData } =
@@ -462,17 +445,10 @@ const ZInpageTable: React.FC = () => {
       _showLoader: false
     });
 
-  // If this is a owned workspace then this api will add a short url in for invitation link.
+  // add a short url in for invitation link.
   const { mutateAsync: invitationLinkShortUrlAsyncMutate } =
     useZRQUpdateRequest({
       _url: API_URL_ENUM.member_create_short_url,
-      _loaderMessage: MESSAGES.MEMBER.INVITE_LINK_API
-    });
-
-  // If this is a share workspace and member has permission to add short url then this api will add a short url in for invitation link.
-  const { mutateAsync: swsInvitationLinkShortUrlAsyncMutate } =
-    useZRQUpdateRequest({
-      _url: API_URL_ENUM.sws_member_create_short_url,
       _loaderMessage: MESSAGES.MEMBER.INVITE_LINK_API
     });
   // #endregion
@@ -496,38 +472,25 @@ const ZInpageTable: React.FC = () => {
     invitationId: string
   ): Promise<void> => {
     try {
-      let _response;
-      if (
-        workspaceId !== undefined &&
-        workspaceId !== null &&
-        (workspaceId?.trim()?.length ?? 0) > 0
-      ) {
-        // WSTeamMembersInterface
-        _response = await invitationLinkShortUrlAsyncMutate({
-          itemIds: [workspaceId, invitationId],
-          urlDynamicParts: [
-            CONSTANTS.RouteParams.workspace.workspaceId,
-            CONSTANTS.RouteParams.workspace.memberInviteId
+      const _response = await invitationLinkShortUrlAsyncMutate({
+        itemIds: _getQueryKey({
+          keys: [
+            isZNonEmptyString(workspaceId)
+              ? ZWSTypeEum.personalWorkspace
+              : isZNonEmptyString(wsShareId) &&
+                isZNonEmptyString(shareWSMemberId)
+              ? ZWSTypeEum.shareWorkspace
+              : ''
           ],
-          requestData: ''
-        });
-      } else if (
-        wsShareId !== undefined &&
-        wsShareId !== null &&
-        wsShareId?.trim()?.length > 0 &&
-        shareWSMemberId !== undefined &&
-        shareWSMemberId !== null &&
-        shareWSMemberId?.trim()?.length > 0
-      ) {
-        _response = await swsInvitationLinkShortUrlAsyncMutate({
-          itemIds: [shareWSMemberId, invitationId],
-          urlDynamicParts: [
-            CONSTANTS.RouteParams.workspace.shareWSMemberId,
-            CONSTANTS.RouteParams.workspace.memberInviteId
-          ],
-          requestData: ''
-        });
-      }
+          additionalKeys: [workspaceId, shareWSMemberId, invitationId]
+        }),
+        urlDynamicParts: [
+          CONSTANTS.RouteParams.workspace.type,
+          CONSTANTS.RouteParams.workspace.workspaceId,
+          CONSTANTS.RouteParams.workspace.memberInviteId
+        ],
+        requestData: ''
+      });
 
       if (_response !== undefined && _response !== null) {
         const _data = extractInnerData<WSTeamMembersInterface>(
@@ -536,34 +499,23 @@ const ZInpageTable: React.FC = () => {
         );
 
         if (_data?.id !== null && _data?.id !== undefined) {
-          if (workspaceId !== undefined) {
-            await updateRQCDataHandler({
-              key: [
-                CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
-                workspaceId
+          await updateRQCDataHandler({
+            key: _getQueryKey({
+              keys: [
+                isZNonEmptyString(workspaceId)
+                  ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS
+                  : isZNonEmptyString(wsShareId) &&
+                    isZNonEmptyString(shareWSMemberId)
+                  ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE
+                      .SWS_MEMBERS_MAIN
+                  : ''
               ],
-              data: _data,
-              id: _data?.id,
-              extractType: ZRQGetRequestExtractEnum.extractItem
-            });
-          } else if (
-            wsShareId !== undefined &&
-            wsShareId !== null &&
-            wsShareId?.trim()?.length > 0 &&
-            shareWSMemberId !== undefined &&
-            shareWSMemberId !== null &&
-            shareWSMemberId?.trim()?.length > 0
-          ) {
-            await updateRQCDataHandler({
-              key: [
-                CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.SWS_MEMBERS_MAIN,
-                wsShareId
-              ],
-              data: _data,
-              id: _data?.id,
-              extractType: ZRQGetRequestExtractEnum.extractItem
-            });
-          }
+              additionalKeys: [workspaceId, wsShareId, shareWSMemberId]
+            }),
+            data: _data,
+            id: _data?.id,
+            extractType: ZRQGetRequestExtractEnum.extractItem
+          });
 
           setCompState(oldValues => ({
             ...oldValues,
@@ -801,30 +753,18 @@ const ZInpageTable: React.FC = () => {
   useEffect(() => {
     try {
       if (
-        workspaceId !== undefined &&
-        workspaceId !== null &&
-        (workspaceId?.trim()?.length ?? 0) > 0 &&
-        membersData !== undefined &&
-        membersData !== null
+        (isZNonEmptyString(workspaceId) ||
+          isZNonEmptyStrings([wsShareId, shareWSMemberId])) &&
+        wsTeamMembersData !== undefined &&
+        wsTeamMembersData !== null
       ) {
-        setMembersDataRState(membersData ?? []);
-      } else if (
-        wsShareId !== null &&
-        wsShareId !== undefined &&
-        wsShareId?.trim()?.length > 0 &&
-        shareWSMemberId !== undefined &&
-        shareWSMemberId !== null &&
-        shareWSMemberId?.trim()?.length > 0 &&
-        swsMembersData !== undefined &&
-        swsMembersData !== null
-      ) {
-        setMembersDataRState(swsMembersData ?? []);
+        setMembersDataRState(wsTeamMembersData);
       }
     } catch (error) {
       reportCustomError(error);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [workspaceId, membersData, swsMembersData, wsShareId, shareWSMemberId]);
+  }, [workspaceId, wsTeamMembersData, wsShareId, shareWSMemberId]);
 
   useEffect(() => {
     try {
@@ -1422,19 +1362,11 @@ const ZMemberActionPopover: React.FC<{
   // #endregion
 
   // #region APIS.
-  // If owner then this api is used to resent invitation to the members.
+  // resent invitation to the members.
   const { mutateAsync: resendInviteMemberAsyncMutate } = useZRQUpdateRequest({
     _url: API_URL_ENUM.member_resendInvite_list,
     _loaderMessage: 'Resending invitation.'
   });
-
-  // If member and has permission to resent invitation then this api is used to resent invitation to other members.
-  const { mutateAsync: resendInviteSWSMemberAsyncMutate } = useZRQUpdateRequest(
-    {
-      _url: API_URL_ENUM.sws_member_resendInvite_list,
-      _loaderMessage: 'Resending invitation.'
-    }
-  );
 
   // If owner then this api is used to cancel invitation.
   const { mutateAsync: updateInvitationAsyncMutate } = useZRQUpdateRequest({
@@ -1442,21 +1374,16 @@ const ZMemberActionPopover: React.FC<{
     _loaderMessage: 'Canceling invitation...'
   });
 
-  // If member and has permission to cancel invitation then this api is used to cancel invitation.
-  const { mutateAsync: updateSWSInvitationAsyncMutate } = useZRQUpdateRequest({
-    _url: API_URL_ENUM.sws_member_update,
-    _loaderMessage: 'Canceling invitation...'
-  });
-
-  // If owner then this api is used to delete invitation.
+  // delete invitation.
   const { mutateAsync: deleteInvitationAsyncMutate } = useZRQDeleteRequest({
     _url: API_URL_ENUM.member_invite_delete
   });
+  // #endregion
 
-  // If member and has permission to delete invitation then this api is used to delete invitation.
-  const { mutateAsync: deleteSWSInvitationAsyncMutate } = useZRQDeleteRequest({
-    _url: API_URL_ENUM.sws_member_invite_delete
-  });
+  // #region Recoils
+  const setZUserCurrentLimitsRState = useSetRecoilState(
+    ZUserCurrentLimitsRStateAtom
+  );
   // #endregion
 
   // #region useEffects
@@ -1523,38 +1450,25 @@ const ZMemberActionPopover: React.FC<{
   // #region Functions.
   const ZResendInvitationHandler = async (): Promise<void> => {
     try {
-      let _response;
-
-      if (
-        workspaceId !== undefined &&
-        workspaceId !== null &&
-        (workspaceId?.trim()?.length ?? 0) > 0
-      ) {
-        _response = await resendInviteMemberAsyncMutate({
-          urlDynamicParts: [
-            CONSTANTS.RouteParams.workspace.workspaceId,
-            CONSTANTS.RouteParams.workspace.invitationId
+      const _response = await resendInviteMemberAsyncMutate({
+        urlDynamicParts: [
+          CONSTANTS.RouteParams.workspace.type,
+          CONSTANTS.RouteParams.workspace.workspaceId,
+          CONSTANTS.RouteParams.workspace.invitationId
+        ],
+        itemIds: _getQueryKey({
+          keys: [
+            isZNonEmptyString(workspaceId)
+              ? ZWSTypeEum.personalWorkspace
+              : isZNonEmptyString(wsShareId) &&
+                isZNonEmptyString(shareWSMemberId)
+              ? ZWSTypeEum.shareWorkspace
+              : ''
           ],
-          itemIds: [workspaceId, membersId],
-          requestData: ''
-        });
-      } else if (
-        wsShareId !== null &&
-        wsShareId !== undefined &&
-        wsShareId?.trim()?.length > 0 &&
-        shareWSMemberId !== undefined &&
-        shareWSMemberId !== null &&
-        shareWSMemberId?.trim()?.length > 0
-      ) {
-        _response = await resendInviteSWSMemberAsyncMutate({
-          urlDynamicParts: [
-            CONSTANTS.RouteParams.workspace.shareWSMemberId,
-            CONSTANTS.RouteParams.workspace.invitationId
-          ],
-          itemIds: [shareWSMemberId, membersId],
-          requestData: ''
-        });
-      }
+          additionalKeys: [workspaceId, shareWSMemberId, membersId]
+        }),
+        requestData: ''
+      });
 
       if ((_response as ZLinkMutateApiType<WSTeamMembersInterface>).success) {
         const _data = extractInnerData<WSTeamMembersInterface>(
@@ -1563,36 +1477,22 @@ const ZMemberActionPopover: React.FC<{
         );
 
         if (_data?.id !== null && _data?.id !== undefined) {
-          if (
-            workspaceId !== undefined &&
-            workspaceId !== null &&
-            (workspaceId?.trim()?.length ?? 0) > 0
-          ) {
-            await updateRQCDataHandler({
-              key: [
-                CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
-                workspaceId
+          await updateRQCDataHandler({
+            key: _getQueryKey({
+              keys: [
+                isZNonEmptyString(workspaceId)
+                  ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS
+                  : isZNonEmptyString(wsShareId) &&
+                    isZNonEmptyString(shareWSMemberId)
+                  ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE
+                      .SWS_MEMBERS_MAIN
+                  : ''
               ],
-              data: _data,
-              id: _data?.id
-            });
-          } else if (
-            wsShareId !== null &&
-            wsShareId !== undefined &&
-            wsShareId?.trim()?.length > 0 &&
-            shareWSMemberId !== undefined &&
-            shareWSMemberId !== null &&
-            shareWSMemberId?.trim()?.length > 0
-          ) {
-            await updateRQCDataHandler({
-              key: [
-                CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.SWS_MEMBERS_MAIN,
-                wsShareId
-              ],
-              data: _data,
-              id: _data?.id
-            });
-          }
+              additionalKeys: [workspaceId, wsShareId, shareWSMemberId]
+            }),
+            data: _data,
+            id: _data?.id
+          });
 
           showSuccessNotification(MESSAGES.MEMBER.INVITE_RESEND);
 
@@ -1645,75 +1545,49 @@ const ZMemberActionPopover: React.FC<{
         status: ZTeamMemberInvitationEnum.cancel
       });
 
-      let _response;
-      if (
-        workspaceId !== undefined &&
-        workspaceId !== null &&
-        (workspaceId?.trim()?.length ?? 0) > 0
-      ) {
-        _response = await updateInvitationAsyncMutate({
-          itemIds: [workspaceId, membersId],
-          urlDynamicParts: [
-            CONSTANTS.RouteParams.workspace.workspaceId,
-            CONSTANTS.RouteParams.workspace.memberInviteId
+      const _response = await updateInvitationAsyncMutate({
+        itemIds: _getQueryKey({
+          keys: [
+            isZNonEmptyString(workspaceId)
+              ? ZWSTypeEum.personalWorkspace
+              : isZNonEmptyString(wsShareId) &&
+                isZNonEmptyString(shareWSMemberId)
+              ? ZWSTypeEum.shareWorkspace
+              : ''
           ],
-          requestData: _stringifyData
-        });
-      } else if (
-        wsShareId !== null &&
-        wsShareId !== undefined &&
-        wsShareId?.trim()?.length > 0 &&
-        shareWSMemberId !== undefined &&
-        shareWSMemberId !== null &&
-        shareWSMemberId?.trim()?.length > 0
-      ) {
-        _response = await updateSWSInvitationAsyncMutate({
-          itemIds: [shareWSMemberId, membersId],
-          urlDynamicParts: [
-            CONSTANTS.RouteParams.workspace.shareWSMemberId,
-            CONSTANTS.RouteParams.workspace.memberInviteId
-          ],
-          requestData: _stringifyData
-        });
-      }
+          additionalKeys: [workspaceId, shareWSMemberId, membersId]
+        }),
+        urlDynamicParts: [
+          CONSTANTS.RouteParams.workspace.type,
+          CONSTANTS.RouteParams.workspace.workspaceId,
+          CONSTANTS.RouteParams.workspace.memberInviteId
+        ],
+        requestData: _stringifyData
+      });
 
-      if (_response !== undefined) {
+      if (_response !== undefined && _response !== null) {
         const _data = extractInnerData<WSTeamMembersInterface>(
           _response,
           extractInnerDataOptionsEnum.createRequestResponseItem
         );
 
         if (_data?.id !== undefined && _data?.id !== null) {
-          if (
-            workspaceId !== undefined &&
-            workspaceId !== null &&
-            (workspaceId?.trim()?.length ?? 0) > 0
-          ) {
-            await updateRQCDataHandler({
-              key: [
-                CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
-                workspaceId
+          await updateRQCDataHandler({
+            key: _getQueryKey({
+              keys: [
+                 isZNonEmptyString(workspaceId)
+                  ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS
+                  : isZNonEmptyString(wsShareId) &&
+                    isZNonEmptyString(shareWSMemberId)
+                  ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE
+                      .SWS_MEMBERS_MAIN
+                  : ''
               ],
-              data: _data,
-              id: _data?.id
-            });
-          } else if (
-            wsShareId !== null &&
-            wsShareId !== undefined &&
-            wsShareId?.trim()?.length > 0 &&
-            shareWSMemberId !== undefined &&
-            shareWSMemberId !== null &&
-            shareWSMemberId?.trim()?.length > 0
-          ) {
-            await updateRQCDataHandler({
-              key: [
-                CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.SWS_MEMBERS_MAIN,
-                wsShareId
-              ],
-              data: _data,
-              id: _data?.id
-            });
-          }
+              additionalKeys: [workspaceId, wsShareId, shareWSMemberId]
+            }),
+            data: _data,
+            id: _data?.id
+          });
 
           showSuccessNotification(MESSAGES.MEMBER.CANCELED);
 
@@ -1728,7 +1602,7 @@ const ZMemberActionPopover: React.FC<{
   // when user won't to delete Invitation and click on the delete button this function will fire and show the confirm alert.
   const deleteMember = async (): Promise<void> => {
     try {
-      if (membersId !== undefined) {
+      if (isZNonEmptyString(membersId)) {
         await presentZIonAlert({
           header: MESSAGES.MEMBER.DELETE_ALERT.HEADER,
           subHeader: MESSAGES.MEMBER.DELETE_ALERT.SUB_HEADER,
@@ -1758,38 +1632,26 @@ const ZMemberActionPopover: React.FC<{
 
   const ZDeleteInvitation = async (): Promise<void> => {
     try {
-      let _response;
+      const _response = await deleteInvitationAsyncMutate({
+        itemIds: _getQueryKey({
+          keys: [
+            isZNonEmptyString(workspaceId)
+              ? ZWSTypeEum.personalWorkspace
+              : isZNonEmptyString(wsShareId) &&
+                isZNonEmptyString(shareWSMemberId)
+              ? ZWSTypeEum.shareWorkspace
+              : ''
+          ],
+          additionalKeys: [workspaceId, shareWSMemberId, membersId]
+        }),
+        urlDynamicParts: [
+          CONSTANTS.RouteParams.workspace.type,
+          CONSTANTS.RouteParams.workspace.workspaceId,
+          CONSTANTS.RouteParams.workspace.memberInviteId
+        ]
+      });
 
-      if (
-        workspaceId !== undefined &&
-        workspaceId !== null &&
-        (workspaceId?.trim()?.length ?? 0) > 0
-      ) {
-        _response = await deleteInvitationAsyncMutate({
-          itemIds: [workspaceId, membersId],
-          urlDynamicParts: [
-            CONSTANTS.RouteParams.workspace.workspaceId,
-            CONSTANTS.RouteParams.workspace.memberInviteId
-          ]
-        });
-      } else if (
-        wsShareId !== null &&
-        wsShareId !== undefined &&
-        wsShareId?.trim()?.length > 0 &&
-        shareWSMemberId !== undefined &&
-        shareWSMemberId !== null &&
-        shareWSMemberId?.trim()?.length > 0
-      ) {
-        _response = await deleteSWSInvitationAsyncMutate({
-          itemIds: [shareWSMemberId, membersId],
-          urlDynamicParts: [
-            CONSTANTS.RouteParams.workspace.shareWSMemberId,
-            CONSTANTS.RouteParams.workspace.memberInviteId
-          ]
-        });
-      }
-
-      if (_response !== undefined) {
+      if (_response !== undefined && _response !== null) {
         const _data = extractInnerData<{ success: boolean }>(
           _response,
           extractInnerDataOptionsEnum.createRequestResponseItem
@@ -1797,82 +1659,53 @@ const ZMemberActionPopover: React.FC<{
 
         if (_data !== undefined && _data?.success) {
           // getting all the members from RQ cache.
-          let _oldMembers: WSTeamMembersInterface[] = [];
-          if (
-            workspaceId !== undefined &&
-            workspaceId !== null &&
-            (workspaceId?.trim()?.length ?? 0) > 0
-          ) {
-            _oldMembers =
-              extractInnerData<WSTeamMembersInterface[]>(
-                getRQCDataHandler<WSTeamMembersInterface[]>({
-                  key: [
-                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
-                    workspaceId
-                  ]
-                }) as WSTeamMembersInterface[],
-                extractInnerDataOptionsEnum.createRequestResponseItems
-              ) ?? [];
-          } else if (
-            wsShareId !== null &&
-            wsShareId !== undefined &&
-            wsShareId?.trim()?.length > 0 &&
-            shareWSMemberId !== undefined &&
-            shareWSMemberId !== null &&
-            shareWSMemberId?.trim()?.length > 0
-          ) {
-            _oldMembers =
-              extractInnerData<WSTeamMembersInterface[]>(
-                getRQCDataHandler<WSTeamMembersInterface[]>({
-                  key: [
-                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE
-                      .SWS_MEMBERS_MAIN,
-                    wsShareId
-                  ]
-                }) as WSTeamMembersInterface[],
-                extractInnerDataOptionsEnum.createRequestResponseItems
-              ) ?? [];
-          }
+          const _oldMembers =
+            extractInnerData<WSTeamMembersInterface[]>(
+              getRQCDataHandler<WSTeamMembersInterface[]>({
+                key: _getQueryKey({
+                  keys: [
+                    isZNonEmptyString(workspaceId)
+                      ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS
+                      : isZNonEmptyString(wsShareId) &&
+                        isZNonEmptyString(shareWSMemberId)
+                      ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE
+                          .SWS_MEMBERS_MAIN
+                      : ''
+                  ],
+                  additionalKeys: [workspaceId, wsShareId, shareWSMemberId]
+                })
+              }) ?? [],
+              extractInnerDataOptionsEnum.createRequestResponseItems
+            ) ?? [];
 
           // removing deleted members from cache.
           const _updatedMembers = _oldMembers?.filter(
             el => el.id !== membersId
           );
 
-          if (
-            workspaceId !== undefined &&
-            workspaceId !== null &&
-            (workspaceId?.trim()?.length ?? 0) > 0
-          ) {
-            await updateRQCDataHandler({
-              key: [
-                CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
-                workspaceId
+          await updateRQCDataHandler({
+            key: _getQueryKey({
+              keys: [
+                isZNonEmptyString(workspaceId)
+                  ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS
+                  : isZNonEmptyString(wsShareId) &&
+                    isZNonEmptyString(shareWSMemberId)
+                  ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE
+                      .SWS_MEMBERS_MAIN
+                  : ''
               ],
-              data: _updatedMembers,
-              id: '',
-              updateHoleData: true,
-              extractType: ZRQGetRequestExtractEnum.extractItems
-            });
-          } else if (
-            wsShareId !== null &&
-            wsShareId !== undefined &&
-            wsShareId?.trim()?.length > 0 &&
-            shareWSMemberId !== undefined &&
-            shareWSMemberId !== null &&
-            shareWSMemberId?.trim()?.length > 0
-          ) {
-            await updateRQCDataHandler({
-              key: [
-                CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.SWS_MEMBERS_MAIN,
-                wsShareId
-              ],
-              data: _updatedMembers,
-              id: '',
-              updateHoleData: true,
-              extractType: ZRQGetRequestExtractEnum.extractItems
-            });
-          }
+              additionalKeys: [workspaceId, wsShareId, shareWSMemberId]
+            }),
+            data: _updatedMembers,
+            id: '',
+            updateHoleData: true,
+            extractType: ZRQGetRequestExtractEnum.extractItems
+          });
+
+          setZUserCurrentLimitsRState(oldValues => ({
+            ...oldValues,
+            [planFeaturesEnum.members]: _updatedMembers?.length
+          }));
 
           showSuccessNotification(MESSAGES.MEMBER.DELETED);
 

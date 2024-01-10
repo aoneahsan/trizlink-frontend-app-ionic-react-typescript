@@ -217,8 +217,13 @@ const ZWorkspacesCard: React.FC<{
           requestData: zStringify({
             status: _item
           }),
-          itemIds: [workspaceId ?? '', memberId ?? ''],
+          itemIds: [
+            ZWSTypeEum.personalWorkspace,
+            workspaceId ?? '',
+            memberId ?? ''
+          ],
           urlDynamicParts: [
+            CONSTANTS.RouteParams.workspace.type,
             CONSTANTS.RouteParams.workspace.workspaceId,
             CONSTANTS.RouteParams.workspace.memberInviteId
           ]

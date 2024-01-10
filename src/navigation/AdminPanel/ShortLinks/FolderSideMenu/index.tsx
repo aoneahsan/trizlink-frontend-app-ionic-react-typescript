@@ -32,10 +32,15 @@ import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import { API_URL_ENUM, PAGE_MENU_SIDE } from '@/utils/enums';
+import { API_URL_ENUM, PAGE_MENU_SIDE, ZWSTypeEum } from '@/utils/enums';
 import CONSTANTS from '@/utils/constants';
 import { reportCustomError } from '@/utils/customErrorType';
-import { zStringify } from '@/utils/helpers';
+import {
+  _getQueryKey,
+  isZNonEmptyString,
+  isZNonEmptyStrings,
+  zStringify
+} from '@/utils/helpers';
 
 /**
  * Type Imports go down
@@ -105,40 +110,38 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
   // #endregion
 
   // #region APIS.
-  // If owned-workspace then this api will fetch owned-workspace-short-links-folder data.
+  // fetch short-links-folder data.
   const { data: shortLinksFoldersData } = useZRQGetRequest<LinkFolderType[]>({
     _url: API_URL_ENUM.ShortLink_folders_create_list,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
-      workspaceId ?? '',
-      folderState.shortlink
+    _key: _getQueryKey({
+      keys: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
+      additionalKeys: [
+        workspaceId,
+        wsShareId,
+        shareWSMemberId,
+        folderState.shortlink
+      ]
+    }),
+    _itemsIds: _getQueryKey({
+      keys: [
+        isZNonEmptyString(workspaceId)
+          ? ZWSTypeEum.personalWorkspace
+          : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+          ? ZWSTypeEum.shareWorkspace
+          : ''
+      ],
+      additionalKeys: [workspaceId, shareWSMemberId]
+    }),
+    _urlDynamicParts: [
+      CONSTANTS.RouteParams.workspace.type,
+      CONSTANTS.RouteParams.workspace.workspaceId
     ],
-    _itemsIds: [workspaceId ?? ''],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _shouldFetchWhenIdPassed: !(
-      workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
+      isZNonEmptyString(workspaceId) ||
+      isZNonEmptyStrings([wsShareId, shareWSMemberId])
     ),
     _showLoader: false
   });
-
-  // If share-workspace then this api will fetch share-workspace-short-links-folders data.
-  const { data: swsShortLinksFoldersData } = useZRQGetRequest<LinkFolderType[]>(
-    {
-      _url: API_URL_ENUM.ws_share_folder_sl_list,
-      _key: [
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
-        wsShareId ?? '',
-        folderState.shortlink
-      ],
-      _itemsIds: [shareWSMemberId ?? ''],
-      _shouldFetchWhenIdPassed: !(
-        shareWSMemberId !== undefined &&
-        (shareWSMemberId?.trim()?.length ?? 0) > 0
-      ),
-      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
-      _showLoader: false
-    }
-  );
 
   // If owned-workspace then this api will used to update the owned-workspace-short-links-folders reorders.
   const { mutateAsync: UpdateShortLinksFoldersReorder } = useZRQUpdateRequest({
@@ -171,6 +174,7 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
       for (let i = 0; i < _shortLinksFoldersEls.length; i++) {
         const _block = _shortLinksFoldersEls[i];
         _shortLinksFoldersIds.push(
+          // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
           _block.getAttribute('data-folder-id') as string
         );
       }
@@ -189,7 +193,7 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
   const shortLinksFoldersReorderHandler = async (): Promise<void> => {
     try {
       let _result;
-      if (workspaceId !== undefined) {
+      if (isZNonEmptyString(workspaceId)) {
         // The update api...
         _result = await UpdateShortLinksFoldersReorder({
           requestData: zStringify({
@@ -209,7 +213,7 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
         });
       }
 
-      if (_result !== undefined) {
+      if (_result !== undefined && _result !== null) {
         // if _result of the UpdateShortLinksFoldersReorder api is success this showing success notification else not success then error notification.
         await validateRequestResponse({
           resultObj: _result
@@ -241,13 +245,11 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
       menuId={CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID}
       contentId={CONSTANTS.PAGE_IDS.AD_SL_LIST_PAGE}
       foldersData={
-        workspaceId !== undefined &&
-        (shortLinksFoldersData !== undefined || shortLinksFoldersData !== null)
-          ? (shortLinksFoldersData as LinkFolderType[])
-          : wsShareId !== undefined &&
-            (swsShortLinksFoldersData !== undefined ||
-              swsShortLinksFoldersData !== null)
-          ? (swsShortLinksFoldersData as LinkFolderType[])
+        (isZNonEmptyString(workspaceId) ||
+          isZNonEmptyStrings([wsShareId, shareWSMemberId])) &&
+        shortLinksFoldersData !== null &&
+        shortLinksFoldersData !== undefined
+          ? shortLinksFoldersData
           : []
       }
       folderActionHandlerFn={(event: unknown) => {

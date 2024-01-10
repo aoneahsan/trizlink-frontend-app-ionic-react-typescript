@@ -11,6 +11,7 @@ import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { addOutline, gitNetworkOutline, starOutline } from 'ionicons/icons';
 import classNames from 'classnames';
 import { type RefresherEventDetail } from '@ionic/react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 /**
  * Custom Imports go down
@@ -38,6 +39,7 @@ import ZCan from '@/components/Can';
 import ZAddNewWorkspaceModal from '@/components/InPageComponents/ZaionsModals/Workspace/CreateModal';
 //
 import { ZFallbackIonSpinner2 } from '@/components/CustomComponents/FallbackSpinner';
+import ZReachedLimitModal from '@/components/InPageComponents/ZaionsModals/UpgradeModals/ReachedLimit';
 
 /**
  * Custom Hooks Imports go down
@@ -66,7 +68,16 @@ import {
   type workspaceInterface,
   type wsShareInterface
 } from '@/types/AdminPanel/workspace';
+import { planFeaturesEnum } from '@/types/AdminPanel/index.type';
 
+/**
+ * Recoil State Imports go down
+ * ? Import of recoil states is a Recoil State import
+ * */
+import {
+  ZUserCurrentLimitsRStateAtom,
+  ZUserCurrentLimitsRStateSelectorFamily
+} from '@/ZaionsStore/UserAccount/index.recoil';
 const ZWorkspacesCard = lazy(
   () => import('@/components/WorkspacesComponents/ListCard')
 );
@@ -78,11 +89,6 @@ const ZWorkspacesCard = lazy(
 const ZAdminPanelTopBar = lazy(
   () => import('@/components/AdminPanelComponents/TopBar')
 );
-
-/**
- * Recoil State Imports go down
- * ? Import of recoil states is a Recoil State import
- * */
 
 /**
  * Style files Imports go down
@@ -113,26 +119,49 @@ const ZWorkspaceListPage: React.FC = () => {
     sharedFavoriteWorkspaces: [],
     ownedFavoriteWorkspaces: []
   });
-  const { presentZIonModal: presentZWorkspaceCreateModal } = useZIonModal(
-    ZAddNewWorkspaceModal
+
+  // #region Custom Hooks
+  const { zInvalidateReactQueries } = useZInvalidateReactQueries();
+  // #endregion
+
+  // #region Recoils
+  const setZUserCurrentLimitsRState = useSetRecoilState(
+    ZUserCurrentLimitsRStateAtom
   );
 
-  const { zInvalidateReactQueries } = useZInvalidateReactQueries();
+  const ZUserCurrentLimitsRState = useRecoilValue(
+    ZUserCurrentLimitsRStateSelectorFamily(planFeaturesEnum.workspace)
+  );
+  // #endregion
 
+  // #region APIs.
   // Get workspaces data from backend.
   const { data: WorkspacesData, isFetching: isWorkspacesDataFetching } =
     useZRQGetRequest<workspaceInterface[]>({
       _url: API_URL_ENUM.workspace_create_list,
-      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN]
+      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN],
+      _showLoader: false
     });
 
   // Get workspaces data from backend.
   const { data: WSShareData, isFetching: isWSShareDataFetching } =
     useZRQGetRequest<wsShareInterface[]>({
       _url: API_URL_ENUM.ws_share_list,
-      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN]
+      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN],
+      _showLoader: false
     });
+  // #endregion
 
+  // #region Modals & Popovers
+  const { presentZIonModal: presentZWorkspaceCreateModal } = useZIonModal(
+    ZAddNewWorkspaceModal
+  );
+
+  const { presentZIonModal: presentZReachedLimitModal } =
+    useZIonModal(ZReachedLimitModal);
+  // #endregion
+
+  // #region useEffects
   useEffect(() => {
     const _sharedFavoriteWorkspaces = WSShareData?.filter(
       el => el?.isFavorite === 1
@@ -157,6 +186,18 @@ const ZWorkspaceListPage: React.FC = () => {
     }
   }, [WorkspacesData, WSShareData]);
 
+  useEffect(() => {
+    if (WorkspacesData !== undefined && WorkspacesData !== null) {
+      setZUserCurrentLimitsRState(oldValues => ({
+        ...oldValues,
+        [planFeaturesEnum.workspace]: WorkspacesData?.length
+      }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isWorkspacesDataFetching]);
+  // #endregion
+
+  // #region Functions
   const zRefetchDataHandler = async (): Promise<void> => {
     try {
       await zInvalidateReactQueries([
@@ -181,6 +222,7 @@ const ZWorkspaceListPage: React.FC = () => {
       reportCustomError(error);
     }
   };
+  // #endregion
 
   const isZFetching = isWorkspacesDataFetching && isWSShareDataFetching;
 
@@ -452,9 +494,15 @@ const ZWorkspaceListPage: React.FC = () => {
                                     .createWorkspaceCardButton
                                 }
                                 onClick={() => {
-                                  presentZWorkspaceCreateModal({
-                                    _cssClass: 'create-workspace-modal-size'
-                                  });
+                                  if (ZUserCurrentLimitsRState === false) {
+                                    presentZReachedLimitModal({
+                                      _cssClass: 'reached-limit-modal-size'
+                                    });
+                                  } else {
+                                    presentZWorkspaceCreateModal({
+                                      _cssClass: 'create-workspace-modal-size'
+                                    });
+                                  }
                                 }}>
                                 <ZIonCardContent className='flex flex-col h-full ion-align-items-center ion-justify-content-center'>
                                   <ZIonIcon

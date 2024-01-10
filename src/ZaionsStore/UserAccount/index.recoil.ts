@@ -18,7 +18,7 @@ import { LOCALSTORAGE_KEYS } from '@/utils/constants';
 import { reportCustomError } from '@/utils/customErrorType';
 import {
   subscriptionTimeLine,
-  type planFeaturesEnum
+  planFeaturesEnum
 } from '@/types/AdminPanel/index.type';
 import { type ZUserSubscriptionI } from '@/types/WhyZaions/PricingPage';
 import dayjs from 'dayjs';
@@ -100,7 +100,8 @@ export const ZCurrentUserSubscriptionRStateAtom = atom<ZUserSubscriptionI>({
 export const ZUserCurrentLimitsRStateAtom = atom<ZUserCurrentLimitsI>({
   key: 'ZUserCurrentLimitsRStateAtom_key',
   default: {
-    currentShortLinks: 0
+    [planFeaturesEnum.shortLinks]: 0,
+    [planFeaturesEnum.shortLinksFolder]: 0
   }
 });
 
@@ -146,8 +147,7 @@ export const ZUserCurrentLimitsRStateSelectorFamily = selectorFamily({
               (_selectService?.maxLimit ?? 0) > 0 &&
               dayjs().isAfter(dayjs(ZCurrentUserSubscription?.startedAt)) &&
               dayjs().isBefore(dayjs(endDate)) &&
-              ZUserCurrentLimits.currentShortLinks <
-                (_selectService?.maxLimit ?? 0)
+              (ZUserCurrentLimits[name] ?? 0) < (_selectService?.maxLimit ?? 0)
             ) {
               return true;
             }

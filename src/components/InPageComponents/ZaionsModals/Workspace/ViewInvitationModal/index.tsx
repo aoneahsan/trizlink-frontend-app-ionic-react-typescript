@@ -41,7 +41,11 @@ import {
  * */
 import CONSTANTS from '@/utils/constants';
 import { reportCustomError } from '@/utils/customErrorType';
-import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import {
+  API_URL_ENUM,
+  extractInnerDataOptionsEnum,
+  ZWSTypeEum
+} from '@/utils/enums';
 import { extractInnerData, zStringify } from '@/utils/helpers';
 import { showSuccessNotification } from '@/utils/notification';
 
@@ -94,6 +98,7 @@ const ZViewInvitationModal: React.FC<{
 
   // #region APIS.
   // api to get Invitation data
+
   const { data: userInvitationData, isFetching: isInvitationFetching } =
     useZRQGetRequest<WSTeamMembersInterface>({
       _url: API_URL_ENUM.member_invite_get,
@@ -103,8 +108,9 @@ const ZViewInvitationModal: React.FC<{
       ],
       _showLoader: false,
       _checkPermissions: false,
-      _itemsIds: [workspaceId, memberInviteId],
+      _itemsIds: [ZWSTypeEum.personalWorkspace, workspaceId, memberInviteId],
       _urlDynamicParts: [
+        CONSTANTS.RouteParams.workspace.type,
         CONSTANTS.RouteParams.workspace.workspaceId,
         CONSTANTS.RouteParams.workspace.memberInviteId
       ],
@@ -137,8 +143,9 @@ const ZViewInvitationModal: React.FC<{
           requestData: zStringify({
             status: _item
           }),
-          itemIds: [workspaceId, memberInviteId],
+          itemIds: [ZWSTypeEum.personalWorkspace, workspaceId, memberInviteId],
           urlDynamicParts: [
+            CONSTANTS.RouteParams.workspace.type,
             CONSTANTS.RouteParams.workspace.workspaceId,
             CONSTANTS.RouteParams.workspace.memberInviteId
           ]

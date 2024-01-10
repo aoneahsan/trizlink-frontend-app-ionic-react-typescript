@@ -106,7 +106,7 @@ const NewLinkFolder: React.FC<{
           }
           onClick={() => {
             presentFolderModal({
-              _cssClass: 'folder-modal-size'
+              _cssClass: 'folder-form-modal'
             });
           }}
         />

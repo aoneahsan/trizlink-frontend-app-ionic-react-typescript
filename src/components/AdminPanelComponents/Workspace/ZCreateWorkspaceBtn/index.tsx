@@ -38,6 +38,10 @@ import { API_URL_ENUM } from '@/utils/enums';
 import { type workspaceInterface } from '@/types/AdminPanel/workspace';
 import classNames from 'classnames';
 import { isZNonEmptyString } from '@/utils/helpers';
+import ZReachedLimitModal from '@/components/InPageComponents/ZaionsModals/UpgradeModals/ReachedLimit';
+import { useRecoilValue } from 'recoil';
+import { ZUserCurrentLimitsRStateSelectorFamily } from '@/ZaionsStore/UserAccount/index.recoil';
+import { planFeaturesEnum } from '@/types/AdminPanel/index.type';
 
 /**
  * Workspace create button
@@ -61,6 +65,13 @@ const ZCreateWorkspaceBtn: React.FC<{
     ZAddNewWorkspaceModal
   );
 
+  const { presentZIonModal: presentZReachedLimitModal } =
+    useZIonModal(ZReachedLimitModal);
+
+  const ZUserCurrentLimitsRState = useRecoilValue(
+    ZUserCurrentLimitsRStateSelectorFamily(planFeaturesEnum.workspace)
+  );
+
   return (
     <ZIonButton
       color='secondary'
@@ -76,9 +87,15 @@ const ZCreateWorkspaceBtn: React.FC<{
       }
       onClick={() => {
         if (!isWorkspacesDataFetching) {
-          presentZWorkspaceCreateModal({
-            _cssClass: 'create-workspace-modal-size'
-          });
+          if (ZUserCurrentLimitsRState === false) {
+            presentZReachedLimitModal({
+              _cssClass: 'reached-limit-modal-size'
+            });
+          } else {
+            presentZWorkspaceCreateModal({
+              _cssClass: 'create-workspace-modal-size'
+            });
+          }
         }
       }}>
       <ZIonIcon

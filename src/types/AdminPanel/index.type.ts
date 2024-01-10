@@ -38,7 +38,12 @@ export enum subscriptionTimeLine {
 }
 
 export enum planFeaturesEnum {
+  workspace = 'workspace',
   shortLinks = 'shortLinks',
+  linkInBio = 'linkInBio',
+  members = 'members',
+  shortLinksFolder = 'shortLinksFolder',
+  linksInBioFolder = 'linksInBioFolder',
   redirects = 'redirects',
   brandedLinks = 'brandedLinks',
   autoBrandedLinks = 'autoBrandedLinks',

@@ -9,7 +9,7 @@ import React from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import { pencilOutline, trashOutline } from 'ionicons/icons';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
 /**
  * Custom Imports go down
@@ -61,7 +61,11 @@ import {
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { folderState, FormMode } from '@/types/AdminPanel/index.type';
+import {
+  folderState,
+  FormMode,
+  planFeaturesEnum
+} from '@/types/AdminPanel/index.type';
 import { type LinkFolderType } from '@/types/AdminPanel/linksType';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
@@ -70,6 +74,7 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
  * ? Import of recoil states is a Recoil State import
  * */
 import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil';
+import { ZUserCurrentLimitsRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
 
 /**
  * Style files Imports go down
@@ -117,6 +122,10 @@ const FolderActionsPopoverContent: React.FC<{
    */
   const [folderFormState, setFolderFormState] = useRecoilState(FolderFormState);
 
+  const setZUserCurrentLimitsRState = useSetRecoilState(
+    ZUserCurrentLimitsRStateAtom
+  );
+
   /**
    * delete short link folder api.
    */
@@ -142,6 +151,7 @@ const FolderActionsPopoverContent: React.FC<{
             {
               text: 'Delete',
               role: 'danger',
+              cssClass: 'zaions_ion_color_danger',
               handler: () => {
                 void removeFolderAccount();
               }
@@ -279,6 +289,18 @@ const FolderActionsPopoverContent: React.FC<{
               });
             }
 
+            // updating limit recoil sate
+            if (state === folderState.shortlink) {
+              setZUserCurrentLimitsRState(oldValues => ({
+                ...oldValues,
+                [planFeaturesEnum.shortLinksFolder]: _updatedFolders?.length
+              }));
+            } else if (state === folderState.linkInBio) {
+              setZUserCurrentLimitsRState(oldValues => ({
+                ...oldValues,
+                [planFeaturesEnum.linksInBioFolder]: _updatedFolders?.length
+              }));
+            }
             // setting the folderFormState to initial state because the value of this recoil state is used as the initial values of the short link folder form, when we click on the delete button in popover it will store the value or that folder in this recoil state. because we need it in here for example the id to delete the folder.
             setFolderFormState(oldVal => ({
               ...oldVal,
@@ -337,7 +359,7 @@ const FolderActionsPopoverContent: React.FC<{
           testinglistselector={`${CONSTANTS.testingSelectors.folder.editBtn}-${state}-${folderFormState.id}`}
           onClick={() => {
             presentFolderModal({
-              _cssClass: 'folder-modal-size'
+              _cssClass: 'folder-form-modal'
             });
           }}>
           <ZIonIcon

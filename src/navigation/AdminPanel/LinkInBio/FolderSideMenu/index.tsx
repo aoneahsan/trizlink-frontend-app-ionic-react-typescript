@@ -102,6 +102,7 @@ const AdminPanelLinkInBioFolderSideMenu: React.FC<{ workspaceId: string }> = ({
       for (let i = 0; i < _shortLinksFoldersEls.length; i++) {
         const _block = _shortLinksFoldersEls[i];
         _shortLinksFoldersIds.push(
+          // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
           _block.getAttribute('data-folder-id') as string
         );
       }

@@ -35,7 +35,7 @@ import {
   useZRemoveRQCacheData,
   useZRQGetRequest
 } from '@/ZaionsHooks/zreactquery-hooks';
-import { API_URL_ENUM } from '@/utils/enums';
+import { API_URL_ENUM, ZWSTypeEum } from '@/utils/enums';
 import CONSTANTS from '@/utils/constants';
 import { reportCustomError } from '@/utils/customErrorType';
 
@@ -47,6 +47,7 @@ import { DefaultDomainsState } from '@/ZaionsStore/UserDashboard/CustomDomainSta
 // Types
 import { type ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { _getQueryKey, isZNonEmptyString } from '@/utils/helpers';
 
 // Styles
 
@@ -71,24 +72,38 @@ const DomainName: React.FC<{
   const { getRQCDataHandler } = useZGetRQCacheData();
 
   // getting workspace and shortlink ids from url with the help of useParams.
-  const { workspaceId } = useParams<{
+  const { workspaceId, wsShareId, shareWSMemberId } = useParams<{
     workspaceId?: string;
+    wsShareId?: string;
+    shareWSMemberId?: string;
   }>();
 
   const { data: zIsPathAvailable, refetch: refetchZIsPathAvailable } =
     useZRQGetRequest<{ isAvailable: boolean; message: string; value: string }>({
       _url: API_URL_ENUM.shortLinks_is_path_available,
-      _key: [
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.IS_PATH_AVAILABLE,
-        workspaceId ?? ''
-      ],
+      _key: _getQueryKey({
+        keys: [
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.IS_PATH_AVAILABLE
+        ],
+        additionalKeys: [workspaceId, wsShareId, shareWSMemberId]
+      }),
       _shouldFetchWhenIdPassed: !(
         values?.shortUrlPath !== undefined &&
         values?.shortUrlPath?.trim()?.length === 6 &&
         initialValues?.shortUrlPath !== values?.shortUrlPath
       ),
-      _itemsIds: [workspaceId ?? '', values?.shortUrlPath ?? ''],
+      _itemsIds: _getQueryKey({
+        keys: [
+          isZNonEmptyString(workspaceId)
+            ? ZWSTypeEum.personalWorkspace
+            : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+            ? ZWSTypeEum.shareWorkspace
+            : ''
+        ],
+        additionalKeys: [workspaceId, shareWSMemberId, values?.shortUrlPath]
+      }),
       _urlDynamicParts: [
+        CONSTANTS.RouteParams.workspace.type,
         CONSTANTS.RouteParams.workspace.workspaceId,
         CONSTANTS.RouteParams.shortLink.path
       ],

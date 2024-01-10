@@ -9,6 +9,7 @@ import React from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import {
+  cardOutline,
   logOutOutline,
   notificationsOutline,
   settingsOutline
@@ -198,6 +199,7 @@ const ZWorkspaceProfilePopover: React.FC<{
       <ZIonList
         lines='full'
         className='pb-0'>
+        {/* Profile settings  */}
         <ZIonItem
           className='text-sm cursor-pointer ion-activatable ion-focusable'
           minHeight='32px'
@@ -217,6 +219,27 @@ const ZWorkspaceProfilePopover: React.FC<{
           <ZIonLabel className='pt-1'>Profile settings</ZIonLabel>
         </ZIonItem>
 
+        {/* Billing */}
+        <ZIonItem
+          className='text-sm cursor-pointer ion-activatable ion-focusable'
+          minHeight='32px'
+          testingselector={
+            CONSTANTS.testingSelectors.user.profilePopover.billing
+          }
+          onClick={() => {
+            zNavigatePushRoute(
+              ZaionsRoutes.AdminPanel.Setting.UserAccount.AccountPlansSettings
+            );
+            dismissZIonPopover();
+          }}>
+          <ZIonIcon
+            icon={cardOutline}
+            className='w-5 h-5 me-2'
+          />
+          <ZIonLabel className='pt-1'>Billing</ZIonLabel>
+        </ZIonItem>
+
+        {/* Notification settings */}
         <ZIonItem
           className='text-sm cursor-pointer ion-activatable ion-focusable'
           minHeight='40px'
@@ -236,6 +259,7 @@ const ZWorkspaceProfilePopover: React.FC<{
           <ZIonLabel className='pt-1 my-0'>Notification settings</ZIonLabel>
         </ZIonItem>
 
+        {/* Logout */}
         <ZIonItem
           className='text-sm cursor-pointer ion-activatable ion-focusable'
           minHeight='40px'

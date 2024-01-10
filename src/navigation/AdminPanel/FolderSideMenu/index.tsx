@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React from 'react';
+import React, { useEffect } from 'react';
 
 /**
  * Packages Imports go down
@@ -18,7 +18,7 @@ import {
 } from 'ionicons/icons';
 import { useParams } from 'react-router';
 import classNames from 'classnames';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 /**
  * Custom Imports go down
@@ -65,7 +65,11 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { type LinkFolderType } from '@/types/AdminPanel/linksType';
-import { folderState, FormMode } from '@/types/AdminPanel/index.type';
+import {
+  folderState,
+  FormMode,
+  planFeaturesEnum
+} from '@/types/AdminPanel/index.type';
 
 /**
  * Recoil State Imports go down
@@ -78,6 +82,11 @@ import {
   permissionsTypeEnum,
   shareWSPermissionEnum
 } from '@/utils/enums/RoleAndPermissions';
+import {
+  ZUserCurrentLimitsRStateAtom,
+  ZUserCurrentLimitsRStateSelectorFamily
+} from '@/ZaionsStore/UserAccount/index.recoil';
+import ZReachedLimitModal from '@/components/InPageComponents/ZaionsModals/UpgradeModals/ReachedLimit';
 
 /**
  * Style files Imports go down
@@ -137,6 +146,14 @@ const AdminPanelFoldersSidebarMenu: React.FC<
 
   const setFolderFormState = useSetRecoilState(FolderFormState);
 
+  const setZUserCurrentLimitsRState = useSetRecoilState(
+    ZUserCurrentLimitsRStateAtom
+  );
+
+  const ZUserCurrentLimitsRState = useRecoilValue(
+    ZUserCurrentLimitsRStateSelectorFamily(planFeaturesEnum.shortLinksFolder)
+  );
+
   // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
   const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
     workspaceId?: string;
@@ -154,7 +171,27 @@ const AdminPanelFoldersSidebarMenu: React.FC<
     }
   );
 
+  const { presentZIonModal: presentZReachedLimitModal } =
+    useZIonModal(ZReachedLimitModal);
+
   const _zIonContentStyle = { '--padding-top': '7px' };
+
+  useEffect(() => {
+    if (foldersData !== undefined && foldersData !== null) {
+      if (state === folderState.shortlink) {
+        setZUserCurrentLimitsRState(oldValues => ({
+          ...oldValues,
+          [planFeaturesEnum.shortLinksFolder]: foldersData?.length
+        }));
+      } else if (state === folderState.linkInBio) {
+        setZUserCurrentLimitsRState(oldValues => ({
+          ...oldValues,
+          [planFeaturesEnum.linksInBioFolder]: foldersData?.length
+        }));
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [workspaceId, shareWSMemberId, wsShareId, foldersData?.length]);
 
   return (
     <ZIonMenu
@@ -461,15 +498,21 @@ const AdminPanelFoldersSidebarMenu: React.FC<
                 fill='outline'
                 expand='block'
                 onClick={() => {
-                  setFolderFormState(oldVal => ({
-                    ...oldVal,
-                    id: '',
-                    name: '',
-                    formMode: FormMode.ADD
-                  }));
-                  presentFolderModal({
-                    _cssClass: 'link-in-bio-folder-modal'
-                  });
+                  if (ZUserCurrentLimitsRState === false) {
+                    presentZReachedLimitModal({
+                      _cssClass: 'reached-limit-modal-size'
+                    });
+                  } else {
+                    setFolderFormState(oldVal => ({
+                      ...oldVal,
+                      id: '',
+                      name: '',
+                      formMode: FormMode.ADD
+                    }));
+                    presentFolderModal({
+                      _cssClass: 'folder-form-modal'
+                    });
+                  }
                 }}>
                 New Folder
               </ZIonButton>

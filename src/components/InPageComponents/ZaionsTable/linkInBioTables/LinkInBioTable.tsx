@@ -100,8 +100,10 @@ import ZaionsAddLinkInBioModal from '../../ZaionsModals/AddNewLinkInBioModal';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import {
   type ZUserSettingInterface,
-  ZUserSettingTypeEnum
+  ZUserSettingTypeEnum,
+  planFeaturesEnum
 } from '@/types/AdminPanel/index.type';
+import { ZUserCurrentLimitsRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
 
 // Styles
 
@@ -244,7 +246,7 @@ const ZaionsLinkInBioLinksTable: React.FC<{
                   (workspaceId?.trim()?.length ?? 0) > 0
                 ) {
                   presentAddLinkInBioModal({
-                    _cssClass: 'folder-modal-size'
+                    _cssClass: 'lib-create-modal-size'
                   });
                 }
               }}
@@ -1273,6 +1275,10 @@ const ZLinkInBioActionPopover: React.FC<{
   const { getRQCDataHandler } = useZGetRQCacheData();
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
 
+  const setZUserCurrentLimitsRState = useSetRecoilState(
+    ZUserCurrentLimitsRStateAtom
+  );
+
   // #region APIS requests.
   const { mutateAsync: deleteLinkInBioLinkMutateAsync } = useZRQDeleteRequest({
     _url: API_URL_ENUM.linkInBio_update_delete
@@ -1436,6 +1442,11 @@ const ZLinkInBioActionPopover: React.FC<{
               extractType: ZRQGetRequestExtractEnum.extractItems,
               updateHoleData: true
             });
+
+            setZUserCurrentLimitsRState(oldValues => ({
+              ...oldValues,
+              [planFeaturesEnum.linkInBio]: _updatedLinkInBios?.length
+            }));
 
             dismissZIonPopover();
 

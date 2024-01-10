@@ -61,7 +61,8 @@ import {
   replaceRouteParams,
   replaceParams,
   isZNonEmptyString,
-  _getQueryKey
+  _getQueryKey,
+  isZNonEmptyStrings
 } from '@/utils/helpers';
 import {
   API_URL_ENUM,
@@ -98,7 +99,8 @@ import {
   FormMode,
   messengerPlatformsBlockEnum,
   type ZUserSettingInterface,
-  ZUserSettingTypeEnum
+  ZUserSettingTypeEnum,
+  planFeaturesEnum
 } from '@/types/AdminPanel/index.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
@@ -158,36 +160,39 @@ const ZaionsShortLinkTable: React.FC<{
     _showLoader: false
   });
 
-  // Request for getting short links data.
-  const { data: ShortLinksData } = useZRQGetRequest<{
+  const { data: shortLinksData } = useZRQGetRequest<{
     items: ShortLinkType[];
     itemsCount: string;
   }>({
     _url: API_URL_ENUM.shortLinks_list,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
-      workspaceId ?? ''
+    _key: _getQueryKey({
+      keys: [
+        isZNonEmptyString(workspaceId)
+          ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN
+          : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+          ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN
+          : ''
+      ],
+      additionalKeys: [workspaceId, wsShareId, shareWSMemberId]
+    }),
+    _itemsIds: _getQueryKey({
+      keys: [
+        isZNonEmptyString(workspaceId)
+          ? ZWSTypeEum.personalWorkspace
+          : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+          ? ZWSTypeEum.shareWorkspace
+          : ''
+      ],
+      additionalKeys: [workspaceId, shareWSMemberId]
+    }),
+    _urlDynamicParts: [
+      CONSTANTS.RouteParams.workspace.type,
+      CONSTANTS.RouteParams.workspace.workspaceId
     ],
-    _shouldFetchWhenIdPassed: !((workspaceId?.trim()?.length ?? 0) > 0),
-    _itemsIds: [workspaceId ?? ''],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-    _showLoader: false,
-    _extractType: ZRQGetRequestExtractEnum.extractData
-  });
-
-  // Request for getting share workspace short links data.
-  const { data: swsShortLinksData } = useZRQGetRequest<{
-    items: ShortLinkType[];
-    itemsCount: string;
-  }>({
-    _url: API_URL_ENUM.sws_sl_create_list,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN,
-      wsShareId ?? ''
-    ],
-    _shouldFetchWhenIdPassed: !((wsShareId?.trim()?.length ?? 0) > 0),
-    _itemsIds: [shareWSMemberId ?? ''],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+    _shouldFetchWhenIdPassed: !(
+      isZNonEmptyString(workspaceId) ||
+      isZNonEmptyStrings([wsShareId, shareWSMemberId])
+    ),
     _showLoader: false,
     _extractType: ZRQGetRequestExtractEnum.extractData
   });
@@ -253,8 +258,7 @@ const ZaionsShortLinkTable: React.FC<{
   return (
     <>
       {!showSkeleton ? (
-        (ShortLinksData?.items?.length ?? 0) > 0 ||
-        (swsShortLinksData?.items?.length ?? 0) > 0 ? (
+        (shortLinksData?.items?.length ?? 0) > 0 ? (
           <ZInpageTable />
         ) : (
           <div className='w-full mb-3 border rounded-lg h-max ion-padding zaions__light_bg'>
@@ -365,19 +369,34 @@ const ZInpageTable: React.FC = () => {
       itemsCount: string;
     }>({
       _url: API_URL_ENUM.shortLinks_list,
-      _key: [
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
-        workspaceId ?? ''
-        // String(pageindex)
-        // String(pagesize)
-      ],
-      _shouldFetchWhenIdPassed: !((workspaceId?.trim()?.length ?? 0) > 0),
-      _itemsIds: [workspaceId ?? '', String(pageindex), String(pagesize)],
+      _key: _getQueryKey({
+        keys: [
+          isZNonEmptyString(workspaceId)
+            ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN
+            : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+            ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN
+            : ''
+        ],
+        additionalKeys: [workspaceId, wsShareId, shareWSMemberId]
+      }),
+      _itemsIds: _getQueryKey({
+        keys: [
+          isZNonEmptyString(workspaceId)
+            ? ZWSTypeEum.personalWorkspace
+            : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+            ? ZWSTypeEum.shareWorkspace
+            : ''
+        ],
+        additionalKeys: [workspaceId, shareWSMemberId]
+      }),
       _urlDynamicParts: [
-        CONSTANTS.RouteParams.workspace.workspaceId,
-        CONSTANTS.RouteParams.pageNumber,
-        CONSTANTS.RouteParams.paginationLimit
+        CONSTANTS.RouteParams.workspace.type,
+        CONSTANTS.RouteParams.workspace.workspaceId
       ],
+      _shouldFetchWhenIdPassed: !(
+        isZNonEmptyString(workspaceId) ||
+        isZNonEmptyStrings([wsShareId, shareWSMemberId])
+      ),
       _showLoader: false,
       _extractType: ZRQGetRequestExtractEnum.extractData
     });
@@ -406,19 +425,6 @@ const ZInpageTable: React.FC = () => {
   // });
   // console.log({ ShortLinksInfiniteQueryData });
   // console.log({ hasNextPage, isFetching, isFetchingNextPage, status });
-
-  // Request for getting share workspace short links data.
-  const { data: swsShortLinksData } = useZRQGetRequest<ShortLinkType[]>({
-    _url: API_URL_ENUM.sws_sl_create_list,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN,
-      wsShareId ?? ''
-    ],
-    _shouldFetchWhenIdPassed: !((wsShareId?.trim()?.length ?? 0) > 0),
-    _itemsIds: [shareWSMemberId ?? ''],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
-    _showLoader: false
-  });
 
   // fetch workspace-short-link filters options data.
   const { data: getShortLinkFiltersData } =
@@ -833,21 +839,17 @@ const ZInpageTable: React.FC = () => {
   useEffect(() => {
     try {
       if (
-        (workspaceId?.trim()?.length ?? 0) > 0 &&
+        (isZNonEmptyString(workspaceId) ||
+          isZNonEmptyStrings([wsShareId, shareWSMemberId])) &&
         ShortLinksData !== undefined
       ) {
         setShortLinksStateAtom(ShortLinksData?.items);
-      } else if (
-        (wsShareId?.trim()?.length ?? 0) > 0 &&
-        (shareWSMemberId?.trim()?.length ?? 0) > 0
-      ) {
-        setShortLinksStateAtom(swsShortLinksData ?? []);
       }
     } catch (error) {
       reportCustomError(error);
     }
     // eslint-disable-next-line
-  }, [ShortLinksData?.items?.length, swsShortLinksData]);
+  }, [ShortLinksData?.items?.length]);
 
   useEffect(() => {
     if (!isShortLinksDataFetching) {
@@ -1511,14 +1513,9 @@ export const ZShortLinkActionPopover: React.FC<{
   const { getRQCDataHandler } = useZGetRQCacheData();
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
 
-  // If owned workspace then this api is used to delete short link.
+  // delete short link api.
   const { mutateAsync: deleteShortLinkMutate } = useZRQDeleteRequest({
     _url: API_URL_ENUM.shortLinks_update_delete
-  });
-
-  // If share workspace then this api is used to delete share ws short link.
-  const { mutateAsync: deleteSWSShortLinkMutate } = useZRQDeleteRequest({
-    _url: API_URL_ENUM.sws_sl_get_update_delete
   });
 
   // when user won't to delete short link and click on the delete button this function will fire and show the confirm alert.
@@ -1565,28 +1562,24 @@ export const ZShortLinkActionPopover: React.FC<{
         shortLinkId?.trim()?.length > 0 &&
         _filteredShortLinkDataSelector?.length !== null
       ) {
-        let _response;
-
-        if ((workspaceId?.trim()?.length ?? 0) > 0) {
-          _response = await deleteShortLinkMutate({
-            itemIds: [workspaceId, shortLinkId],
-            urlDynamicParts: [
-              CONSTANTS.RouteParams.workspace.workspaceId,
-              CONSTANTS.RouteParams.shortLink.shortLinkId
-            ]
-          });
-        } else if (
-          (wsShareId?.trim()?.length ?? 0) > 0 &&
-          (shareWSMemberId?.trim()?.length ?? 0) > 0
-        ) {
-          _response = await deleteSWSShortLinkMutate({
-            itemIds: [shareWSMemberId, shortLinkId],
-            urlDynamicParts: [
-              CONSTANTS.RouteParams.workspace.shareWSMemberId,
-              CONSTANTS.RouteParams.shortLink.shortLinkId
-            ]
-          });
-        }
+        const _response = await deleteShortLinkMutate({
+          itemIds: _getQueryKey({
+            keys: [
+              isZNonEmptyString(workspaceId)
+                ? ZWSTypeEum.personalWorkspace
+                : isZNonEmptyString(wsShareId) &&
+                  isZNonEmptyString(shareWSMemberId)
+                ? ZWSTypeEum.shareWorkspace
+                : ''
+            ],
+            additionalKeys: [workspaceId, shareWSMemberId, shortLinkId]
+          }),
+          urlDynamicParts: [
+            CONSTANTS.RouteParams.workspace.type,
+            CONSTANTS.RouteParams.workspace.workspaceId,
+            CONSTANTS.RouteParams.shortLink.shortLinkId
+          ]
+        });
 
         if (_response !== undefined && _response !== null) {
           const _data = extractInnerData<{ success: boolean }>(
@@ -1619,7 +1612,7 @@ export const ZShortLinkActionPopover: React.FC<{
             const _updatedShortLinks = _oldShortLinks.filter(
               el => el.id !== shortLinkId
             );
-            console.log({ _updatedShortLinks });
+
             // Updating data in RQ cache.
             await updateRQCDataHandler<ShortLinkType[] | undefined>({
               key: _getQueryKey({
@@ -1642,7 +1635,7 @@ export const ZShortLinkActionPopover: React.FC<{
             // Updating short link in UserCurrentLimits.
             setZUserCurrentLimitsRState(oldValues => ({
               ...oldValues,
-              currentShortLinks: _updatedShortLinks?.length
+              [planFeaturesEnum.shortLinks]: _updatedShortLinks?.length
             }));
 
             showSuccessNotification(MESSAGES.SHORT_LINKS.DELETE);

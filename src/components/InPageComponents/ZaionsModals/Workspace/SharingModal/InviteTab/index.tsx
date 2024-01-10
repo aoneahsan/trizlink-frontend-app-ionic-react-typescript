@@ -19,6 +19,7 @@ import {
 import classNames from 'classnames';
 import { Formik } from 'formik';
 import { AxiosError } from 'axios';
+import { useSetRecoilState } from 'recoil';
 
 /**
  * Custom Imports go down
@@ -36,6 +37,7 @@ import {
   ZIonTitle
 } from '@/components/ZIonComponents';
 import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
+import ZReachedLimitModal from '@/components/InPageComponents/ZaionsModals/UpgradeModals/ReachedLimit';
 import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
 import ZaionsSeparator from '@/components/InPageComponents/ZaionsSepatator/ZaionsSeparator';
 
@@ -44,7 +46,7 @@ import ZaionsSeparator from '@/components/InPageComponents/ZaionsSepatator/Zaion
  * ? Like import of custom Hook is a custom import
  * */
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
-import { useZIonToast } from '@/ZaionsHooks/zionic-hooks';
+import { useZIonModal, useZIonToast } from '@/ZaionsHooks/zionic-hooks';
 import {
   useZGetRQCacheData,
   useZRQCreateRequest,
@@ -57,21 +59,25 @@ import {
  * ? Like import of Constant is a global constants import
  * */
 import {
+  _getQueryKey,
   extractInnerData,
   formatApiRequestErrorForFormikFormField,
+  isZNonEmptyString,
   validateField,
   zStringify
 } from '@/utils/helpers';
 import {
   API_URL_ENUM,
   extractInnerDataOptionsEnum,
-  VALIDATION_RULE
+  VALIDATION_RULE,
+  ZWSTypeEum
 } from '@/utils/enums';
 import { reportCustomError } from '@/utils/customErrorType';
 import { showSuccessNotification } from '@/utils/notification';
 import MESSAGES from '@/utils/messages';
 import CONSTANTS from '@/utils/constants';
 import { ENVS } from '@/utils/envKeys';
+import { errorCodes } from '@/utils/constants/apiConstants';
 
 /**
  * Type Imports go down
@@ -89,7 +95,8 @@ import {
 import { type ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import { type ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
-import { FormMode } from '@/types/AdminPanel/index.type';
+import { FormMode, planFeaturesEnum } from '@/types/AdminPanel/index.type';
+import { ZUserCurrentLimitsRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
 
 /**
  * Recoil State Imports go down
@@ -155,22 +162,25 @@ const ZInviteTab: React.FC<{
   // #endregion
 
   // #region APIS.
-  // If owned workspace then this api will use to invite member in workspace.
+  // invite member in workspace.
   const { mutateAsync: inviteTeamMemberAsyncMutate } = useZRQCreateRequest({
     _url: API_URL_ENUM.member_sendInvite_list,
-    _itemsIds: [workspaceId ?? ''],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+    _itemsIds: _getQueryKey({
+      keys: [
+        isZNonEmptyString(workspaceId)
+          ? ZWSTypeEum.personalWorkspace
+          : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+          ? ZWSTypeEum.shareWorkspace
+          : ''
+      ],
+      additionalKeys: [workspaceId, shareWSMemberId]
+    }),
+    _urlDynamicParts: [
+      CONSTANTS.RouteParams.workspace.type,
+      CONSTANTS.RouteParams.workspace.workspaceId
+    ],
     _showAlertOnError: false,
     _loaderMessage: MESSAGES.MEMBER.SENDING_INVITATION_LINK_API
-  });
-
-  // If share workspace and member has permission to invite other members then this api will use to invite member in workspace.
-  const { mutateAsync: swsInviteTeamMemberAsyncMutate } = useZRQCreateRequest({
-    _url: API_URL_ENUM.sws_member_sendInvite_list,
-    _itemsIds: [shareWSMemberId ?? ''],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
-    _showAlertOnError: false,
-    _loaderMessage: MESSAGES.MEMBER.INVITE_LINK_API
   });
 
   // If owned workspace then this api will use to update member role.
@@ -179,25 +189,21 @@ const ZInviteTab: React.FC<{
     _loaderMessage: MESSAGES.MEMBER.UPDATE_ROLE_API
   });
 
-  // If share workspace and member has permission to update role of other members then this api will use to update member role.
-  const { mutateAsync: swsUpdateRoleAsyncMutate } = useZRQUpdateRequest({
-    _url: API_URL_ENUM.sws_member_role_update,
-    _loaderMessage: MESSAGES.MEMBER.UPDATE_ROLE_API
-  });
-
-  // If this is a owned workspace then this api will add a short url in for invitation link.
+  // add a short url in for invitation link.
   const { mutateAsync: invitationLinkShortUrlAsyncMutate } =
     useZRQUpdateRequest({
       _url: API_URL_ENUM.member_create_short_url,
       _loaderMessage: MESSAGES.MEMBER.INVITE_LINK_API
     });
+  // #endregion
 
-  // If this is a share workspace and member has permission to add short url then this api will add a short url in for invitation link.
-  const { mutateAsync: swsInvitationLinkShortUrlAsyncMutate } =
-    useZRQUpdateRequest({
-      _url: API_URL_ENUM.sws_member_create_short_url,
-      _loaderMessage: MESSAGES.MEMBER.INVITE_LINK_API
-    });
+  // #region Recoils
+  const setZUserCurrentLimitsRState = useSetRecoilState(
+    ZUserCurrentLimitsRStateAtom
+  );
+
+  const { presentZIonModal: presentZReachedLimitModal } =
+    useZIonModal(ZReachedLimitModal);
   // #endregion
 
   // #region useEffects.
@@ -284,53 +290,27 @@ const ZInviteTab: React.FC<{
       if (_value?.trim()?.length > 0) {
         let _response;
         if (compState?.formMode === FormMode.ADD) {
-          if (
-            workspaceId !== undefined &&
-            workspaceId !== null &&
-            workspaceId?.trim().length > 0
-          ) {
-            _response = await inviteTeamMemberAsyncMutate(_value);
-          } else if (
-            wsShareId !== undefined &&
-            wsShareId !== null &&
-            wsShareId?.trim()?.length > 0 &&
-            shareWSMemberId !== undefined &&
-            shareWSMemberId !== null &&
-            shareWSMemberId?.trim()?.length > 0
-          ) {
-            _response = await swsInviteTeamMemberAsyncMutate(_value);
-          }
+          _response = await inviteTeamMemberAsyncMutate(_value);
         } else if (compState?.formMode === FormMode.EDIT) {
-          if (
-            workspaceId !== undefined &&
-            workspaceId !== null &&
-            workspaceId?.trim().length > 0
-          ) {
-            _response = await updateRoleAsyncMutate({
-              itemIds: [workspaceId, compState?.memberId ?? ''],
-              urlDynamicParts: [
-                CONSTANTS.RouteParams.workspace.workspaceId,
-                CONSTANTS.RouteParams.workspace.memberInviteId
+          _response = await updateRoleAsyncMutate({
+            itemIds: _getQueryKey({
+              keys: [
+                isZNonEmptyString(workspaceId)
+                  ? ZWSTypeEum.personalWorkspace
+                  : isZNonEmptyString(wsShareId) &&
+                    isZNonEmptyString(shareWSMemberId)
+                  ? ZWSTypeEum.shareWorkspace
+                  : ''
               ],
-              requestData: _value
-            });
-          } else if (
-            wsShareId !== undefined &&
-            wsShareId !== null &&
-            wsShareId?.trim()?.length > 0 &&
-            shareWSMemberId !== undefined &&
-            shareWSMemberId !== null &&
-            shareWSMemberId?.trim()?.length > 0
-          ) {
-            _response = await swsUpdateRoleAsyncMutate({
-              itemIds: [shareWSMemberId, compState?.memberId ?? ''],
-              urlDynamicParts: [
-                CONSTANTS.RouteParams.workspace.shareWSMemberId,
-                CONSTANTS.RouteParams.workspace.memberInviteId
-              ],
-              requestData: _value
-            });
-          }
+              additionalKeys: [workspaceId, shareWSMemberId, compState.memberId]
+            }),
+            urlDynamicParts: [
+              CONSTANTS.RouteParams.workspace.type,
+              CONSTANTS.RouteParams.workspace.workspaceId,
+              CONSTANTS.RouteParams.workspace.memberInviteId
+            ],
+            requestData: _value
+          });
         }
 
         if ((_response as ZLinkMutateApiType<WSTeamMembersInterface>).success) {
@@ -339,32 +319,23 @@ const ZInviteTab: React.FC<{
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (_data?.id !== null) {
-            let WSmembersRQData;
-            if (
-              workspaceId !== undefined &&
-              workspaceId !== null &&
-              workspaceId?.trim().length > 0
-            ) {
-              WSmembersRQData = getRQCDataHandler({
-                key: [
-                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
-                  workspaceId
-                ]
-              });
-            } else if (
-              wsShareId !== undefined &&
-              shareWSMemberId !== undefined
-            ) {
-              WSmembersRQData = getRQCDataHandler({
-                key: [
-                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.SWS_MEMBERS_MAIN,
-                  wsShareId
-                ]
-              });
-            }
+          if (_data?.id !== null && _data?.id !== undefined) {
+            const WSmembersRQData = getRQCDataHandler({
+              key: _getQueryKey({
+                keys: [
+                  isZNonEmptyString(workspaceId)
+                    ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS
+                    : isZNonEmptyString(wsShareId) &&
+                      isZNonEmptyString(shareWSMemberId)
+                    ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE
+                        .SWS_MEMBERS_MAIN
+                    : ''
+                ],
+                additionalKeys: [workspaceId, wsShareId, shareWSMemberId]
+              })
+            });
 
-            if (WSmembersRQData !== undefined) {
+            if (WSmembersRQData !== undefined && WSmembersRQData !== null) {
               const _oldTeamsMemberData =
                 extractInnerData<WSTeamMembersInterface[]>(
                   WSmembersRQData,
@@ -374,75 +345,48 @@ const ZInviteTab: React.FC<{
               if (compState?.formMode === FormMode.ADD) {
                 const _updatedMembersData = [..._oldTeamsMemberData, _data];
 
-                if (
-                  workspaceId !== undefined &&
-                  workspaceId !== null &&
-                  workspaceId?.trim().length > 0
-                ) {
-                  await updateRQCDataHandler({
-                    key: [
-                      CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
-                      workspaceId
+                await updateRQCDataHandler({
+                  key: _getQueryKey({
+                    keys: [
+                      isZNonEmptyString(workspaceId)
+                        ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS
+                        : isZNonEmptyString(wsShareId) &&
+                          isZNonEmptyString(shareWSMemberId)
+                        ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE
+                            .SWS_MEMBERS_MAIN
+                        : ''
                     ],
-                    data: _updatedMembersData,
-                    id: '',
-                    updateHoleData: true,
-                    extractType: ZRQGetRequestExtractEnum.extractItems
-                  });
-                } else if (
-                  wsShareId !== undefined &&
-                  wsShareId !== null &&
-                  wsShareId?.trim()?.length > 0 &&
-                  shareWSMemberId !== undefined &&
-                  shareWSMemberId !== null &&
-                  shareWSMemberId?.trim()?.length > 0
-                ) {
-                  await updateRQCDataHandler({
-                    key: [
-                      CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE
-                        .SWS_MEMBERS_MAIN,
-                      wsShareId
-                    ],
-                    data: _updatedMembersData,
-                    id: '',
-                    updateHoleData: true,
-                    extractType: ZRQGetRequestExtractEnum.extractItems
-                  });
-                }
+                    additionalKeys: [workspaceId, wsShareId, shareWSMemberId]
+                  }),
+                  data: _updatedMembersData,
+                  id: '',
+                  updateHoleData: true,
+                  extractType: ZRQGetRequestExtractEnum.extractItems
+                });
+
+                setZUserCurrentLimitsRState(oldValues => ({
+                  ...oldValues,
+                  [planFeaturesEnum.members]: _updatedMembersData?.length
+                }));
 
                 showSuccessNotification(MESSAGES.MEMBER.INVITE_SEND);
               } else if (compState?.formMode === FormMode.EDIT) {
-                if (
-                  workspaceId !== undefined &&
-                  workspaceId !== null &&
-                  workspaceId?.trim().length > 0
-                ) {
-                  await updateRQCDataHandler({
-                    key: [
-                      CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
-                      workspaceId
+                await updateRQCDataHandler({
+                  key: _getQueryKey({
+                    keys: [
+                      isZNonEmptyString(workspaceId)
+                        ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS
+                        : isZNonEmptyString(wsShareId) &&
+                          isZNonEmptyString(shareWSMemberId)
+                        ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE
+                            .SWS_MEMBERS_MAIN
+                        : ''
                     ],
-                    data: _data,
-                    id: _data?.id ?? ''
-                  });
-                } else if (
-                  wsShareId !== undefined &&
-                  wsShareId !== null &&
-                  wsShareId?.trim()?.length > 0 &&
-                  shareWSMemberId !== undefined &&
-                  shareWSMemberId !== null &&
-                  shareWSMemberId?.trim()?.length > 0
-                ) {
-                  await updateRQCDataHandler({
-                    key: [
-                      CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE
-                        .SWS_MEMBERS_MAIN,
-                      wsShareId
-                    ],
-                    data: _data,
-                    id: _data?.id ?? ''
-                  });
-                }
+                    additionalKeys: [workspaceId, wsShareId, shareWSMemberId]
+                  }),
+                  data: _data,
+                  id: _data?.id ?? ''
+                });
 
                 showSuccessNotification(MESSAGES.MEMBER.ROLE_UPDATED);
               }
@@ -462,6 +406,15 @@ const ZInviteTab: React.FC<{
       }
     } catch (error) {
       if (error instanceof AxiosError) {
+        const _apiErrorsCode = error.response?.status;
+
+        if (_apiErrorsCode === errorCodes.reachedLimit) {
+          presentZReachedLimitModal({
+            _cssClass: 'reached-limit-modal-size'
+          });
+
+          dismissZIonModal();
+        }
         const _apiErrors = (error.response?.data as { errors: ZGenericObject })
           ?.errors;
         const _errors = formatApiRequestErrorForFormikFormField(
@@ -489,71 +442,50 @@ const ZInviteTab: React.FC<{
     invitationId: string
   ): Promise<void> => {
     try {
-      let _response;
-      if (
-        workspaceId !== undefined &&
-        workspaceId !== null &&
-        workspaceId?.trim().length > 0
-      ) {
-        // WSTeamMembersInterface
-        _response = await invitationLinkShortUrlAsyncMutate({
-          itemIds: [workspaceId, invitationId],
-          urlDynamicParts: [
-            CONSTANTS.RouteParams.workspace.workspaceId,
-            CONSTANTS.RouteParams.workspace.memberInviteId
+      const _response = await invitationLinkShortUrlAsyncMutate({
+        itemIds: _getQueryKey({
+          keys: [
+            isZNonEmptyString(workspaceId)
+              ? ZWSTypeEum.personalWorkspace
+              : isZNonEmptyString(wsShareId) &&
+                isZNonEmptyString(shareWSMemberId)
+              ? ZWSTypeEum.shareWorkspace
+              : ''
           ],
-          requestData: ''
-        });
-      } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
-        _response = await swsInvitationLinkShortUrlAsyncMutate({
-          itemIds: [shareWSMemberId, invitationId],
-          urlDynamicParts: [
-            CONSTANTS.RouteParams.workspace.shareWSMemberId,
-            CONSTANTS.RouteParams.workspace.memberInviteId
-          ],
-          requestData: ''
-        });
-      }
+          additionalKeys: [workspaceId, shareWSMemberId, invitationId]
+        }),
+        urlDynamicParts: [
+          CONSTANTS.RouteParams.workspace.type,
+          CONSTANTS.RouteParams.workspace.workspaceId,
+          CONSTANTS.RouteParams.workspace.memberInviteId
+        ],
+        requestData: ''
+      });
 
-      if (_response !== undefined) {
+      if (_response !== undefined && _response !== null) {
         const _data = extractInnerData<WSTeamMembersInterface>(
           _response,
           extractInnerDataOptionsEnum.createRequestResponseItem
         );
 
-        if (_data?.id !== null) {
-          if (
-            workspaceId !== undefined &&
-            workspaceId !== null &&
-            workspaceId?.trim().length > 0
-          ) {
-            await updateRQCDataHandler({
-              key: [
-                CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
-                workspaceId
+        if (_data?.id !== null && _data?.id !== undefined) {
+          await updateRQCDataHandler({
+            key: _getQueryKey({
+              keys: [
+                isZNonEmptyString(workspaceId)
+                  ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS
+                  : isZNonEmptyString(wsShareId) &&
+                    isZNonEmptyString(shareWSMemberId)
+                  ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE
+                      .SWS_MEMBERS_MAIN
+                  : ''
               ],
-              data: _data,
-              id: _data?.id ?? '',
-              extractType: ZRQGetRequestExtractEnum.extractItem
-            });
-          } else if (
-            wsShareId !== undefined &&
-            wsShareId !== null &&
-            wsShareId?.trim()?.length > 0 &&
-            shareWSMemberId !== undefined &&
-            shareWSMemberId !== null &&
-            shareWSMemberId?.trim()?.length > 0
-          ) {
-            await updateRQCDataHandler({
-              key: [
-                CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.SWS_MEMBERS_MAIN,
-                wsShareId
-              ],
-              data: _data,
-              id: _data?.id ?? '',
-              extractType: ZRQGetRequestExtractEnum.extractItem
-            });
-          }
+              additionalKeys: [workspaceId, wsShareId, shareWSMemberId]
+            }),
+            data: _data,
+            id: _data?.id ?? '',
+            extractType: ZRQGetRequestExtractEnum.extractItem
+          });
 
           setCompState(oldValues => ({
             ...oldValues,

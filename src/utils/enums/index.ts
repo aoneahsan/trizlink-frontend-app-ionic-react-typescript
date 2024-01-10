@@ -148,10 +148,6 @@ export enum API_URL_ENUM {
   // /user/{type}/{wsUniqueId}/sl/{slUniqueId}/analytics/{itemId}
   sl_analytics_list = 'sl_analytics_list',
 
-  // Share workspace short links
-  sws_sl_create_list = 'sws_sl_create_list',
-  sws_sl_get_update_delete = 'sws_sl_get_update_delete',
-
   linkInBio_update_delete = 'linkInBio_update_delete',
   linkInBio_create_list = 'linkInBio_create_list',
 

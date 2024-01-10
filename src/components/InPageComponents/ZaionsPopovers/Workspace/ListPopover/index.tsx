@@ -13,6 +13,7 @@ import {
   pencilOutline,
   trashBinOutline
 } from 'ionicons/icons';
+import { useSetRecoilState } from 'recoil';
 
 /**
  * Custom Imports go down
@@ -70,11 +71,13 @@ import {
   type wsShareInterface
 } from '@/types/AdminPanel/workspace';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { planFeaturesEnum } from '@/types/AdminPanel/index.type';
 
 /**
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
+import { ZUserCurrentLimitsRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
 
 /**
  * Style files Imports go down
@@ -367,11 +370,17 @@ const ZWorkspaceActionPopover: React.FC<{
 
   // #endregion
 
-  // #region
+  // #region apis.
   // delete workspace api.
   const { mutateAsync: deleteWorkspaceMutate } = useZRQDeleteRequest({
     _url: API_URL_ENUM.workspace_update_delete
   });
+  // #endregion
+
+  // #region Recoils
+  const setZUserCurrentLimitsRState = useSetRecoilState(
+    ZUserCurrentLimitsRStateAtom
+  );
   // #endregion
 
   // #region popovers & modals
@@ -456,6 +465,11 @@ const ZWorkspaceActionPopover: React.FC<{
               extractType: ZRQGetRequestExtractEnum.extractItems,
               updateHoleData: true
             });
+
+            setZUserCurrentLimitsRState(oldValues => ({
+              ...oldValues,
+              [planFeaturesEnum.workspace]: _updatedWorkspaces?.length
+            }));
 
             // show success message after deleting.
             showSuccessNotification(MESSAGES.WORKSPACE.DELETED);

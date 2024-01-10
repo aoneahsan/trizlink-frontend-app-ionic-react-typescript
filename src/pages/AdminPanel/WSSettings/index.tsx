@@ -66,9 +66,14 @@ import {
 } from '@/utils/enums/RoleAndPermissions';
 import { reportCustomError } from '@/utils/customErrorType';
 import CONSTANTS from '@/utils/constants';
-import { API_URL_ENUM } from '@/utils/enums';
+import { API_URL_ENUM, ZWSTypeEum } from '@/utils/enums';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { replaceRouteParams } from '@/utils/helpers';
+import {
+  _getQueryKey,
+  isZNonEmptyString,
+  isZNonEmptyStrings,
+  replaceRouteParams
+} from '@/utils/helpers';
 
 /**
  * Type Imports go down
@@ -150,46 +155,41 @@ const ZWorkspaceSettings: React.FC = () => {
   // #endregion
 
   // #region APIS
-  // If owned workspace then this api is used to fetch workspace member.
+  // fetch workspace member.
   const {
     data: wsTeamMembersData,
     isFetching: isWSTeamMembersDataFetching,
     isError: isWSTeamMembersDataError
   } = useZRQGetRequest<WSTeamMembersInterface[]>({
     _url: API_URL_ENUM.member_getAllInvite_list,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
-      workspaceId ?? ''
+    _key: _getQueryKey({
+      keys: [
+        isZNonEmptyString(workspaceId)
+          ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS
+          : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+          ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.SWS_MEMBERS_MAIN
+          : ''
+      ],
+      additionalKeys: [workspaceId, wsShareId, shareWSMemberId]
+    }),
+    _itemsIds: _getQueryKey({
+      keys: [
+        isZNonEmptyString(workspaceId)
+          ? ZWSTypeEum.personalWorkspace
+          : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+          ? ZWSTypeEum.shareWorkspace
+          : ''
+      ],
+      additionalKeys: [workspaceId, shareWSMemberId]
+    }),
+    _urlDynamicParts: [
+      CONSTANTS.RouteParams.workspace.type,
+      CONSTANTS.RouteParams.workspace.workspaceId
     ],
-    _itemsIds: [workspaceId ?? ''],
     _shouldFetchWhenIdPassed: !(
-      workspaceId !== undefined &&
-      workspaceId !== null &&
-      (workspaceId?.trim()?.length ?? 0) > 0
+      isZNonEmptyString(workspaceId) ||
+      isZNonEmptyStrings([wsShareId, shareWSMemberId])
     ),
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-    _showLoader: false
-  });
-
-  // If owned workspace then this api is used to fetch workspace member.
-  const {
-    data: swsTeamMembersData,
-    isFetching: isSWSTeamMembersDataFetching,
-    isError: isSWSTeamMembersDataError
-  } = useZRQGetRequest<WSTeamMembersInterface[]>({
-    _url: API_URL_ENUM.sws_member_getAllInvite_list,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.SWS_MEMBERS_MAIN,
-      wsShareId ?? ''
-    ],
-    _itemsIds: [shareWSMemberId ?? ''],
-    _shouldFetchWhenIdPassed: !(
-      wsShareId !== undefined &&
-      (wsShareId?.trim()?.length ?? 0) > 0 &&
-      shareWSMemberId !== undefined &&
-      (shareWSMemberId?.trim()?.length ?? 0) > 0
-    ),
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _showLoader: false
   });
 
@@ -444,8 +444,8 @@ const ZWorkspaceSettings: React.FC = () => {
         shareWSMemberId !== undefined &&
         shareWSMemberId !== null &&
         shareWSMemberId?.trim()?.length > 0 &&
-        !isSWSTeamMembersDataFetching &&
-        !isSWSTeamMembersDataError &&
+        !isWSTeamMembersDataFetching &&
+        !isWSTeamMembersDataError &&
         !isSWSUTMTagsDataFetching &&
         !isSWSUTMTagsDataError &&
         !isSWSPixelAccountsDataFetching &&
@@ -464,8 +464,8 @@ const ZWorkspaceSettings: React.FC = () => {
   }, [
     wsShareId,
     shareWSMemberId,
-    isSWSTeamMembersDataFetching,
-    isSWSTeamMembersDataError,
+    isWSTeamMembersDataFetching,
+    isWSTeamMembersDataError,
     isSWSUTMTagsDataFetching,
     isSWSUTMTagsDataError,
     isSWSPixelAccountsDataFetching,
@@ -531,7 +531,7 @@ const ZWorkspaceSettings: React.FC = () => {
                 shareWSMemberId?.trim()?.length > 0
               ? isGetMemberRolePermissionsFetching
                 ? 'Getting & setting your permissions in this workspace'
-                : isSWSTeamMembersDataFetching
+                : isWSTeamMembersDataFetching
                 ? 'Fetching Share workspaces members'
                 : isSWSUTMTagsDataFetching
                 ? 'Fetching share workspace UTM tags'
@@ -1034,11 +1034,9 @@ const ZWorkspaceSettings: React.FC = () => {
             (swsUTMTagsData !== undefined &&
               (swsUTMTagsData?.length ?? 0) > 0)) && <ZUTMTagsFilterMenu />}
 
-        {isMembersPage === true &&
-          ((wsTeamMembersData !== undefined &&
-            (wsTeamMembersData?.length ?? 0) > 0) ||
-            (swsTeamMembersData !== undefined &&
-              (swsTeamMembersData?.length ?? 0) > 0)) && <ZMembersFilterMenu />}
+        {isMembersPage === true && (wsTeamMembersData?.length ?? 0) > 0 && (
+          <ZMembersFilterMenu />
+        )}
 
         {/*  */}
         <ZIonPage

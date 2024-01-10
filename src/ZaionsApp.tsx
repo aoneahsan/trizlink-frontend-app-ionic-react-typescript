@@ -61,7 +61,8 @@ const App: React.FC = () => {
         });
       }
     })();
-  }, [setAuthTokenState, setUserAccountStateAtom]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <IonApp>

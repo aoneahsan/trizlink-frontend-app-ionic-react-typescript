@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 
 /**
  * Packages Imports go down
@@ -51,7 +51,7 @@ import {
   permissionsTypeEnum,
   shareWSPermissionEnum
 } from '@/utils/enums/RoleAndPermissions';
-import { API_URL_ENUM } from '@/utils/enums';
+import { API_URL_ENUM, ZWSTypeEum } from '@/utils/enums';
 
 /**
  * Type Imports go down
@@ -62,6 +62,18 @@ import {
   type WSTeamMembersInterface
 } from '@/types/AdminPanel/workspace';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import ZReachedLimitModal from '@/components/InPageComponents/ZaionsModals/UpgradeModals/ReachedLimit';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import {
+  ZUserCurrentLimitsRStateAtom,
+  ZUserCurrentLimitsRStateSelectorFamily
+} from '@/ZaionsStore/UserAccount/index.recoil';
+import { planFeaturesEnum } from '@/types/AdminPanel/index.type';
+import {
+  _getQueryKey,
+  isZNonEmptyString,
+  isZNonEmptyStrings
+} from '@/utils/helpers';
 
 const ZMembersListTable = lazy(
   () =>
@@ -109,7 +121,20 @@ const ZWSSettingTeamsListPage: React.FC = () => {
   const { zInvalidateReactQueries } = useZInvalidateReactQueries();
   // #endregion
 
+  // #region Recoils
+  const setZUserCurrentLimitsRState = useSetRecoilState(
+    ZUserCurrentLimitsRStateAtom
+  );
+
+  const ZUserCurrentLimitsRState = useRecoilValue(
+    ZUserCurrentLimitsRStateSelectorFamily(planFeaturesEnum.members)
+  );
+  // #endregion
+
   // #region Popovers & Modals.
+  const { presentZIonModal: presentZReachedLimitModal } =
+    useZIonModal(ZReachedLimitModal);
+
   const { presentZIonModal: presentWorkspaceSharingModal } = useZIonModal(
     ZWorkspacesSharingModal,
     {
@@ -122,44 +147,39 @@ const ZWSSettingTeamsListPage: React.FC = () => {
   // #endregion
 
   // #region APIS
-  // If owned workspace then this api is used to fetch workspace members.
-  const { data: wsTeamMembersData } = useZRQGetRequest<
-    WSTeamMembersInterface[]
-  >({
-    _url: API_URL_ENUM.member_getAllInvite_list,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
-      workspaceId ?? ''
-    ],
-    _itemsIds: [workspaceId ?? ''],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-    _shouldFetchWhenIdPassed: !(
-      workspaceId !== undefined &&
-      workspaceId !== null &&
-      (workspaceId?.trim()?.length ?? 0) > 0
-    )
-  });
-
-  // If share workspace then this api is used to fetch share workspace members.
-  const { data: swsWSTeamMembersData } = useZRQGetRequest<
-    WSTeamMembersInterface[]
-  >({
-    _url: API_URL_ENUM.sws_member_getAllInvite_list,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.SWS_MEMBERS_MAIN,
-      wsShareId ?? ''
-    ],
-    _itemsIds: [shareWSMemberId ?? ''],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
-    _shouldFetchWhenIdPassed: !(
-      wsShareId !== undefined &&
-      wsShareId !== null &&
-      (wsShareId?.trim()?.length ?? 0) > 0 &&
-      shareWSMemberId !== undefined &&
-      shareWSMemberId !== null &&
-      (shareWSMemberId?.trim()?.length ?? 0) > 0
-    )
-  });
+  // fetch workspace members.
+  const { data: wsTeamMembersData, isFetching: isWsTeamMembersDataFetching } =
+    useZRQGetRequest<WSTeamMembersInterface[]>({
+      _url: API_URL_ENUM.member_getAllInvite_list,
+      _key: _getQueryKey({
+        keys: [
+          isZNonEmptyString(workspaceId)
+            ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS
+            : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+            ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.SWS_MEMBERS_MAIN
+            : ''
+        ],
+        additionalKeys: [workspaceId, wsShareId, shareWSMemberId]
+      }),
+      _itemsIds: _getQueryKey({
+        keys: [
+          isZNonEmptyString(workspaceId)
+            ? ZWSTypeEum.personalWorkspace
+            : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+            ? ZWSTypeEum.shareWorkspace
+            : ''
+        ],
+        additionalKeys: [workspaceId, shareWSMemberId]
+      }),
+      _urlDynamicParts: [
+        CONSTANTS.RouteParams.workspace.type,
+        CONSTANTS.RouteParams.workspace.workspaceId
+      ],
+      _shouldFetchWhenIdPassed: !(
+        isZNonEmptyString(workspaceId) ||
+        isZNonEmptyStrings([wsShareId, shareWSMemberId])
+      )
+    });
 
   // If share-workspace then this api will fetch role & permission of current member in this share-workspace.
   const { data: getMemberRolePermissions } = useZRQGetRequest<{
@@ -222,6 +242,19 @@ const ZWSSettingTeamsListPage: React.FC = () => {
       reportCustomError(error);
     }
   };
+  // #endregion
+
+  // #region useEffects
+  useEffect(() => {
+    if (wsTeamMembersData !== undefined && wsTeamMembersData !== null) {
+      setZUserCurrentLimitsRState(oldValues => ({
+        ...oldValues,
+        [planFeaturesEnum.members]: wsTeamMembersData?.length
+      }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [workspaceId, shareWSMemberId, wsShareId, isWsTeamMembersDataFetching]);
+
   // #endregion
 
   return (
@@ -303,51 +336,50 @@ const ZWSSettingTeamsListPage: React.FC = () => {
             'ion-justify-content-between flex gap-1': !isLgScale && isSmScale,
             'w-full': !isSmScale
           })}>
-          {((workspaceId !== undefined &&
+          {(isZNonEmptyString(workspaceId) ||
+            isZNonEmptyStrings([wsShareId, shareWSMemberId])) &&
             wsTeamMembersData !== undefined &&
-            (wsTeamMembersData?.length ?? 0) > 0) ||
-            (wsShareId !== undefined &&
-              swsWSTeamMembersData !== undefined &&
-              (swsWSTeamMembersData?.length ?? 0) > 0)) && (
-            <ZIonButton
-              fill='outline'
-              color='primary'
-              minHeight={isLgScale ? '39px' : '2rem'}
-              expand={!isLgScale ? 'block' : undefined}
-              testingselector={
-                CONSTANTS.testingSelectors.WSSettings.teamListPage.timeFilterBtn
-              }
-              className={classNames({
-                'my-2': true,
-                'me-2': isLgScale,
-                'text-xs ion-no-margin ion-no-padding w-[33.33%]':
-                  !isLgScale && isSmScale,
-                'w-full': !isSmScale,
-                'ion-no-margin': !isSmScale
-              })}
-              onClick={() => {
-                void (async () => {
-                  // Open the menu by menu-id
-                  await menuController.enable(
-                    true,
-                    CONSTANTS.MENU_IDS.MEMBER_FILTERS_MENU_ID
-                  );
-                  await menuController.open(
-                    CONSTANTS.MENU_IDS.MEMBER_FILTERS_MENU_ID
-                  );
-                })();
-              }}>
-              <ZIonIcon
-                slot='start'
-                icon={filterOutline}
+            (wsTeamMembersData?.length ?? 0) > 0 && (
+              <ZIonButton
+                fill='outline'
+                color='primary'
+                minHeight={isLgScale ? '39px' : '2rem'}
+                expand={!isLgScale ? 'block' : undefined}
+                testingselector={
+                  CONSTANTS.testingSelectors.WSSettings.teamListPage
+                    .timeFilterBtn
+                }
                 className={classNames({
-                  'me-1': true,
-                  'w-4 h-4': !isLgScale
+                  'my-2': true,
+                  'me-2': isLgScale,
+                  'text-xs ion-no-margin ion-no-padding w-[33.33%]':
+                    !isLgScale && isSmScale,
+                  'w-full': !isSmScale,
+                  'ion-no-margin': !isSmScale
                 })}
-              />
-              Filters
-            </ZIonButton>
-          )}
+                onClick={() => {
+                  void (async () => {
+                    // Open the menu by menu-id
+                    await menuController.enable(
+                      true,
+                      CONSTANTS.MENU_IDS.MEMBER_FILTERS_MENU_ID
+                    );
+                    await menuController.open(
+                      CONSTANTS.MENU_IDS.MEMBER_FILTERS_MENU_ID
+                    );
+                  })();
+                }}>
+                <ZIonIcon
+                  slot='start'
+                  icon={filterOutline}
+                  className={classNames({
+                    'me-1': true,
+                    'w-4 h-4': !isLgScale
+                  })}
+                />
+                Filters
+              </ZIonButton>
+            )}
 
           {/* Refetch data button */}
           <ZIonButton
@@ -421,10 +453,15 @@ const ZWSSettingTeamsListPage: React.FC = () => {
                 'w-full': !isSmScale
               })}
               onClick={() => {
-                // if (!isWorkspacesDataFetching)
-                presentWorkspaceSharingModal({
-                  _cssClass: 'workspace-sharing-modal-size'
-                });
+                if (ZUserCurrentLimitsRState === false) {
+                  presentZReachedLimitModal({
+                    _cssClass: 'reached-limit-modal-size'
+                  });
+                } else {
+                  presentWorkspaceSharingModal({
+                    _cssClass: 'workspace-sharing-modal-size'
+                  });
+                }
               }}>
               Invite member
             </ZIonButton>

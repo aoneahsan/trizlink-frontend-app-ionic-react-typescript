@@ -2,7 +2,7 @@
 import React from 'react';
 // Packages Import
 import { Form, Formik } from 'formik';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import classNames from 'classnames';
 import { AxiosError } from 'axios';
 
@@ -17,7 +17,8 @@ import {
   ZIonFooter,
   ZIonInput,
   ZIonImg,
-  ZIonButton
+  ZIonButton,
+  ZIonIcon
 } from '@/components/ZIonComponents';
 import ZCan from '@/components/Can';
 
@@ -61,7 +62,11 @@ import { ZaionsAppSettingsRState } from '@/ZaionsStore/zaionsAppSettings.recoil'
 import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil';
 
 // Types
-import { folderState, FormMode } from '@/types/AdminPanel/index.type';
+import {
+  folderState,
+  FormMode,
+  planFeaturesEnum
+} from '@/types/AdminPanel/index.type';
 import {
   type FormikSetErrorsType,
   type resetFormType
@@ -69,6 +74,11 @@ import {
 import { type ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { type LinkFolderType } from '@/types/AdminPanel/linksType';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { closeOutline } from 'ionicons/icons';
+import { ZUserCurrentLimitsRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
+import { errorCodes } from '@/utils/constants/apiConstants';
+import ZReachedLimitModal from '@/components/InPageComponents/ZaionsModals/UpgradeModals/ReachedLimit';
+import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 
 // Styles
 
@@ -94,6 +104,14 @@ const ZaionsAddNewFolder: React.FC<{
   // #region Recoil states.
   const appSettings = useRecoilValue(ZaionsAppSettingsRState);
   const [folderFormState, setFolderFormState] = useRecoilState(FolderFormState);
+  const setZUserCurrentLimitsRState = useSetRecoilState(
+    ZUserCurrentLimitsRStateAtom
+  );
+  // #endregion
+
+  // #region Modals & Popovers
+  const { presentZIonModal: presentZReachedLimitModal } =
+    useZIonModal(ZReachedLimitModal);
   // #endregion
 
   // #region APIS.
@@ -117,7 +135,8 @@ const ZaionsAddNewFolder: React.FC<{
     _urlDynamicParts: [
       CONSTANTS.RouteParams.workspace.type,
       CONSTANTS.RouteParams.workspace.workspaceId
-    ]
+    ],
+    _showAlertOnError: false
   });
 
   // Update folder.
@@ -229,6 +248,19 @@ const ZaionsAddNewFolder: React.FC<{
               });
             }
 
+            // updating limit recoil sate
+            if (state === folderState.shortlink) {
+              setZUserCurrentLimitsRState(oldValues => ({
+                ...oldValues,
+                [planFeaturesEnum.shortLinksFolder]: _updatedFolders?.length
+              }));
+            } else if (state === folderState.linkInBio) {
+              setZUserCurrentLimitsRState(oldValues => ({
+                ...oldValues,
+                [planFeaturesEnum.linksInBioFolder]: _updatedFolders?.length
+              }));
+            }
+
             showSuccessNotification(
               MESSAGES.GENERAL.FOLDER.NEW_FOLDER_CREATED_SUCCEED_MESSAGE
             );
@@ -330,6 +362,15 @@ const ZaionsAddNewFolder: React.FC<{
       }
     } catch (error) {
       if (error instanceof AxiosError) {
+        const _apiErrorsCode = error.response?.status;
+        if (_apiErrorsCode === errorCodes.reachedLimit) {
+          presentZReachedLimitModal({
+            _cssClass: 'reached-limit-modal-size'
+          });
+
+          dismissZIonModal();
+        }
+
         // await presentZIonErrorAlert();
         // Setting errors on form fields
         const _apiErrors = (error.response?.data as { errors: ZGenericObject })
@@ -484,7 +525,21 @@ const ZaionsAddNewFolder: React.FC<{
               )}
 
               <ZIonContent className='ion-padding'>
-                <div className='flex flex-col ion-text-center ion-justify-content-center ion-padding-top ion-margin-top'>
+                {/* Close modal button */}
+                <div className='ion-text-end'>
+                  <ZIonIcon
+                    icon={closeOutline}
+                    className='cursor-pointer w-7 h-7'
+                    testingselector={
+                      CONSTANTS.testingSelectors.linkInBio.formModal.closeBtn
+                    }
+                    onClick={() => {
+                      dismissZIonModal();
+                    }}
+                  />
+                </div>
+
+                <div className='flex flex-col ion-text-center ion-justify-content-center'>
                   <div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter'>
                     <ZIonImg
                       src={ProductFaviconSmall}

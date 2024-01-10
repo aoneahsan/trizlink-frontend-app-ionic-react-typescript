@@ -37,7 +37,10 @@ import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import {
   createRedirectRoute,
   zGenerateShortLink,
-  replaceRouteParams
+  replaceRouteParams,
+  isZNonEmptyStrings,
+  isZNonEmptyString,
+  _getQueryKey
 } from '@/utils/helpers';
 import { API_URL_ENUM, ZWSTypeEum } from '@/utils/enums';
 import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
@@ -114,38 +117,49 @@ export const ZInpageTable: React.FC = () => {
     itemsCount: string;
   }>({
     _url: API_URL_ENUM.shortLinks_list,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
-      workspaceId ?? '',
-      String(pageindex),
-      String(pagesize)
-    ],
+    _key: _getQueryKey({
+      keys: [
+        isZNonEmptyString(workspaceId)
+          ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN
+          : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+          ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN
+          : ''
+      ],
+      additionalKeys: [
+        workspaceId,
+        wsShareId,
+        shareWSMemberId,
+        String(pageindex),
+        String(pagesize)
+      ]
+    }),
     _shouldFetchWhenIdPassed: !(
-      workspaceId !== undefined && workspaceId?.trim()?.length > 0
+      isZNonEmptyString(workspaceId) ||
+      isZNonEmptyStrings([wsShareId, shareWSMemberId])
     ),
-    _itemsIds: [workspaceId ?? '', String(pageindex), String(pagesize)],
+    _itemsIds: _getQueryKey({
+      keys: [
+        isZNonEmptyString(workspaceId)
+          ? ZWSTypeEum.personalWorkspace
+          : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+          ? ZWSTypeEum.shareWorkspace
+          : ''
+      ],
+      additionalKeys: [
+        workspaceId,
+        shareWSMemberId,
+        String(pageindex),
+        String(pagesize)
+      ]
+    }),
     _urlDynamicParts: [
+      CONSTANTS.RouteParams.workspace.type,
       CONSTANTS.RouteParams.workspace.workspaceId,
       CONSTANTS.RouteParams.pageNumber,
       CONSTANTS.RouteParams.paginationLimit
     ],
     _showLoader: false,
     _extractType: ZRQGetRequestExtractEnum.extractData
-  });
-
-  // Request for getting share workspace short links data.
-  const { data: swsShortLinksData } = useZRQGetRequest<ShortLinkType[]>({
-    _url: API_URL_ENUM.sws_sl_create_list,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN,
-      wsShareId ?? ''
-    ],
-    _shouldFetchWhenIdPassed: !(
-      wsShareId !== undefined && (wsShareId?.trim()?.length ?? 0) > 0
-    ),
-    _itemsIds: [shareWSMemberId ?? ''],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
-    _showLoader: false
   });
 
   // If owned-workspace then this api will fetch owned-workspace-short-link filters options data.
@@ -549,19 +563,17 @@ export const ZInpageTable: React.FC = () => {
   useEffect(() => {
     try {
       if (
-        workspaceId !== undefined &&
-        workspaceId !== null &&
+        (isZNonEmptyString(workspaceId) ||
+          isZNonEmptyStrings([wsShareId, shareWSMemberId])) &&
         ShortLinksData !== undefined
       ) {
         setShortLinksStateAtom(ShortLinksData?.items);
-      } else if (wsShareId !== undefined && swsShortLinksData !== undefined) {
-        setShortLinksStateAtom(swsShortLinksData ?? []);
       }
     } catch (error) {
       reportCustomError(error);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ShortLinksData, swsShortLinksData]);
+  }, [ShortLinksData]);
   // #endregion
 
   return (
@@ -891,12 +903,7 @@ export const ZInpageTable: React.FC = () => {
                   zShortLinksTable.getState().pagination.pageIndex + 1
                 );
 
-                console.log({
-                  log: 'yess',
-                  c: zShortLinksTable.getState().pagination.pageIndex
-                });
-
-                if (workspaceId !== undefined) {
+                if (workspaceId !== undefined && workspaceId !== null) {
                   zNavigatePushRoute(
                     createRedirectRoute({
                       url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
@@ -919,6 +926,7 @@ export const ZInpageTable: React.FC = () => {
                   );
                 } else if (
                   wsShareId !== undefined &&
+                  wsShareId !== null &&
                   shareWSMemberId !== undefined
                 ) {
                   zNavigatePushRoute(

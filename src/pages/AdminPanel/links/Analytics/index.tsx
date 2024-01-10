@@ -292,21 +292,28 @@ const ZInpageMainContent: React.FC = () => {
   const { data: selectedShortLink, isFetching: isSelectedShortLinkFetching } =
     useZRQGetRequest<ShortLinkType>({
       _url: API_URL_ENUM.shortLinks_update_delete,
-      _key: [
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.GET,
-        workspaceId ?? '',
-        editLinkId ?? ''
-      ],
-      _itemsIds: [workspaceId ?? '', editLinkId ?? ''],
+      _key: _getQueryKey({
+        keys: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.GET],
+        additionalKeys: [workspaceId, wsShareId, shareWSMemberId, editLinkId]
+      }),
+      _itemsIds: _getQueryKey({
+        keys: [
+          isZNonEmptyString(workspaceId)
+            ? ZWSTypeEum.personalWorkspace
+            : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+            ? ZWSTypeEum.shareWorkspace
+            : ''
+        ],
+        additionalKeys: [workspaceId, shareWSMemberId, editLinkId]
+      }),
       _urlDynamicParts: [
+        CONSTANTS.RouteParams.workspace.type,
         CONSTANTS.RouteParams.workspace.workspaceId,
         CONSTANTS.RouteParams.shortLink.shortLinkId
       ],
       _shouldFetchWhenIdPassed: !(
-        editLinkId !== undefined &&
-        (editLinkId?.trim()?.length ?? 0) > 0 &&
-        workspaceId !== undefined &&
-        (workspaceId?.trim()?.length ?? 0) > 0
+        isZNonEmptyStrings([workspaceId, editLinkId]) ||
+        isZNonEmptyStrings([wsShareId, shareWSMemberId, editLinkId])
       ),
       _extractType: ZRQGetRequestExtractEnum.extractItem,
       _showLoader: false

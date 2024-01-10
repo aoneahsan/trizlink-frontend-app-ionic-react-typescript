@@ -77,6 +77,9 @@ import {
   WorkspaceSharingTabEnum
 } from '@/types/AdminPanel/workspace';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { planFeaturesEnum } from '@/types/AdminPanel/index.type';
+import { ZUserCurrentLimitsRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
+import { useSetRecoilState } from 'recoil';
 
 /**
  * Recoil State Imports go down
@@ -219,6 +222,10 @@ const ZWorkspacesActionPopover: React.FC<{
     [type, workspaceId]
   );
 
+  const setZUserCurrentLimitsRState = useSetRecoilState(
+    ZUserCurrentLimitsRStateAtom
+  );
+
   // delete Workspace Confirm Modal.
   const deleteWorkspaceConfirmModal = async (): Promise<void> => {
     try {
@@ -270,7 +277,7 @@ const ZWorkspacesActionPopover: React.FC<{
           urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
         });
 
-        if (_response !== undefined) {
+        if (_response !== undefined && _response !== null) {
           const _data = extractInnerData<{ success: boolean }>(
             _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
@@ -299,6 +306,11 @@ const ZWorkspacesActionPopover: React.FC<{
               extractType: ZRQGetRequestExtractEnum.extractItems,
               updateHoleData: true
             });
+
+            setZUserCurrentLimitsRState(oldValues => ({
+              ...oldValues,
+              [planFeaturesEnum.workspace]: _updatedWorkspaces?.length
+            }));
 
             // show success message after deleting.
             showSuccessNotification(MESSAGES.WORKSPACE.DELETED);

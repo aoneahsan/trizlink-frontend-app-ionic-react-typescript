@@ -39,7 +39,8 @@ import { reportCustomError } from '@/utils/customErrorType';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import {
   type userSubscriptionI,
-  type UserRoleAndPermissionsInterface
+  type UserRoleAndPermissionsInterface,
+  type userServicesLimitI
 } from '@/types/UserAccount/index.type';
 
 /**
@@ -90,6 +91,25 @@ const ZAppStartupPage: React.FC = () => {
   const { zNavigatePushRoute } = useZNavigate(); // hook to navigate
 
   // getting the role & permissions of the current log in user.
+
+  const { isFetching: isUserSubscriptionFetching } =
+    useZRQGetRequest<userSubscriptionI>({
+      _url: API_URL_ENUM.getUserSubscription,
+      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SUBSCRIPTION],
+      _extractType: ZRQGetRequestExtractEnum.extractItem,
+      _checkPermissions: false
+    });
+
+  const { isFetching: isUserServicesLimitsFetching } = useZRQGetRequest<
+    userServicesLimitI[]
+  >({
+    _url: API_URL_ENUM.getUserServicesLimits,
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.LIMITS],
+    _extractType: ZRQGetRequestExtractEnum.extractItems,
+    _checkPermissions: false,
+    _showLoader: false
+  });
+
   const {
     data: getUserRoleAndPermissions,
     isFetching: isUserRoleAndPermissionsFetching,
@@ -101,16 +121,9 @@ const ZAppStartupPage: React.FC = () => {
     _url: API_URL_ENUM.getUserRolePermission,
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.ROLE_PERMISSIONS],
     _extractType: ZRQGetRequestExtractEnum.extractItem,
-    _checkPermissions: false
+    _checkPermissions: false,
+    _showLoader: false
   });
-
-  const { isFetching: isUserSubscriptionFetching } =
-    useZRQGetRequest<userSubscriptionI>({
-      _url: API_URL_ENUM.getUserSubscription,
-      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SUBSCRIPTION],
-      _extractType: ZRQGetRequestExtractEnum.extractItem,
-      _checkPermissions: false
-    });
 
   // const { isFetching: isUserServicesLimitsFetching } = useZRQGetRequest({
   //   _url: API_URL_ENUM.getUserServicesLimits,
@@ -161,7 +174,9 @@ const ZAppStartupPage: React.FC = () => {
   return (
     <ZIonPage pageTitle='zaions startup page'>
       <ZPageLoader>
-        {isUserRoleAndPermissionsFetching && isUserSubscriptionFetching
+        {isUserRoleAndPermissionsFetching &&
+        isUserSubscriptionFetching &&
+        isUserServicesLimitsFetching
           ? 'Fetching Permissions'
           : 'Loading dashboard please await a second!'}
       </ZPageLoader>
