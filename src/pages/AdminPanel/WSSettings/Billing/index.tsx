@@ -198,7 +198,7 @@ const PriceCards = [
 
 /**
  * Functional Component
- * About: (Info of component here...)
+ * About: ()
  * @type {*}
  * */
 const ZBillingPage: React.FC = () => {
@@ -292,7 +292,7 @@ const ZBillingPage: React.FC = () => {
               minHeight='4rem'>
               <ZIonProgressBar
                 value={0.5}
-                className=' h-2 rounded-md'
+                className='h-2 rounded-md '
               />
               <div className='w-max ps-1 ms-auto'>
                 <ZIonLabel>1 / 8 custom domain</ZIonLabel>
@@ -447,7 +447,7 @@ const ZBillingPage: React.FC = () => {
                       {el.price}
                     </ZIonText>
                     <ZIonText
-                      className='text-sm ms-2 font-semibold'
+                      className='text-sm font-semibold ms-2'
                       color='medium'>
                       /mo
                     </ZIonText>
@@ -457,7 +457,7 @@ const ZBillingPage: React.FC = () => {
                     {el.points?.map((_point, index) => {
                       return (
                         <div
-                          className='flex ion-align-items-top w-full mt-3'
+                          className='flex w-full mt-3 ion-align-items-top'
                           key={index}>
                           <ZIonIcon
                             icon={checkmarkCircleOutline}
@@ -470,7 +470,7 @@ const ZBillingPage: React.FC = () => {
                     })}
                   </div>
 
-                  <div className='w-full mt-5 pt-4 flex ion-align-items-center ion-justify-content-center'>
+                  <div className='flex w-full pt-4 mt-5 ion-align-items-center ion-justify-content-center'>
                     <ZIonButton
                       className='ion-no-margin'
                       color={el.theme === 'dark' ? 'light' : 'primary'}>
