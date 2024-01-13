@@ -64,13 +64,15 @@ const ZEmptyTable: React.FC<{
   btnOnClick?: React.MouseEventHandler<HTMLIonButtonElement>;
   btnText?: string;
   showBtn?: boolean;
+  testingselector?: string;
   btnTestingselector?: string;
 }> = ({
   message = 'no data found!',
   btnOnClick,
   btnText,
   showBtn = true,
-  btnTestingselector
+  btnTestingselector,
+  testingselector
 }) => {
   const { isLgScale, isMdScale } = useZMediaQueryScale();
   return (
@@ -81,6 +83,7 @@ const ZEmptyTable: React.FC<{
         'flex-col': !isMdScale
       })}>
       <ZIonImg
+        testingselector={`${testingselector}-image`}
         src={zEmptyTable}
         className={classNames({
           'mt-2': true,
@@ -97,6 +100,7 @@ const ZEmptyTable: React.FC<{
             !isMdScale
         })}>
         <ZIonText
+          testingselector={`${testingselector}-text`}
           className={classNames({
             'inline-block max-content': true,
             'text-lg': isMdScale,

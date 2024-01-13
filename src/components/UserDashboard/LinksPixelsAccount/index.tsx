@@ -18,7 +18,10 @@ import {
   ZIonButton
 } from '@/components/ZIonComponents';
 import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
-import { formatReactSelectOptionsArray } from '@/utils/helpers';
+import {
+  formatReactSelectOptionsArray,
+  isZNonEmptyStrings
+} from '@/utils/helpers';
 import ZaionsAddPixelAccount from '@/components/InPageComponents/ZaionsModals/AddPixelsAccount';
 
 // Global Constants
@@ -57,6 +60,7 @@ const selectOptionComponent = (_el: PixelAccountType): JSX.Element => {
       className='flex ion-align-items-center'
       key={_el.id}>
       <ZIonImg
+        // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
         src={Platforms[_el.platform as PixelPlatformsEnum]}
         className='pe-3 w-[30px]'
       />
@@ -160,12 +164,12 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
     <ZCan
       shareWSId={wsShareId}
       permissionType={
-        wsShareId !== undefined
+        isZNonEmptyStrings([wsShareId, shareWSMemberId])
           ? permissionsTypeEnum.shareWSMemberPermissions
           : permissionsTypeEnum.loggedInUserPermissions
       }
       havePermissions={
-        wsShareId !== undefined
+        isZNonEmptyStrings([wsShareId, shareWSMemberId])
           ? [shareWSPermissionEnum.viewAny_sws_pixel]
           : [permissionsEnum.viewAny_pixel]
       }>

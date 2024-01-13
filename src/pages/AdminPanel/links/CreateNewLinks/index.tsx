@@ -37,6 +37,7 @@ import {
   ZIonRefresherContent,
   ZIonSpinner
 } from '@/components/ZIonComponents';
+import ZReachedLimitModal from '@/components/InPageComponents/ZaionsModals/UpgradeModals/ReachedLimit';
 import ZIonPage from '@/components/ZIonPage';
 import { ZFallbackIonSpinner2 } from '@/components/CustomComponents/FallbackSpinner';
 import ZCan from '@/components/Can';
@@ -89,6 +90,7 @@ import {
   permissionsTypeEnum,
   shareWSPermissionEnum
 } from '@/utils/enums/RoleAndPermissions';
+import { errorCodes } from '@/utils/constants/apiConstants';
 
 /**
  * Recoil State Imports go down
@@ -96,6 +98,7 @@ import {
  * */
 import { NewShortLinkFormState } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
 import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
+import { ZWsLimitsRStateAtom } from '@/ZaionsStore/UserDashboard/Workspace/index.recoil';
 
 /**
  * Type Imports go down
@@ -130,9 +133,6 @@ import { type ZLinkMutateApiType } from '@/types/ZaionsApis.type';
 import { type ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { type workspaceInterface } from '@/types/AdminPanel/workspace';
 import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type';
-import { ZUserCurrentLimitsRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
-import { errorCodes } from '@/utils/constants/apiConstants';
-import ZReachedLimitModal from '@/components/InPageComponents/ZaionsModals/UpgradeModals/ReachedLimit';
 
 const AddNotes = lazy(() => import('@/components/UserDashboard/AddNotes'));
 // const EmbedWidget = lazy(
@@ -229,9 +229,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
     NewShortLinkFormState
   );
   // Recoil state that control the dashboard.
-  const setZUserCurrentLimitsRState = useSetRecoilState(
-    ZUserCurrentLimitsRStateAtom
-  );
+  const setZWsLimitsRState = useSetRecoilState(ZWsLimitsRStateAtom);
   const ZDashboardState = useRecoilValue(ZDashboardRState);
   // #endregion
 
@@ -796,7 +794,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
             });
 
             // Updating short link in UserCurrentLimits.
-            setZUserCurrentLimitsRState(oldValues => ({
+            setZWsLimitsRState(oldValues => ({
               ...oldValues,
               [planFeaturesEnum.shortLinks]: _updatedShortLinks?.length
             }));
@@ -1956,6 +1954,9 @@ const ZTopBar: React.FC = () => {
           {/* Home button */}
           {isMdScale && (
             <ZIonButton
+              testingselector={
+                CONSTANTS.testingSelectors.shortLink.formPage.homeBtn
+              }
               size={
                 (!isMdScale && isSmScale) || (!isMdScale && !isSmScale)
                   ? 'small'
@@ -2002,6 +2003,9 @@ const ZTopBar: React.FC = () => {
           {/* Title */}
           <ZIonTitle
             color='medium'
+            testingselector={
+              CONSTANTS.testingSelectors.shortLink.formPage.topBarText
+            }
             className={classNames({
               'text-xl': isXlScale || isLgScale,
               'text-lg': isMdScale && !isSmScale,
@@ -2051,6 +2055,9 @@ const ZTopBar: React.FC = () => {
           })}>
           {!isMdScale && (
             <ZIonButton
+              testingselector={
+                CONSTANTS.testingSelectors.shortLink.formPage.homeBtn
+              }
               minHeight={
                 (!isMdScale && isSmScale) || (!isMdScale && !isSmScale)
                   ? '1.3rem'
@@ -2077,6 +2084,9 @@ const ZTopBar: React.FC = () => {
 
           <ZIonButton
             fill='outline'
+            testingselector={
+              CONSTANTS.testingSelectors.shortLink.formPage.topBarRefreshBtn
+            }
             onClick={() => {
               void (async () => {
                 try {
@@ -2171,6 +2181,7 @@ const ZTopBar: React.FC = () => {
                 : undefined
             }>
             <ZIonIcon
+              testingselector={`${CONSTANTS.testingSelectors.shortLink.formPage.topBarRefreshBtn}-icon`}
               slot='start'
               icon={refresh}
             />
@@ -2179,6 +2190,9 @@ const ZTopBar: React.FC = () => {
 
           {/* get my link button */}
           <ZIonButton
+            testingselector={
+              CONSTANTS.testingSelectors.shortLink.formPage.topBarSubmitBtn
+            }
             onClick={() => {
               void submitForm();
             }}

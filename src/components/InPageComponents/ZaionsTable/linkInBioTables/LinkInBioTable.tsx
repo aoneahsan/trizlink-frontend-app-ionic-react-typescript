@@ -103,7 +103,7 @@ import {
   ZUserSettingTypeEnum,
   planFeaturesEnum
 } from '@/types/AdminPanel/index.type';
-import { ZUserCurrentLimitsRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
+import { ZWsLimitsRStateAtom } from '@/ZaionsStore/UserDashboard/Workspace/index.recoil';
 
 // Styles
 
@@ -1275,9 +1275,7 @@ const ZLinkInBioActionPopover: React.FC<{
   const { getRQCDataHandler } = useZGetRQCacheData();
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
 
-  const setZUserCurrentLimitsRState = useSetRecoilState(
-    ZUserCurrentLimitsRStateAtom
-  );
+  const setWsLimitsRState = useSetRecoilState(ZWsLimitsRStateAtom);
 
   // #region APIS requests.
   const { mutateAsync: deleteLinkInBioLinkMutateAsync } = useZRQDeleteRequest({
@@ -1443,7 +1441,7 @@ const ZLinkInBioActionPopover: React.FC<{
               updateHoleData: true
             });
 
-            setZUserCurrentLimitsRState(oldValues => ({
+            setWsLimitsRState(oldValues => ({
               ...oldValues,
               [planFeaturesEnum.linkInBio]: _updatedLinkInBios?.length
             }));

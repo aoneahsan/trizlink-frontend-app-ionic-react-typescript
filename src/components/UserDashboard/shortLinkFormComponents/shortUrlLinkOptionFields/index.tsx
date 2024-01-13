@@ -34,6 +34,7 @@ import {
   ZIonText,
   ZIonTextareaShort
 } from '@/components/ZIonComponents';
+import ZCPhoneNumberInput from '@/components/CustomComponents/ZPhoneNumberInput';
 import ZShortLinkOptionsPopover from '@/components/InPageComponents/ZaionsPopovers/ShortLinkOptionsPopover';
 
 /**
@@ -72,7 +73,6 @@ import { messengerPlatformsBlockEnum } from '@/types/AdminPanel/index.type';
  * */
 import { NewShortLinkSelectTypeOption } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
 import { LinkTypeOptionsData } from '@/data/UserDashboard/Links';
-import ZCPhoneNumberInput from '@/components/CustomComponents/ZPhoneNumberInput';
 
 /**
  * Style files Imports go down
@@ -331,21 +331,22 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
                     {(newShortLinkTypeOptionDataAtom?.icon?.iconName).length >
                       0 && (
                       <ZIonIcon
+                        testingselector={`${CONSTANTS.testingSelectors.shortLink.formPage.ShortUrlOptionFields.typeBtn}-icon`}
                         icon={newShortLinkTypeOptionDataAtom.icon.iconName}
                         size={isMdScale ? 'large' : 'default'}
                         color='primary'
                       />
                     )}
                     <ZIonText
+                      testingselector={`${CONSTANTS.testingSelectors.shortLink.formPage.ShortUrlOptionFields.typeBtn}-text`}
                       className={classNames({
-                        'pt-[3px] ms-2 ion-padding-end': true,
+                        'pt-[3px] ms-2 ion-padding-end font-bold ion-no-margin d-inline':
+                          true,
                         'text-lg': isMdScale,
                         'text-md': !isMdScale
                       })}
                       color='dark'>
-                      <h6 className='font-bold ion-no-margin d-inline'>
-                        {newShortLinkTypeOptionDataAtom.text}
-                      </h6>
+                      {newShortLinkTypeOptionDataAtom.text}
                     </ZIonText>
                   </ZIonButton>
                 )}

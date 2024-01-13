@@ -46,9 +46,9 @@ import ZCan from '@/components/Can';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
-import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
+import CONSTANTS from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { replaceParams, replaceRouteParams } from '@/utils/helpers';
+import { isZNonEmptyString, replaceRouteParams } from '@/utils/helpers';
 import { API_URL_ENUM } from '@/utils/enums';
 import {
   permissionCheckModeEnum,
@@ -204,17 +204,23 @@ const AdminPanelSidebarMenu: React.FC<{
   if (isLgScale) {
     _content = (
       <ZIonCol
+        testingselector={
+          CONSTANTS.testingSelectors.expendableMenu.mainContainer
+        }
         size={isExpand ? (is2XlScale ? '1.5' : '2') : is2XlScale ? '.6' : '.8'}
         className='h-full zaions__medium_bg zaions-transition'>
         <ZIonContent color='dark'>
           {/* Toggler menu button */}
           <ZIonButton
             slot='fixed'
+            shape='round'
+            testingselector={
+              CONSTANTS.testingSelectors.expendableMenu.toggleMenuBtn
+            }
             className={classNames(classes['zaions-ap-msm-toggle-button'], {
               'zaions-transition z-20 w-11 h-11 ion-no-padding ion-no-margin':
                 true
             })}
-            shape='round'
             onClick={() => {
               setZDashboardState(oldValues => ({
                 ...oldValues,
@@ -226,6 +232,7 @@ const AdminPanelSidebarMenu: React.FC<{
             }}
             style={togglerMenuButtonStyle}>
             <ZIonIcon
+              testingselector={`${CONSTANTS.testingSelectors.expendableMenu.toggleMenuBtn}-icon`}
               icon={isExpand ? chevronBackOutline : chevronForwardOutline}
             />
           </ZIonButton>
@@ -234,29 +241,28 @@ const AdminPanelSidebarMenu: React.FC<{
             <div className='flex w-full pt-2 my-3 ion-justify-content-center'>
               {!isZFetching && (
                 <ZIonRouterLink
-                  routerLink={ZaionsRoutes.AdminPanel.Workspaces.Main}>
+                  routerLink={ZaionsRoutes.AdminPanel.Workspaces.Main}
+                  testingselector={`${CONSTANTS.testingSelectors.expendableMenu.wsImage}-link`}>
                   <ZIonImg
+                    testingselector={
+                      CONSTANTS.testingSelectors.expendableMenu.wsImage
+                    }
                     src={
-                      wsShareId != null
-                        ? (selectedShareWorkspace as workspaceInterface)
-                            ?.workspaceImage != null
-                          ? (selectedShareWorkspace as workspaceInterface)
-                              .workspaceImage
+                      isZNonEmptyString(wsShareId)
+                        ? selectedShareWorkspace?.workspaceImage !== null &&
+                          selectedShareWorkspace?.workspaceImage !== undefined
+                          ? selectedShareWorkspace.workspaceImage
                           : getUiAvatarApiUrl({
-                              name: (
-                                selectedShareWorkspace as workspaceInterface
-                              ).workspaceName
+                              name: selectedShareWorkspace?.workspaceName
                             })
-                        : (selectedWorkspace as workspaceInterface)
-                            ?.workspaceImage != null
-                        ? (selectedWorkspace as workspaceInterface)
-                            ?.workspaceImage
+                        : selectedWorkspace?.workspaceImage !== null &&
+                          selectedWorkspace?.workspaceImage !== undefined
+                        ? selectedWorkspace?.workspaceImage
                         : getUiAvatarApiUrl({
-                            name: (selectedWorkspace as workspaceInterface)
-                              ?.workspaceName
+                            name: selectedWorkspace?.workspaceName
                           })
                     }
-                    alt={`${PRODUCT_NAME} logo`}
+                    alt='workspace image'
                     className={classNames(classes['zaions-ap-msm-logo'], {
                       'rounded-full zaions-transition': true
                     })}
@@ -267,18 +273,10 @@ const AdminPanelSidebarMenu: React.FC<{
             </div>
 
             {/*  */}
-            {/* <ZRTooltip
-              anchorSelect='#z-expendable-menu-shortlink-item'
-              isOpen={true}
-              content='Short links'
-              variant='light'
-              place='top'
-              className='z-[100]'
-            /> */}
             <ZIonList
               lines='none'
               className='bg-transparent'>
-              <div className=''>
+              <div>
                 {!isZFetching && (
                   <>
                     {/* Short link */}
@@ -300,6 +298,9 @@ const AdminPanelSidebarMenu: React.FC<{
                           button
                           detail={isExpand}
                           minHeight='2.5rem'
+                          testingselector={
+                            CONSTANTS.testingSelectors.expendableMenu.shortLink
+                          }
                           routerLink={
                             (workspaceId?.trim()?.length ?? 0) > 0
                               ? replaceRouteParams(
@@ -345,12 +346,14 @@ const AdminPanelSidebarMenu: React.FC<{
                           <ZIonIcon
                             icon={linkOutline}
                             color='light'
+                            testingselector={`${CONSTANTS.testingSelectors.expendableMenu.shortLink}-icon`}
                             className={classNames({
                               'mx-auto zaions-transition ion-text-start': true,
                               'ion-text-center w-8 h-8': !isExpand
                             })}
                           />
                           <ZIonLabel
+                            testingselector={`${CONSTANTS.testingSelectors.expendableMenu.shortLink}-label`}
                             color='light'
                             className={classNames({
                               'ms-2 ion-no-margin zaions-transition': true,
@@ -380,6 +383,9 @@ const AdminPanelSidebarMenu: React.FC<{
                         button
                         minHeight='2.5rem'
                         detail={isExpand}
+                        testingselector={
+                          CONSTANTS.testingSelectors.expendableMenu.linkInBio
+                        }
                         routerLink={
                           (workspaceId?.trim()?.length ?? 0) > 0
                             ? replaceRouteParams(
@@ -422,6 +428,7 @@ const AdminPanelSidebarMenu: React.FC<{
                             : ''
                         )}>
                         <ZIonIcon
+                          testingselector={`${CONSTANTS.testingSelectors.expendableMenu.linkInBio}-icon`}
                           icon={idCardOutline}
                           color='light'
                           className={classNames({
@@ -430,6 +437,7 @@ const AdminPanelSidebarMenu: React.FC<{
                           })}
                         />
                         <ZIonLabel
+                          testingselector={`${CONSTANTS.testingSelectors.expendableMenu.linkInBio}-label`}
                           color='light'
                           className={classNames({
                             'ms-2 ion-no-margin zaions-transition': true,
@@ -469,6 +477,9 @@ const AdminPanelSidebarMenu: React.FC<{
                         button
                         minHeight='2.5rem'
                         detail={isExpand}
+                        testingselector={
+                          CONSTANTS.testingSelectors.expendableMenu.setting
+                        }
                         routerLink={
                           (workspaceId?.trim()?.length ?? 0) > 0
                             ? replaceRouteParams(
@@ -523,6 +534,7 @@ const AdminPanelSidebarMenu: React.FC<{
                             : ''
                         )}>
                         <ZIonIcon
+                          testingselector={`${CONSTANTS.testingSelectors.expendableMenu.setting}-icon`}
                           icon={settingsOutline}
                           color='light'
                           className={classNames({
@@ -531,6 +543,7 @@ const AdminPanelSidebarMenu: React.FC<{
                           })}
                         />
                         <ZIonLabel
+                          testingselector={`${CONSTANTS.testingSelectors.expendableMenu.setting}-label`}
                           color='light'
                           className={classNames({
                             'ms-2 ion-no-margin zaions-transition': true,
@@ -594,6 +607,9 @@ const AdminPanelSidebarMenu: React.FC<{
                 : [permissionsEnum.viewAny_shortLink]
             }>
             <ZIonSegmentButton
+              testingselector={
+                CONSTANTS.testingSelectors.expendableMenu.shortLink
+              }
               value={AdminPanelSidebarMenuPageEnum.shortLink}
               className='normal-case'
               onClick={() => {
@@ -626,6 +642,9 @@ const AdminPanelSidebarMenu: React.FC<{
                 : [permissionsEnum.viewAny_linkInBio]
             }>
             <ZIonSegmentButton
+              testingselector={
+                CONSTANTS.testingSelectors.expendableMenu.linkInBio
+              }
               value={AdminPanelSidebarMenuPageEnum.linkInBio}
               className='normal-case'
               onClick={() => {
@@ -645,7 +664,7 @@ const AdminPanelSidebarMenu: React.FC<{
           </ZCan>
 
           {/* Extension */}
-          <ZIonSegmentButton
+          {/* <ZIonSegmentButton
             value='extension'
             className='normal-case'
             onClick={() => {
@@ -658,10 +677,10 @@ const AdminPanelSidebarMenu: React.FC<{
               );
             }}>
             Extension
-          </ZIonSegmentButton>
+          </ZIonSegmentButton> */}
 
           {/* Integrations */}
-          <ZIonSegmentButton
+          {/* <ZIonSegmentButton
             value='integrations'
             className='normal-case'
             onClick={() => {
@@ -674,10 +693,10 @@ const AdminPanelSidebarMenu: React.FC<{
               );
             }}>
             Integrations
-          </ZIonSegmentButton>
+          </ZIonSegmentButton> */}
 
           {/* Workspaces */}
-          <ZIonSegmentButton
+          {/* <ZIonSegmentButton
             value='Workspaces'
             className='normal-case'
             onClick={() => {
@@ -692,10 +711,10 @@ const AdminPanelSidebarMenu: React.FC<{
               // zNavigatePushRoute();
             }}>
             Workspaces
-          </ZIonSegmentButton>
+          </ZIonSegmentButton> */}
 
           {/* Help center */}
-          <ZIonSegmentButton
+          {/* <ZIonSegmentButton
             value='help-center'
             className='normal-case'
             onClick={() => {
@@ -708,7 +727,7 @@ const AdminPanelSidebarMenu: React.FC<{
               );
             }}>
             Help center
-          </ZIonSegmentButton>
+          </ZIonSegmentButton> */}
 
           {/* Settings */}
           <ZCan
@@ -735,6 +754,9 @@ const AdminPanelSidebarMenu: React.FC<{
                   ]
             }>
             <ZIonSegmentButton
+              testingselector={
+                CONSTANTS.testingSelectors.expendableMenu.setting
+              }
               value='settings'
               className='normal-case'
               onClick={() => {

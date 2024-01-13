@@ -12,7 +12,7 @@ export enum ZPlanTimeLine {
   annual = 'annual'
 }
 
-export interface ZUserSubscriptionI {
+export interface ZSubscriptionI {
   id?: string;
   startedAt?: string;
   endedAt?: string;

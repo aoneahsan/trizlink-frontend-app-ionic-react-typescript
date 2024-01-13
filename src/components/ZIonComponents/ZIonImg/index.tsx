@@ -3,8 +3,7 @@ import React, { type ReactNode } from 'react';
 
 // Packages Import
 import { IonImg } from '@ionic/react';
-import { zCreateElementTestingSelector } from '@/utils/helpers';
-import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
+import { zComponentTestingSelectorMaker } from '@/utils/helpers';
 
 interface ZIonImgType {
   src?: string;
@@ -15,33 +14,23 @@ interface ZIonImgType {
   slot?: 'start' | 'end';
   testingselector?: string;
   testinglistselector?: string;
+  testingidselector?: string;
 }
 
 const ZIonImg: React.FC<ZIonImgType> = (props: ZIonImgType) => {
-  const _testinglistselector =
-    props.testinglistselector !== undefined
-      ? {
-          ...zCreateElementTestingSelector({
-            _value: props.testinglistselector,
-            _key: zCreateElementTestingSelectorKeyEnum.listSelector
-          })
-        }
-      : {};
-
-  const _testingSelector =
-    props.testingselector !== undefined
-      ? {
-          ...zCreateElementTestingSelector({
-            _value: props.testingselector
-          })
-        }
-      : {};
+  const { _idSelector, _testingSelector, _testinglistselector } =
+    zComponentTestingSelectorMaker({
+      testingidselector: props.testingidselector,
+      testinglistselector: props.testinglistselector,
+      testingselector: props.testingselector
+    });
   return (
     <IonImg
       {...props}
       style={props.style}
       {..._testingSelector}
-      {..._testinglistselector}>
+      {..._testinglistselector}
+      {..._idSelector}>
       {props.children}
     </IonImg>
   );

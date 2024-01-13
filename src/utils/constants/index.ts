@@ -163,6 +163,10 @@ export const API_URLS = {
   member_create_short_url: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/create-short-url/${RouteParams.workspace.memberInviteId}`,
   member_check_short_url: `/user/ws-member/short-url/check/${RouteParams.workspace.invitationId}`,
   validate_invitation_status: '/user/validate-and-update-invitation',
+  ws_subscription_get: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/ws-subscription`,
+  ws_subscription: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/subscribe`,
+  ws_subscription_update: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/update/subscribe`,
+  ws_subscription_limits: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/limits`,
 
   // Share workspace members
   sws_member_sendInvite_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/ws/member/send-invitation`,
@@ -550,6 +554,18 @@ const testingSelectors = {
   },
   // #endregion
 
+  // #region Expendable Menu
+  expendableMenu: {
+    mainContainer: 'em-main-container',
+    toggleMenuBtn: 'em-toggle-menu-btn',
+    wsImage: 'em-toggle-ws-image',
+    list: 'em-toggle-list',
+    shortLink: 'em-toggle-short-link',
+    linkInBio: 'em-toggle-link-in-bio',
+    setting: 'em-toggle-setting'
+  },
+  // #endregion
+
   // #region login page
   loginPage: {
     loginButton: 'lp-login-btn',
@@ -641,8 +657,10 @@ const testingSelectors = {
     },
 
     createModal: {
-      nameInput: 'wcm-name-input',
       timezoneInput: 'wcm-timezone-input',
+      nameInput: 'wcm-name-input',
+      planSelector: 'wcm-plan-selector',
+      seePlansDetailsBtn: 'wcm-plans-details-btn',
       createButton: 'wcm-create-btn',
       closeButton: 'wcm-close-btn'
     },
@@ -738,9 +756,12 @@ const testingSelectors = {
   // #region short links
   shortLink: {
     listPage: {
+      rightSideMainContainer: 'slp-right-side-main-container',
+      switchItItem: 'slp-switch-item',
       switchItInput: 'slp-switch-input',
       switchItBtn: 'slp-switch-btn',
       switchItInputError: 'slp-search-input-error',
+      searchItem: 'slp-search-item',
       searchInput: 'slp-search-input',
       searchBtn: 'slp-search-btn',
       filterBtn: 'slp-filter-btn',
@@ -753,6 +774,14 @@ const testingSelectors = {
       refetchBtn: 'slp-refetch-btn',
 
       table: {
+        main: 'slp-t-main',
+        head: 'slp-t-head',
+        body: 'slp-t-body',
+        footer: 'slp-t-footer',
+        empty: {
+          main: 'slp-t-empty',
+          btn: 'slp-t-empty-create-btn'
+        },
         url: 'slp-t-url',
         linkToShare: 'slp-t-link-to-share',
         pixel: 'slp-t-pixel',
@@ -765,11 +794,16 @@ const testingSelectors = {
         getFirstPageButton: 'slp-t-first-page-btn',
         nextButton: 'slp-t-next-page-btn',
         getLastPageButton: 'slp-t-last-page-btn',
-        pageSizeInput: 'slp-t-page-size-input'
+        pageSizeInput: 'slp-t-page-size-input',
+        countText: 'slp-t-count-text'
       }
     },
 
     formPage: {
+      homeBtn: 'sl-fp-home-btn',
+      topBarText: 'sl-fp-tb-text',
+      topBarRefreshBtn: 'sl-fp-tb-refresh-btn',
+      topBarSubmitBtn: 'sl-fp-tb-submit-btn',
       advanceOptionsBtn: 'sl-fp-advance-options-btn',
       advanceOptionsContent: 'sl-fp-advance-options-content',
 
@@ -876,6 +910,19 @@ const testingSelectors = {
         createBtn: 'sl-fp-folder-create-btn',
         selector: 'sl-fp-folder-selector'
       }
+    },
+
+    filterMenu: {
+      mainMenu: 'slp-fm-main',
+      menuCloseBtn: 'slp-fm-close-btn',
+      timeSelector: 'slp-fm-time-selector',
+      tagsSelector: 'slp-fm-tags-selector',
+      domainsSelector: 'slp-fm-domains-selector',
+      filterSlBtn: 'slp-fm-filter-sl-btn',
+      reorderItem: 'slp-fm-item',
+      reorderSaveBtn: 'slp-fm-reorder-save-btn',
+      exportBtn: 'slp-fm-export-btn',
+      bulkImportBtn: 'slp-fm-bulk-import-btn'
     }
   },
   // #endregion
@@ -1287,12 +1334,13 @@ const testingSelectors = {
 
   // #region folder
   folder: {
+    mainContainer: 'folder-main-container',
     create: 'f-create-btn',
-    actionPopoverBtn: 'fap-btn',
+    noDataItem: 'f-no-data-item',
     editBtn: 'f-edit-btn',
     deleteBtn: 'f-delete-btn',
     reorderBtn: 'f-reorder-btn',
-    singleFolder: 'single-folder',
+    singleFolder: 'folder-item',
     formModal: {
       closeModalBtn: 'folder-fm-close-btn',
       submitFormBtn: 'folder-fm-submit-form-btn',
@@ -1694,7 +1742,10 @@ const REACT_QUERY = {
       INVITATION_GET: 'rq-ws-team-member-invitation-get-key',
 
       SWS_MEMBERS_MAIN: 'rq-sws-team-members-main-key',
-      SWS_MEMBER_GET: 'rq-sws-team-member-get-key'
+      SWS_MEMBER_GET: 'rq-sws-team-member-get-key',
+
+      SUBSCRIPTION_GET: 'rq-workspace-subscription-key',
+      SUBSCRIPTION_LIMITS: 'rq-workspace-subscription-limits-key'
     },
     SHARE_WS: {
       MAIN: 'rq-ws-share-list-key',

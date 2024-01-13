@@ -20,7 +20,7 @@ import {
   subscriptionTimeLine,
   planFeaturesEnum
 } from '@/types/AdminPanel/index.type';
-import { type ZUserSubscriptionI } from '@/types/WhyZaions/PricingPage';
+import { type ZSubscriptionI } from '@/types/WhyZaions/PricingPage';
 import dayjs from 'dayjs';
 
 export const ZaionsUserAccountRStateAtom = atom<UserAccountType | null>({
@@ -92,7 +92,7 @@ export const ZUserServicesLimitsRStateAtom = atom<userServicesLimitI[]>({
   default: []
 });
 
-export const ZCurrentUserSubscriptionRStateAtom = atom<ZUserSubscriptionI>({
+export const ZCurrentUserSubscriptionRStateAtom = atom<ZSubscriptionI>({
   key: 'ZCurrentUserSubscriptionRStateAtom_key',
   default: {}
 });

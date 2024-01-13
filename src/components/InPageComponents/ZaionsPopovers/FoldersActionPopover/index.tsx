@@ -74,7 +74,7 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
  * ? Import of recoil states is a Recoil State import
  * */
 import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil';
-import { ZUserCurrentLimitsRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
+import { ZWsLimitsRStateAtom } from '@/ZaionsStore/UserDashboard/Workspace/index.recoil';
 
 /**
  * Style files Imports go down
@@ -122,9 +122,7 @@ const FolderActionsPopoverContent: React.FC<{
    */
   const [folderFormState, setFolderFormState] = useRecoilState(FolderFormState);
 
-  const setZUserCurrentLimitsRState = useSetRecoilState(
-    ZUserCurrentLimitsRStateAtom
-  );
+  const serZWsLimitsRState = useSetRecoilState(ZWsLimitsRStateAtom);
 
   /**
    * delete short link folder api.
@@ -291,12 +289,12 @@ const FolderActionsPopoverContent: React.FC<{
 
             // updating limit recoil sate
             if (state === folderState.shortlink) {
-              setZUserCurrentLimitsRState(oldValues => ({
+              serZWsLimitsRState(oldValues => ({
                 ...oldValues,
                 [planFeaturesEnum.shortLinksFolder]: _updatedFolders?.length
               }));
             } else if (state === folderState.linkInBio) {
-              setZUserCurrentLimitsRState(oldValues => ({
+              serZWsLimitsRState(oldValues => ({
                 ...oldValues,
                 [planFeaturesEnum.linksInBioFolder]: _updatedFolders?.length
               }));

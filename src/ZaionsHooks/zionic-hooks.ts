@@ -479,6 +479,7 @@ export const useZIonModal = <A extends object>(
         .fromTo('opacity', '0.01', 'var(--backdrop-opacity)');
 
       const wrapperAnimation = createAnimation()
+        // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
         .addElement(root?.querySelector('.modal-wrapper') as Element)
         .keyframes([
           { offset: 0, opacity: '0', transform: 'scale(0)' },
@@ -498,10 +499,12 @@ export const useZIonModal = <A extends object>(
 
     const presentZIonModal = ({
       _cssClass,
+      _htmlAttributes,
       _onWillDismiss,
       _onDidDismiss
     }: {
       _cssClass?: string | string[];
+      _htmlAttributes?: Record<string, any>;
       _onWillDismiss?: (
         event: CustomEvent<OverlayEventDetail<unknown>>
       ) => void;
@@ -518,7 +521,8 @@ export const useZIonModal = <A extends object>(
         onWillDismiss: _onWillDismiss,
         onDidDismiss: _onDidDismiss,
         leaveAnimation: _leaveAnimation,
-        enterAnimation: _enterAnimation
+        enterAnimation: _enterAnimation,
+        htmlAttributes: _htmlAttributes
       });
     };
     return { presentZIonModal, dismissZIonModal };

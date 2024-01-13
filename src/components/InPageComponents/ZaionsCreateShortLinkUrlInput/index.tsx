@@ -34,7 +34,13 @@ import {
 import { reportCustomError } from '@/utils/customErrorType';
 import CONSTANTS from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { replaceParams, validateField } from '@/utils/helpers';
+import {
+  createRedirectRoute,
+  isZNonEmptyString,
+  isZNonEmptyStrings,
+  replaceParams,
+  validateField
+} from '@/utils/helpers';
 import { VALIDATION_RULE } from '@/utils/enums';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 
@@ -81,9 +87,11 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{
   className?: string;
   showSkeleton?: boolean;
 }> = ({ className, showSkeleton = false }) => {
-  // getting current workspace id form params.
-  const { workspaceId } = useParams<{
+  // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
+  const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
     workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   const setNewShortLinkFormState = useSetRecoilState(NewShortLinkFormState);
@@ -139,19 +147,36 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{
               el => el.type === messengerPlatformsBlockEnum.link
             );
 
-            if (selectedTypeOptionData !== undefined) {
+            if (
+              selectedTypeOptionData !== undefined &&
+              selectedTypeOptionData !== null
+            ) {
               setNewShortLinkTypeOptionDataAtom(_ => ({
                 ...selectedTypeOptionData
               }));
             }
 
-            zNavigatePushRoute(
-              replaceParams(
-                ZaionsRoutes.AdminPanel.ShortLinks.Create,
-                CONSTANTS.RouteParams.workspace.workspaceId,
-                workspaceId ?? ''
-              )
-            );
+            if (isZNonEmptyString(workspaceId)) {
+              zNavigatePushRoute(
+                replaceParams(
+                  ZaionsRoutes.AdminPanel.ShortLinks.Create,
+                  CONSTANTS.RouteParams.workspace.workspaceId,
+                  workspaceId ?? ''
+                )
+              );
+            } else if (isZNonEmptyStrings([wsShareId, shareWSMemberId])) {
+              zNavigatePushRoute(
+                createRedirectRoute({
+                  url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Create,
+                  params: [
+                    CONSTANTS.RouteParams.workspace.wsShareId,
+                    CONSTANTS.RouteParams.workspace.shareWSMemberId
+                  ],
+                  values: [wsShareId ?? '', shareWSMemberId ?? '']
+                })
+              );
+            }
+
             resetForm();
           }
         } catch (error) {
@@ -165,6 +190,9 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{
               <ZIonItem
                 lines='none'
                 minHeight='40px'
+                testingselector={
+                  CONSTANTS.testingSelectors.shortLink.listPage.switchItItem
+                }
                 className={classNames(className, {
                   'ion-item-start-no-padding z-inner-padding-end-0': true,
                   'ion-touched': touched?.domain === true,

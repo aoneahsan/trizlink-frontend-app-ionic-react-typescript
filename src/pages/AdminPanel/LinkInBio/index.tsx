@@ -82,11 +82,12 @@ import {
 
 // Styles
 import classes from './styles.module.css';
-import {
-  ZUserCurrentLimitsRStateAtom,
-  ZUserCurrentLimitsRStateSelectorFamily
-} from '@/ZaionsStore/UserAccount/index.recoil';
 import ZReachedLimitModal from '@/components/InPageComponents/ZaionsModals/UpgradeModals/ReachedLimit';
+import ZRequiredWsDataHOC from '@/components/WorkspacesComponents/RequiredWsDataHOC';
+import {
+  ZWsLimitsRStateAtom,
+  ZWsRemainingLimitsRStateSelectorFamily
+} from '@/ZaionsStore/UserDashboard/Workspace/index.recoil';
 
 // Lazy loads
 const ZaionsLinkInBioLinksTable = lazy(
@@ -137,12 +138,10 @@ const ZLinkInBiosListPage: React.FC = () => {
   // #region Recoils.
   const ZDashboardState = useRecoilValue(ZDashboardRState);
 
-  const setZUserCurrentLimitsRState = useSetRecoilState(
-    ZUserCurrentLimitsRStateAtom
-  );
+  const setZWsLimitsRState = useSetRecoilState(ZWsLimitsRStateAtom);
 
-  const ZUserCurrentLimitsRState = useRecoilValue(
-    ZUserCurrentLimitsRStateSelectorFamily(planFeaturesEnum.linksInBioFolder)
+  const ZWsRemainingLibFoldersLimitsRState = useRecoilValue(
+    ZWsRemainingLimitsRStateSelectorFamily(planFeaturesEnum.linksInBioFolder)
   );
   // #endregion
 
@@ -440,13 +439,23 @@ const ZLinkInBiosListPage: React.FC = () => {
   // #region useEffect.
   useEffect(() => {
     if (libFoldersData !== undefined && libFoldersData !== null) {
-      setZUserCurrentLimitsRState(oldValues => ({
+      setZWsLimitsRState(oldValues => ({
         ...oldValues,
         [planFeaturesEnum.linksInBioFolder]: libFoldersData?.length
       }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspaceId, shareWSMemberId, wsShareId, isLibFoldersDataFetching]);
+
+  useEffect(() => {
+    if (libData !== undefined && libData !== null) {
+      setZWsLimitsRState(oldValues => ({
+        ...oldValues,
+        [planFeaturesEnum.linkInBio]: libData?.items?.length
+      }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [workspaceId, shareWSMemberId, wsShareId, libData]);
 
   useEffect(() => {
     try {
@@ -493,199 +502,203 @@ const ZLinkInBiosListPage: React.FC = () => {
       <ZIonPage
         pageTitle='Zaions link-in-bio list page'
         id={CONSTANTS.PAGE_IDS.AD_LIB_LIST_PAGE}>
-        {compState?.isProcessing ? (
-          <ZPageLoader>
-            {workspaceId !== undefined &&
-            workspaceId !== null &&
-            workspaceId?.trim()?.length > 0
-              ? isSelectedWorkspaceFetching
-                ? 'Setting workspace data'
-                : isLibDataFetching
-                ? 'Fetching workspace link-in-bio'
-                : isLibFoldersDataFetching
-                ? 'Fetching workspace link-in-bio folders'
-                : null
-              : wsShareId !== undefined &&
-                wsShareId !== null &&
-                wsShareId?.trim()?.length > 0 &&
-                shareWSMemberId !== undefined &&
-                shareWSMemberId !== null &&
-                shareWSMemberId?.trim()?.length > 0
-              ? isGetMemberRolePermissionsFetching
-                ? 'Getting & setting your permissions in this workspace'
-                : isSelectedWorkspaceFetching
-                ? 'Setting share workspace data'
-                : isLibDataFetching
-                ? 'Fetching share workspace link-in-bio'
-                : isLibFoldersDataFetching
-                ? 'Fetching share workspace link-in-bio folders'
-                : null
-              : null}
-          </ZPageLoader>
-        ) : (
-          <ZIonContent>
-            {/* Page Navigation */}
-            <ZIonRefresher
-              onIonRefresh={event => {
-                void handleRefresh(event);
-              }}>
-              <ZIonRefresherContent />
-            </ZIonRefresher>
+        <ZRequiredWsDataHOC>
+          {compState?.isProcessing ? (
+            <ZPageLoader>
+              {workspaceId !== undefined &&
+              workspaceId !== null &&
+              workspaceId?.trim()?.length > 0
+                ? isSelectedWorkspaceFetching
+                  ? 'Setting workspace data'
+                  : isLibDataFetching
+                  ? 'Fetching workspace link-in-bio'
+                  : isLibFoldersDataFetching
+                  ? 'Fetching workspace link-in-bio folders'
+                  : null
+                : wsShareId !== undefined &&
+                  wsShareId !== null &&
+                  wsShareId?.trim()?.length > 0 &&
+                  shareWSMemberId !== undefined &&
+                  shareWSMemberId !== null &&
+                  shareWSMemberId?.trim()?.length > 0
+                ? isGetMemberRolePermissionsFetching
+                  ? 'Getting & setting your permissions in this workspace'
+                  : isSelectedWorkspaceFetching
+                  ? 'Setting share workspace data'
+                  : isLibDataFetching
+                  ? 'Fetching share workspace link-in-bio'
+                  : isLibFoldersDataFetching
+                  ? 'Fetching share workspace link-in-bio folders'
+                  : null
+                : null}
+            </ZPageLoader>
+          ) : (
+            <ZIonContent>
+              {/* Page Navigation */}
+              <ZIonRefresher
+                onIonRefresh={event => {
+                  void handleRefresh(event);
+                }}>
+                <ZIonRefresherContent />
+              </ZIonRefresher>
 
-            {/* Grid-1 */}
-            <ZIonGrid
-              className={classNames({
-                'h-screen ion-no-padding': true,
-                'max-w-[200rem] mx-auto': false
-              })}>
-              {/* Row-1 */}
-              <ZIonRow className='h-full'>
-                {/* Col-1 Side bar */}
-                <Suspense
-                  fallback={
-                    <ZIonCol
-                      size='.8'
-                      className='h-full zaions__medium_bg zaions-transition'>
-                      <ZFallbackIonSpinner2 />
-                    </ZIonCol>
-                  }>
-                  <AdminPanelSidebarMenu
-                    activePage={AdminPanelSidebarMenuPageEnum.linkInBio}
-                  />
-                </Suspense>
-
-                {/* Col-2 Right-side Main Container */}
-                <ZIonCol
-                  sizeXl={
-                    ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
-                      ? is2XlScale
-                        ? '10.5'
-                        : '10'
-                      : is2XlScale
-                      ? '11.4'
-                      : '11.2'
-                  }
-                  sizeLg={
-                    ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
-                      ? is2XlScale
-                        ? '10.5'
-                        : '10'
-                      : is2XlScale
-                      ? '11.4'
-                      : '11.2'
-                  }
-                  sizeMd='12'
-                  sizeSm='12'
-                  sizeXs='12'
-                  className='h-screen zaions-transition'>
-                  <ZIonGrid className='h-full ion-no-padding'>
-                    {/* Col-2 Row-1 Top bar. */}
-                    <Suspense
-                      fallback={
-                        <ZIonRow className='h-[4rem] px-3 zaions__light_bg'>
-                          <ZFallbackIonSpinner2 />
-                        </ZIonRow>
-                      }>
-                      <ZAdminPanelTopBar workspaceId={workspaceId} />
-                    </Suspense>
-
-                    {/* Col-2 Row-2 */}
-                    <ZIonRow className='h-[calc(100%-4rem)]'>
-                      {isLgScale && (
-                        <ZCan
-                          shareWSId={wsShareId}
-                          permissionType={
-                            wsShareId !== undefined &&
-                            wsShareId !== null &&
-                            wsShareId?.trim()?.length > 0 &&
-                            shareWSMemberId !== undefined &&
-                            shareWSMemberId !== null &&
-                            shareWSMemberId?.trim()?.length > 0
-                              ? permissionsTypeEnum.shareWSMemberPermissions
-                              : permissionsTypeEnum.loggedInUserPermissions
-                          }
-                          havePermissions={
-                            wsShareId !== undefined &&
-                            wsShareId !== null &&
-                            wsShareId?.trim()?.length > 0 &&
-                            shareWSMemberId !== undefined &&
-                            shareWSMemberId !== null &&
-                            shareWSMemberId?.trim()?.length > 0
-                              ? [shareWSPermissionEnum.viewAny_sws_folder]
-                              : [permissionsEnum.viewAny_folder]
-                          }>
-                          <Suspense
-                            fallback={
-                              <ZIonCol className='h-full border-e-[1px] zaions-transition'>
-                                <ZFallbackIonSpinner2 />
-                              </ZIonCol>
-                            }>
-                            <ZDashboardFolderMenu
-                              showSkeleton={isZFetching}
-                              type={AdminPanelSidebarMenuPageEnum.linkInBio}
-                              foldersData={libFoldersData ?? []}
-                              showFoldersSaveReorderButton={
-                                compState?.LinkInBioFoldersReorder?.isEnable
-                              }
-                              handleFoldersReorder={handleReorder}
-                              addNewFolderButtonOnClickHandler={() => {
-                                if (ZUserCurrentLimitsRState === false) {
-                                  presentZReachedLimitModal({
-                                    _cssClass: 'reached-limit-modal-size'
-                                  });
-                                } else {
-                                  presentFolderModal({
-                                    _cssClass: 'folder-form-modal'
-                                  });
-                                }
-                              }}
-                              foldersSaveReorderButtonOnClickHandler={() => {
-                                void linkInBioFoldersReOrderHandler();
-                              }}
-                              folderActionsButtonOnClickHandler={(
-                                event: unknown
-                              ) => {
-                                presentLinkInBioFolderActionIonPopover({
-                                  _event: event as Event,
-                                  _cssClass: classNames(
-                                    classes.zaions_present_folder_Action_popover_width
-                                  )
-                                });
-                              }}
-                            />
-                          </Suspense>
-                        </ZCan>
-                      )}
-
-                      {/* Col-2 Row-2 col-2 Table & filters etc. */}
+              {/* Grid-1 */}
+              <ZIonGrid
+                className={classNames({
+                  'h-screen ion-no-padding': true,
+                  'max-w-[200rem] mx-auto': false
+                })}>
+                {/* Row-1 */}
+                <ZIonRow className='h-full'>
+                  {/* Col-1 Side bar */}
+                  <Suspense
+                    fallback={
                       <ZIonCol
-                        className='h-full zaions-transition'
-                        sizeXl='9.2'
-                        sizeLg='9.2'
-                        sizeMd='12'
-                        sizeSm='12'
-                        sizeXs='12'>
-                        {!isSmScale ? (
-                          <ZInpageMainContent />
-                        ) : (
-                          <ZCustomScrollable
-                            className={classNames({
-                              'flex flex-col w-full h-full px-3 pt-3': true,
-                              'gap-10': isMdScale,
-                              'gap-5': !isMdScale
-                            })}
-                            scrollY={true}>
-                            <ZInpageMainContent />
-                          </ZCustomScrollable>
-                        )}
+                        size='.8'
+                        className='h-full zaions__medium_bg zaions-transition'>
+                        <ZFallbackIonSpinner2 />
                       </ZIonCol>
-                    </ZIonRow>
-                  </ZIonGrid>
-                </ZIonCol>
-              </ZIonRow>
-            </ZIonGrid>
-          </ZIonContent>
-        )}
+                    }>
+                    <AdminPanelSidebarMenu
+                      activePage={AdminPanelSidebarMenuPageEnum.linkInBio}
+                    />
+                  </Suspense>
+
+                  {/* Col-2 Right-side Main Container */}
+                  <ZIonCol
+                    sizeXl={
+                      ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
+                        ? is2XlScale
+                          ? '10.5'
+                          : '10'
+                        : is2XlScale
+                        ? '11.4'
+                        : '11.2'
+                    }
+                    sizeLg={
+                      ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
+                        ? is2XlScale
+                          ? '10.5'
+                          : '10'
+                        : is2XlScale
+                        ? '11.4'
+                        : '11.2'
+                    }
+                    sizeMd='12'
+                    sizeSm='12'
+                    sizeXs='12'
+                    className='h-screen zaions-transition'>
+                    <ZIonGrid className='h-full ion-no-padding'>
+                      {/* Col-2 Row-1 Top bar. */}
+                      <Suspense
+                        fallback={
+                          <ZIonRow className='h-[4rem] px-3 zaions__light_bg'>
+                            <ZFallbackIonSpinner2 />
+                          </ZIonRow>
+                        }>
+                        <ZAdminPanelTopBar workspaceId={workspaceId} />
+                      </Suspense>
+
+                      {/* Col-2 Row-2 */}
+                      <ZIonRow className='h-[calc(100%-4rem)]'>
+                        {isLgScale && (
+                          <ZCan
+                            shareWSId={wsShareId}
+                            permissionType={
+                              wsShareId !== undefined &&
+                              wsShareId !== null &&
+                              wsShareId?.trim()?.length > 0 &&
+                              shareWSMemberId !== undefined &&
+                              shareWSMemberId !== null &&
+                              shareWSMemberId?.trim()?.length > 0
+                                ? permissionsTypeEnum.shareWSMemberPermissions
+                                : permissionsTypeEnum.loggedInUserPermissions
+                            }
+                            havePermissions={
+                              wsShareId !== undefined &&
+                              wsShareId !== null &&
+                              wsShareId?.trim()?.length > 0 &&
+                              shareWSMemberId !== undefined &&
+                              shareWSMemberId !== null &&
+                              shareWSMemberId?.trim()?.length > 0
+                                ? [shareWSPermissionEnum.viewAny_sws_folder]
+                                : [permissionsEnum.viewAny_folder]
+                            }>
+                            <Suspense
+                              fallback={
+                                <ZIonCol className='h-full border-e-[1px] zaions-transition'>
+                                  <ZFallbackIonSpinner2 />
+                                </ZIonCol>
+                              }>
+                              <ZDashboardFolderMenu
+                                showSkeleton={isZFetching}
+                                type={AdminPanelSidebarMenuPageEnum.linkInBio}
+                                foldersData={libFoldersData ?? []}
+                                showFoldersSaveReorderButton={
+                                  compState?.LinkInBioFoldersReorder?.isEnable
+                                }
+                                handleFoldersReorder={handleReorder}
+                                addNewFolderButtonOnClickHandler={() => {
+                                  if (
+                                    ZWsRemainingLibFoldersLimitsRState === false
+                                  ) {
+                                    presentZReachedLimitModal({
+                                      _cssClass: 'reached-limit-modal-size'
+                                    });
+                                  } else {
+                                    presentFolderModal({
+                                      _cssClass: 'folder-form-modal'
+                                    });
+                                  }
+                                }}
+                                foldersSaveReorderButtonOnClickHandler={() => {
+                                  void linkInBioFoldersReOrderHandler();
+                                }}
+                                folderActionsButtonOnClickHandler={(
+                                  event: unknown
+                                ) => {
+                                  presentLinkInBioFolderActionIonPopover({
+                                    _event: event as Event,
+                                    _cssClass: classNames(
+                                      classes.zaions_present_folder_Action_popover_width
+                                    )
+                                  });
+                                }}
+                              />
+                            </Suspense>
+                          </ZCan>
+                        )}
+
+                        {/* Col-2 Row-2 col-2 Table & filters etc. */}
+                        <ZIonCol
+                          className='h-full zaions-transition'
+                          sizeXl='9.2'
+                          sizeLg='9.2'
+                          sizeMd='12'
+                          sizeSm='12'
+                          sizeXs='12'>
+                          {!isSmScale ? (
+                            <ZInpageMainContent />
+                          ) : (
+                            <ZCustomScrollable
+                              className={classNames({
+                                'flex flex-col w-full h-full px-3 pt-3': true,
+                                'gap-10': isMdScale,
+                                'gap-5': !isMdScale
+                              })}
+                              scrollY={true}>
+                              <ZInpageMainContent />
+                            </ZCustomScrollable>
+                          )}
+                        </ZIonCol>
+                      </ZIonRow>
+                    </ZIonGrid>
+                  </ZIonCol>
+                </ZIonRow>
+              </ZIonGrid>
+            </ZIonContent>
+          )}
+        </ZRequiredWsDataHOC>
       </ZIonPage>
     </>
   );
@@ -705,12 +718,8 @@ const ZInpageMainContent: React.FC = () => {
   // #endregion
 
   // #region Recoils.
-  const setZUserCurrentLimitsRState = useSetRecoilState(
-    ZUserCurrentLimitsRStateAtom
-  );
-
-  const ZUserCurrentLimitsRState = useRecoilValue(
-    ZUserCurrentLimitsRStateSelectorFamily(planFeaturesEnum.linkInBio)
+  const ZWsLibLimitsRState = useRecoilValue(
+    ZWsRemainingLimitsRStateSelectorFamily(planFeaturesEnum.linkInBio)
   );
   // #endregion
 
@@ -735,7 +744,7 @@ const ZInpageMainContent: React.FC = () => {
     _showLoader: false
   });
 
-  const { data: libData, isFetching: isLibDataFetching } = useZRQGetRequest<{
+  const { data: libData } = useZRQGetRequest<{
     items: LinkInBioType[];
     itemsCount: string;
   }>({
@@ -806,18 +815,6 @@ const ZInpageMainContent: React.FC = () => {
       reportCustomError(error);
     }
   };
-  // #endregion
-
-  // #region useEffects
-  useEffect(() => {
-    if (libData?.items !== undefined && libData?.items !== null) {
-      setZUserCurrentLimitsRState(oldValues => ({
-        ...oldValues,
-        [planFeaturesEnum.linkInBio]: libData?.items?.length
-      }));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [workspaceId, shareWSMemberId, wsShareId, isLibDataFetching]);
   // #endregion
 
   return (
@@ -1076,7 +1073,7 @@ const ZInpageMainContent: React.FC = () => {
                   CONSTANTS.testingSelectors.linkInBio.listPage.createBtn
                 }
                 onClick={() => {
-                  if (ZUserCurrentLimitsRState === false) {
+                  if (ZWsLibLimitsRState === false) {
                     presentZReachedLimitModal({
                       _cssClass: 'reached-limit-modal-size'
                     });

@@ -518,6 +518,9 @@ span.new {
 .zaions-border-color-secondary {
   border-color: var(--ion-color-secondary) !important;
 }
+.z-border-color-success-point-4 {
+  border-color: rgba(var(--ion-color-success-rgb), 0.4) !important;
+}
 .zaions-border-transparent {
   --border-width: 2px;
   --border-style: solid;
@@ -737,8 +740,10 @@ span.new {
 }
 
 .create-workspace-modal-size {
-  --height: 27rem;
-  --width: 27rem;
+  --height: 46rem;
+  --width: 35rem;
+  --max-width: 95%;
+  --max-height: 89%;
 }
 
 .invitation-view-modal-size {

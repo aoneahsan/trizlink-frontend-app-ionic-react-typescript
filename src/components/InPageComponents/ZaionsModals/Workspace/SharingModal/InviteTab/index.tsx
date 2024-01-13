@@ -96,7 +96,7 @@ import { type ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import { type ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 import { FormMode, planFeaturesEnum } from '@/types/AdminPanel/index.type';
-import { ZUserCurrentLimitsRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
+import { ZWsLimitsRStateAtom } from '@/ZaionsStore/UserDashboard/Workspace/index.recoil';
 
 /**
  * Recoil State Imports go down
@@ -198,9 +198,7 @@ const ZInviteTab: React.FC<{
   // #endregion
 
   // #region Recoils
-  const setZUserCurrentLimitsRState = useSetRecoilState(
-    ZUserCurrentLimitsRStateAtom
-  );
+  const setZWsLimitsRState = useSetRecoilState(ZWsLimitsRStateAtom);
 
   const { presentZIonModal: presentZReachedLimitModal } =
     useZIonModal(ZReachedLimitModal);
@@ -364,7 +362,7 @@ const ZInviteTab: React.FC<{
                   extractType: ZRQGetRequestExtractEnum.extractItems
                 });
 
-                setZUserCurrentLimitsRState(oldValues => ({
+                setZWsLimitsRState(oldValues => ({
                   ...oldValues,
                   [planFeaturesEnum.members]: _updatedMembersData?.length
                 }));

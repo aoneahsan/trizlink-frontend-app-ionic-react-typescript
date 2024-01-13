@@ -118,6 +118,12 @@ export enum API_URL_ENUM {
   validate_invitation_status = 'validate_invitation_status',
   member_check_short_url = 'member_check_short_url',
 
+  // Workspace subscription
+  ws_subscription_get = 'ws_subscription_get',
+  ws_subscription = 'ws_subscription',
+  ws_subscription_update = 'ws_subscription_update',
+  ws_subscription_limits = 'ws_subscription_limits',
+
   // Share workspace members
   sws_member_sendInvite_list = 'sws_member_sendInvite_list',
   sws_member_getAllInvite_list = 'sws_member_getAllInvite_list',

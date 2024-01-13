@@ -2,6 +2,7 @@
 import React from 'react';
 
 // Packages Import
+import { useSetRecoilState } from 'recoil';
 import { closeOutline } from 'ionicons/icons';
 import classNames from 'classnames';
 
@@ -52,8 +53,7 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { ENVS } from '@/utils/envKeys';
 import { planFeaturesEnum } from '@/types/AdminPanel/index.type';
-import { useSetRecoilState } from 'recoil';
-import { ZUserCurrentLimitsRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
+import { ZWsLimitsRStateAtom } from '@/ZaionsStore/UserDashboard/Workspace/index.recoil';
 
 // Styles
 
@@ -78,9 +78,7 @@ const ZaionsAddLinkInBioModal: React.FC<{
   const { getRQCDataHandler } = useZGetRQCacheData();
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
 
-  const setZUserCurrentLimitsRState = useSetRecoilState(
-    ZUserCurrentLimitsRStateAtom
-  );
+  const setWsLimitsRState = useSetRecoilState(ZWsLimitsRStateAtom);
 
   // Create new link-in-bio API.
   const { mutateAsync: createLinkInBioMutate } =
@@ -178,7 +176,7 @@ const ZaionsAddLinkInBioModal: React.FC<{
               updateHoleData: true
             });
 
-            setZUserCurrentLimitsRState(oldValues => ({
+            setWsLimitsRState(oldValues => ({
               ...oldValues,
               [planFeaturesEnum.linkInBio]: _updatedLinkInBios?.length
             }));

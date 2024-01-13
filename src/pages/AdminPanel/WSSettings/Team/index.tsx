@@ -64,16 +64,16 @@ import {
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import ZReachedLimitModal from '@/components/InPageComponents/ZaionsModals/UpgradeModals/ReachedLimit';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import {
-  ZUserCurrentLimitsRStateAtom,
-  ZUserCurrentLimitsRStateSelectorFamily
-} from '@/ZaionsStore/UserAccount/index.recoil';
 import { planFeaturesEnum } from '@/types/AdminPanel/index.type';
 import {
   _getQueryKey,
   isZNonEmptyString,
   isZNonEmptyStrings
 } from '@/utils/helpers';
+import {
+  ZWsLimitsRStateAtom,
+  ZWsRemainingLimitsRStateSelectorFamily
+} from '@/ZaionsStore/UserDashboard/Workspace/index.recoil';
 
 const ZMembersListTable = lazy(
   () =>
@@ -122,12 +122,10 @@ const ZWSSettingTeamsListPage: React.FC = () => {
   // #endregion
 
   // #region Recoils
-  const setZUserCurrentLimitsRState = useSetRecoilState(
-    ZUserCurrentLimitsRStateAtom
-  );
+  const setZWsLimitsRState = useSetRecoilState(ZWsLimitsRStateAtom);
 
-  const ZUserCurrentLimitsRState = useRecoilValue(
-    ZUserCurrentLimitsRStateSelectorFamily(planFeaturesEnum.members)
+  const ZWsRemainingMembersLimitsRState = useRecoilValue(
+    ZWsRemainingLimitsRStateSelectorFamily(planFeaturesEnum.members)
   );
   // #endregion
 
@@ -247,7 +245,7 @@ const ZWSSettingTeamsListPage: React.FC = () => {
   // #region useEffects
   useEffect(() => {
     if (wsTeamMembersData !== undefined && wsTeamMembersData !== null) {
-      setZUserCurrentLimitsRState(oldValues => ({
+      setZWsLimitsRState(oldValues => ({
         ...oldValues,
         [planFeaturesEnum.members]: wsTeamMembersData?.length
       }));
@@ -453,7 +451,7 @@ const ZWSSettingTeamsListPage: React.FC = () => {
                 'w-full': !isSmScale
               })}
               onClick={() => {
-                if (ZUserCurrentLimitsRState === false) {
+                if (ZWsRemainingMembersLimitsRState === false) {
                   presentZReachedLimitModal({
                     _cssClass: 'reached-limit-modal-size'
                   });

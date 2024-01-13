@@ -3,42 +3,31 @@ import React, { type ReactNode } from 'react';
 
 // Packages Import
 import { IonRow } from '@ionic/react';
-import { zCreateElementTestingSelector } from '@/utils/helpers';
-import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
+import { zComponentTestingSelectorMaker } from '@/utils/helpers';
 
 interface ZIonRowType {
   children: ReactNode;
   className?: string;
   testingselector?: string;
   testinglistselector?: string;
+  testingidselector?: string;
   style?: React.CSSProperties;
   onClick?: React.MouseEventHandler<HTMLIonRowElement>;
 }
 
 const ZIonRow: React.FC<ZIonRowType> = (props: ZIonRowType) => {
-  const _testinglistselector =
-    props.testinglistselector !== undefined
-      ? {
-          ...zCreateElementTestingSelector({
-            _value: props.testinglistselector,
-            _key: zCreateElementTestingSelectorKeyEnum.listSelector
-          })
-        }
-      : {};
-
-  const _testingSelector =
-    props.testingselector !== undefined
-      ? {
-          ...zCreateElementTestingSelector({
-            _value: props.testingselector
-          })
-        }
-      : {};
+  const { _idSelector, _testingSelector, _testinglistselector } =
+    zComponentTestingSelectorMaker({
+      testingidselector: props.testingidselector,
+      testinglistselector: props.testinglistselector,
+      testingselector: props.testingselector
+    });
 
   return (
     <IonRow
       {...props}
       {..._testingSelector}
+      {..._idSelector}
       {..._testinglistselector}>
       {props.children}
     </IonRow>

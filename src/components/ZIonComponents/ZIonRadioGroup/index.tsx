@@ -11,6 +11,7 @@ import {
 } from '@/types/zaionsAppSettings.type';
 
 import { type IonRadioGroupCustomEvent } from '@ionic/core/dist/types/components';
+import { zComponentTestingSelectorMaker } from '@/utils/helpers';
 
 interface ZIonRadioGroupType {
   children: ReactNode;
@@ -23,12 +24,31 @@ interface ZIonRadioGroupType {
   onIonChange?: (
     event: IonRadioGroupCustomEvent<RadioGroupChangeEventDetail<unknown>>
   ) => void;
+  //
+  testingselector?: string;
+  testinglistselector?: string;
+  testingidselector?: string;
 }
 
 const ZIonRadioGroup: React.FC<ZIonRadioGroupType> = (
   props: ZIonRadioGroupType
 ) => {
-  return <IonRadioGroup {...props}>{props.children}</IonRadioGroup>;
+  const { _idSelector, _testingSelector, _testinglistselector } =
+    zComponentTestingSelectorMaker({
+      testingidselector: props.testingidselector,
+      testinglistselector: props.testinglistselector,
+      testingselector: props.testingselector
+    });
+
+  return (
+    <IonRadioGroup
+      {...props}
+      {..._testingSelector}
+      {..._testinglistselector}
+      {..._idSelector}>
+      {props.children}
+    </IonRadioGroup>
+  );
 };
 
 export default ZIonRadioGroup;

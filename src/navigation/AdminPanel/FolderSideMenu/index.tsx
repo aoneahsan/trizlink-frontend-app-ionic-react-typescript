@@ -82,11 +82,11 @@ import {
   permissionsTypeEnum,
   shareWSPermissionEnum
 } from '@/utils/enums/RoleAndPermissions';
-import {
-  ZUserCurrentLimitsRStateAtom,
-  ZUserCurrentLimitsRStateSelectorFamily
-} from '@/ZaionsStore/UserAccount/index.recoil';
 import ZReachedLimitModal from '@/components/InPageComponents/ZaionsModals/UpgradeModals/ReachedLimit';
+import {
+  ZWsLimitsRStateAtom,
+  ZWsRemainingLimitsRStateSelectorFamily
+} from '@/ZaionsStore/UserDashboard/Workspace/index.recoil';
 
 /**
  * Style files Imports go down
@@ -146,12 +146,10 @@ const AdminPanelFoldersSidebarMenu: React.FC<
 
   const setFolderFormState = useSetRecoilState(FolderFormState);
 
-  const setZUserCurrentLimitsRState = useSetRecoilState(
-    ZUserCurrentLimitsRStateAtom
-  );
+  const serZWsLimitsRState = useSetRecoilState(ZWsLimitsRStateAtom);
 
-  const ZUserCurrentLimitsRState = useRecoilValue(
-    ZUserCurrentLimitsRStateSelectorFamily(planFeaturesEnum.shortLinksFolder)
+  const ZWsRemainingLibFoldersLimitsRState = useRecoilValue(
+    ZWsRemainingLimitsRStateSelectorFamily(planFeaturesEnum.shortLinksFolder)
   );
 
   // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
@@ -179,12 +177,12 @@ const AdminPanelFoldersSidebarMenu: React.FC<
   useEffect(() => {
     if (foldersData !== undefined && foldersData !== null) {
       if (state === folderState.shortlink) {
-        setZUserCurrentLimitsRState(oldValues => ({
+        serZWsLimitsRState(oldValues => ({
           ...oldValues,
           [planFeaturesEnum.shortLinksFolder]: foldersData?.length
         }));
       } else if (state === folderState.linkInBio) {
-        setZUserCurrentLimitsRState(oldValues => ({
+        serZWsLimitsRState(oldValues => ({
           ...oldValues,
           [planFeaturesEnum.linksInBioFolder]: foldersData?.length
         }));
@@ -498,7 +496,7 @@ const AdminPanelFoldersSidebarMenu: React.FC<
                 fill='outline'
                 expand='block'
                 onClick={() => {
-                  if (ZUserCurrentLimitsRState === false) {
+                  if (ZWsRemainingLibFoldersLimitsRState === false) {
                     presentZReachedLimitModal({
                       _cssClass: 'reached-limit-modal-size'
                     });

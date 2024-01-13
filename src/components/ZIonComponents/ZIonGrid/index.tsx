@@ -3,8 +3,7 @@ import React, { type ReactNode } from 'react';
 
 // Packages Import
 import { IonGrid } from '@ionic/react';
-import { zCreateElementTestingSelector } from '@/utils/helpers';
-import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
+import { zComponentTestingSelectorMaker } from '@/utils/helpers';
 
 interface ZIonGridType {
   children: ReactNode;
@@ -13,32 +12,23 @@ interface ZIonGridType {
   style?: Record<string, unknown>;
   testingselector?: string;
   testinglistselector?: string;
+  testingidselector?: string;
   onClick?: React.MouseEventHandler<HTMLIonGridElement>;
 }
 
 const ZIonGrid: React.FC<ZIonGridType> = props => {
-  const _testinglistselector =
-    props.testinglistselector !== undefined
-      ? {
-          ...zCreateElementTestingSelector({
-            _value: props.testinglistselector,
-            _key: zCreateElementTestingSelectorKeyEnum.listSelector
-          })
-        }
-      : {};
+  const { _idSelector, _testingSelector, _testinglistselector } =
+    zComponentTestingSelectorMaker({
+      testingidselector: props.testingidselector,
+      testinglistselector: props.testinglistselector,
+      testingselector: props.testingselector
+    });
 
-  const _testingSelector =
-    props.testingselector !== undefined
-      ? {
-          ...zCreateElementTestingSelector({
-            _value: props.testingselector
-          })
-        }
-      : {};
   return (
     <IonGrid
       {...props}
       {..._testingSelector}
+      {..._idSelector}
       {..._testinglistselector}>
       {props.children}
     </IonGrid>

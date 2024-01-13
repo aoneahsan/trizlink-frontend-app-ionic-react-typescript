@@ -7,6 +7,7 @@ import {
   type ZIonColorType,
   type ZIonModeType
 } from '@/types/zaionsAppSettings.type';
+import { zComponentTestingSelectorMaker } from '@/utils/helpers';
 
 // Type
 interface ZIonListType {
@@ -18,10 +19,30 @@ interface ZIonListType {
   slot?: string;
   color?: ZIonColorType;
   style?: Record<string, unknown>;
+
+  //
+  testingselector?: string;
+  testinglistselector?: string;
+  testingidselector?: string;
 }
 
 const ZIonList: React.FC<ZIonListType> = (props: ZIonListType) => {
-  return <IonList {...props}>{props.children}</IonList>;
+  const { _idSelector, _testingSelector, _testinglistselector } =
+    zComponentTestingSelectorMaker({
+      testingidselector: props.testingidselector,
+      testinglistselector: props.testinglistselector,
+      testingselector: props.testingselector
+    });
+
+  return (
+    <IonList
+      {...props}
+      {..._testingSelector}
+      {..._testinglistselector}
+      {..._idSelector}>
+      {props.children}
+    </IonList>
+  );
 };
 
 export default ZIonList;

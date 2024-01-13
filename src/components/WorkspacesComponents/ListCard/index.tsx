@@ -89,13 +89,13 @@ import { type UserAccountType } from '@/types/UserAccount/index.type';
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
+import { ZaionsUserAccountRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
 
 /**
  * Style files Imports go down
  * ? Import of style sheet is a style import
  * */
 import classes from './styles.module.css';
-import { ZaionsUserAccountRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
 
 /**
  * Images Imports go down

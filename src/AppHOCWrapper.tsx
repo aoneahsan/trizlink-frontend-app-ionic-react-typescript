@@ -48,7 +48,7 @@ const queryClientObj = new QueryClient();
 const AppHOCWrapper: React.FC = () => {
   return (
     <>
-      {/* Other Packages  */}
+      {/* React Query HOC */}
       <QueryClientProvider client={queryClientObj}>
         {/* Ionic React Router HOC */}
         <IonReactRouter>
@@ -56,7 +56,6 @@ const AppHOCWrapper: React.FC = () => {
           <IonRouterOutlet>
             {/* Recoil State HOC */}
             <RecoilRoot>
-              {/* React Query HOC */}
               {/* My Custom HOCs - Below This */}
               {/* Error Logging HOC */}
               <ErrorLoggingHOC>

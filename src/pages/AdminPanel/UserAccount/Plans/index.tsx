@@ -70,7 +70,7 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import { type userServicesLimitI } from '@/types/UserAccount/index.type';
 import {
   ZPlanTimeLine,
-  type ZUserSubscriptionI,
+  type ZSubscriptionI,
   ZPlansEnum,
   type ZaionsPricingI
 } from '@/types/WhyZaions/PricingPage';
@@ -136,7 +136,7 @@ const ZAccountPlansSettings: React.FC = () => {
   const {
     data: userSubscriptionData,
     isFetching: isZUserSubscriptionDataFetching
-  } = useZRQGetRequest<ZUserSubscriptionI>({
+  } = useZRQGetRequest<ZSubscriptionI>({
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SUBSCRIPTION],
     _url: API_URL_ENUM.getUserSubscription,
     _extractType: ZRQGetRequestExtractEnum.extractItem
@@ -176,7 +176,7 @@ const ZAccountPlansSettings: React.FC = () => {
         }
 
         if (_response !== undefined && _response !== null) {
-          const _data = extractInnerData<ZUserSubscriptionI>(
+          const _data = extractInnerData<ZSubscriptionI>(
             _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );

@@ -39,7 +39,8 @@ import {
   ZIonSelect,
   ZIonSelectOption,
   ZIonButton,
-  ZIonRouterLink
+  ZIonRouterLink,
+  ZIonGrid
 } from '@/components/ZIonComponents';
 import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
 import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
@@ -117,7 +118,7 @@ import {
   NewShortLinkSelectTypeOption
 } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
 import { LinkTypeOptionsData } from '@/data/UserDashboard/Links';
-import { ZUserCurrentLimitsRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
+import { ZWsLimitsRStateAtom } from '@/ZaionsStore/UserDashboard/Workspace/index.recoil';
 
 // Styles
 
@@ -263,6 +264,12 @@ const ZaionsShortLinkTable: React.FC<{
         ) : (
           <div className='w-full mb-3 border rounded-lg h-max ion-padding zaions__light_bg'>
             <ZEmptyTable
+              btnTestingselector={
+                CONSTANTS.testingSelectors.shortLink.listPage.table.empty.btn
+              }
+              testingselector={
+                CONSTANTS.testingSelectors.shortLink.listPage.table.empty.main
+              }
               message={
                 ((wsShareId?.length ?? 0) > 0 &&
                   (getMemberRolePermissions?.memberPermissions?.includes(
@@ -863,8 +870,10 @@ const ZInpageTable: React.FC = () => {
   // #endregion
 
   return (
-    <div
+    <ZIonGrid
+      testingselector={CONSTANTS.testingSelectors.shortLink.listPage.table.main}
       className={classNames({
+        'ion-no-padding w-full': true,
         'mt-2': !isMdScale
       })}>
       {isShortLinksDataFetching && <ZaionsShortLinkTableSkeleton />}
@@ -879,6 +888,9 @@ const ZInpageTable: React.FC = () => {
                 return (
                   <ZIonRow
                     key={_headerIndex}
+                    testingselector={
+                      CONSTANTS.testingSelectors.shortLink.listPage.table.head
+                    }
                     className='flex flex-nowrap zaions__light_bg'>
                     {_headerInfo.headers.map((_columnInfo, _columnIndex) => {
                       return (
@@ -919,6 +931,9 @@ const ZInpageTable: React.FC = () => {
             <ZIonRow className='rounded-b-lg'>
               <ZIonCol
                 size='12'
+                testingselector={
+                  CONSTANTS.testingSelectors.shortLink.listPage.table.body
+                }
                 className='w-full ion-no-padding'>
                 {zShortLinksTable
                   .getRowModel()
@@ -926,11 +941,17 @@ const ZInpageTable: React.FC = () => {
                     return (
                       <ZIonRow
                         key={_rowIndex}
+                        testingidselector={_rowInfo?.original?.id}
+                        testingselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.body}-row-${_rowInfo?.original?.id}`}
+                        testinglistselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.body}-row`}
                         className='flex-nowrap'>
                         {_rowInfo.getAllCells().map((_cellInfo, _cellIndex) =>
                           _cellInfo.column.getIsVisible() ? (
                             <ZIonCol
                               key={_cellIndex}
+                              testingidselector={_cellInfo?.id}
+                              testingselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.body}-col-${_rowInfo?.original?.id}`}
+                              testinglistselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.body}-col`}
                               size={
                                 _cellInfo.column.id ===
                                   ZShortLinkListPageTableColumnsIds.id ||
@@ -1011,6 +1032,9 @@ const ZInpageTable: React.FC = () => {
 
       {/*  */}
       <ZIonRow
+        testingselector={
+          CONSTANTS.testingSelectors.shortLink.listPage.table.footer
+        }
         className={classNames({
           'w-full px-2 pt-1 pb-2 mt-1 overflow-hidden rounded-lg zaions__light_bg':
             true,
@@ -1090,6 +1114,7 @@ const ZInpageTable: React.FC = () => {
               }
             }}>
             <ZIonIcon
+              testingselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.getFirstPageButton}-icon`}
               icon={playBackOutline}
               slot='icon-only'
               className='w-5 h-5'
@@ -1158,6 +1183,7 @@ const ZInpageTable: React.FC = () => {
               }
             }}>
             <ZIonIcon
+              testingselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.previousButton}-icon`}
               icon={chevronBackOutline}
               slot='icon-only'
               className='w-5 h-5'
@@ -1251,6 +1277,7 @@ const ZInpageTable: React.FC = () => {
               }
             }}>
             <ZIonIcon
+              testingselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.nextButton}-icon`}
               icon={chevronForwardOutline}
               slot='icon-only'
               className='w-5 h-5'
@@ -1321,6 +1348,7 @@ const ZInpageTable: React.FC = () => {
               }
             }}>
             <ZIonIcon
+              testingselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.getLastPageButton}-icon`}
               icon={playForwardOutline}
               slot='icon-only'
               className='w-5 h-5'
@@ -1406,7 +1434,11 @@ const ZInpageTable: React.FC = () => {
             'ion-justify-content-end': isSmScale,
             'ion-justify-content-between mt-1 px-2': !isSmScale
           })}>
-          <ZIonText className='mt-1 font-semibold me-3'>
+          <ZIonText
+            className='mt-1 font-semibold me-3'
+            testingselector={
+              CONSTANTS.testingSelectors.shortLink.listPage.table.countText
+            }>
             {ShortLinksData?.itemsCount ?? 0}{' '}
             {ShortLinksData !== undefined &&
             ShortLinksData?.itemsCount !== undefined &&
@@ -1479,7 +1511,7 @@ const ZInpageTable: React.FC = () => {
           </ZIonSelect>
         </ZIonCol>
       </ZIonRow>
-    </div>
+    </ZIonGrid>
   );
 };
 
@@ -1504,9 +1536,7 @@ export const ZShortLinkActionPopover: React.FC<{
   const _filteredShortLinkDataSelector = useRecoilValue(
     FilteredShortLinkDataSelector
   );
-  const setZUserCurrentLimitsRState = useSetRecoilState(
-    ZUserCurrentLimitsRStateAtom
-  );
+  const setZWsLimitsRState = useSetRecoilState(ZWsLimitsRStateAtom);
 
   const { presentZIonErrorAlert } = useZIonErrorAlert();
   const { presentZIonAlert } = useZIonAlert();
@@ -1633,7 +1663,7 @@ export const ZShortLinkActionPopover: React.FC<{
             });
 
             // Updating short link in UserCurrentLimits.
-            setZUserCurrentLimitsRState(oldValues => ({
+            setZWsLimitsRState(oldValues => ({
               ...oldValues,
               [planFeaturesEnum.shortLinks]: _updatedShortLinks?.length
             }));

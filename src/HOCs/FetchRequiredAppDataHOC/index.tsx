@@ -8,6 +8,8 @@ import React, { Suspense, useEffect } from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRouteMatch } from 'react-router';
+import { App } from '@capacitor/app';
 
 /**
  * Custom Imports go down
@@ -34,6 +36,13 @@ import { useZPrivateRouteChecker } from '@/ZaionsHooks/zrouter-hooks';
 import CONSTANTS, { LOCALSTORAGE_KEYS } from '@/utils/constants';
 import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
 import { ZErrorCodeEnum } from '@/utils/enums/ErrorsCodes';
+import { reportCustomError } from '@/utils/customErrorType';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import {
+  extractInnerData,
+  getUserDataObjectForm,
+  STORAGE
+} from '@/utils/helpers';
 
 /**
  * Type Imports go down
@@ -45,6 +54,7 @@ import {
   type UserAccountType,
   type UserRoleAndPermissionsInterface
 } from '@/types/UserAccount/index.type';
+import { type ZSubscriptionI } from '@/types/WhyZaions/PricingPage';
 
 /**
  * Recoil State Imports go down
@@ -57,16 +67,6 @@ import {
   ZCurrentUserSubscriptionRStateAtom,
   ZUserServicesLimitsRStateAtom
 } from '@/ZaionsStore/UserAccount/index.recoil';
-import { reportCustomError } from '@/utils/customErrorType';
-import { useRouteMatch } from 'react-router';
-import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import {
-  extractInnerData,
-  getUserDataObjectForm,
-  STORAGE
-} from '@/utils/helpers';
-import { App } from '@capacitor/app';
-import { type ZUserSubscriptionI } from '@/types/WhyZaions/PricingPage';
 
 interface IFetchRequiredAppDataHOCProps {
   children?: React.ReactNode;
@@ -146,7 +146,7 @@ const FetchRequiredAppDataHOCAsync: React.FC<IFetchRequiredAppDataHOCProps> = ({
 
   // #region APIS.
   const { data: userSubscriptionData, refetch: refetchUserSubscriptionData } =
-    useZRQGetRequest<ZUserSubscriptionI>({
+    useZRQGetRequest<ZSubscriptionI>({
       _url: API_URL_ENUM.getUserSubscription,
       _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SUBSCRIPTION],
       _extractType: ZRQGetRequestExtractEnum.extractItem,

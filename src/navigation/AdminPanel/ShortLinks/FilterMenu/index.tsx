@@ -301,6 +301,7 @@ const ZShortLinksFilterMenu: React.FC = () => {
       ];
       for (let i = 0; i < _shortLinksListColumnsEls.length; i++) {
         const _block = _shortLinksListColumnsEls[i];
+        // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
         _shortLinksColumnIds.push(_block.getAttribute('data-id') as string);
       }
 
@@ -434,6 +435,7 @@ const ZShortLinksFilterMenu: React.FC = () => {
   return (
     <ZIonMenu
       side='end'
+      testingselector={CONSTANTS.testingSelectors.shortLink.filterMenu.mainMenu}
       contentId={CONSTANTS.PAGE_IDS.AD_SL_LIST_PAGE}
       menuId={CONSTANTS.MENU_IDS.SL_FILTERS_MENU_ID}
       style={
@@ -457,6 +459,9 @@ const ZShortLinksFilterMenu: React.FC = () => {
         <ZIonIcon
           icon={closeOutline}
           className='w-6 h-6 pt-[2px] cursor-pointer'
+          testingselector={
+            CONSTANTS.testingSelectors.shortLink.filterMenu.menuCloseBtn
+          }
           onClick={() => {
             void menuController.close(CONSTANTS.MENU_IDS.SL_FILTERS_MENU_ID);
           }}
@@ -523,8 +528,8 @@ const ZShortLinksFilterMenu: React.FC = () => {
                       name='filters.time'
                       className='mt-2'
                       testingselector={
-                        CONSTANTS.testingSelectors.shortLink.formPage
-                          .geoLocation.countrySelector
+                        CONSTANTS.testingSelectors.shortLink.filterMenu
+                          .timeSelector
                       }
                       onChange={_value => {
                         void setFieldValue(
@@ -547,8 +552,8 @@ const ZShortLinksFilterMenu: React.FC = () => {
                       name='filters.tags'
                       className='mt-2'
                       testingselector={
-                        CONSTANTS.testingSelectors.shortLink.formPage
-                          .geoLocation.countrySelector
+                        CONSTANTS.testingSelectors.shortLink.filterMenu
+                          .tagsSelector
                       }
                       onChange={_value => {
                         void setFieldValue('filters.tags', _value, true);
@@ -571,8 +576,8 @@ const ZShortLinksFilterMenu: React.FC = () => {
                       name='filters.domains'
                       className='mt-2'
                       testingselector={
-                        CONSTANTS.testingSelectors.shortLink.formPage
-                          .geoLocation.countrySelector
+                        CONSTANTS.testingSelectors.shortLink.filterMenu
+                          .domainsSelector
                       }
                       onChange={_value => {
                         void setFieldValue('filters.domains', _value, true);
@@ -592,6 +597,10 @@ const ZShortLinksFilterMenu: React.FC = () => {
                     <ZIonButton
                       expand='block'
                       className='mt-3'
+                      testingselector={
+                        CONSTANTS.testingSelectors.shortLink.filterMenu
+                          .filterSlBtn
+                      }
                       onClick={() => {
                         void submitForm();
                       }}>
@@ -646,18 +655,23 @@ const ZShortLinksFilterMenu: React.FC = () => {
                                 color='light'
                                 className='zaions-short-link-list-table-column'
                                 data-id={el?.id}
-                                style={libListTableColumnStyle}>
+                                style={libListTableColumnStyle}
+                                testingselector={`${CONSTANTS.testingSelectors.shortLink.filterMenu.reorderItem}-${el.name}`}>
                                 <ZIonReorder
                                   slot='start'
                                   className='me-3'
+                                  testingselector={`${CONSTANTS.testingSelectors.shortLink.filterMenu.reorderItem}-${el.name}-reorder`}
                                 />
-                                <ZIonText className='text-sm'>
+                                <ZIonText
+                                  className='text-sm'
+                                  testingselector={`${CONSTANTS.testingSelectors.shortLink.filterMenu.reorderItem}-${el.name}-name`}>
                                   {el.name}
                                 </ZIonText>
 
                                 <ZIonText slot='end'>
                                   <ZRCSwitch
                                     checked={el.isVisible}
+                                    testingselector={`${CONSTANTS.testingSelectors.shortLink.filterMenu.reorderItem}-${el.name}-switch`}
                                     onChange={_value => {
                                       void setFieldValue(
                                         `columns.${index}.isVisible`,
@@ -678,6 +692,10 @@ const ZShortLinksFilterMenu: React.FC = () => {
                   <ZIonButton
                     expand='block'
                     className='mx-3 mt-2'
+                    testingselector={
+                      CONSTANTS.testingSelectors.shortLink.filterMenu
+                        .reorderSaveBtn
+                    }
                     onClick={() => {
                       void submitForm();
                     }}>
@@ -697,21 +715,31 @@ const ZShortLinksFilterMenu: React.FC = () => {
             'flex-col': !isLgScale
           })}>
           <ZIonButton
+            testingselector={
+              CONSTANTS.testingSelectors.shortLink.filterMenu.exportBtn
+            }
             className={classNames({
               'ion-no-margin mt-2': true,
               'w-1/2': isLgScale,
               'w-full': !isLgScale
             })}
-            // fill='outline'
             color='tertiary'>
             <ZIonIcon
+              testingselector={`${CONSTANTS.testingSelectors.shortLink.filterMenu.exportBtn}-icon`}
               slot='start'
               icon={cloudDownloadOutline}
             />
-            <ZIonText className='mt-1 ms-1'>Export data&apos;s</ZIonText>
+            <ZIonText
+              className='mt-1 ms-1'
+              testingselector={`${CONSTANTS.testingSelectors.shortLink.filterMenu.exportBtn}-text`}>
+              Export data&apos;s
+            </ZIonText>
           </ZIonButton>
 
           <ZIonButton
+            testingselector={
+              CONSTANTS.testingSelectors.shortLink.filterMenu.bulkImportBtn
+            }
             className={classNames({
               'ion-no-margin mt-2': true,
               'w-1/2': isLgScale,
@@ -720,10 +748,15 @@ const ZShortLinksFilterMenu: React.FC = () => {
             // fill='outline'
             color='tertiary'>
             <ZIonIcon
+              testingselector={`${CONSTANTS.testingSelectors.shortLink.filterMenu.bulkImportBtn}-icon`}
               slot='start'
               icon={cloudUploadOutline}
             />
-            <ZIonText className='mt-1 ms-1'>Bulk imports</ZIonText>
+            <ZIonText
+              className='mt-1 ms-1'
+              testingselector={`${CONSTANTS.testingSelectors.shortLink.filterMenu.bulkImportBtn}-text`}>
+              Bulk imports
+            </ZIonText>
           </ZIonButton>
         </div>
       </ZIonFooter>

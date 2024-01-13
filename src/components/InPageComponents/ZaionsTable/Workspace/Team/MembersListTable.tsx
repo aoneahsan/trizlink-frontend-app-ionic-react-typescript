@@ -134,7 +134,7 @@ import {
   MembersAccountsRStateAtom,
   MembersFilterOptionsRStateAtom
 } from '@/ZaionsStore/UserDashboard/MemberState/index.recoil';
-import { ZUserCurrentLimitsRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
+import { ZWsLimitsRStateAtom } from '@/ZaionsStore/UserDashboard/Workspace/index.recoil';
 
 /**
  * Style files Imports go down
@@ -1381,9 +1381,7 @@ const ZMemberActionPopover: React.FC<{
   // #endregion
 
   // #region Recoils
-  const setZUserCurrentLimitsRState = useSetRecoilState(
-    ZUserCurrentLimitsRStateAtom
-  );
+  const setZWsLimitsRState = useSetRecoilState(ZWsLimitsRStateAtom);
   // #endregion
 
   // #region useEffects
@@ -1575,7 +1573,7 @@ const ZMemberActionPopover: React.FC<{
           await updateRQCDataHandler({
             key: _getQueryKey({
               keys: [
-                 isZNonEmptyString(workspaceId)
+                isZNonEmptyString(workspaceId)
                   ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS
                   : isZNonEmptyString(wsShareId) &&
                     isZNonEmptyString(shareWSMemberId)
@@ -1702,7 +1700,7 @@ const ZMemberActionPopover: React.FC<{
             extractType: ZRQGetRequestExtractEnum.extractItems
           });
 
-          setZUserCurrentLimitsRState(oldValues => ({
+          setZWsLimitsRState(oldValues => ({
             ...oldValues,
             [planFeaturesEnum.members]: _updatedMembers?.length
           }));

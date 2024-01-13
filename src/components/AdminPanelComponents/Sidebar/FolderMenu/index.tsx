@@ -41,7 +41,11 @@ import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
  * ? Like import of Constant is a global constants import
  * */
 import CONSTANTS from '@/utils/constants';
-import { createRedirectRoute } from '@/utils/helpers';
+import {
+  createRedirectRoute,
+  isZNonEmptyString,
+  isZNonEmptyStrings
+} from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import {
   permissionCheckModeEnum,
@@ -116,7 +120,9 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
   // #endregion
 
   return (
-    <ZIonCol className='border-e-[1px] zaions-transition h-full'>
+    <ZIonCol
+      className='border-e-[1px] zaions-transition h-full'
+      testingselector={`${CONSTANTS.testingSelectors.folder.mainContainer}-${type}`}>
       <ZCustomScrollable
         className={classNames({
           'w-full h-full': true,
@@ -150,30 +156,18 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
           <ZCan
             shareWSId={wsShareId}
             permissionType={
-              wsShareId !== null &&
-              wsShareId !== undefined &&
-              wsShareId?.trim()?.length > 0 &&
-              shareWSMemberId !== null &&
-              shareWSMemberId !== undefined &&
-              shareWSMemberId?.trim()?.length > 0
+              isZNonEmptyStrings([wsShareId, shareWSMemberId])
                 ? permissionsTypeEnum.shareWSMemberPermissions
                 : permissionsTypeEnum.loggedInUserPermissions
             }
             havePermissions={
-              wsShareId !== null &&
-              wsShareId !== undefined &&
-              wsShareId?.trim()?.length > 0 &&
-              shareWSMemberId !== null &&
-              shareWSMemberId !== undefined &&
-              shareWSMemberId?.trim()?.length > 0
+              isZNonEmptyStrings([wsShareId, shareWSMemberId])
                 ? type === AdminPanelSidebarMenuPageEnum.shortLink
                   ? [shareWSPermissionEnum.viewAny_sws_sl_folder]
                   : type === AdminPanelSidebarMenuPageEnum.linkInBio
                   ? [shareWSPermissionEnum.viewAny_sws_lib_folder]
                   : []
-                : workspaceId !== null &&
-                  workspaceId !== undefined &&
-                  workspaceId?.trim()?.length > 0
+                : isZNonEmptyString(workspaceId)
                 ? type === AdminPanelSidebarMenuPageEnum.shortLink
                   ? [permissionsEnum.viewAny_sl_folder]
                   : type === AdminPanelSidebarMenuPageEnum.linkInBio
@@ -294,8 +288,13 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                     break;
                 }
               }}>
-              <ZIonLabel className='ion-no-margin'>Default</ZIonLabel>
+              <ZIonLabel
+                className='ion-no-margin'
+                testingselector={`${CONSTANTS.testingSelectors.folder.singleFolder}-default-${type}-label`}>
+                Default
+              </ZIonLabel>
               <ZIonIcon
+                testingselector={`${CONSTANTS.testingSelectors.folder.singleFolder}-default-${type}-icon`}
                 slot='start'
                 icon={appsOutline}
                 className='w-4 h-4 me-3'
@@ -306,27 +305,18 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
           <ZCan
             shareWSId={wsShareId}
             permissionType={
-              wsShareId !== null &&
-              wsShareId !== undefined &&
-              wsShareId?.trim()?.length > 0
+              isZNonEmptyStrings([wsShareId, shareWSMemberId])
                 ? permissionsTypeEnum.shareWSMemberPermissions
                 : permissionsTypeEnum.loggedInUserPermissions
             }
             havePermissions={
-              wsShareId !== null &&
-              wsShareId !== undefined &&
-              wsShareId?.trim()?.length > 0 &&
-              shareWSMemberId !== null &&
-              shareWSMemberId !== undefined &&
-              shareWSMemberId?.trim()?.length > 0
+              isZNonEmptyStrings([wsShareId, shareWSMemberId])
                 ? type === AdminPanelSidebarMenuPageEnum.shortLink
                   ? [shareWSPermissionEnum.viewAny_sws_sl_folder]
                   : type === AdminPanelSidebarMenuPageEnum.linkInBio
                   ? [shareWSPermissionEnum.viewAny_sws_lib_folder]
                   : []
-                : workspaceId !== null &&
-                  workspaceId !== undefined &&
-                  workspaceId?.trim()?.length > 0
+                : isZNonEmptyString(workspaceId)
                 ? type === AdminPanelSidebarMenuPageEnum.shortLink
                   ? [permissionsEnum.viewAny_sl_folder]
                   : type === AdminPanelSidebarMenuPageEnum.linkInBio
@@ -343,27 +333,18 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                     key={el.id}
                     shareWSId={wsShareId}
                     permissionType={
-                      wsShareId !== null &&
-                      wsShareId !== undefined &&
-                      wsShareId?.trim()?.length > 0
+                      isZNonEmptyStrings([wsShareId, shareWSMemberId])
                         ? permissionsTypeEnum.shareWSMemberPermissions
                         : permissionsTypeEnum.loggedInUserPermissions
                     }
                     havePermissions={
-                      wsShareId !== null &&
-                      wsShareId !== undefined &&
-                      wsShareId?.trim()?.length > 0 &&
-                      shareWSMemberId !== null &&
-                      shareWSMemberId !== undefined &&
-                      shareWSMemberId?.trim()?.length > 0
+                      isZNonEmptyStrings([wsShareId, shareWSMemberId])
                         ? type === AdminPanelSidebarMenuPageEnum.shortLink
                           ? [shareWSPermissionEnum.view_sws_sl_folder]
                           : type === AdminPanelSidebarMenuPageEnum.linkInBio
                           ? [shareWSPermissionEnum.view_sws_lib_folder]
                           : []
-                        : workspaceId !== null &&
-                          workspaceId !== undefined &&
-                          workspaceId?.trim()?.length > 0
+                        : isZNonEmptyString(workspaceId)
                         ? type === AdminPanelSidebarMenuPageEnum.shortLink
                           ? [permissionsEnum.view_sl_folder]
                           : type === AdminPanelSidebarMenuPageEnum.linkInBio
@@ -372,6 +353,8 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                         : []
                     }>
                     <ZIonItem
+                      testingselector={`${CONSTANTS.testingSelectors.folder.singleFolder}-${type}-${el?.id}`}
+                      testinglistselector={`${CONSTANTS.testingSelectors.folder.singleFolder}-${type}`}
                       data-folder-id={el.id}
                       minHeight='2.2rem'
                       style={
@@ -390,9 +373,9 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                           type === AdminPanelSidebarMenuPageEnum.linkInBio
                       })}>
                       <ZIonLabel
+                        testingselector={`${CONSTANTS.testingSelectors.folder.singleFolder}-${type}-label-${el?.id}`}
+                        testinglistselector={`${CONSTANTS.testingSelectors.folder.singleFolder}-${type}-label`}
                         className='ion-no-margin'
-                        testingselector={`${CONSTANTS.testingSelectors.folder.singleFolder}-${type}`}
-                        testinglistselector={`${CONSTANTS.testingSelectors.folder.singleFolder}-${type}-${el.id}`}
                         onClick={() => {
                           if (
                             el.id !== undefined &&
@@ -417,7 +400,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                                         CONSTANTS.RouteParams
                                           .folderIdToGetShortLinksOrLinkInBio
                                       ],
-                                      values: [workspaceId ?? '', el?.id]
+                                      values: [workspaceId, el?.id]
                                     })
                                   );
                                 } else if (
@@ -442,8 +425,8 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                                           .folderIdToGetShortLinksOrLinkInBio
                                       ],
                                       values: [
-                                        wsShareId ?? '',
-                                        shareWSMemberId ?? '',
+                                        wsShareId,
+                                        shareWSMemberId,
                                         el.id
                                       ]
                                     })
@@ -511,22 +494,12 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                         shareWSId={wsShareId}
                         checkMode={permissionCheckModeEnum.any}
                         permissionType={
-                          wsShareId !== null &&
-                          wsShareId !== undefined &&
-                          wsShareId?.trim()?.length > 0 &&
-                          shareWSMemberId !== null &&
-                          shareWSMemberId !== undefined &&
-                          shareWSMemberId?.trim()?.length > 0
+                          isZNonEmptyStrings([wsShareId, shareWSMemberId])
                             ? permissionsTypeEnum.shareWSMemberPermissions
                             : permissionsTypeEnum.loggedInUserPermissions
                         }
                         havePermissions={
-                          wsShareId !== null &&
-                          wsShareId !== undefined &&
-                          wsShareId?.trim()?.length > 0 &&
-                          shareWSMemberId !== null &&
-                          shareWSMemberId !== undefined &&
-                          shareWSMemberId?.trim()?.length > 0
+                          isZNonEmptyStrings([wsShareId, shareWSMemberId])
                             ? type === AdminPanelSidebarMenuPageEnum.shortLink
                               ? [
                                   shareWSPermissionEnum.create_sws_sl_folder,
@@ -538,9 +511,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                                   shareWSPermissionEnum.delete_sws_lib_folder
                                 ]
                               : []
-                            : workspaceId !== null &&
-                              workspaceId !== undefined &&
-                              workspaceId?.trim()?.length > 0
+                            : isZNonEmptyString(workspaceId)
                             ? type === AdminPanelSidebarMenuPageEnum.shortLink
                               ? [
                                   permissionsEnum.create_sl_folder,
@@ -560,8 +531,8 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                           size='small'
                           value={el.id}
                           className='ion-no-padding w-[2rem] h-[2rem] rounded-full overflow-hidden ms-auto'
-                          testingselector={`${CONSTANTS.testingSelectors.folder.actionPopoverBtn}-${type}`}
-                          testinglistselector={`${CONSTANTS.testingSelectors.folder.actionPopoverBtn}-${type}-${el.id}`}
+                          testingselector={`${CONSTANTS.testingSelectors.folder.singleFolder}-${type}-ellipsis-${el?.id}`}
+                          testinglistselector={`${CONSTANTS.testingSelectors.folder.singleFolder}-${type}-ellipsis`}
                           onClick={event => {
                             folderActionsButtonOnClickHandler != null &&
                               folderActionsButtonOnClickHandler(event);
@@ -579,7 +550,9 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 
                       <ZIonReorder
                         slot='start'
-                        className='me-3'>
+                        className='me-3'
+                        testingselector={`${CONSTANTS.testingSelectors.folder.singleFolder}-${type}-reorder-${el?.id}`}
+                        testinglistselector={`${CONSTANTS.testingSelectors.folder.singleFolder}-${type}-reorder`}>
                         <ZIonIcon icon={appsOutline} />
                       </ZIonReorder>
                     </ZIonItem>
@@ -590,15 +563,21 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
           </ZCan>
 
           {!showSkeleton && foldersData?.length === 0 && (
-            <ZIonItem style={fallbackZIonItemStyle}>
-              <ZIonLabel className='w-full text-md ion-text-center'>
+            <ZIonItem
+              style={fallbackZIonItemStyle}
+              testinglistselector={`${CONSTANTS.testingSelectors.folder.noDataItem}-${type}`}>
+              <ZIonLabel
+                className='w-full text-md ion-text-center'
+                testinglistselector={`${CONSTANTS.testingSelectors.folder.noDataItem}-${type}-label`}>
                 <ZIonIcon
                   icon={fileTrayOutline}
+                  testinglistselector={`${CONSTANTS.testingSelectors.folder.noDataItem}-${type}-icon`}
                   className='w-6 h-6'
                   color='medium'
                 />
                 <ZIonText
                   className='block'
+                  testinglistselector={`${CONSTANTS.testingSelectors.folder.noDataItem}-${type}-text`}
                   color='medium'>
                   No folder found!
                 </ZIonText>
@@ -659,30 +638,18 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
         <ZCan
           shareWSId={wsShareId}
           permissionType={
-            wsShareId !== null &&
-            wsShareId !== undefined &&
-            wsShareId?.trim()?.length > 0 &&
-            shareWSMemberId !== null &&
-            shareWSMemberId !== undefined &&
-            shareWSMemberId?.trim()?.length > 0
+            isZNonEmptyStrings([wsShareId, shareWSMemberId])
               ? permissionsTypeEnum.shareWSMemberPermissions
               : permissionsTypeEnum.loggedInUserPermissions
           }
           havePermissions={
-            wsShareId !== null &&
-            wsShareId !== undefined &&
-            wsShareId?.trim()?.length > 0 &&
-            shareWSMemberId !== null &&
-            shareWSMemberId !== undefined &&
-            shareWSMemberId?.trim()?.length > 0
+            isZNonEmptyStrings([wsShareId, shareWSMemberId])
               ? type === AdminPanelSidebarMenuPageEnum.shortLink
                 ? [shareWSPermissionEnum.create_sws_sl_folder]
                 : type === AdminPanelSidebarMenuPageEnum.linkInBio
                 ? [shareWSPermissionEnum.create_sws_lib_folder]
                 : []
-              : workspaceId !== null &&
-                workspaceId !== undefined &&
-                workspaceId?.trim()?.length > 0
+              : isZNonEmptyString(workspaceId)
               ? type === AdminPanelSidebarMenuPageEnum.shortLink
                 ? [permissionsEnum.create_sl_folder]
                 : type === AdminPanelSidebarMenuPageEnum.linkInBio
@@ -709,30 +676,18 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
             <ZCan
               shareWSId={wsShareId}
               permissionType={
-                wsShareId !== null &&
-                wsShareId !== undefined &&
-                wsShareId?.trim()?.length > 0 &&
-                shareWSMemberId !== null &&
-                shareWSMemberId !== undefined &&
-                shareWSMemberId?.trim()?.length > 0
+                isZNonEmptyStrings([wsShareId, shareWSMemberId])
                   ? permissionsTypeEnum.shareWSMemberPermissions
                   : permissionsTypeEnum.loggedInUserPermissions
               }
               havePermissions={
-                wsShareId !== null &&
-                wsShareId !== undefined &&
-                wsShareId?.trim()?.length > 0 &&
-                shareWSMemberId !== null &&
-                shareWSMemberId !== undefined &&
-                shareWSMemberId?.trim()?.length > 0
+                isZNonEmptyStrings([wsShareId, shareWSMemberId])
                   ? type === AdminPanelSidebarMenuPageEnum.shortLink
                     ? [shareWSPermissionEnum.sort_sws_sl_folder]
                     : type === AdminPanelSidebarMenuPageEnum.linkInBio
                     ? [shareWSPermissionEnum.sort_sws_lib_folder]
                     : []
-                  : workspaceId !== null &&
-                    workspaceId !== undefined &&
-                    workspaceId?.trim()?.length > 0
+                  : isZNonEmptyString(workspaceId)
                   ? type === AdminPanelSidebarMenuPageEnum.shortLink
                     ? [permissionsEnum.sort_sl_folder]
                     : type === AdminPanelSidebarMenuPageEnum.linkInBio

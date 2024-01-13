@@ -4,8 +4,7 @@ import React, { type ReactNode } from 'react';
 // Packages Import
 import { IonCol } from '@ionic/react';
 import { type ZIonColorType } from '@/types/zaionsAppSettings.type';
-import { zCreateElementTestingSelector } from '@/utils/helpers';
-import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
+import { zComponentTestingSelectorMaker } from '@/utils/helpers';
 
 interface ZIonColType {
   offset?: string;
@@ -39,6 +38,7 @@ interface ZIonColType {
   style?: Record<string, unknown>;
   testingselector?: string;
   testinglistselector?: string;
+  testingidselector?: string;
   onMouseEnter?: React.MouseEventHandler<HTMLIonColElement>;
   onClick?: React.MouseEventHandler<HTMLIonIconElement>;
   minHeight?: 'auto' | string;
@@ -54,29 +54,18 @@ const ZIonCol: React.FC<ZIonColType> = (props: ZIonColType) => {
       ? { 'min-height': props.minHeight }
       : {};
 
-  const _testinglistselector =
-    props.testinglistselector !== undefined
-      ? {
-          ...zCreateElementTestingSelector({
-            _value: props.testinglistselector,
-            _key: zCreateElementTestingSelectorKeyEnum.listSelector
-          })
-        }
-      : {};
-
-  const _testingSelector =
-    props.testingselector !== undefined
-      ? {
-          ...zCreateElementTestingSelector({
-            _value: props.testingselector
-          })
-        }
-      : {};
+  const { _idSelector, _testingSelector, _testinglistselector } =
+    zComponentTestingSelectorMaker({
+      testingidselector: props.testingidselector,
+      testinglistselector: props.testinglistselector,
+      testingselector: props.testingselector
+    });
   return (
     <IonCol
       {...props}
       style={compStyle}
       {..._testingSelector}
+      {..._idSelector}
       {..._testinglistselector}>
       {props.children}
     </IonCol>

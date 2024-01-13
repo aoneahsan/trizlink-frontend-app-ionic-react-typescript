@@ -128,12 +128,13 @@ import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil
  * ? Import of style sheet is a style import
  * */
 import classes from './styles.module.css';
-import {
-  ZUserCurrentLimitsRStateAtom,
-  ZUserCurrentLimitsRStateSelectorFamily
-} from '@/ZaionsStore/UserAccount/index.recoil';
 import ZReachedLimitModal from '@/components/InPageComponents/ZaionsModals/UpgradeModals/ReachedLimit';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
+import ZRequiredWsDataHOC from '@/components/WorkspacesComponents/RequiredWsDataHOC';
+import {
+  ZWsLimitsRStateAtom,
+  ZWsRemainingLimitsRStateSelectorFamily
+} from '@/ZaionsStore/UserDashboard/Workspace/index.recoil';
 
 const ZDashboardFolderMenu = lazy(
   () => import('@/components/AdminPanelComponents/Sidebar/FolderMenu')
@@ -198,12 +199,10 @@ const ZShortLinksListPage: React.FC = () => {
   //
   const setFolderFormState = useSetRecoilState(FolderFormState);
 
-  const setZUserCurrentLimitsRState = useSetRecoilState(
-    ZUserCurrentLimitsRStateAtom
-  );
+  const setZWsLimitsRState = useSetRecoilState(ZWsLimitsRStateAtom);
 
-  const ZUserCurrentLimitsRState = useRecoilValue(
-    ZUserCurrentLimitsRStateSelectorFamily(planFeaturesEnum.shortLinksFolder)
+  const ZWsSlFoldersLimitsRState = useRecoilValue(
+    ZWsRemainingLimitsRStateSelectorFamily(planFeaturesEnum.shortLinksFolder)
   );
   // #endregion
 
@@ -548,13 +547,23 @@ const ZShortLinksListPage: React.FC = () => {
   // #region useEffects
   useEffect(() => {
     if (shortLinksFoldersData !== undefined && shortLinksFoldersData !== null) {
-      setZUserCurrentLimitsRState(oldValues => ({
+      setZWsLimitsRState(oldValues => ({
         ...oldValues,
         [planFeaturesEnum.shortLinksFolder]: shortLinksFoldersData?.length
       }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspaceId, shareWSMemberId, wsShareId, shortLinksFoldersData]);
+
+  useEffect(() => {
+    if (shortLinksData !== undefined && shortLinksData !== null) {
+      setZWsLimitsRState(oldValues => ({
+        ...oldValues,
+        [planFeaturesEnum.shortLinks]: shortLinksData?.items?.length
+      }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [workspaceId, shareWSMemberId, wsShareId, shortLinksData]);
 
   useEffect(() => {
     try {
@@ -651,225 +660,228 @@ const ZShortLinksListPage: React.FC = () => {
         // id={CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID}
         // menu={PAGE_MENU.ADMIN_PANEL_SHORT_LINKS_FOLDERS_MENU}
         id={CONSTANTS.PAGE_IDS.AD_SL_LIST_PAGE}>
-        {compState?.isProcessing ? (
-          <ZPageLoader>
-            {workspaceId !== undefined &&
-            workspaceId !== null &&
-            workspaceId?.trim()?.length > 0
-              ? isSelectedWorkspaceFetching
-                ? 'Setting workspace data'
-                : isShortLinksDataFetching
-                ? 'Fetching workspace short links'
-                : isShortLinksFoldersDataFetching
-                ? 'Fetching workspace short links folders'
-                : null
-              : wsShareId !== undefined &&
-                wsShareId !== null &&
-                wsShareId?.trim()?.length > 0 &&
-                shareWSMemberId !== undefined &&
-                shareWSMemberId !== null &&
-                shareWSMemberId?.trim()?.length > 0
-              ? isGetMemberRolePermissionsFetching
-                ? 'Getting & setting your permissions in this workspace'
-                : isSWSFetching
-                ? 'Setting share workspace data'
-                : isShortLinksDataFetching
-                ? 'Fetching share workspace short links'
-                : isShortLinksFoldersDataFetching
-                ? 'Fetching share workspace short links folders'
-                : null
-              : null}
-          </ZPageLoader>
-        ) : (
-          <ZCan
-            returnPermissionDeniedView={true}
-            shareWSId={wsShareId}
-            permissionType={
-              isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
-                ? permissionsTypeEnum.shareWSMemberPermissions
-                : permissionsTypeEnum.loggedInUserPermissions
-            }
-            havePermissions={
-              isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
-                ? [shareWSPermissionEnum.viewAny_sws_shortLink]
-                : [permissionsEnum.viewAny_shortLink]
-            }>
-            {/* Content */}
-            <ZIonContent>
-              {/* IonRefresher */}
-              <ZIonRefresher
-                onIonRefresh={event => {
-                  void handleRefresh(event);
-                }}>
-                <ZIonRefresherContent />
-              </ZIonRefresher>
+        <ZRequiredWsDataHOC>
+          {compState?.isProcessing ? (
+            <ZPageLoader>
+              {isZNonEmptyString(workspaceId)
+                ? isSelectedWorkspaceFetching
+                  ? 'Setting workspace data'
+                  : isShortLinksDataFetching
+                  ? 'Fetching workspace short links'
+                  : isShortLinksFoldersDataFetching
+                  ? 'Fetching workspace short links folders'
+                  : null
+                : isZNonEmptyString(wsShareId) &&
+                  isZNonEmptyString(shareWSMemberId)
+                ? isGetMemberRolePermissionsFetching
+                  ? 'Getting & setting your permissions in this workspace'
+                  : isSWSFetching
+                  ? 'Setting share workspace data'
+                  : isShortLinksDataFetching
+                  ? 'Fetching share workspace short links'
+                  : isShortLinksFoldersDataFetching
+                  ? 'Fetching share workspace short links folders'
+                  : null
+                : null}
+            </ZPageLoader>
+          ) : (
+            <ZCan
+              returnPermissionDeniedView={true}
+              shareWSId={wsShareId}
+              permissionType={
+                isZNonEmptyString(wsShareId) &&
+                isZNonEmptyString(shareWSMemberId)
+                  ? permissionsTypeEnum.shareWSMemberPermissions
+                  : permissionsTypeEnum.loggedInUserPermissions
+              }
+              havePermissions={
+                isZNonEmptyString(wsShareId) &&
+                isZNonEmptyString(shareWSMemberId)
+                  ? [shareWSPermissionEnum.viewAny_sws_shortLink]
+                  : [permissionsEnum.viewAny_shortLink]
+              }>
+              {/* Content */}
+              <ZIonContent>
+                {/* IonRefresher */}
+                <ZIonRefresher
+                  onIonRefresh={event => {
+                    void handleRefresh(event);
+                  }}>
+                  <ZIonRefresherContent />
+                </ZIonRefresher>
 
-              {/* Grid-1 */}
-              <ZIonGrid
-                className={classNames({
-                  'h-screen ion-no-padding': true,
-                  'max-w-[200rem] mx-auto': false
-                })}>
-                {/* Row-1 */}
-                <ZIonRow className='h-full'>
-                  {/* Col-1 Side bar */}
-                  <Suspense
-                    fallback={
-                      <ZIonCol
-                        size='.8'
-                        className='h-full zaions__medium_bg zaions-transition'>
-                        <ZFallbackIonSpinner2 />
-                      </ZIonCol>
-                    }>
-                    <AdminPanelSidebarMenu
-                      activePage={AdminPanelSidebarMenuPageEnum.shortLink}
-                    />
-                  </Suspense>
-
-                  {/* Col-2 Right-side Main Container */}
-                  <ZIonCol
-                    sizeXl={
-                      ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
-                        ? is2XlScale
-                          ? '10.5'
-                          : '10'
-                        : is2XlScale
-                        ? '11.4'
-                        : '11.2'
-                    }
-                    sizeLg={
-                      ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
-                        ? is2XlScale
-                          ? '10.5'
-                          : '10'
-                        : is2XlScale
-                        ? '11.4'
-                        : '11.2'
-                    }
-                    sizeMd='12'
-                    sizeSm='12'
-                    sizeXs='12'
-                    className='h-screen zaions-transition'>
-                    <ZIonGrid
-                      className={classNames({
-                        'h-full ion-no-padding': true,
-                        'mt-2': !isLgScale
-                      })}>
-                      {/* Col-2 Row-1 Top bar. */}
-                      <Suspense
-                        fallback={
-                          <ZIonRow className='h-[4rem] px-3 zaions__light_bg'>
-                            <ZFallbackIonSpinner2 />
-                          </ZIonRow>
-                        }>
-                        <ZAdminPanelTopBar workspaceId={workspaceId} />
-                      </Suspense>
-
-                      {/* Col-2 Row-2 */}
-                      <ZIonRow className='h-[calc(100%-4rem)]'>
-                        {/* Col-2 Row-2 col-1 Folder menu */}
-                        {isLgScale && (
-                          <ZCan
-                            shareWSId={wsShareId}
-                            permissionType={
-                              isZNonEmptyString(wsShareId) &&
-                              isZNonEmptyString(shareWSMemberId)
-                                ? permissionsTypeEnum.shareWSMemberPermissions
-                                : permissionsTypeEnum.loggedInUserPermissions
-                            }
-                            havePermissions={
-                              isZNonEmptyString(wsShareId) &&
-                              isZNonEmptyString(shareWSMemberId)
-                                ? [shareWSPermissionEnum.viewAny_sws_folder]
-                                : [permissionsEnum.viewAny_folder]
-                            }>
-                            <Suspense
-                              fallback={
-                                <ZIonCol className='h-full border-e-[1px] zaions-transition'>
-                                  <ZFallbackIonSpinner2 />
-                                </ZIonCol>
-                              }>
-                              <ZDashboardFolderMenu
-                                showSkeleton={isZFetching}
-                                type={AdminPanelSidebarMenuPageEnum.shortLink}
-                                foldersData={
-                                  (isZNonEmptyString(workspaceId) ||
-                                    (isZNonEmptyString(wsShareId) &&
-                                      isZNonEmptyString(shareWSMemberId))) &&
-                                  shortLinksFoldersData !== undefined &&
-                                  shortLinksFoldersData !== null
-                                    ? shortLinksFoldersData
-                                    : []
-                                }
-                                showFoldersSaveReorderButton={
-                                  compState?.shortLinksFoldersReorder?.isEnable
-                                }
-                                handleFoldersReorder={handleReorder}
-                                addNewFolderButtonOnClickHandler={() => {
-                                  if (ZUserCurrentLimitsRState === false) {
-                                    presentZReachedLimitModal({
-                                      _cssClass: 'reached-limit-modal-size'
-                                    });
-                                  } else {
-                                    setFolderFormState(oldVal => ({
-                                      ...oldVal,
-                                      id: '',
-                                      name: '',
-                                      formMode: FormMode.ADD
-                                    }));
-                                    presentFolderModal({
-                                      _cssClass: 'folder-form-modal'
-                                    });
-                                  }
-                                }}
-                                foldersSaveReorderButtonOnClickHandler={() => {
-                                  void shortLinksFoldersReOrderHandler();
-                                }}
-                                folderActionsButtonOnClickHandler={(
-                                  event: unknown
-                                ) => {
-                                  presentFolderActionIonPopover({
-                                    _event: event as Event,
-                                    _cssClass: classNames(
-                                      classes.zaions_present_folder_Action_popover_width
-                                    )
-                                  });
-                                }}
-                              />
-                            </Suspense>
-                          </ZCan>
-                        )}
-
-                        {/* Col-2 Row-2 col-2 Table & filters etc. */}
+                {/* Grid-1 */}
+                <ZIonGrid
+                  className={classNames({
+                    'h-screen ion-no-padding': true,
+                    'max-w-[200rem] mx-auto': false
+                  })}>
+                  {/* Row-1 */}
+                  <ZIonRow className='h-full'>
+                    {/* Col-1 Side bar */}
+                    <Suspense
+                      fallback={
                         <ZIonCol
-                          className='h-full zaions-transition'
-                          sizeXl='9.2'
-                          sizeLg='9.2'
-                          sizeMd='12'
-                          sizeSm='12'
-                          sizeXs='12'>
-                          {!isSmScale ? (
-                            <ZInpageMainContent />
-                          ) : (
-                            <ZCustomScrollable
-                              className={classNames({
-                                'flex flex-col w-full h-full px-3 pt-3': true,
-                                'gap-10': isMdScale,
-                                'gap-5': !isMdScale
-                              })}
-                              scrollY={true}>
-                              <ZInpageMainContent />
-                            </ZCustomScrollable>
-                          )}
+                          size='.8'
+                          className='h-full zaions__medium_bg zaions-transition'>
+                          <ZFallbackIonSpinner2 />
                         </ZIonCol>
-                      </ZIonRow>
-                    </ZIonGrid>
-                  </ZIonCol>
-                </ZIonRow>
-              </ZIonGrid>
-            </ZIonContent>
-          </ZCan>
-        )}
+                      }>
+                      <AdminPanelSidebarMenu
+                        activePage={AdminPanelSidebarMenuPageEnum.shortLink}
+                      />
+                    </Suspense>
+
+                    {/* Col-2 Right-side Main Container */}
+                    <ZIonCol
+                      testingselector={
+                        CONSTANTS.testingSelectors.shortLink.listPage
+                          .rightSideMainContainer
+                      }
+                      sizeXl={
+                        ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
+                          ? is2XlScale
+                            ? '10.5'
+                            : '10'
+                          : is2XlScale
+                          ? '11.4'
+                          : '11.2'
+                      }
+                      sizeLg={
+                        ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
+                          ? is2XlScale
+                            ? '10.5'
+                            : '10'
+                          : is2XlScale
+                          ? '11.4'
+                          : '11.2'
+                      }
+                      sizeMd='12'
+                      sizeSm='12'
+                      sizeXs='12'
+                      className='h-screen zaions-transition'>
+                      <ZIonGrid
+                        className={classNames({
+                          'h-full ion-no-padding': true,
+                          'mt-2': !isLgScale
+                        })}>
+                        {/* Col-2 Row-1 Top bar. */}
+                        <Suspense
+                          fallback={
+                            <ZIonRow className='h-[4rem] px-3 zaions__light_bg'>
+                              <ZFallbackIonSpinner2 />
+                            </ZIonRow>
+                          }>
+                          <ZAdminPanelTopBar workspaceId={workspaceId} />
+                        </Suspense>
+
+                        {/* Col-2 Row-2 */}
+                        <ZIonRow className='h-[calc(100%-4rem)]'>
+                          {/* Col-2 Row-2 col-1 Folder menu */}
+                          {isLgScale && (
+                            <ZCan
+                              shareWSId={wsShareId}
+                              permissionType={
+                                isZNonEmptyString(wsShareId) &&
+                                isZNonEmptyString(shareWSMemberId)
+                                  ? permissionsTypeEnum.shareWSMemberPermissions
+                                  : permissionsTypeEnum.loggedInUserPermissions
+                              }
+                              havePermissions={
+                                isZNonEmptyString(wsShareId) &&
+                                isZNonEmptyString(shareWSMemberId)
+                                  ? [shareWSPermissionEnum.viewAny_sws_folder]
+                                  : [permissionsEnum.viewAny_folder]
+                              }>
+                              <Suspense
+                                fallback={
+                                  <ZIonCol className='h-full border-e-[1px] zaions-transition'>
+                                    <ZFallbackIonSpinner2 />
+                                  </ZIonCol>
+                                }>
+                                <ZDashboardFolderMenu
+                                  showSkeleton={isZFetching}
+                                  type={AdminPanelSidebarMenuPageEnum.shortLink}
+                                  foldersData={
+                                    (isZNonEmptyString(workspaceId) ||
+                                      (isZNonEmptyString(wsShareId) &&
+                                        isZNonEmptyString(shareWSMemberId))) &&
+                                    shortLinksFoldersData !== undefined &&
+                                    shortLinksFoldersData !== null
+                                      ? shortLinksFoldersData
+                                      : []
+                                  }
+                                  showFoldersSaveReorderButton={
+                                    compState?.shortLinksFoldersReorder
+                                      ?.isEnable
+                                  }
+                                  handleFoldersReorder={handleReorder}
+                                  addNewFolderButtonOnClickHandler={() => {
+                                    if (ZWsSlFoldersLimitsRState === false) {
+                                      presentZReachedLimitModal({
+                                        _cssClass: 'reached-limit-modal-size'
+                                      });
+                                    } else {
+                                      setFolderFormState(oldVal => ({
+                                        ...oldVal,
+                                        id: '',
+                                        name: '',
+                                        formMode: FormMode.ADD
+                                      }));
+                                      presentFolderModal({
+                                        _cssClass: 'folder-form-modal'
+                                      });
+                                    }
+                                  }}
+                                  foldersSaveReorderButtonOnClickHandler={() => {
+                                    void shortLinksFoldersReOrderHandler();
+                                  }}
+                                  folderActionsButtonOnClickHandler={(
+                                    event: unknown
+                                  ) => {
+                                    presentFolderActionIonPopover({
+                                      _event: event as Event,
+                                      _cssClass: classNames(
+                                        classes.zaions_present_folder_Action_popover_width
+                                      )
+                                    });
+                                  }}
+                                />
+                              </Suspense>
+                            </ZCan>
+                          )}
+
+                          {/* Col-2 Row-2 col-2 Table & filters etc. */}
+                          <ZIonCol
+                            className='h-full zaions-transition'
+                            sizeXl='9.2'
+                            sizeLg='9.2'
+                            sizeMd='12'
+                            sizeSm='12'
+                            sizeXs='12'>
+                            {!isSmScale ? (
+                              <ZInpageMainContent />
+                            ) : (
+                              <ZCustomScrollable
+                                className={classNames({
+                                  'flex flex-col w-full h-full px-3 pt-3': true,
+                                  'gap-10': isMdScale,
+                                  'gap-5': !isMdScale
+                                })}
+                                scrollY={true}>
+                                <ZInpageMainContent />
+                              </ZCustomScrollable>
+                            )}
+                          </ZIonCol>
+                        </ZIonRow>
+                      </ZIonGrid>
+                    </ZIonCol>
+                  </ZIonRow>
+                </ZIonGrid>
+              </ZIonContent>
+            </ZCan>
+          )}
+        </ZRequiredWsDataHOC>
       </ZIonPage>
     </>
   );
@@ -890,12 +902,8 @@ const ZInpageMainContent: React.FC = () => {
   // #endregion
 
   // #region Recoils.
-  const setZUserCurrentLimitsRState = useSetRecoilState(
-    ZUserCurrentLimitsRStateAtom
-  );
-
-  const ZUserCurrentLimitsRState = useRecoilValue(
-    ZUserCurrentLimitsRStateSelectorFamily(planFeaturesEnum.shortLinks)
+  const ZWsShortLinksLimitsRState = useRecoilValue(
+    ZWsRemainingLimitsRStateSelectorFamily(planFeaturesEnum.shortLinks)
   );
 
   // Recoil state for storing filter options for short-links.
@@ -906,7 +914,6 @@ const ZInpageMainContent: React.FC = () => {
   const setNewShortLinkTypeOptionDataAtom = useSetRecoilState(
     NewShortLinkSelectTypeOption
   );
-
   // #endregion
 
   // #region APIS requests.
@@ -1134,16 +1141,6 @@ const ZInpageMainContent: React.FC = () => {
   };
   // #endregion
 
-  useEffect(() => {
-    if (shortLinksData !== undefined && shortLinksData !== null) {
-      setZUserCurrentLimitsRState(oldValues => ({
-        ...oldValues,
-        [planFeaturesEnum.shortLinks]: shortLinksData?.items?.length
-      }));
-    }
-    // eslint-disable-next-line
-  }, [workspaceId, shareWSMemberId, wsShareId, isShortLinksDataFetching]);
-
   let isZFetching =
     isShortLinksFoldersDataFetching ||
     isShortLinksDataFetching ||
@@ -1180,9 +1177,9 @@ const ZInpageMainContent: React.FC = () => {
             })}
             // color='medium'
           >
-            {workspaceId !== undefined
+            {isZNonEmptyString(workspaceId)
               ? 'Create a New Link or Manage Your Existing Ones!'
-              : wsShareId !== undefined
+              : isZNonEmptyStrings([wsShareId, shareWSMemberId])
               ? getMemberRolePermissions?.memberPermissions?.includes(
                   shareWSPermissionEnum.create_sws_shortLink
                 ) ?? false
@@ -1200,7 +1197,7 @@ const ZInpageMainContent: React.FC = () => {
           >
             {isZNonEmptyString(workspaceId)
               ? 'Craft fresh links or take a peek at your existing ones. The choice is yours!'
-              : isZNonEmptyString(wsShareId)
+              : isZNonEmptyStrings([wsShareId, shareWSMemberId])
               ? getMemberRolePermissions?.memberPermissions?.includes(
                   shareWSPermissionEnum.create_sws_shortLink
                 ) ?? false
@@ -1393,7 +1390,7 @@ const ZInpageMainContent: React.FC = () => {
                   'w-full': !isSmScale
                 })}
                 onClick={() => {
-                  if (ZUserCurrentLimitsRState === false) {
+                  if (ZWsShortLinksLimitsRState === false) {
                     presentZReachedLimitModal({
                       _cssClass: 'reached-limit-modal-size'
                     });
@@ -1494,7 +1491,10 @@ const SearchQueryInputComponent: React.FC = () => {
         <ZIonItem
           className='border ion-item-start-no-padding z-inner-padding-end-0'
           lines='none'
-          minHeight='40px'>
+          minHeight='40px'
+          testingselector={
+            CONSTANTS.testingSelectors.shortLink.listPage.searchItem
+          }>
           <ZIonInput
             aria-label='search'
             type='text'
@@ -1520,10 +1520,14 @@ const SearchQueryInputComponent: React.FC = () => {
               CONSTANTS.testingSelectors.shortLink.listPage.searchBtn
             }>
             <ZIonIcon
+              testingselector={`${CONSTANTS.testingSelectors.shortLink.listPage.searchBtn}-icon`}
               icon={searchOutline}
               className='me-2'
             />
-            <ZIonText>search</ZIonText>
+            <ZIonText
+              testingselector={`${CONSTANTS.testingSelectors.shortLink.listPage.searchBtn}-text`}>
+              search
+            </ZIonText>
           </ZIonButton>
         </ZIonItem>
       )}

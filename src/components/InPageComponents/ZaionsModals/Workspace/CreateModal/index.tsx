@@ -18,13 +18,21 @@ import { AxiosError } from 'axios';
  * ? Like import of custom components is a custom import
  * */
 import {
+  ZIonBadge,
   ZIonButton,
   ZIonCol,
   ZIonContent,
   ZIonIcon,
   ZIonImg,
   ZIonInput,
+  ZIonItem,
+  ZIonLabel,
+  ZIonList,
+  ZIonNote,
+  ZIonRadio,
+  ZIonRadioGroup,
   ZIonRow,
+  ZIonSkeletonText,
   ZIonText
 } from '@/components/ZIonComponents';
 import { ZTimezoneSelector } from '@/components/CustomComponents/ZTimezone';
@@ -36,6 +44,7 @@ import { ZTimezoneSelector } from '@/components/CustomComponents/ZTimezone';
 import {
   useZGetRQCacheData,
   useZRQCreateRequest,
+  useZRQGetRequest,
   useZUpdateRQCacheData
 } from '@/ZaionsHooks/zreactquery-hooks';
 
@@ -46,11 +55,16 @@ import {
 import {
   extractInnerData,
   formatApiRequestErrorForFormikFormField,
+  isZNonEmptyString,
   validateField,
   zStringify
 } from '@/utils/helpers';
 import { reportCustomError, ZCustomError } from '@/utils/customErrorType';
-import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import {
+  API_URL_ENUM,
+  VALIDATION_RULE,
+  extractInnerDataOptionsEnum
+} from '@/utils/enums';
 import CONSTANTS from '@/utils/constants';
 import { showSuccessNotification } from '@/utils/notification';
 import MESSAGES from '@/utils/messages';
@@ -85,8 +99,12 @@ import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import { planFeaturesEnum } from '@/types/AdminPanel/index.type';
 import { useSetRecoilState } from 'recoil';
 import { ZUserCurrentLimitsRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
+import { ZPlansEnum, type ZaionsPricingI } from '@/types/WhyZaions/PricingPage';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
+ *
  * Component props type go down
  * ? Like if you have a type for props it should be please Down
  * */
@@ -103,12 +121,21 @@ const ZAddNewWorkspaceModal: React.FC<{
   // Custom hooks
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
   const { getRQCDataHandler } = useZGetRQCacheData();
+  const { zNavigatePushRoute } = useZNavigate();
 
   // Create new workspace API.
   const { mutateAsync: createWorkspaceMutate } = useZRQCreateRequest({
     _url: API_URL_ENUM.workspace_create_list,
     _showAlertOnError: false
   });
+
+  const { data: ZPlansData, isFetching: isZPlanDataFetching } =
+    useZRQGetRequest<ZaionsPricingI[]>({
+      _url: API_URL_ENUM.zPlans,
+      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PLANS.MAIN],
+      _authenticated: false,
+      _checkPermissions: false
+    });
 
   const { presentZIonModal: presentZReachedLimitModal } =
     useZIonModal(ZReachedLimitModal);
@@ -127,7 +154,7 @@ const ZAddNewWorkspaceModal: React.FC<{
         // Making an api call creating new workspace.
         const _response = await createWorkspaceMutate(values);
 
-        if (_response !== undefined) {
+        if (_response !== undefined && _response !== null) {
           // extracting data from _response.
           const _data = extractInnerData<workspaceInterface>(
             _response,
@@ -196,7 +223,8 @@ const ZAddNewWorkspaceModal: React.FC<{
 
   const formikInitialValues = {
     title: '',
-    workspaceTimezone: CONSTANTS.DEFAULT_VALUES.TIMEZONE_DEFAULT
+    workspaceTimezone: CONSTANTS.DEFAULT_VALUES.TIMEZONE_DEFAULT,
+    plan: ZPlansEnum?.core
   };
 
   return (
@@ -239,13 +267,15 @@ const ZAddNewWorkspaceModal: React.FC<{
           initialValues={formikInitialValues}
           validate={values => {
             const errors = {};
-            validateField('title', values, errors);
+            validateField('title', values, errors, VALIDATION_RULE.string);
+            validateField('plan', values, errors, VALIDATION_RULE.string);
             return errors;
           }}
           onSubmit={(values, { setErrors }) => {
             const zStringifyData = zStringify({
               title: values.title,
-              timezone: values.workspaceTimezone
+              timezone: values.workspaceTimezone,
+              plan: values.plan
             });
             void formikSubmitHandler(zStringifyData, setErrors);
           }}>
@@ -264,7 +294,7 @@ const ZAddNewWorkspaceModal: React.FC<{
                 <ZIonCol size='12'>
                   <ZIonInput
                     name='title'
-                    label='Workspace Name'
+                    label='Workspace Name*'
                     minHeight='40px'
                     labelPlacement='stacked'
                     placeholder='Workspace Name'
@@ -305,8 +335,136 @@ const ZAddNewWorkspaceModal: React.FC<{
                   />
                 </ZIonCol>
 
+                {/* Select Plan */}
+                <ZIonCol
+                  size='12'
+                  className='mt-3'>
+                  <div className='flex w-full ion-align-items-center ion-justify-content-between'>
+                    <ZIonText className='inline-block text-xl font-medium border-b-2 z-border-color-success-point-4'>
+                      Select Plan*
+                    </ZIonText>
+
+                    <ZIonText
+                      color='primary'
+                      className='text-sm transition-all cursor-pointer hover:border-b'
+                      testingselector={
+                        CONSTANTS.testingSelectors.workspace.createModal
+                          .seePlansDetailsBtn
+                      }
+                      onClick={() => {
+                        dismissZIonModal();
+                        zNavigatePushRoute(
+                          ZaionsRoutes.AdminPanel.Setting.UserAccount
+                            .AccountPlansSettings
+                        );
+                      }}>
+                      See plans details
+                    </ZIonText>
+                  </div>
+
+                  <div className='mt-2 overflow-hidden border rounded-md shadow-md zaions__tertiary_set'>
+                    <ZIonList
+                      lines='none'
+                      color='danger'
+                      className='z-bg-transparent'
+                      testingselector={`${CONSTANTS.testingSelectors.workspace.createModal.planSelector}-list`}>
+                      <ZIonRadioGroup
+                        name='plan'
+                        value={values?.plan}
+                        testingselector={`${CONSTANTS.testingSelectors.workspace.createModal.planSelector}-radio-group`}
+                        onIonChange={handleChange}
+                        className={classNames({
+                          'ion-touched': touched?.plan === true,
+                          'ion-invalid': touched?.plan === true && errors.plan,
+                          'ion-valid':
+                            touched?.plan === true &&
+                            (errors.plan === null || errors.plan === undefined)
+                        })}>
+                        {!isZPlanDataFetching &&
+                          ZPlansData?.map((el, index) => {
+                            return (
+                              <ZIonItem
+                                testingselector={`${CONSTANTS.testingSelectors.workspace.createModal.planSelector}-item-${el?.id}`}
+                                testinglistselector={`${CONSTANTS.testingSelectors.workspace.createModal.planSelector}-item`}
+                                testingidselector={`${el?.id}`}
+                                className='overflow-hidden rounded-sm z-ion-bg-transparent'
+                                key={index}>
+                                <ZIonRadio
+                                  value={el.name}
+                                  testingselector={`${CONSTANTS.testingSelectors.workspace.createModal.planSelector}-radio-${el?.id}`}
+                                  testinglistselector={`${CONSTANTS.testingSelectors.workspace.createModal.planSelector}-radio`}>
+                                  <ZIonLabel
+                                    testingselector={`${CONSTANTS.testingSelectors.workspace.createModal.planSelector}-label-${el?.id}`}
+                                    testinglistselector={`${CONSTANTS.testingSelectors.workspace.createModal.planSelector}-label`}>
+                                    <ZIonText
+                                      className='flex w-full gap-2 text-lg font-semibold ion-align-items-center'
+                                      color='dark'
+                                      testingselector={`${CONSTANTS.testingSelectors.workspace.createModal.planSelector}-text-${el?.id}`}
+                                      testinglistselector={`${CONSTANTS.testingSelectors.workspace.createModal.planSelector}-text`}>
+                                      {el.displayName}
+                                      {el.isMostPopular ? (
+                                        <ZIonBadge
+                                          className='px-2 text-sm h-max font-medium min-h-max max-h-max pt-[2px] ion-no-margin ion-no-padding'
+                                          testingselector={`${CONSTANTS.testingSelectors.workspace.createModal.planSelector}-badge-${el?.id}`}
+                                          testinglistselector={`${CONSTANTS.testingSelectors.workspace.createModal.planSelector}-badge`}>
+                                          Most Popular
+                                        </ZIonBadge>
+                                      ) : null}
+                                    </ZIonText>
+                                    <ZIonText
+                                      className='block w-full overflow-hidden text-sm text-ellipsis'
+                                      testingselector={`${CONSTANTS.testingSelectors.workspace.createModal.planSelector}-description-${el?.id}`}
+                                      testinglistselector={`${CONSTANTS.testingSelectors.workspace.createModal.planSelector}-description`}>
+                                      {el.description}
+                                    </ZIonText>
+                                  </ZIonLabel>
+                                </ZIonRadio>
+                              </ZIonItem>
+                            );
+                          })}
+
+                        {isZPlanDataFetching &&
+                          [...Array(4)].map((el, index) => {
+                            return (
+                              <ZIonItem
+                                className='w-full mt-3 overflow-hidden rounded-sm z-ion-bg-transparent'
+                                key={index}>
+                                <div className='flex w-full gap-2 ion-align-items-center'>
+                                  <div className='w-[90%]'>
+                                    <ZIonText
+                                      className='flex w-full gap-2 text-lg font-semibold ion-align-items-center'
+                                      color='dark'>
+                                      <ZIonSkeletonText className='w-20 h-5' />
+                                    </ZIonText>
+                                    <ZIonText className='block w-full overflow-hidden text-sm text-ellipsis'>
+                                      <ZIonSkeletonText className='w-full h-4' />
+                                    </ZIonText>
+                                  </div>
+
+                                  <ZIonText
+                                    className='block w-[10%] ion-text-end overflow-hidden text-sm text-ellipsis'
+                                    slot='end'>
+                                    <ZIonSkeletonText className='w-5 h-5 rounded-full ms-auto' />
+                                  </ZIonText>
+                                </div>
+                              </ZIonItem>
+                            );
+                          })}
+                      </ZIonRadioGroup>
+                    </ZIonList>
+                  </div>
+                  {touched?.plan === true &&
+                    isZNonEmptyString(errors?.plan) && (
+                      <ZIonNote
+                        color='danger'
+                        className='text-xs font-thin ms-4'>
+                        {errors?.plan}
+                      </ZIonNote>
+                    )}
+                </ZIonCol>
+
                 {/* create button */}
-                <ZIonCol>
+                <ZIonCol size='12'>
                   <div
                     className={classNames({
                       'w-full mt-4': true,

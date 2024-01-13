@@ -4,6 +4,7 @@ import React from 'react';
 import { Form, Formik } from 'formik';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import classNames from 'classnames';
+import { closeOutline } from 'ionicons/icons';
 import { AxiosError } from 'axios';
 
 // Custom Imports
@@ -20,6 +21,7 @@ import {
   ZIonButton,
   ZIonIcon
 } from '@/components/ZIonComponents';
+import ZReachedLimitModal from '@/components/InPageComponents/ZaionsModals/UpgradeModals/ReachedLimit';
 import ZCan from '@/components/Can';
 
 // Custom hooks
@@ -29,6 +31,7 @@ import {
   useZRQUpdateRequest,
   useZUpdateRQCacheData
 } from '@/ZaionsHooks/zreactquery-hooks';
+import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 // Global Constants
@@ -53,12 +56,14 @@ import {
   permissionsTypeEnum,
   shareWSPermissionEnum
 } from '@/utils/enums/RoleAndPermissions';
+import { errorCodes } from '@/utils/constants/apiConstants';
 
 // Images
 import { ProductFaviconSmall } from '@/assets/images';
 
 // Recoil States
 import { ZaionsAppSettingsRState } from '@/ZaionsStore/zaionsAppSettings.recoil';
+import { ZWsLimitsRStateAtom } from '@/ZaionsStore/UserDashboard/Workspace/index.recoil';
 import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil';
 
 // Types
@@ -74,11 +79,6 @@ import {
 import { type ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { type LinkFolderType } from '@/types/AdminPanel/linksType';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import { closeOutline } from 'ionicons/icons';
-import { ZUserCurrentLimitsRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
-import { errorCodes } from '@/utils/constants/apiConstants';
-import ZReachedLimitModal from '@/components/InPageComponents/ZaionsModals/UpgradeModals/ReachedLimit';
-import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 
 // Styles
 
@@ -104,9 +104,7 @@ const ZaionsAddNewFolder: React.FC<{
   // #region Recoil states.
   const appSettings = useRecoilValue(ZaionsAppSettingsRState);
   const [folderFormState, setFolderFormState] = useRecoilState(FolderFormState);
-  const setZUserCurrentLimitsRState = useSetRecoilState(
-    ZUserCurrentLimitsRStateAtom
-  );
+  const serZWsLimitsRState = useSetRecoilState(ZWsLimitsRStateAtom);
   // #endregion
 
   // #region Modals & Popovers
@@ -250,12 +248,12 @@ const ZaionsAddNewFolder: React.FC<{
 
             // updating limit recoil sate
             if (state === folderState.shortlink) {
-              setZUserCurrentLimitsRState(oldValues => ({
+              serZWsLimitsRState(oldValues => ({
                 ...oldValues,
                 [planFeaturesEnum.shortLinksFolder]: _updatedFolders?.length
               }));
             } else if (state === folderState.linkInBio) {
-              setZUserCurrentLimitsRState(oldValues => ({
+              serZWsLimitsRState(oldValues => ({
                 ...oldValues,
                 [planFeaturesEnum.linksInBioFolder]: _updatedFolders?.length
               }));

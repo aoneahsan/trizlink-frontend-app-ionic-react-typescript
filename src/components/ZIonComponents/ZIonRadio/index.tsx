@@ -11,6 +11,7 @@ import {
 } from '@/types/zaionsAppSettings.type';
 
 import { type IonRadioCustomEvent } from '@ionic/core/dist/types/components';
+import { zComponentTestingSelectorMaker } from '@/utils/helpers';
 
 interface ZIonRadioType {
   children?: ReactNode;
@@ -26,10 +27,29 @@ interface ZIonRadioType {
   legacy?: boolean;
   onIonBlur?: (event: IonRadioCustomEvent<void>) => void;
   onIonFocus?: (event: IonRadioCustomEvent<void>) => void;
+  //
+  testingselector?: string;
+  testinglistselector?: string;
+  testingidselector?: string;
 }
 
 const ZIonRadio: React.FC<ZIonRadioType> = (props: ZIonRadioType) => {
-  return <IonRadio {...props}>{props.children}</IonRadio>;
+  const { _idSelector, _testingSelector, _testinglistselector } =
+    zComponentTestingSelectorMaker({
+      testingidselector: props.testingidselector,
+      testinglistselector: props.testinglistselector,
+      testingselector: props.testingselector
+    });
+
+  return (
+    <IonRadio
+      {...props}
+      {..._testingSelector}
+      {..._testinglistselector}
+      {..._idSelector}>
+      {props.children}
+    </IonRadio>
+  );
 };
 
 export default ZIonRadio;
