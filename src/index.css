@@ -518,6 +518,9 @@ span.new {
 .zaions-border-color-secondary {
   border-color: var(--ion-color-secondary) !important;
 }
+.z-border-color-primary {
+  border-color: var(--ion-color-primary) !important;
+}
 .z-border-color-success-point-4 {
   border-color: rgba(var(--ion-color-success-rgb), 0.4) !important;
 }
@@ -733,7 +736,7 @@ span.new {
 }
 
 .reached-limit-modal-size {
-  --height: 18rem;
+  --height: 19rem;
   --width: 33rem;
   --max-width: 95%;
   --max-height: 89%;

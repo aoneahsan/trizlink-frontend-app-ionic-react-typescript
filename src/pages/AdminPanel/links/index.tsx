@@ -902,9 +902,6 @@ const ZInpageMainContent: React.FC = () => {
   // #endregion
 
   // #region Recoils.
-  const ZWsShortLinksLimitsRState = useRecoilValue(
-    ZWsRemainingLimitsRStateSelectorFamily(planFeaturesEnum.shortLinks)
-  );
 
   // Recoil state for storing filter options for short-links.
   // Recoil state for shortLinks.
@@ -1046,11 +1043,6 @@ const ZInpageMainContent: React.FC = () => {
       _showLoader: false,
       _extractType: ZRQGetRequestExtractEnum.extractData
     });
-  // #endregion
-
-  // #region Popovers & Modals.
-  const { presentZIonModal: presentZReachedLimitModal } =
-    useZIonModal(ZReachedLimitModal);
   // #endregion
 
   // #region Functions.
@@ -1390,34 +1382,28 @@ const ZInpageMainContent: React.FC = () => {
                   'w-full': !isSmScale
                 })}
                 onClick={() => {
-                  if (ZWsShortLinksLimitsRState === false) {
-                    presentZReachedLimitModal({
-                      _cssClass: 'reached-limit-modal-size'
-                    });
-                  } else {
-                    resetShortLinkFormHandler();
+                  resetShortLinkFormHandler();
 
-                    zNavigatePushRoute(
-                      isZNonEmptyString(workspaceId)
-                        ? replaceParams(
-                            ZaionsRoutes.AdminPanel.ShortLinks.Create,
-                            CONSTANTS.RouteParams.workspace.workspaceId,
-                            workspaceId ?? ''
-                          )
-                        : isZNonEmptyString(wsShareId) &&
-                          isZNonEmptyString(shareWSMemberId)
-                        ? createRedirectRoute({
-                            url: ZaionsRoutes.AdminPanel.ShareWS.Short_link
-                              .Create,
-                            params: [
-                              CONSTANTS.RouteParams.workspace.wsShareId,
-                              CONSTANTS.RouteParams.workspace.shareWSMemberId
-                            ],
-                            values: [wsShareId ?? '', shareWSMemberId ?? '']
-                          })
-                        : ''
-                    );
-                  }
+                  zNavigatePushRoute(
+                    isZNonEmptyString(workspaceId)
+                      ? replaceParams(
+                          ZaionsRoutes.AdminPanel.ShortLinks.Create,
+                          CONSTANTS.RouteParams.workspace.workspaceId,
+                          workspaceId ?? ''
+                        )
+                      : isZNonEmptyString(wsShareId) &&
+                        isZNonEmptyString(shareWSMemberId)
+                      ? createRedirectRoute({
+                          url: ZaionsRoutes.AdminPanel.ShareWS.Short_link
+                            .Create,
+                          params: [
+                            CONSTANTS.RouteParams.workspace.wsShareId,
+                            CONSTANTS.RouteParams.workspace.shareWSMemberId
+                          ],
+                          values: [wsShareId ?? '', shareWSMemberId ?? '']
+                        })
+                      : ''
+                  );
                 }}
                 testingselector={
                   CONSTANTS.testingSelectors.shortLink.listPage.createBtn

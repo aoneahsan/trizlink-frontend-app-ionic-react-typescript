@@ -40,7 +40,8 @@ import {
   ZIonSelectOption,
   ZIonButton,
   ZIonRouterLink,
-  ZIonGrid
+  ZIonGrid,
+  ZIonBadge
 } from '@/components/ZIonComponents';
 import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
 import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
@@ -101,7 +102,8 @@ import {
   messengerPlatformsBlockEnum,
   type ZUserSettingInterface,
   ZUserSettingTypeEnum,
-  planFeaturesEnum
+  planFeaturesEnum,
+  StatusEnum
 } from '@/types/AdminPanel/index.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
@@ -534,38 +536,47 @@ const ZInpageTable: React.FC = () => {
       header: 'Title',
       id: ZShortLinkListPageTableColumnsIds.title,
       cell: row => {
+        console.log({ c: row?.row?.original });
         return (
-          <ZIonRouterLink
-            className='hover:underline'
-            routerLink={
-              (workspaceId?.trim()?.length ?? 0) > 0
-                ? replaceRouteParams(
-                    ZaionsRoutes.AdminPanel.ShortLinks.Edit,
-                    [
-                      CONSTANTS.RouteParams.workspace.workspaceId,
-                      CONSTANTS.RouteParams.editShortLinkIdParam
-                    ],
-                    [workspaceId ?? '', row?.row?.original?.id ?? '']
-                  )
-                : (wsShareId?.trim()?.length ?? 0) > 0 &&
-                  (shareWSMemberId?.trim()?.length ?? 0) > 0
-                ? replaceRouteParams(
-                    ZaionsRoutes.AdminPanel.ShareWS.Short_link.Edit,
-                    [
-                      CONSTANTS.RouteParams.workspace.wsShareId,
-                      CONSTANTS.RouteParams.workspace.shareWSMemberId,
-                      CONSTANTS.RouteParams.editShortLinkIdParam
-                    ],
-                    [
-                      wsShareId ?? '',
-                      shareWSMemberId ?? '',
-                      row?.row?.original?.id ?? ''
-                    ]
-                  )
-                : ''
-            }>
-            <ZIonText>{row.getValue()}</ZIonText>
-          </ZIonRouterLink>
+          <ZIonText
+            className={classNames({
+              'hover:underline cursor-pointer': true
+            })}
+            color='primary'
+            onClick={() => {
+              zNavigatePushRoute(
+                createRedirectRoute({
+                  url: isZNonEmptyString(workspaceId)
+                    ? ZaionsRoutes.AdminPanel.ShortLinks.Edit
+                    : isZNonEmptyStrings([wsShareId, shareWSMemberId])
+                    ? ZaionsRoutes.AdminPanel.ShareWS.Short_link.Edit
+                    : '',
+                  values: isZNonEmptyString(workspaceId)
+                    ? [workspaceId ?? '', row?.row?.original?.id ?? '']
+                    : isZNonEmptyStrings([wsShareId, shareWSMemberId])
+                    ? [
+                        wsShareId ?? '',
+                        shareWSMemberId ?? '',
+                        row?.row?.original?.id ?? ''
+                      ]
+                    : [],
+                  params: isZNonEmptyString(workspaceId)
+                    ? [
+                        CONSTANTS.RouteParams.workspace.workspaceId,
+                        CONSTANTS.RouteParams.editShortLinkIdParam
+                      ]
+                    : isZNonEmptyStrings([wsShareId, shareWSMemberId])
+                    ? [
+                        CONSTANTS.RouteParams.workspace.wsShareId,
+                        CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                        CONSTANTS.RouteParams.editShortLinkIdParam
+                      ]
+                    : []
+                })
+              );
+            }}>
+            {row.getValue()}
+          </ZIonText>
         );
       },
       footer: 'Title'
@@ -576,6 +587,31 @@ const ZInpageTable: React.FC = () => {
       header: 'Date',
       id: ZShortLinkListPageTableColumnsIds.date,
       footer: 'Date'
+    }),
+
+    // Date
+    columnHelper.accessor(itemData => itemData.status, {
+      header: 'Status',
+      id: ZShortLinkListPageTableColumnsIds.status,
+      cell: row => {
+        const _value = row?.getValue();
+        return (
+          <ZIonBadge
+            className='font-normal tracking-wide'
+            color={
+              _value === StatusEnum.publish
+                ? 'success'
+                : _value === StatusEnum.draft
+                ? 'medium'
+                : _value === StatusEnum.private
+                ? 'tertiary'
+                : undefined
+            }>
+            {_value}
+          </ZIonBadge>
+        );
+      },
+      footer: 'Status'
     }),
 
     // Pixels
@@ -994,32 +1030,38 @@ const ZInpageTable: React.FC = () => {
                               true,
                             'border-r': false
                           })}>
-                          <ZIonButton
-                            fill='clear'
-                            color='dark'
-                            className='ion-no-padding ion-no-margin'
-                            size='small'
-                            testingselector={
-                              CONSTANTS.testingSelectors.shortLink.listPage
-                                .table.actionPopoverBtn
-                            }
-                            testinglistselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.actionPopoverBtn}-${_rowInfo.original.id}`}
-                            onClick={(_event: unknown) => {
-                              setCompState(oldVal => ({
-                                ...oldVal,
-                                selectedShortLinkId: _rowInfo.original.id ?? ''
-                              }));
+                          <div
+                            className={classNames({
+                              'w-max-h-max': true
+                            })}>
+                            <ZIonButton
+                              fill='clear'
+                              color='dark'
+                              className='ion-no-padding ion-no-margin'
+                              size='small'
+                              testingselector={
+                                CONSTANTS.testingSelectors.shortLink.listPage
+                                  .table.actionPopoverBtn
+                              }
+                              testinglistselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.actionPopoverBtn}-${_rowInfo.original.id}`}
+                              onClick={(_event: unknown) => {
+                                setCompState(oldVal => ({
+                                  ...oldVal,
+                                  selectedShortLinkId:
+                                    _rowInfo.original.id ?? ''
+                                }));
 
-                              //
-                              presentZShortLinkActionPopover({
-                                _event: _event as Event,
-                                _cssClass:
-                                  'zaions_present_folder_Action_popover_width',
-                                _dismissOnSelect: false
-                              });
-                            }}>
-                            <ZIonIcon icon={ellipsisVerticalOutline} />
-                          </ZIonButton>
+                                //
+                                presentZShortLinkActionPopover({
+                                  _event: _event as Event,
+                                  _cssClass:
+                                    'zaions_present_folder_Action_popover_width',
+                                  _dismissOnSelect: false
+                                });
+                              }}>
+                              <ZIonIcon icon={ellipsisVerticalOutline} />
+                            </ZIonButton>
+                          </div>
                         </ZIonCol>
                       </ZIonRow>
                     );

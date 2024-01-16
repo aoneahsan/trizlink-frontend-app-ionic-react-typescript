@@ -37,6 +37,12 @@ export enum subscriptionTimeLine {
   yearly = 'yearly'
 }
 
+export enum StatusEnum {
+  publish = 'publish',
+  draft = 'draft',
+  private = 'private'
+}
+
 export enum planFeaturesEnum {
   workspace = 'workspace',
   shortLinks = 'shortLinks',

@@ -1,5 +1,6 @@
 // IMPORTS
 import {
+  type StatusEnum,
   type ABTestingRotatorInterface,
   type FormMode,
   type GeoLocationRotatorInterface,
@@ -117,6 +118,7 @@ export enum ZShortLinkListPageTableColumnsEnum {
   title = 'title',
   clicks = 'clicks',
   date = 'date',
+  status = 'status',
   pixels = 'pixels',
   notes = 'notes',
   url = 'url',
@@ -127,6 +129,7 @@ export enum ZShortLinkListPageTableColumnsIds {
   id = '__z_short_link_id__',
   title = '__z_short_link_title__',
   date = '__z_short_link_date__',
+  status = '__z_short_link_status__',
   pixel = '__z_short_link_pixels__',
   notes = '__z_short_link_notes__',
   url = '__z_short_link_target_url__',
@@ -321,6 +324,7 @@ export interface ShortLinkType {
   // };
 
   favicon?: string;
+  status?: StatusEnum;
 
   // computed data - due to other events or calculations
   totalClicks?: number;
@@ -338,6 +342,7 @@ export interface ShortLinkType {
     linkExpiration?: boolean;
     password?: boolean;
   };
+  isActive?: boolean;
 
   formMode?: FormMode;
 }

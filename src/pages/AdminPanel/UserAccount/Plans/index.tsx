@@ -67,7 +67,6 @@ import { reportCustomError } from '@/utils/customErrorType';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import { type userServicesLimitI } from '@/types/UserAccount/index.type';
 import {
   ZPlanTimeLine,
   type ZSubscriptionI,
@@ -142,14 +141,6 @@ const ZAccountPlansSettings: React.FC = () => {
     _extractType: ZRQGetRequestExtractEnum.extractItem
   });
 
-  const { data: _userServicesLimits } = useZRQGetRequest<userServicesLimitI[]>({
-    _url: API_URL_ENUM.getUserServicesLimits,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.LIMITS],
-    _extractType: ZRQGetRequestExtractEnum.extractItems,
-    _showLoader: false
-  });
-
-  console.log({ _userServicesLimits });
   // #endregion
 
   // #region Functions

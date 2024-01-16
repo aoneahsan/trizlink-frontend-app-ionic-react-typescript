@@ -92,6 +92,7 @@ import {
  * */
 import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import ZRequiredWsDataHOC from '@/components/WorkspacesComponents/RequiredWsDataHOC';
 const AdminPanelSidebarMenu = lazy(
   () => import('@/components/AdminPanelComponents/Sidebar/ExpendableMenu')
 );
@@ -509,38 +510,40 @@ const ZWorkspaceSettings: React.FC = () => {
   if (compState?.isProcessing) {
     return (
       <ZIonPage pageTitle='Workspace settings page'>
-        <ZIonContent>
-          <div className='flex flex-col w-full h-full pt-4 ion-align-items-center ion-justify-content-center'>
-            <ZIonSpinner className='w-10 h-10' />
+        <ZRequiredWsDataHOC>
+          <ZIonContent>
+            <div className='flex flex-col w-full h-full pt-4 ion-align-items-center ion-justify-content-center'>
+              <ZIonSpinner className='w-10 h-10' />
 
-            {workspaceId !== undefined &&
-            workspaceId !== null &&
-            workspaceId?.trim()?.length > 0
-              ? isWSTeamMembersDataFetching
-                ? 'Fetching workspace members'
-                : isUTMTagsDataFetching
-                ? 'Fetching UTM tags'
-                : isPixelAccountsDataFetching
-                ? 'Fetching pixels'
-                : null
-              : wsShareId !== undefined &&
-                wsShareId !== null &&
-                wsShareId?.trim()?.length > 0 &&
-                shareWSMemberId !== undefined &&
-                shareWSMemberId !== null &&
-                shareWSMemberId?.trim()?.length > 0
-              ? isGetMemberRolePermissionsFetching
-                ? 'Getting & setting your permissions in this workspace'
-                : isWSTeamMembersDataFetching
-                ? 'Fetching Share workspaces members'
-                : isSWSUTMTagsDataFetching
-                ? 'Fetching share workspace UTM tags'
-                : isSWSPixelAccountsDataFetching
-                ? 'Fetching share workspace pixels'
-                : null
-              : ''}
-          </div>
-        </ZIonContent>
+              {workspaceId !== undefined &&
+              workspaceId !== null &&
+              workspaceId?.trim()?.length > 0
+                ? isWSTeamMembersDataFetching
+                  ? 'Fetching workspace members'
+                  : isUTMTagsDataFetching
+                  ? 'Fetching UTM tags'
+                  : isPixelAccountsDataFetching
+                  ? 'Fetching pixels'
+                  : null
+                : wsShareId !== undefined &&
+                  wsShareId !== null &&
+                  wsShareId?.trim()?.length > 0 &&
+                  shareWSMemberId !== undefined &&
+                  shareWSMemberId !== null &&
+                  shareWSMemberId?.trim()?.length > 0
+                ? isGetMemberRolePermissionsFetching
+                  ? 'Getting & setting your permissions in this workspace'
+                  : isWSTeamMembersDataFetching
+                  ? 'Fetching Share workspaces members'
+                  : isSWSUTMTagsDataFetching
+                  ? 'Fetching share workspace UTM tags'
+                  : isSWSPixelAccountsDataFetching
+                  ? 'Fetching share workspace pixels'
+                  : null
+                : ''}
+            </div>
+          </ZIonContent>
+        </ZRequiredWsDataHOC>
       </ZIonPage>
     );
   } else {

@@ -26,6 +26,11 @@ export const ShortLinksTableColumns = [
     isVisible: true
   },
   {
+    id: ZShortLinkListPageTableColumnsIds.status,
+    name: ZShortLinkListPageTableColumnsEnum.status,
+    isVisible: true
+  },
+  {
     id: ZShortLinkListPageTableColumnsIds.pixel,
     name: ZShortLinkListPageTableColumnsEnum.pixels,
     isVisible: true

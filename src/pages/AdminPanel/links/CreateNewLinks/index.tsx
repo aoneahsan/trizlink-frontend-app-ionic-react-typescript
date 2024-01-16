@@ -9,7 +9,13 @@ import React, { lazy, Suspense, useEffect, useState } from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import VALIDATOR from 'validator';
-import { refresh, settingsOutline } from 'ionicons/icons';
+import {
+  cloudDoneOutline,
+  eyeOffOutline,
+  refresh,
+  saveOutline,
+  settingsOutline
+} from 'ionicons/icons';
 import { Formik, useFormikContext } from 'formik';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import classNames from 'classnames';
@@ -98,7 +104,6 @@ import { errorCodes } from '@/utils/constants/apiConstants';
  * */
 import { NewShortLinkFormState } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
 import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
-import { ZWsLimitsRStateAtom } from '@/ZaionsStore/UserDashboard/Workspace/index.recoil';
 
 /**
  * Type Imports go down
@@ -121,7 +126,8 @@ import {
   type GeoLocationRotatorInterface,
   type LinkExpirationInfoInterface,
   type PasswordInterface,
-  planFeaturesEnum
+  planFeaturesEnum,
+  StatusEnum
 } from '@/types/AdminPanel/index.type';
 import {
   type FormikSetErrorsType,
@@ -133,6 +139,7 @@ import { type ZLinkMutateApiType } from '@/types/ZaionsApis.type';
 import { type ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { type workspaceInterface } from '@/types/AdminPanel/workspace';
 import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type';
+import { ZWsLimitsRStateAtom } from '@/ZaionsStore/UserDashboard/Workspace/index.recoil';
 
 const AddNotes = lazy(() => import('@/components/UserDashboard/AddNotes'));
 // const EmbedWidget = lazy(
@@ -308,7 +315,8 @@ const AdminCreateNewLinkPages: React.FC = () => {
 
   // If owned-workspace then this api will update short link.
   const { mutateAsync: updateShortLink } = useZRQUpdateRequest({
-    _url: API_URL_ENUM.shortLinks_update_delete
+    _url: API_URL_ENUM.shortLinks_update_delete,
+    _showAlertOnError: false
   });
 
   // Request for getting short links data.
@@ -973,7 +981,6 @@ const AdminCreateNewLinkPages: React.FC = () => {
   // #endregion
 
   // is fetching.
-
   const isZFetching = isSelectedShortLinkFetching || isShortLinksFetching;
 
   const formikInitialValues = {
@@ -1068,7 +1075,8 @@ const AdminCreateNewLinkPages: React.FC = () => {
     //     selectedShortLink?.favicon?.featureImgFile ??
     //     null
     // }
-    favicon: selectedShortLink?.favicon ?? ''
+    favicon: selectedShortLink?.favicon ?? '',
+    status: selectedShortLink?.status ?? StatusEnum.draft
     // complete page fields here
   };
 
@@ -1488,6 +1496,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 
               const _zStringifyData = zStringify({
                 type: newShortLinkFormState.type,
+                status: values.status ?? newShortLinkFormState.status,
                 target: zStringify({
                   url: values.target.url,
                   accountId: values.target.accountId,
@@ -1536,7 +1545,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
             // #endregion
           >
             {/* Content */}
-            {({ isSubmitting, isValid, submitForm }) => {
+            {({ isSubmitting, isValid, submitForm, setFieldValue }) => {
               return (
                 <ZIonContent color='light'>
                   {/* IonRefresher */}
@@ -1881,19 +1890,98 @@ const AdminCreateNewLinkPages: React.FC = () => {
                           {/* Gird */}
                           <ZIonGrid className='mx-4 mt-3'>
                             {/* Row */}
-                            <ZIonRow>
-                              {/* Col-1 */}
+                            <ZIonRow className='flex ion-align-items-center'>
                               <ZIonCol>
+                                <ZIonText
+                                  className='text-xl font-normal tracking-wider h-max'
+                                  color='medium'>
+                                  Visibility Options
+                                </ZIonText>
+                              </ZIonCol>
+                              {/* Col-2 */}
+                              <ZIonCol className='flex gap-2 ion-text-end ion-align-items-center ion-justify-content-end'>
                                 {/* get my link button */}
                                 <ZIonButton
-                                  expand='full'
+                                  color='success'
+                                  disabled={isSubmitting || !isValid}
+                                  testingselector={
+                                    CONSTANTS.testingSelectors.shortLink
+                                      .formPage.footer.publishBtn
+                                  }
                                   onClick={() => {
-                                    void submitForm();
-                                  }}
-                                  disabled={isSubmitting || !isValid}>
-                                  {editLinkId !== undefined
+                                    void (async () => {
+                                      await setFieldValue(
+                                        'status',
+                                        StatusEnum.publish,
+                                        false
+                                      );
+                                      await submitForm();
+                                    })();
+                                  }}>
+                                  {/* {editLinkId !== undefined
                                     ? 'Get my updated link'
-                                    : 'Get my new link'}
+                                    : 'Get my new link'} */}
+                                  Publish
+                                  <ZIonIcon
+                                    slot='end'
+                                    testingselector={`${CONSTANTS.testingSelectors.shortLink.formPage.footer.publishBtn}-icon`}
+                                    className='mb-[2px]'
+                                    icon={cloudDoneOutline}
+                                  />
+                                </ZIonButton>
+
+                                {/* save as draft btn */}
+                                <ZIonButton
+                                  disabled={isSubmitting || !isValid}
+                                  color='secondary'
+                                  testingselector={
+                                    CONSTANTS.testingSelectors.shortLink
+                                      .formPage.footer.saveDraftBtn
+                                  }
+                                  onClick={() => {
+                                    void (async () => {
+                                      await setFieldValue(
+                                        'status',
+                                        StatusEnum.draft,
+                                        false
+                                      );
+                                      await submitForm();
+                                    })();
+                                  }}>
+                                  Save as draft
+                                  <ZIonIcon
+                                    slot='end'
+                                    className='mb-[2px]'
+                                    icon={saveOutline}
+                                    testingselector={`${CONSTANTS.testingSelectors.shortLink.formPage.footer.saveDraftBtn}-icon`}
+                                  />
+                                </ZIonButton>
+
+                                {/* save as private btn */}
+                                <ZIonButton
+                                  disabled={isSubmitting || !isValid}
+                                  color='tertiary'
+                                  testingselector={
+                                    CONSTANTS.testingSelectors.shortLink
+                                      .formPage.footer.savePrivateBtn
+                                  }
+                                  onClick={() => {
+                                    void (async () => {
+                                      await setFieldValue(
+                                        'status',
+                                        StatusEnum.private,
+                                        false
+                                      );
+                                      await submitForm();
+                                    })();
+                                  }}>
+                                  Save as private
+                                  <ZIonIcon
+                                    slot='end'
+                                    className='mb-[2px]'
+                                    icon={eyeOffOutline}
+                                    testingselector={`${CONSTANTS.testingSelectors.shortLink.formPage.footer.savePrivateBtn}-icon`}
+                                  />
                                 </ZIonButton>
                               </ZIonCol>
                             </ZIonRow>
@@ -1928,7 +2016,8 @@ const ZTopBar: React.FC = () => {
   // #endregion
 
   // Formik Context.
-  const { resetForm, submitForm, isSubmitting, isValid } = useFormikContext();
+  const { resetForm, submitForm, setFieldValue, isSubmitting, isValid } =
+    useFormikContext();
 
   // #region Recoils.
   //
@@ -2049,8 +2138,8 @@ const ZTopBar: React.FC = () => {
           sizeSm='12'
           sizeXs='12'
           className={classNames({
-            'ion-text-end': isMdScale,
-            'flex ion-align-items-center': !isMdScale && isSmScale,
+            'ion-justify-content-end': isMdScale,
+            'flex ion-align-items-center gap-2': true,
             'flex-col': !isSmScale
           })}>
           {!isMdScale && (
@@ -2082,6 +2171,7 @@ const ZTopBar: React.FC = () => {
             </ZIonButton>
           )}
 
+          {/* refresh btn */}
           <ZIonButton
             fill='outline'
             testingselector={
@@ -2191,10 +2281,14 @@ const ZTopBar: React.FC = () => {
           {/* get my link button */}
           <ZIonButton
             testingselector={
-              CONSTANTS.testingSelectors.shortLink.formPage.topBarSubmitBtn
+              CONSTANTS.testingSelectors.shortLink.formPage.topBarPublishBtn
             }
+            color='success'
             onClick={() => {
-              void submitForm();
+              void (async () => {
+                await setFieldValue('status', StatusEnum.publish, false);
+                await submitForm();
+              })();
             }}
             disabled={isSubmitting || !isValid}
             className={classNames({
@@ -2216,9 +2310,60 @@ const ZTopBar: React.FC = () => {
                 ? '1.3rem'
                 : undefined
             }>
-            {(editLinkId?.trim()?.length ?? 0) > 0
-              ? 'Get my updated link'
-              : 'Get my new link'}
+            {/* {editLinkId !== undefined
+                                    ? 'Get my updated link'
+                                  : 'Get my new link'} */}
+            Publish
+            <ZIonIcon
+              slot='end'
+              className='mb-[2px]'
+              icon={cloudDoneOutline}
+              testingselector={`${CONSTANTS.testingSelectors.shortLink.formPage.topBarPublishBtn}-icon`}
+            />
+          </ZIonButton>
+
+          {/* save as draft btn */}
+          <ZIonButton
+            disabled={isSubmitting || !isValid}
+            color='secondary'
+            onClick={() => {
+              void (async () => {
+                await setFieldValue('status', StatusEnum.draft, false);
+                await submitForm();
+              })();
+            }}
+            testingselector={
+              CONSTANTS.testingSelectors.shortLink.formPage.topBarSaveDraftBtn
+            }>
+            Save as draft
+            <ZIonIcon
+              slot='end'
+              className='mb-[2px]'
+              icon={saveOutline}
+              testingselector={`${CONSTANTS.testingSelectors.shortLink.formPage.topBarSaveDraftBtn}-icon`}
+            />
+          </ZIonButton>
+
+          {/* save as private btn */}
+          <ZIonButton
+            disabled={isSubmitting || !isValid}
+            color='tertiary'
+            onClick={() => {
+              void (async () => {
+                await setFieldValue('status', StatusEnum.private, false);
+                await submitForm();
+              })();
+            }}
+            testingselector={
+              CONSTANTS.testingSelectors.shortLink.formPage.topBarSavePrivateBtn
+            }>
+            Save as private
+            <ZIonIcon
+              slot='end'
+              className='mb-[2px]'
+              icon={eyeOffOutline}
+              testingselector={`${CONSTANTS.testingSelectors.shortLink.formPage.topBarSavePrivateBtn}-icon`}
+            />
           </ZIonButton>
         </ZIonCol>
       </ZIonRow>

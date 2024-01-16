@@ -164,8 +164,8 @@ export const API_URLS = {
   member_check_short_url: `/user/ws-member/short-url/check/${RouteParams.workspace.invitationId}`,
   validate_invitation_status: '/user/validate-and-update-invitation',
   ws_subscription_get: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/ws-subscription`,
-  ws_subscription: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/subscribe`,
-  ws_subscription_update: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/update/subscribe`,
+  ws_subscription: `/user/workspace/${RouteParams.workspace.workspaceId}/subscribe`,
+  ws_subscription_update: `/user/workspace/${RouteParams.workspace.workspaceId}/update/subscription`,
   ws_subscription_limits: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/limits`,
 
   // Share workspace members
@@ -803,9 +803,17 @@ const testingSelectors = {
       homeBtn: 'sl-fp-home-btn',
       topBarText: 'sl-fp-tb-text',
       topBarRefreshBtn: 'sl-fp-tb-refresh-btn',
-      topBarSubmitBtn: 'sl-fp-tb-submit-btn',
+      topBarPublishBtn: 'sl-fp-tb-publish-btn',
+      topBarSaveDraftBtn: 'sl-fp-tb-draft-btn',
+      topBarSavePrivateBtn: 'sl-fp-tb-private-btn',
       advanceOptionsBtn: 'sl-fp-advance-options-btn',
       advanceOptionsContent: 'sl-fp-advance-options-content',
+
+      footer: {
+        publishBtn: 'sl-fp-f-publish-btn',
+        saveDraftBtn: 'sl-fp-f-draft-btn',
+        savePrivateBtn: 'sl-fp-f-private-btn'
+      },
 
       notesTextarea: 'sl-fp-note-textarea',
 

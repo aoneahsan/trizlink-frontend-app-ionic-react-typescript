@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 /**
  * Packages Imports go down
@@ -40,15 +40,30 @@ import {
  * ? Like import of custom Hook is a custom import
  * */
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
-import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import {
+  useZInvalidateReactQueries,
+  useZRQGetRequest,
+  useZRQUpdateRequest,
+  useZUpdateRQCacheData
+} from '@/ZaionsHooks/zreactquery-hooks';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
 import CONSTANTS from '@/utils/constants';
-import { API_URL_ENUM } from '@/utils/enums';
-import { isZNonEmptyString } from '@/utils/helpers';
+import {
+  API_URL_ENUM,
+  ZWSTypeEum,
+  extractInnerDataOptionsEnum
+} from '@/utils/enums';
+import {
+  _getQueryKey,
+  extractInnerData,
+  isZNonEmptyString,
+  isZNonEmptyStrings,
+  zStringify
+} from '@/utils/helpers';
 
 /**
  * Type Imports go down
@@ -56,10 +71,13 @@ import { isZNonEmptyString } from '@/utils/helpers';
  * */
 import {
   ZPlanTimeLine,
+  type ZPlansEnum,
   type ZSubscriptionI,
   type ZaionsPricingI
 } from '@/types/WhyZaions/PricingPage';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { reportCustomError } from '@/utils/customErrorType';
+import { useParams } from 'react-router';
 
 /**
  * Recoil State Imports go down
@@ -87,7 +105,14 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
  * @type {*}
  * */
 const ZBillingPage: React.FC = () => {
-  // #region
+  // getting link-in-bio and workspace ids from url with the help of useParams.
+  const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
+  }>();
+
+  // #region Comp state
   const [compState, setCompState] = useState<{
     planTimeDuration: ZPlanTimeLine;
   }>({
@@ -98,16 +123,46 @@ const ZBillingPage: React.FC = () => {
   // #region Custom hooks.
   const { isSmScale, isLgScale, isMdScale, isXlScale, is2XlScale } =
     useZMediaQueryScale();
+  const { updateRQCDataHandler } = useZUpdateRQCacheData();
+  const { zInvalidateReactQueries } = useZInvalidateReactQueries();
   // #endregion
 
-  // #region APIS.
+  // #region APIS
+  const { mutateAsync: upgradePlanSubscriptionAsyncMutate } =
+    useZRQUpdateRequest({
+      _url: API_URL_ENUM.ws_subscription_update
+    });
+
+  // fetch workspace subscription data.
   const {
-    data: userSubscriptionData,
-    isFetching: isZUserSubscriptionDataFetching
+    data: WSSubscriptionData,
+    isFetching: isSelectedWSSubscriptionFetching
   } = useZRQGetRequest<ZSubscriptionI>({
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SUBSCRIPTION],
     _url: API_URL_ENUM.ws_subscription_get,
-    _extractType: ZRQGetRequestExtractEnum.extractItem
+    _key: _getQueryKey({
+      keys: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.SUBSCRIPTION_GET],
+      additionalKeys: [workspaceId, wsShareId, shareWSMemberId]
+    }),
+    _itemsIds: _getQueryKey({
+      keys: [
+        isZNonEmptyString(workspaceId)
+          ? ZWSTypeEum.personalWorkspace
+          : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+          ? ZWSTypeEum.shareWorkspace
+          : ''
+      ],
+      additionalKeys: [workspaceId, shareWSMemberId]
+    }),
+    _urlDynamicParts: [
+      CONSTANTS.RouteParams.workspace.type,
+      CONSTANTS.RouteParams.workspace.workspaceId
+    ],
+    _shouldFetchWhenIdPassed: !(
+      isZNonEmptyString(workspaceId) ||
+      isZNonEmptyStrings([wsShareId, shareWSMemberId])
+    ),
+    _extractType: ZRQGetRequestExtractEnum.extractItem,
+    _showLoader: false
   });
 
   const { data: ZPlansData, isFetching: isZPlanDataFetching } =
@@ -118,6 +173,90 @@ const ZBillingPage: React.FC = () => {
       _checkPermissions: false
     });
   // #endregion
+
+  // #region Functions.
+  const getStartedClickHandler = useCallback(
+    async (plan: ZPlansEnum, selectedTimeLine: ZPlanTimeLine) => {
+      try {
+        const _selectedPlanData = {
+          plan,
+          selectedTimeLine
+        };
+
+        const _response = await upgradePlanSubscriptionAsyncMutate({
+          requestData: zStringify(_selectedPlanData),
+          itemIds: _getQueryKey({
+            keys: [
+              isZNonEmptyString(workspaceId)
+                ? ZWSTypeEum.personalWorkspace
+                : isZNonEmptyString(wsShareId) &&
+                  isZNonEmptyString(shareWSMemberId)
+                ? ZWSTypeEum.shareWorkspace
+                : ''
+            ],
+            additionalKeys: [workspaceId, shareWSMemberId]
+          }),
+          urlDynamicParts: [
+            CONSTANTS.RouteParams.workspace.type,
+            CONSTANTS.RouteParams.workspace.workspaceId
+          ]
+        });
+
+        if (_response !== undefined && _response !== null) {
+          const _data = extractInnerData<ZSubscriptionI>(
+            _response,
+            extractInnerDataOptionsEnum.createRequestResponseItem
+          );
+
+          if (_data !== null && isZNonEmptyString(_data?.id)) {
+            if (_data?.name !== WSSubscriptionData?.name) {
+              await zInvalidateReactQueries(
+                _getQueryKey({
+                  keys: [
+                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE
+                      .SUBSCRIPTION_LIMITS
+                  ],
+                  additionalKeys: [workspaceId, wsShareId, shareWSMemberId]
+                })
+              );
+
+              await zInvalidateReactQueries(
+                _getQueryKey({
+                  keys: [
+                    isZNonEmptyString(workspaceId)
+                      ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN
+                      : isZNonEmptyString(wsShareId) &&
+                        isZNonEmptyString(shareWSMemberId)
+                      ? CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN
+                      : ''
+                  ],
+                  additionalKeys: [workspaceId, wsShareId, shareWSMemberId]
+                })
+              );
+            }
+            await updateRQCDataHandler({
+              key: _getQueryKey({
+                keys: [
+                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.SUBSCRIPTION_GET
+                ],
+                additionalKeys: [workspaceId, wsShareId, shareWSMemberId]
+              }),
+              extractType: ZRQGetRequestExtractEnum.extractItem,
+              updateHoleData: true,
+              data: _data,
+              id: ''
+            });
+          }
+        }
+      } catch (error) {
+        reportCustomError(error);
+      }
+    },
+    // eslint-disable-next-line
+    []
+  );
+  // #endregion
+
   return (
     <>
       <ZIonRow className='border rounded-lg zaions__light_bg ion-align-items-center ion-padding'>
@@ -313,6 +452,7 @@ const ZBillingPage: React.FC = () => {
               className='flex mt-3 gap-7 ion-align-items-start'
               value={compState.planTimeDuration}
               onIonChange={({ target }) => {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                 if (isZNonEmptyString(target?.value as ZPlanTimeLine)) {
                   setCompState(oldValues => ({
                     ...oldValues,
@@ -344,7 +484,7 @@ const ZBillingPage: React.FC = () => {
           'gap-1': !is2XlScale && isXlScale
         })}>
         {isZPlanDataFetching &&
-          isZUserSubscriptionDataFetching &&
+          isSelectedWSSubscriptionFetching &&
           [...Array(4)].map((_, index) => {
             return (
               <ZIonCol
@@ -401,12 +541,12 @@ const ZBillingPage: React.FC = () => {
           })}
 
         {!isZPlanDataFetching &&
-          !isZUserSubscriptionDataFetching &&
+          !isSelectedWSSubscriptionFetching &&
           ZPlansData?.map(plan => {
             const _planDisabled =
               compState.planTimeDuration === ZPlanTimeLine.annual &&
               plan?.isAnnualOnly;
-            const _currentPlan = userSubscriptionData?.name === plan?.name;
+            const _currentPlan = WSSubscriptionData?.name === plan?.name;
             return (
               <ZIonCol
                 sizeXl='2.8'
@@ -492,12 +632,12 @@ const ZBillingPage: React.FC = () => {
                           height='2.5rem'
                           disabled={_planDisabled}
                           onClick={() => {
-                            // if (!_planDisabled) {
-                            //   void getStartedClickHandler(
-                            //     plan?.name,
-                            //     values?.planTimeDuration
-                            //   );
-                            // }
+                            if (!_planDisabled) {
+                              void getStartedClickHandler(
+                                plan?.name,
+                                compState?.planTimeDuration
+                              );
+                            }
                           }}>
                           Upgrade
                         </ZIonButton>

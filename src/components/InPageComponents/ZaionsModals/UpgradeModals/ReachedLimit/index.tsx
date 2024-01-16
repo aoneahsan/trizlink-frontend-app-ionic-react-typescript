@@ -54,6 +54,7 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import { ProductFavicon } from '@/assets/images';
+import classNames from 'classnames';
 
 /**
  * Component props type go down
@@ -69,7 +70,12 @@ import { ProductFavicon } from '@/assets/images';
 const ZReachedLimitModal: React.FC<{
   dismissZIonModal: (data?: string, role?: string | undefined) => void;
   zNavigatePushRoute?: (_url: string) => void;
-}> = ({ dismissZIonModal, zNavigatePushRoute }) => {
+  showDowngradeMessage: boolean;
+}> = ({
+  dismissZIonModal,
+  zNavigatePushRoute,
+  showDowngradeMessage = false
+}) => {
   return (
     <ZIonContent className='ion-padding'>
       {/* Close modal button */}
@@ -98,14 +104,21 @@ const ZReachedLimitModal: React.FC<{
         <ZIonText
           color='dark'
           className='mt-3 text-xl font-bold'>
-          Oh, seems you have reached your plan limits
+          {showDowngradeMessage
+            ? 'Subscription Downgraded'
+            : 'Oh, seems you have reached your plan limits'}
         </ZIonText>
 
         <ZIonText
           color='medium'
-          className='mt-3 text-md w-[72%] mx-auto my-3'>
-          To move forward, increase your limit. Choose the best plan that fit
-          your needs!
+          className={classNames({
+            'mt-3 text-md mx-auto my-3': true,
+            'w-[72%]': !showDowngradeMessage,
+            'w-full': showDowngradeMessage
+          })}>
+          {showDowngradeMessage
+            ? "It seems you've recently changed your subscription. Access to this feature is now limited based on your current plan. Check your subscription details for more information"
+            : 'To move forward, increase your limit. Choose the best plan that fit your needs!'}
         </ZIonText>
 
         <ZIonButton
@@ -116,6 +129,7 @@ const ZReachedLimitModal: React.FC<{
               dismissZIonModal();
 
               zNavigatePushRoute(
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                 ZaionsRoutes.AdminPanel.Setting.UserAccount.AccountPlansSettings
               );
             }
