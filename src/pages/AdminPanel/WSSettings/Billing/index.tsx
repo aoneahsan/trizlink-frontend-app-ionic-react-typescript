@@ -101,7 +101,7 @@ import { useParams } from 'react-router';
 
 /**
  * Functional Component
- * About: (Info of component here...)
+ * About: ()
  * @type {*}
  * */
 const ZBillingPage: React.FC = () => {

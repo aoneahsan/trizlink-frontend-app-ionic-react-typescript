@@ -34,7 +34,6 @@ import {
   ZIonList,
   ZIonTitle,
   ZIonInput,
-  ZIonNote,
   ZIonButton
 } from '@/components/ZIonComponents';
 
@@ -687,7 +686,7 @@ const ZAccountDetails: React.FC = () => {
                             </ZIonRow>
                           </ZIonItem>
 
-                          {/* zaions_tappk link redirects */}
+                          {/* link redirects */}
                           <ZIonItem className='ion-no-padding'>
                             <ZIonRow className='w-full ion-align-items-center ion-no-padding'>
                               <ZIonCol
