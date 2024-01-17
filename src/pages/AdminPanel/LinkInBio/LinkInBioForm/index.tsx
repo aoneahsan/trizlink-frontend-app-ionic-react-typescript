@@ -9,8 +9,8 @@ import { useLocation, useParams } from 'react-router';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { Formik } from 'formik';
-import { createOutline } from 'ionicons/icons';
+import { Formik, useFormikContext } from 'formik';
+import { chevronDownCircleOutline, createOutline } from 'ionicons/icons';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import routeQueryString from 'qs';
 import classNames from 'classnames';
@@ -83,7 +83,7 @@ import {
 } from '@/types/AdminPanel/linkInBioType';
 import { LinkInBioBlockEnum } from '@/types/AdminPanel/linkInBioType/blockTypes';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import { FormMode } from '@/types/AdminPanel/index.type';
+import { FormMode, StatusEnum } from '@/types/AdminPanel/index.type';
 
 /**
  * Recoil State Imports go down
@@ -106,10 +106,11 @@ import {
   shareWSPermissionEnum
 } from '@/utils/enums/RoleAndPermissions';
 import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type';
-import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
+import { useZIonModal, useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 import ZLinkInBioFormSettingsModal from '@/components/InPageComponents/ZaionsModals/LinkInBio/SettingsModal';
 import { reloadBlockingRStateAtom } from '@/ZaionsStore/AppRStates';
 import { reloadBlockingTypeEnum } from '@/types/zaionsAppSettings.type';
+import { ZVisibilityControlPopover } from '@/components/AdminPanelComponents/VisibilityControlButton';
 
 const LinkInBioDesignPage = lazy(
   () => import('@/pages/AdminPanel/LinkInBio/LinkInBioForm/Design')
@@ -153,43 +154,24 @@ const ZaionsLinkInBioForm: React.FC = () => {
     ignoreQueryPrefix: true
   });
 
-  // Recoil state of managing current page. for example design, share settings etc.
-  const [linkInBioFromPageState, setLinkInBioFromPageState] = useRecoilState(
-    LinkInBioFromPageRState
-  );
-
   // Recoil state link-in-bio form state (for editing or creating link-in-bio)
   const setLinkInBioFormState = useSetRecoilState(NewLinkInBioFormState);
-  const reloadBlockingRState = useRecoilValue(reloadBlockingRStateAtom);
   // #endregion
 
   // #region Custom hooks.
   // useZNavigate for redirection
-  const { zNavigatePushRoute } = useZNavigate();
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
 
   // validate the request. this hook will show success notification if the request->success is true and show error notification if request->success is false.
   const { validateRequestResponse } = useZValidateRequestResponse();
   // #endregion
 
-  // #region Modals
-  const { presentZIonModal: presentZLinkInBioFormSettingsModal } = useZIonModal(
-    ZLinkInBioFormSettingsModal,
-    {
-      workspaceId,
-      shareWSMemberId,
-      wsShareId
-    }
-  );
-  // #endregion
-
   // #region APIS
 
   // fetching link-in-bio with the linkInBioId data from backend.
   const {
-    data: selectedLinkInBio,
+    data: selectedLinkInBio
     // refetch: refetchSelectedLinkInBio,
-    isFetching: isSelectedLinkInBioFetching
   } = useZRQGetRequest<LinkInBioType>({
     _url: API_URL_ENUM.linkInBio_update_delete,
     _key: _getQueryKey({
@@ -281,26 +263,6 @@ const ZaionsLinkInBioForm: React.FC = () => {
     }
     // eslint-disable-next-line
   }, [selectedLinkInBio]);
-
-  // storing the current page info in setLinkInBioFromPageState recoil state, so we can show the appropriate content.
-  useEffect(() => {
-    try {
-      if (
-        routeQSearchParams?.page !== undefined &&
-        routeQSearchParams?.page !== null
-      ) {
-        setLinkInBioFromPageState(oldValues => ({
-          ...oldValues,
-          page: ZLinkInBioPageEnum[
-            routeQSearchParams.page as ZLinkInBioPageEnum
-          ]
-        }));
-      }
-    } catch (error) {
-      reportCustomError(error);
-    }
-    // eslint-disable-next-line
-  }, [routeQSearchParams.page]);
   // #endregion
 
   // #region Functions
@@ -385,14 +347,13 @@ const ZaionsLinkInBioForm: React.FC = () => {
   };
   // #endregion
 
-  const isZFetching = isSelectedLinkInBioFetching;
-
   const formikInitialValues = {
     designPageCurrentTab:
       (routeQSearchParams as { step: ZLinkInBioRHSComponentEnum })?.step ??
       ZLinkInBioRHSComponentEnum.theme,
     LinkInBioBlock: LinkInBioBlockEnum.default, // REMOVE THIS
     title: selectedLinkInBio?.title ?? '',
+    status: selectedLinkInBio?.status ?? StatusEnum.draft,
     linkInBioTitle: selectedLinkInBio?.linkInBioTitle ?? '',
     enableTitleInput: false,
     theme: {
@@ -532,6 +493,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 
               const stringifyValue = zStringify({
                 linkInBioTitle: values.linkInBioTitle,
+                status: values.status,
                 theme: zStringify(values.theme),
                 settings: zStringify(values.settings)
               });
@@ -546,500 +508,742 @@ const ZaionsLinkInBioForm: React.FC = () => {
             }}
             // #endregion
           >
-            {({ values, setFieldValue, handleChange, handleBlur }) => {
-              return (
-                <>
-                  {!isZFetching ? (
-                    <ZIonHeader className='ion-padding-horizontal'>
-                      <ZIonGrid className='ion-no-padding'>
-                        <ZIonRow>
-                          <ZIonCol
-                            className='flex ion-align-items-center'
-                            size='3'>
-                            {/* Home btn */}
-                            <div
-                              className={classNames({
-                                'w-max h-max': true,
-                                'cursor-not-allowed':
-                                  reloadBlockingRState?.isBlock &&
-                                  reloadBlockingRState?.type !== null &&
-                                  reloadBlockingRState?.type !== undefined &&
-                                  [
-                                    reloadBlockingTypeEnum.libBlockFormSection,
-                                    reloadBlockingTypeEnum.libFormThemeSection
-                                  ].includes(reloadBlockingRState?.type)
-                              })}>
-                              <ZIonButton
-                                disabled={
-                                  reloadBlockingRState?.isBlock &&
-                                  reloadBlockingRState?.type !== null &&
-                                  reloadBlockingRState?.type !== undefined &&
-                                  [
-                                    reloadBlockingTypeEnum.libBlockFormSection,
-                                    reloadBlockingTypeEnum.libFormThemeSection
-                                  ].includes(reloadBlockingRState?.type)
-                                }
-                                className='ion-text-capitalize ion-no-margin'
-                                color='secondary'
-                                testingselector={
-                                  CONSTANTS.testingSelectors.linkInBio.formPage
-                                    .topBar.homeBtn
-                                }
-                                onClick={() => {
-                                  if (!reloadBlockingRState?.isBlock) {
-                                    zNavigatePushRoute(
-                                      replaceRouteParams(
-                                        ZaionsRoutes.AdminPanel.LinkInBio.Main,
-                                        [
-                                          CONSTANTS.RouteParams.workspace
-                                            .workspaceId,
-                                          CONSTANTS.RouteParams
-                                            .folderIdToGetShortLinksOrLinkInBio
-                                        ],
-                                        [
-                                          workspaceId ?? '',
-                                          CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
-                                        ]
-                                      )
-                                    );
-                                  }
-                                }}>
-                                <ZIonText className='ion-no-padding text-[16px]'>
-                                  Home
-                                </ZIonText>
-                              </ZIonButton>
-                            </div>
-
-                            {/* Title */}
-                            <ZIonGrid
-                              className='ms-2 w-[71%]'
-                              testingselector={
-                                CONSTANTS.testingSelectors.linkInBio.formPage
-                                  .topBar.titleContainer
-                              }>
-                              {values.enableTitleInput && (
-                                <ZIonItem
-                                  lines='none'
-                                  minHeight='40px'
-                                  testingselector={
-                                    CONSTANTS.testingSelectors.linkInBio
-                                      .formPage.topBar.titleIonItem
-                                  }
-                                  className={classNames({
-                                    'ion-no-padding ion-no-margin me-2 ion-align-items-start z-inner-padding-end-0':
-                                      true
-                                  })}>
-                                  <div className='flex w-full'>
-                                    <ZIonInput
-                                      aria-label='Link-in-bio title'
-                                      counter={false}
-                                      minHeight='40px'
-                                      name='linkInBioTitle'
-                                      onIonChange={handleChange}
-                                      onIonBlur={handleBlur}
-                                      value={values.linkInBioTitle}
-                                      testingselector={
-                                        CONSTANTS.testingSelectors.linkInBio
-                                          .formPage.topBar.titleInput
-                                      }
-                                      className={classNames(
-                                        classes['link-in-bio-title-field'],
-                                        {
-                                          'text-[18px] z-ion-border-radius-point-8rem ion-padding-start-point-8rem':
-                                            true
-                                        }
-                                      )}
-                                    />
-                                    <ZIonButton
-                                      className='ion-text-capitalize ion-no-margin'
-                                      height='40px'
-                                      expand='full'
-                                      testingselector={
-                                        CONSTANTS.testingSelectors.linkInBio
-                                          .formPage.topBar.titleSaveBtn
-                                      }
-                                      onClick={() => {
-                                        void setFieldValue(
-                                          'enableTitleInput',
-                                          false,
-                                          false
-                                        );
-                                      }}>
-                                      <ZIonText className='text-sm'>
-                                        save
-                                      </ZIonText>
-                                    </ZIonButton>
-                                  </div>
-                                </ZIonItem>
-                              )}
-                              {!values.enableTitleInput && (
-                                <ZIonGrid
-                                  className='flex w-full text-[18px] cursor-pointer ms-2'
-                                  testingselector={
-                                    CONSTANTS.testingSelectors.linkInBio
-                                      .formPage.topBar.titleTextContainer
-                                  }
-                                  onClick={() => {
-                                    void setFieldValue(
-                                      'enableTitleInput',
-                                      true,
-                                      false
-                                    );
-                                  }}>
-                                  <ZIonTitle
-                                    className='overflow-hidden me-1 w-min max-w-max ion-no-padding text-md'
-                                    testingselector={
-                                      CONSTANTS.testingSelectors.linkInBio
-                                        .formPage.topBar.titleText
-                                    }>
-                                    {values.linkInBioTitle}
-                                  </ZIonTitle>
-                                  <ZIonIcon
-                                    icon={createOutline}
-                                    className='w-6 h-6 mt-1'
-                                    color='dark'
-                                  />
-                                </ZIonGrid>
-                              )}
-                            </ZIonGrid>
-                          </ZIonCol>
-
-                          <ZIonCol size='6'>
-                            {/* Segment */}
-                            <ZIonSegment
-                              value={linkInBioFromPageState.page}
-                              className={classNames({
-                                'cursor-not-allowed':
-                                  reloadBlockingRState?.isBlock &&
-                                  reloadBlockingRState?.type !== null &&
-                                  reloadBlockingRState?.type !== undefined &&
-                                  [
-                                    reloadBlockingTypeEnum.libBlockFormSection,
-                                    reloadBlockingTypeEnum.libFormThemeSection
-                                  ].includes(reloadBlockingRState?.type)
-                              })}>
-                              {/* Design */}
-                              <ZIonSegmentButton
-                                value='design'
-                                disabled={
-                                  reloadBlockingRState?.isBlock &&
-                                  reloadBlockingRState?.type !== null &&
-                                  reloadBlockingRState?.type !== undefined &&
-                                  [
-                                    reloadBlockingTypeEnum.libBlockFormSection,
-                                    reloadBlockingTypeEnum.libFormThemeSection
-                                  ].includes(reloadBlockingRState?.type)
-                                }
-                                className='ion-text-capitalize'
-                                testingselector={
-                                  CONSTANTS.testingSelectors.linkInBio.formPage
-                                    .topBar.tab.design
-                                }
-                                onClick={() => {
-                                  if (
-                                    !reloadBlockingRState?.isBlock &&
-                                    reloadBlockingRState.type !==
-                                      reloadBlockingTypeEnum.libFormThemeSection
-                                  ) {
-                                    zNavigatePushRoute(
-                                      createRedirectRoute({
-                                        url: isZNonEmptyString(workspaceId)
-                                          ? ZaionsRoutes.AdminPanel.LinkInBio
-                                              .Edit
-                                          : isZNonEmptyString(wsShareId) &&
-                                            isZNonEmptyString(shareWSMemberId)
-                                          ? ZaionsRoutes.AdminPanel.ShareWS
-                                              .Link_in_bio.Main
-                                          : '',
-                                        params: [
-                                          CONSTANTS.RouteParams.workspace
-                                            .workspaceId,
-                                          CONSTANTS.RouteParams.linkInBio
-                                            .linkInBioId
-                                        ],
-                                        values: _getQueryKey({
-                                          keys: [],
-                                          additionalKeys: [
-                                            workspaceId,
-                                            shareWSMemberId,
-                                            linkInBioId
-                                          ]
-                                        }),
-                                        routeSearchParams: {
-                                          page: ZLinkInBioPageEnum.design,
-                                          step: ZLinkInBioRHSComponentEnum.theme
-                                        }
-                                      })
-                                    );
-                                  }
-                                }}>
-                                <ZIonLabel className='font-bold tracking-normal'>
-                                  Design
-                                </ZIonLabel>
-                              </ZIonSegmentButton>
-
-                              {/* Share settings */}
-                              <ZIonSegmentButton
-                                disabled={
-                                  reloadBlockingRState?.isBlock &&
-                                  reloadBlockingRState?.type !== null &&
-                                  reloadBlockingRState?.type !== undefined &&
-                                  [
-                                    reloadBlockingTypeEnum.libBlockFormSection,
-                                    reloadBlockingTypeEnum.libFormThemeSection
-                                  ].includes(reloadBlockingRState?.type)
-                                }
-                                value='shareSettings'
-                                className='ion-text-capitalize'
-                                testingselector={
-                                  CONSTANTS.testingSelectors.linkInBio.formPage
-                                    .topBar.tab.shareSettings
-                                }
-                                onClick={() => {
-                                  if (!reloadBlockingRState?.isBlock) {
-                                    zNavigatePushRoute(
-                                      createRedirectRoute({
-                                        url: isZNonEmptyString(workspaceId)
-                                          ? ZaionsRoutes.AdminPanel.LinkInBio
-                                              .Edit
-                                          : isZNonEmptyString(wsShareId) &&
-                                            isZNonEmptyString(shareWSMemberId)
-                                          ? ZaionsRoutes.AdminPanel.ShareWS
-                                              .Link_in_bio.Main
-                                          : '',
-                                        params: [
-                                          CONSTANTS.RouteParams.workspace
-                                            .workspaceId,
-                                          CONSTANTS.RouteParams.linkInBio
-                                            .linkInBioId
-                                        ],
-                                        values: _getQueryKey({
-                                          keys: [],
-                                          additionalKeys: [
-                                            workspaceId,
-                                            shareWSMemberId,
-                                            linkInBioId
-                                          ]
-                                        }),
-                                        routeSearchParams: {
-                                          page: ZLinkInBioPageEnum.shareSettings
-                                        }
-                                      })
-                                    );
-                                  }
-                                }}>
-                                <ZIonLabel className='font-bold tracking-normal'>
-                                  Share settings
-                                </ZIonLabel>
-                              </ZIonSegmentButton>
-
-                              {/* Page analytics */}
-                              <ZIonSegmentButton
-                                disabled={reloadBlockingRState?.isBlock}
-                                value='pageAnalytics'
-                                className='ion-text-capitalize'
-                                testingselector={
-                                  CONSTANTS.testingSelectors.linkInBio.formPage
-                                    .topBar.tab.pageAnalytics
-                                }
-                                onClick={() => {
-                                  if (!reloadBlockingRState?.isBlock) {
-                                    zNavigatePushRoute(
-                                      createRedirectRoute({
-                                        url: isZNonEmptyString(workspaceId)
-                                          ? ZaionsRoutes.AdminPanel.LinkInBio
-                                              .Edit
-                                          : isZNonEmptyString(wsShareId) &&
-                                            isZNonEmptyString(shareWSMemberId)
-                                          ? ZaionsRoutes.AdminPanel.ShareWS
-                                              .Link_in_bio.Main
-                                          : '',
-                                        params: [
-                                          CONSTANTS.RouteParams.workspace
-                                            .workspaceId,
-                                          CONSTANTS.RouteParams.linkInBio
-                                            .linkInBioId
-                                        ],
-                                        values: _getQueryKey({
-                                          keys: [],
-                                          additionalKeys: [
-                                            workspaceId,
-                                            shareWSMemberId,
-                                            linkInBioId
-                                          ]
-                                        }),
-                                        routeSearchParams: {
-                                          page: ZLinkInBioPageEnum.pageAnalytics
-                                        }
-                                      })
-                                    );
-                                  }
-                                }}>
-                                <ZIonLabel className='font-bold tracking-normal'>
-                                  Page Analytics
-                                </ZIonLabel>
-                              </ZIonSegmentButton>
-
-                              {/* Lead */}
-                              <ZIonSegmentButton
-                                disabled={
-                                  reloadBlockingRState?.isBlock &&
-                                  reloadBlockingRState?.type !== null &&
-                                  reloadBlockingRState?.type !== undefined &&
-                                  [
-                                    reloadBlockingTypeEnum.libBlockFormSection,
-                                    reloadBlockingTypeEnum.libFormThemeSection
-                                  ].includes(reloadBlockingRState?.type)
-                                }
-                                value='lead'
-                                className='ion-text-capitalize'
-                                testingselector={
-                                  CONSTANTS.testingSelectors.linkInBio.formPage
-                                    .topBar.tab.lead
-                                }
-                                onClick={() => {
-                                  if (
-                                    !reloadBlockingRState?.isBlock &&
-                                    reloadBlockingRState?.type !== null &&
-                                    reloadBlockingRState?.type !== undefined &&
-                                    [
-                                      reloadBlockingTypeEnum.libBlockFormSection,
-                                      reloadBlockingTypeEnum.libFormThemeSection
-                                    ].includes(reloadBlockingRState?.type)
-                                  ) {
-                                    zNavigatePushRoute(
-                                      createRedirectRoute({
-                                        url: isZNonEmptyString(workspaceId)
-                                          ? ZaionsRoutes.AdminPanel.LinkInBio
-                                              .Edit
-                                          : isZNonEmptyString(wsShareId) &&
-                                            isZNonEmptyString(shareWSMemberId)
-                                          ? ZaionsRoutes.AdminPanel.ShareWS
-                                              .Link_in_bio.Main
-                                          : '',
-                                        params: [
-                                          CONSTANTS.RouteParams.workspace
-                                            .workspaceId,
-                                          CONSTANTS.RouteParams.linkInBio
-                                            .linkInBioId
-                                        ],
-                                        values: _getQueryKey({
-                                          keys: [],
-                                          additionalKeys: [
-                                            workspaceId,
-                                            shareWSMemberId,
-                                            linkInBioId
-                                          ]
-                                        }),
-                                        routeSearchParams: {
-                                          page: ZLinkInBioPageEnum.lead
-                                        }
-                                      })
-                                    );
-                                  }
-                                }}>
-                                <ZIonLabel className='font-bold tracking-normal'>
-                                  Lead
-                                </ZIonLabel>
-                              </ZIonSegmentButton>
-
-                              {/* Block analytics */}
-                              <ZIonSegmentButton
-                                value='block-analytics'
-                                disabled={
-                                  reloadBlockingRState?.isBlock &&
-                                  reloadBlockingRState?.type !== null &&
-                                  reloadBlockingRState?.type !== undefined &&
-                                  [
-                                    reloadBlockingTypeEnum.libBlockFormSection,
-                                    reloadBlockingTypeEnum.libFormThemeSection
-                                  ].includes(reloadBlockingRState?.type)
-                                }
-                                className='ion-text-capitalize'
-                                testingselector={
-                                  CONSTANTS.testingSelectors.linkInBio.formPage
-                                    .topBar.tab.blockAnalytics
-                                }>
-                                <ZIonLabel className='font-bold tracking-normal'>
-                                  Block Analytics
-                                </ZIonLabel>
-                              </ZIonSegmentButton>
-                            </ZIonSegment>
-                          </ZIonCol>
-
-                          <ZIonCol className='flex ion-align-items-center ion-justify-content-end'>
-                            {/* Errors btn */}
-                            <ZIonButton
-                              className='ion-text-lowercase ion-no-margin me-4'
-                              color='danger'
-                              testingselector={
-                                CONSTANTS.testingSelectors.linkInBio.formPage
-                                  .topBar.errorsBtn
-                              }>
-                              <ZIonText className='ion-no-padding text-[16px]'>
-                                errors
-                              </ZIonText>
-                            </ZIonButton>
-
-                            {/* Settings btn */}
-                            <ZIonButton
-                              className='ion-text-lowercase ion-no-margin me-4'
-                              color='tertiary'
-                              onClick={() => {
-                                presentZLinkInBioFormSettingsModal({
-                                  _cssClass: 'lib-form-settings-modal-size'
-                                });
-                              }}
-                              testingselector={
-                                CONSTANTS.testingSelectors.linkInBio.formPage
-                                  .topBar.errorsBtn
-                              }>
-                              <ZIonText className='ion-no-padding text-[16px]'>
-                                Setting
-                              </ZIonText>
-                            </ZIonButton>
-
-                            {/* Upgrade btn */}
-                            <ZIonButton
-                              className='ion-text-capitalize ion-no-margin'
-                              testingselector={
-                                CONSTANTS.testingSelectors.linkInBio.formPage
-                                  .topBar.upgradeBtn
-                              }>
-                              <ZIonText className='ion-no-padding text-[16px]'>
-                                Upgrade
-                              </ZIonText>
-                            </ZIonButton>
-                          </ZIonCol>
-                        </ZIonRow>
-                      </ZIonGrid>
-                    </ZIonHeader>
-                  ) : (
-                    <ZHeaderSkeleton />
-                  )}
-
-                  {/* Design  */}
-                  {linkInBioFromPageState.page ===
-                    ZLinkInBioPageEnum.design && <LinkInBioDesignPage />}
-
-                  {/* Share Settings */}
-                  {linkInBioFromPageState.page ===
-                    ZLinkInBioPageEnum.shareSettings && (
-                    <LinkInBioShareSettings />
-                  )}
-
-                  {/* Page Analytics */}
-                  {linkInBioFromPageState.page ===
-                    ZLinkInBioPageEnum.pageAnalytics && (
-                    <LinkInBioPageAnalytics />
-                  )}
-                </>
-              );
+            {({
+              values,
+              setFieldValue,
+              handleChange,
+              handleBlur,
+              submitForm
+            }) => {
+              return <ZInpageFormikComp />;
             }}
           </Formik>
         </Suspense>
       </ZCan>
     </ZIonPage>
+  );
+};
+
+const ZInpageFormikComp: React.FC = () => {
+  const location = useLocation();
+
+  const { values, handleChange, handleBlur, setFieldValue, submitForm } =
+    useFormikContext<{
+      enableTitleInput: boolean;
+      linkInBioTitle: string;
+    }>();
+
+  // getting current linkInBioId & workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
+  const { linkInBioId, workspaceId, shareWSMemberId, wsShareId } = useParams<{
+    linkInBioId?: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
+  }>();
+
+  // #region Recoil states.
+  // getting search param from url with the help of 'qs' package
+  const routeQSearchParams = routeQueryString.parse(location.search, {
+    ignoreQueryPrefix: true
+  });
+
+  // Recoil state of managing current page. for example design, share settings etc.
+  const [linkInBioFromPageState, setLinkInBioFromPageState] = useRecoilState(
+    LinkInBioFromPageRState
+  );
+
+  // Recoil state link-in-bio form state (for editing or creating link-in-bio)
+  const setLinkInBioFormState = useSetRecoilState(NewLinkInBioFormState);
+  const reloadBlockingRState = useRecoilValue(reloadBlockingRStateAtom);
+  // #endregion
+
+  // #region Custom hooks.
+  // useZNavigate for redirection
+  const { zNavigatePushRoute } = useZNavigate();
+  // #endregion
+
+  // #region Modals
+  const { presentZIonModal: presentZLinkInBioFormSettingsModal } = useZIonModal(
+    ZLinkInBioFormSettingsModal,
+    {
+      workspaceId,
+      shareWSMemberId,
+      wsShareId
+    }
+  );
+
+  // #endregion
+
+  // #region APIS
+
+  // fetching link-in-bio with the linkInBioId data from backend.
+  const {
+    data: selectedLinkInBio,
+    // refetch: refetchSelectedLinkInBio,
+    isFetching: isSelectedLinkInBioFetching
+  } = useZRQGetRequest<LinkInBioType>({
+    _url: API_URL_ENUM.linkInBio_update_delete,
+    _key: _getQueryKey({
+      keys: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET],
+      additionalKeys: [workspaceId, wsShareId, shareWSMemberId, linkInBioId]
+    }),
+    _itemsIds: _getQueryKey({
+      keys: [
+        isZNonEmptyString(workspaceId)
+          ? ZWSTypeEum.personalWorkspace
+          : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+          ? ZWSTypeEum.shareWorkspace
+          : ''
+      ],
+      additionalKeys: [workspaceId, shareWSMemberId, linkInBioId]
+    }),
+    _urlDynamicParts: [
+      CONSTANTS.RouteParams.workspace.type,
+      CONSTANTS.RouteParams.workspace.workspaceId,
+      CONSTANTS.RouteParams.linkInBio.linkInBioId
+    ],
+    _shouldFetchWhenIdPassed: !(
+      isZNonEmptyStrings([wsShareId, shareWSMemberId, linkInBioId]) ||
+      isZNonEmptyStrings([workspaceId, linkInBioId])
+    ),
+    _extractType: ZRQGetRequestExtractEnum.extractItem
+  });
+  // #endregion
+
+  // #region UseEffects
+  // Refetching if the linkInBioId changes and if the linkInBioId is undefined it will redirect user to link-in-bio page.
+  // useEffect(() => {
+  //   try {
+  //     if ((linkInBioId?.trim()?.length ?? 0) > 0) {
+  //       void linkInBioGetRequestFn();
+  //     }
+  //   } catch (error) {
+  //     if (error instanceof AxiosError) {
+  //       zNavigatePushRoute(
+  //         replaceRouteParams(
+  //           ZaionsRoutes.AdminPanel.LinkInBio.Main,
+  //           [
+  //             CONSTANTS.RouteParams.workspace.workspaceId,
+  //             CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+  //           ],
+  //           [workspaceId ?? '', CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
+  //         )
+  //       );
+  //       showErrorNotification(error.message);
+  //     } else {
+  //       reportCustomError(error);
+  //     }
+  //   }
+  //   // eslint-disable-next-line
+  // }, [linkInBioId]);
+
+  // Storing link-in-bio data in recoil state.
+  useEffect(() => {
+    try {
+      if (
+        selectedLinkInBio?.id !== undefined &&
+        selectedLinkInBio?.id !== null &&
+        (linkInBioId?.trim()?.length ?? 0) > 0
+      ) {
+        setLinkInBioFormState(oldVal => ({
+          ...oldVal,
+          formMode: FormMode.EDIT
+        }));
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+    // eslint-disable-next-line
+  }, [selectedLinkInBio]);
+
+  // storing the current page info in setLinkInBioFromPageState recoil state, so we can show the appropriate content.
+  useEffect(() => {
+    try {
+      if (
+        routeQSearchParams?.page !== undefined &&
+        routeQSearchParams?.page !== null
+      ) {
+        setLinkInBioFromPageState(oldValues => ({
+          ...oldValues,
+          page: ZLinkInBioPageEnum[
+            routeQSearchParams.page as ZLinkInBioPageEnum
+          ]
+        }));
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+    // eslint-disable-next-line
+  }, [routeQSearchParams.page]);
+  // #endregion
+
+  // #region Functions
+  const draftBtnOnClick = (): void => {
+    void (async () => {
+      await setFieldValue('status', StatusEnum.draft, false);
+      await submitForm();
+    })();
+  };
+  const privateBtnOnClick = (): void => {
+    void (async () => {
+      await setFieldValue('status', StatusEnum.private, false);
+      await submitForm();
+    })();
+  };
+  // const linkInBioGetRequestFn = useCallback(async () => {
+  //   await refetchSelectedLinkInBio();
+  //   // eslint-disable-next-line
+  // }, []);
+  // #endregion
+
+  const { presentZIonPopover: presentZVisibilityControlPopover } =
+    useZIonPopover(ZVisibilityControlPopover, {
+      draftBtnOnClick,
+      privateBtnOnClick
+    });
+
+  const isZFetching = isSelectedLinkInBioFetching;
+
+  return (
+    <>
+      {!isZFetching ? (
+        <ZIonHeader className='ion-padding-horizontal'>
+          <ZIonGrid className='ion-no-padding'>
+            <ZIonRow>
+              <ZIonCol
+                className='flex ion-align-items-center'
+                size='3'>
+                {/* Home btn */}
+                <div
+                  className={classNames({
+                    'w-max h-max': true,
+                    'cursor-not-allowed':
+                      reloadBlockingRState?.isBlock &&
+                      reloadBlockingRState?.type !== null &&
+                      reloadBlockingRState?.type !== undefined &&
+                      [
+                        reloadBlockingTypeEnum.libBlockFormSection,
+                        reloadBlockingTypeEnum.libFormThemeSection
+                      ].includes(reloadBlockingRState?.type)
+                  })}>
+                  <ZIonButton
+                    disabled={
+                      reloadBlockingRState?.isBlock &&
+                      reloadBlockingRState?.type !== null &&
+                      reloadBlockingRState?.type !== undefined &&
+                      [
+                        reloadBlockingTypeEnum.libBlockFormSection,
+                        reloadBlockingTypeEnum.libFormThemeSection
+                      ].includes(reloadBlockingRState?.type)
+                    }
+                    className='ion-text-capitalize ion-no-margin'
+                    color='secondary'
+                    testingselector={
+                      CONSTANTS.testingSelectors.linkInBio.formPage.topBar
+                        .homeBtn
+                    }
+                    onClick={() => {
+                      if (!reloadBlockingRState?.isBlock) {
+                        zNavigatePushRoute(
+                          replaceRouteParams(
+                            ZaionsRoutes.AdminPanel.LinkInBio.Main,
+                            [
+                              CONSTANTS.RouteParams.workspace.workspaceId,
+                              CONSTANTS.RouteParams
+                                .folderIdToGetShortLinksOrLinkInBio
+                            ],
+                            [
+                              workspaceId ?? '',
+                              CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                            ]
+                          )
+                        );
+                      }
+                    }}>
+                    <ZIonText className='ion-no-padding text-[16px]'>
+                      Home
+                    </ZIonText>
+                  </ZIonButton>
+                </div>
+
+                {/* Title */}
+                <ZIonGrid
+                  className='ms-2 w-[71%]'
+                  testingselector={
+                    CONSTANTS.testingSelectors.linkInBio.formPage.topBar
+                      .titleContainer
+                  }>
+                  {values.enableTitleInput && (
+                    <ZIonItem
+                      lines='none'
+                      minHeight='40px'
+                      testingselector={
+                        CONSTANTS.testingSelectors.linkInBio.formPage.topBar
+                          .titleIonItem
+                      }
+                      className={classNames({
+                        'ion-no-padding ion-no-margin me-2 ion-align-items-start z-inner-padding-end-0':
+                          true
+                      })}>
+                      <div className='flex w-full'>
+                        <ZIonInput
+                          aria-label='Link-in-bio title'
+                          counter={false}
+                          minHeight='40px'
+                          name='linkInBioTitle'
+                          onIonChange={handleChange}
+                          onIonBlur={handleBlur}
+                          value={values.linkInBioTitle}
+                          testingselector={
+                            CONSTANTS.testingSelectors.linkInBio.formPage.topBar
+                              .titleInput
+                          }
+                          className={classNames(
+                            classes['link-in-bio-title-field'],
+                            {
+                              'text-[18px] z-ion-border-radius-point-8rem ion-padding-start-point-8rem':
+                                true
+                            }
+                          )}
+                        />
+                        <ZIonButton
+                          className='ion-text-capitalize ion-no-margin'
+                          height='40px'
+                          expand='full'
+                          testingselector={
+                            CONSTANTS.testingSelectors.linkInBio.formPage.topBar
+                              .titleSaveBtn
+                          }
+                          onClick={() => {
+                            void setFieldValue(
+                              'enableTitleInput',
+                              false,
+                              false
+                            );
+                          }}>
+                          <ZIonText className='text-sm'>save</ZIonText>
+                        </ZIonButton>
+                      </div>
+                    </ZIonItem>
+                  )}
+                  {!values.enableTitleInput && (
+                    <ZIonGrid
+                      className='flex w-full text-[18px] cursor-pointer ms-2'
+                      testingselector={
+                        CONSTANTS.testingSelectors.linkInBio.formPage.topBar
+                          .titleTextContainer
+                      }
+                      onClick={() => {
+                        void setFieldValue('enableTitleInput', true, false);
+                      }}>
+                      <ZIonTitle
+                        className='overflow-hidden me-1 w-min max-w-max ion-no-padding text-md'
+                        testingselector={
+                          CONSTANTS.testingSelectors.linkInBio.formPage.topBar
+                            .titleText
+                        }>
+                        {values.linkInBioTitle}
+                      </ZIonTitle>
+                      <ZIonIcon
+                        icon={createOutline}
+                        className='w-6 h-6 mt-1'
+                        color='dark'
+                      />
+                    </ZIonGrid>
+                  )}
+                </ZIonGrid>
+              </ZIonCol>
+
+              <ZIonCol size='6'>
+                {/* Segment */}
+                <ZIonSegment
+                  value={linkInBioFromPageState.page}
+                  className={classNames({
+                    'cursor-not-allowed':
+                      reloadBlockingRState?.isBlock &&
+                      reloadBlockingRState?.type !== null &&
+                      reloadBlockingRState?.type !== undefined &&
+                      [
+                        reloadBlockingTypeEnum.libBlockFormSection,
+                        reloadBlockingTypeEnum.libFormThemeSection
+                      ].includes(reloadBlockingRState?.type)
+                  })}>
+                  {/* Design */}
+                  <ZIonSegmentButton
+                    value='design'
+                    disabled={
+                      reloadBlockingRState?.isBlock &&
+                      reloadBlockingRState?.type !== null &&
+                      reloadBlockingRState?.type !== undefined &&
+                      [
+                        reloadBlockingTypeEnum.libBlockFormSection,
+                        reloadBlockingTypeEnum.libFormThemeSection
+                      ].includes(reloadBlockingRState?.type)
+                    }
+                    className='ion-text-capitalize'
+                    testingselector={
+                      CONSTANTS.testingSelectors.linkInBio.formPage.topBar.tab
+                        .design
+                    }
+                    onClick={() => {
+                      if (
+                        !reloadBlockingRState?.isBlock &&
+                        reloadBlockingRState.type !==
+                          reloadBlockingTypeEnum.libFormThemeSection
+                      ) {
+                        zNavigatePushRoute(
+                          createRedirectRoute({
+                            url: isZNonEmptyString(workspaceId)
+                              ? ZaionsRoutes.AdminPanel.LinkInBio.Edit
+                              : isZNonEmptyString(wsShareId) &&
+                                isZNonEmptyString(shareWSMemberId)
+                              ? ZaionsRoutes.AdminPanel.ShareWS.Link_in_bio.Main
+                              : '',
+                            params: [
+                              CONSTANTS.RouteParams.workspace.workspaceId,
+                              CONSTANTS.RouteParams.linkInBio.linkInBioId
+                            ],
+                            values: _getQueryKey({
+                              keys: [],
+                              additionalKeys: [
+                                workspaceId,
+                                shareWSMemberId,
+                                linkInBioId
+                              ]
+                            }),
+                            routeSearchParams: {
+                              page: ZLinkInBioPageEnum.design,
+                              step: ZLinkInBioRHSComponentEnum.theme
+                            }
+                          })
+                        );
+                      }
+                    }}>
+                    <ZIonLabel className='font-bold tracking-normal'>
+                      Design
+                    </ZIonLabel>
+                  </ZIonSegmentButton>
+
+                  {/* Share settings */}
+                  <ZIonSegmentButton
+                    disabled={
+                      reloadBlockingRState?.isBlock &&
+                      reloadBlockingRState?.type !== null &&
+                      reloadBlockingRState?.type !== undefined &&
+                      [
+                        reloadBlockingTypeEnum.libBlockFormSection,
+                        reloadBlockingTypeEnum.libFormThemeSection
+                      ].includes(reloadBlockingRState?.type)
+                    }
+                    value='shareSettings'
+                    className='ion-text-capitalize'
+                    testingselector={
+                      CONSTANTS.testingSelectors.linkInBio.formPage.topBar.tab
+                        .shareSettings
+                    }
+                    onClick={() => {
+                      if (!reloadBlockingRState?.isBlock) {
+                        zNavigatePushRoute(
+                          createRedirectRoute({
+                            url: isZNonEmptyString(workspaceId)
+                              ? ZaionsRoutes.AdminPanel.LinkInBio.Edit
+                              : isZNonEmptyString(wsShareId) &&
+                                isZNonEmptyString(shareWSMemberId)
+                              ? ZaionsRoutes.AdminPanel.ShareWS.Link_in_bio.Main
+                              : '',
+                            params: [
+                              CONSTANTS.RouteParams.workspace.workspaceId,
+                              CONSTANTS.RouteParams.linkInBio.linkInBioId
+                            ],
+                            values: _getQueryKey({
+                              keys: [],
+                              additionalKeys: [
+                                workspaceId,
+                                shareWSMemberId,
+                                linkInBioId
+                              ]
+                            }),
+                            routeSearchParams: {
+                              page: ZLinkInBioPageEnum.shareSettings
+                            }
+                          })
+                        );
+                      }
+                    }}>
+                    <ZIonLabel className='font-bold tracking-normal'>
+                      Share settings
+                    </ZIonLabel>
+                  </ZIonSegmentButton>
+
+                  {/* Page analytics */}
+                  <ZIonSegmentButton
+                    disabled={reloadBlockingRState?.isBlock}
+                    value='pageAnalytics'
+                    className='ion-text-capitalize'
+                    testingselector={
+                      CONSTANTS.testingSelectors.linkInBio.formPage.topBar.tab
+                        .pageAnalytics
+                    }
+                    onClick={() => {
+                      if (!reloadBlockingRState?.isBlock) {
+                        zNavigatePushRoute(
+                          createRedirectRoute({
+                            url: isZNonEmptyString(workspaceId)
+                              ? ZaionsRoutes.AdminPanel.LinkInBio.Edit
+                              : isZNonEmptyString(wsShareId) &&
+                                isZNonEmptyString(shareWSMemberId)
+                              ? ZaionsRoutes.AdminPanel.ShareWS.Link_in_bio.Main
+                              : '',
+                            params: [
+                              CONSTANTS.RouteParams.workspace.workspaceId,
+                              CONSTANTS.RouteParams.linkInBio.linkInBioId
+                            ],
+                            values: _getQueryKey({
+                              keys: [],
+                              additionalKeys: [
+                                workspaceId,
+                                shareWSMemberId,
+                                linkInBioId
+                              ]
+                            }),
+                            routeSearchParams: {
+                              page: ZLinkInBioPageEnum.pageAnalytics
+                            }
+                          })
+                        );
+                      }
+                    }}>
+                    <ZIonLabel className='font-bold tracking-normal'>
+                      Page Analytics
+                    </ZIonLabel>
+                  </ZIonSegmentButton>
+
+                  {/* Lead */}
+                  <ZIonSegmentButton
+                    disabled={
+                      reloadBlockingRState?.isBlock &&
+                      reloadBlockingRState?.type !== null &&
+                      reloadBlockingRState?.type !== undefined &&
+                      [
+                        reloadBlockingTypeEnum.libBlockFormSection,
+                        reloadBlockingTypeEnum.libFormThemeSection
+                      ].includes(reloadBlockingRState?.type)
+                    }
+                    value='lead'
+                    className='ion-text-capitalize'
+                    testingselector={
+                      CONSTANTS.testingSelectors.linkInBio.formPage.topBar.tab
+                        .lead
+                    }
+                    onClick={() => {
+                      if (
+                        !reloadBlockingRState?.isBlock &&
+                        reloadBlockingRState?.type !== null &&
+                        reloadBlockingRState?.type !== undefined &&
+                        [
+                          reloadBlockingTypeEnum.libBlockFormSection,
+                          reloadBlockingTypeEnum.libFormThemeSection
+                        ].includes(reloadBlockingRState?.type)
+                      ) {
+                        zNavigatePushRoute(
+                          createRedirectRoute({
+                            url: isZNonEmptyString(workspaceId)
+                              ? ZaionsRoutes.AdminPanel.LinkInBio.Edit
+                              : isZNonEmptyString(wsShareId) &&
+                                isZNonEmptyString(shareWSMemberId)
+                              ? ZaionsRoutes.AdminPanel.ShareWS.Link_in_bio.Main
+                              : '',
+                            params: [
+                              CONSTANTS.RouteParams.workspace.workspaceId,
+                              CONSTANTS.RouteParams.linkInBio.linkInBioId
+                            ],
+                            values: _getQueryKey({
+                              keys: [],
+                              additionalKeys: [
+                                workspaceId,
+                                shareWSMemberId,
+                                linkInBioId
+                              ]
+                            }),
+                            routeSearchParams: {
+                              page: ZLinkInBioPageEnum.lead
+                            }
+                          })
+                        );
+                      }
+                    }}>
+                    <ZIonLabel className='font-bold tracking-normal'>
+                      Lead
+                    </ZIonLabel>
+                  </ZIonSegmentButton>
+
+                  {/* Block analytics */}
+                  <ZIonSegmentButton
+                    value='block-analytics'
+                    disabled={
+                      reloadBlockingRState?.isBlock &&
+                      reloadBlockingRState?.type !== null &&
+                      reloadBlockingRState?.type !== undefined &&
+                      [
+                        reloadBlockingTypeEnum.libBlockFormSection,
+                        reloadBlockingTypeEnum.libFormThemeSection
+                      ].includes(reloadBlockingRState?.type)
+                    }
+                    className='ion-text-capitalize'
+                    testingselector={
+                      CONSTANTS.testingSelectors.linkInBio.formPage.topBar.tab
+                        .blockAnalytics
+                    }>
+                    <ZIonLabel className='font-bold tracking-normal'>
+                      Block Analytics
+                    </ZIonLabel>
+                  </ZIonSegmentButton>
+                </ZIonSegment>
+              </ZIonCol>
+
+              <ZIonCol className='flex ion-align-items-center ion-justify-content-end'>
+                {/* Errors btn */}
+                {/* <ZIonButton
+              className='ion-text-lowercase ion-no-margin me-4'
+              color='danger'
+              testingselector={
+                CONSTANTS.testingSelectors.linkInBio.formPage
+                  .topBar.errorsBtn
+              }>
+              <ZIonText className='ion-no-padding text-[16px]'>
+                errors
+              </ZIonText>
+            </ZIonButton> */}
+
+                {/* Settings btn */}
+                <ZIonButton
+                  className='ion-text-lowercase ion-no-margin me-4'
+                  color='tertiary'
+                  onClick={() => {
+                    presentZLinkInBioFormSettingsModal({
+                      _cssClass: 'lib-form-settings-modal-size'
+                    });
+                  }}
+                  testingselector={
+                    CONSTANTS.testingSelectors.linkInBio.formPage.topBar
+                      .errorsBtn
+                  }>
+                  <ZIonText className='ion-no-padding text-[16px]'>
+                    Setting
+                  </ZIonText>
+                </ZIonButton>
+
+                {/* Upgrade btn */}
+                <ZIonButton
+                  className='ion-text-capitalize ion-no-margin'
+                  color='secondary'
+                  testingselector={
+                    CONSTANTS.testingSelectors.linkInBio.formPage.topBar
+                      .upgradeBtn
+                  }>
+                  <ZIonText className='ion-no-padding text-[16px]'>
+                    Upgrade
+                  </ZIonText>
+                </ZIonButton>
+
+                <ZIonButton
+                  fill='clear'
+                  color='success'
+                  className={classNames({
+                    'h-[2.4rem] ion-no-margin overflow-hidden ion-no-padding ms-4':
+                      true
+                  })}>
+                  <ZIonButton
+                    fill='solid'
+                    color='success'
+                    // disabled={isSubmitting || !isValid}
+                    testingselector={
+                      CONSTANTS.testingSelectors.shortLink.formPage
+                        .topBarPublishBtn
+                    }
+                    onClick={() => {
+                      void (async () => {
+                        await setFieldValue(
+                          'status',
+                          StatusEnum.publish,
+                          false
+                        );
+                        await submitForm();
+                      })();
+                    }}
+                    style={{
+                      '--padding-end': '.3rem'
+                    }}
+                    className={classNames({
+                      'z-ion-border-radius-0 ion-no-margin overflow-hidden h-full':
+                        true
+                    })}>
+                    Publish
+                  </ZIonButton>
+                  <ZIonButton
+                    fill='solid'
+                    color='primary'
+                    className='h-full overflow-hidden ion-no-margin ion-no-padding z-ion-border-radius-0'
+                    onClick={(event: unknown) => {
+                      presentZVisibilityControlPopover({
+                        _event: event as Event,
+                        _cssClass: ''
+                      });
+                    }}>
+                    <ZIonIcon
+                      className='w-[1.5rem] h-[1.5rem] pe-1 ps-1'
+                      slot='icon-only'
+                      icon={chevronDownCircleOutline}
+                    />
+                  </ZIonButton>
+                </ZIonButton>
+
+                {/* <ZVisibilityControlButton
+              className='ms-4'
+              draftBtnOnClick={() => {
+                void (async () => {
+                  await setFieldValue(
+                    'status',
+                    StatusEnum.draft,
+                    false
+                  );
+                  await submitForm();
+                })();
+              }}
+              privateBtnOnClick={() => {
+                void (async () => {
+                  await setFieldValue(
+                    'status',
+                    StatusEnum.private,
+                    false
+                  );
+                  await submitForm();
+                })();
+              }}
+            /> */}
+              </ZIonCol>
+            </ZIonRow>
+          </ZIonGrid>
+        </ZIonHeader>
+      ) : (
+        <ZHeaderSkeleton />
+      )}
+
+      {/* Design  */}
+      {linkInBioFromPageState.page === ZLinkInBioPageEnum.design && (
+        <LinkInBioDesignPage />
+      )}
+
+      {/* Share Settings */}
+      {linkInBioFromPageState.page === ZLinkInBioPageEnum.shareSettings && (
+        <LinkInBioShareSettings />
+      )}
+
+      {/* Page Analytics */}
+      {linkInBioFromPageState.page === ZLinkInBioPageEnum.pageAnalytics && (
+        <LinkInBioPageAnalytics />
+      )}
+    </>
   );
 };
 

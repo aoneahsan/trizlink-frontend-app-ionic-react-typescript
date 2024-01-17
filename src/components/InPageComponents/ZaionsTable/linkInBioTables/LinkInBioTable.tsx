@@ -43,7 +43,8 @@ import {
   ZIonButton,
   ZIonSelect,
   ZIonSelectOption,
-  ZIonRouterLink
+  ZIonRouterLink,
+  ZIonBadge
 } from '@/components/ZIonComponents';
 import ZCan from '@/components/Can';
 
@@ -101,7 +102,8 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import {
   type ZUserSettingInterface,
   ZUserSettingTypeEnum,
-  planFeaturesEnum
+  planFeaturesEnum,
+  StatusEnum
 } from '@/types/AdminPanel/index.type';
 import { ZWsLimitsRStateAtom } from '@/ZaionsStore/UserDashboard/Workspace/index.recoil';
 
@@ -454,6 +456,31 @@ const ZInpageTable: React.FC<{
       header: 'Date',
       id: ZLIBListPageTableColumnsIds.date,
       footer: 'Date'
+    }),
+
+    // Status
+    columnHelper.accessor(itemData => itemData.status, {
+      header: 'Status',
+      id: ZLIBListPageTableColumnsIds.status,
+      cell: row => {
+        const _value = row?.getValue();
+        return (
+          <ZIonBadge
+            className='font-normal tracking-wide'
+            color={
+              _value === StatusEnum.publish
+                ? 'success'
+                : _value === StatusEnum.draft
+                ? 'medium'
+                : _value === StatusEnum.private
+                ? 'tertiary'
+                : undefined
+            }>
+            {_value}
+          </ZIonBadge>
+        );
+      },
+      footer: 'Status'
     }),
 
     // Pixels

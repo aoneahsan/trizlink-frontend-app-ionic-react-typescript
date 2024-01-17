@@ -269,6 +269,7 @@ const ZLinkInBioFilterMenu: React.FC = () => {
       const _libColumnIds: string[] = [ZLIBListPageTableColumnsIds.id];
       for (let i = 0; i < _libListColumnsEls.length; i++) {
         const _block = _libListColumnsEls[i];
+        // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
         _libColumnIds.push(_block.getAttribute('data-id') as string);
       }
 

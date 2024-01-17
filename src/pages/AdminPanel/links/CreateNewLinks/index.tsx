@@ -10,6 +10,7 @@ import React, { lazy, Suspense, useEffect, useState } from 'react';
  * */
 import VALIDATOR from 'validator';
 import {
+  chevronDownCircleOutline,
   cloudDoneOutline,
   eyeOffOutline,
   refresh,
@@ -62,7 +63,7 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
+import { useZIonModal, useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 import MESSAGES from '@/utils/messages';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import {
@@ -140,6 +141,7 @@ import { type ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { type workspaceInterface } from '@/types/AdminPanel/workspace';
 import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type';
 import { ZWsLimitsRStateAtom } from '@/ZaionsStore/UserDashboard/Workspace/index.recoil';
+import { ZVisibilityControlPopover } from '@/components/AdminPanelComponents/VisibilityControlButton';
 
 const AddNotes = lazy(() => import('@/components/UserDashboard/AddNotes'));
 // const EmbedWidget = lazy(
@@ -632,6 +634,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
   // #endregion
 
   // #region Functions.
+
   // Formik submit handler.
   const invalidedQueries = async (): Promise<void> => {
     try {
@@ -2024,6 +2027,25 @@ const ZTopBar: React.FC = () => {
   const [newShortLinkFormState] = useRecoilState(NewShortLinkFormState);
   // #endregion
 
+  const draftBtnOnClick = (): void => {
+    void (async () => {
+      await setFieldValue('status', StatusEnum.draft, false);
+      await submitForm();
+    })();
+  };
+  const privateBtnOnClick = (): void => {
+    void (async () => {
+      await setFieldValue('status', StatusEnum.private, false);
+      await submitForm();
+    })();
+  };
+
+  const { presentZIonPopover: presentZVisibilityControlPopover } =
+    useZIonPopover(ZVisibilityControlPopover, {
+      draftBtnOnClick,
+      privateBtnOnClick
+    });
+
   return (
     <ZIonGrid className='px-3 py-2 zaions__bg_white'>
       {/* Row */}
@@ -2279,7 +2301,7 @@ const ZTopBar: React.FC = () => {
           </ZIonButton>
 
           {/* get my link button */}
-          <ZIonButton
+          {/* <ZIonButton
             testingselector={
               CONSTANTS.testingSelectors.shortLink.formPage.topBarPublishBtn
             }
@@ -2312,7 +2334,7 @@ const ZTopBar: React.FC = () => {
             }>
             {/* {editLinkId !== undefined
                                     ? 'Get my updated link'
-                                  : 'Get my new link'} */}
+                                  : 'Get my new link'} * /}
             Publish
             <ZIonIcon
               slot='end'
@@ -2320,10 +2342,79 @@ const ZTopBar: React.FC = () => {
               icon={cloudDoneOutline}
               testingselector={`${CONSTANTS.testingSelectors.shortLink.formPage.topBarPublishBtn}-icon`}
             />
+          </ZIonButton> */}
+
+          <ZIonButton
+            fill='clear'
+            color='success'
+            className={classNames({
+              'h-[2.4rem] ion-no-margin overflow-hidden ion-no-padding': true,
+              'w-[33.33%]': !isMdScale && isSmScale,
+              'w-full mt-2': !isSmScale
+            })}>
+            <ZIonButton
+              fill='solid'
+              color='success'
+              disabled={isSubmitting || !isValid}
+              testingselector={
+                CONSTANTS.testingSelectors.shortLink.formPage.topBarPublishBtn
+              }
+              onClick={() => {
+                void (async () => {
+                  await setFieldValue('status', StatusEnum.publish, false);
+                  await submitForm();
+                })();
+              }}
+              style={{
+                '--padding-end': '.3rem'
+              }}
+              className={classNames({
+                'z-ion-border-radius-0 ion-no-margin overflow-hidden h-full':
+                  true
+              })}
+              expand={
+                (!isMdScale && isSmScale) || (!isMdScale && !isSmScale)
+                  ? 'block'
+                  : undefined
+              }
+              size={
+                (!isMdScale && isSmScale) || (!isMdScale && !isSmScale)
+                  ? undefined
+                  : 'default'
+              }
+              minHeight={
+                (!isMdScale && isSmScale) || (!isMdScale && !isSmScale)
+                  ? '1.3rem'
+                  : undefined
+              }>
+              Publish
+              {/* <ZIonIcon
+                  slot='end'
+                  className='mb-[2px]'
+                  icon={cloudDoneOutline}
+                  testingselector={`${CONSTANTS.testingSelectors.shortLink.formPage.topBarPublishBtn}-icon`}
+                /> */}
+            </ZIonButton>
+            <ZIonButton
+              fill='solid'
+              color='primary'
+              className='h-full overflow-hidden ion-no-margin ion-no-padding z-ion-border-radius-0'
+              onClick={(event: unknown) => {
+                presentZVisibilityControlPopover({
+                  _event: event as Event,
+                  _cssClass: ''
+                });
+              }}>
+              <ZIonIcon
+                className='w-[1.5rem] h-[1.5rem] pe-1 ps-1'
+                slot='icon-only'
+                icon={chevronDownCircleOutline}
+              />
+            </ZIonButton>
           </ZIonButton>
 
           {/* save as draft btn */}
-          <ZIonButton
+          {/* <ZIonButton
             disabled={isSubmitting || !isValid}
             color='secondary'
             onClick={() => {
@@ -2342,10 +2433,10 @@ const ZTopBar: React.FC = () => {
               icon={saveOutline}
               testingselector={`${CONSTANTS.testingSelectors.shortLink.formPage.topBarSaveDraftBtn}-icon`}
             />
-          </ZIonButton>
+          </ZIonButton> */}
 
           {/* save as private btn */}
-          <ZIonButton
+          {/* <ZIonButton
             disabled={isSubmitting || !isValid}
             color='tertiary'
             onClick={() => {
@@ -2364,7 +2455,7 @@ const ZTopBar: React.FC = () => {
               icon={eyeOffOutline}
               testingselector={`${CONSTANTS.testingSelectors.shortLink.formPage.topBarSavePrivateBtn}-icon`}
             />
-          </ZIonButton>
+          </ZIonButton> */}
         </ZIonCol>
       </ZIonRow>
     </ZIonGrid>

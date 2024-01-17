@@ -10,7 +10,8 @@ import {
   type ShortUrlInterface,
   type UTMTagInfoInterface,
   type FormMode,
-  type ZUserSettingTypeEnum
+  type ZUserSettingTypeEnum,
+  type StatusEnum
 } from '@/types/AdminPanel/index.type';
 
 import { type ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
@@ -73,6 +74,7 @@ export enum ZLIBListPageTableColumnsIds {
   id = '__z_link_in_bio_id__',
   title = '__z_link_in_bio_title__',
   date = '__z_link_in_bio_date__',
+  status = '__z_link_in_bio_status__',
   pixel = '__z_link_in_bio_pixels__',
   notes = '__z_link_in_bio_notes__',
   url = '__z_link_in_bio_target_url__',
@@ -173,6 +175,7 @@ export interface LinkInBioType {
   };
   // featureImgPath?: string;
   title?: string;
+  status?: StatusEnum;
   linkInBioTitle?: string;
   description?: string;
   pixelIds?: ZaionsRSelectOptions[] | string[] | string;

@@ -52,7 +52,7 @@ import {
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { ENVS } from '@/utils/envKeys';
-import { planFeaturesEnum } from '@/types/AdminPanel/index.type';
+import { StatusEnum, planFeaturesEnum } from '@/types/AdminPanel/index.type';
 import { ZWsLimitsRStateAtom } from '@/ZaionsStore/UserDashboard/Workspace/index.recoil';
 
 // Styles
@@ -257,6 +257,7 @@ const ZaionsAddLinkInBioModal: React.FC<{
               const zStringifyData = zStringify({
                 linkInBioTitle: values.linkInBioTitle,
                 shortUrlDomain: values.shortUrlDomain,
+                status: StatusEnum.draft,
                 theme: zStringify(ZaionsLinkInBioDefaultData.theme), // passing default data with title
                 folderId: CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
                 tags: zStringify([])

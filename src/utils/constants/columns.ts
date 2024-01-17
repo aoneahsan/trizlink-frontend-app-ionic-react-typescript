@@ -144,27 +144,37 @@ export const MemberTableColumns = [
 export const LinkInBioTableColumns = [
   {
     id: ZLIBListPageTableColumnsIds.title,
-    name: ZLIBListPageTableColumnsIds.title,
+    name: 'Title',
     isVisible: true
   },
   {
     id: ZLIBListPageTableColumnsIds.date,
-    name: ZLIBListPageTableColumnsIds.date,
+    name: 'Date',
     isVisible: true
   },
   {
-    id: ZLIBListPageTableColumnsIds.pixel,
-    name: ZLIBListPageTableColumnsIds.pixel,
+    id: ZLIBListPageTableColumnsIds.status,
+    name: 'Status',
+    isVisible: true
+  },
+  {
+    id: ZLIBListPageTableColumnsIds.status,
+    name: 'No of attached pixels',
+    isVisible: true
+  },
+  {
+    id: ZLIBListPageTableColumnsIds.notes,
+    name: 'Notes',
     isVisible: true
   },
   {
     id: ZLIBListPageTableColumnsIds.linkToShare,
-    name: ZLIBListPageTableColumnsIds.linkToShare,
+    name: 'Link to share',
     isVisible: true
   },
   {
     id: ZLIBListPageTableColumnsIds.actions,
-    name: ZLIBListPageTableColumnsIds.actions,
+    name: 'Actions',
     isVisible: true
   }
 ];

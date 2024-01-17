@@ -589,7 +589,7 @@ const ZInpageTable: React.FC = () => {
       footer: 'Date'
     }),
 
-    // Date
+    // Status
     columnHelper.accessor(itemData => itemData.status, {
       header: 'Status',
       id: ZShortLinkListPageTableColumnsIds.status,
