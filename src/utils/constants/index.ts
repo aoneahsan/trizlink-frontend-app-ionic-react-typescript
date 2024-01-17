@@ -310,7 +310,7 @@ export const API_URLS = {
 } as const;
 
 // Site
-export const PRODUCT_NAME = 'zaions_tappk';
+export const PRODUCT_NAME = 'Trizlink';
 export const PRODUCT_DOMAIN = 'prettylinks.zaions.com';
 export const CurrentProductDetails = {
   Name: ''
