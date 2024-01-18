@@ -130,7 +130,7 @@ const ZWorkspaceInstagramPageLayout: React.FC = () => {
                   'flex-col ion-align-items-start': !isLgScale
                 })}>
                 <ZIonRouterLink
-                  routerLink={CONSTANTS.ExternalURL.FacebookUrl}
+                  routerLink={CONSTANTS.ProductExternalURLFacebookUrl}
                   target='_blank'
                   color='dark'
                   className='text-3xl font-light zaions-transition'>
@@ -172,7 +172,7 @@ const ZWorkspaceInstagramPageLayout: React.FC = () => {
               {/*  */}
               <ZIonText className='text-sm'>
                 <ZIonRouterLink
-                  routerLink={CONSTANTS.ExternalURL.FacebookUrl}
+                  routerLink={CONSTANTS.ProductExternalURLFacebookUrl}
                   target='_blank'
                   className='font-bold hover:underline zaions-transition'
                   color='dark'>

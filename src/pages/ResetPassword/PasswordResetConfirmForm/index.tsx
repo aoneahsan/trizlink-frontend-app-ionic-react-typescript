@@ -320,8 +320,9 @@ const ZSendOtpTab: React.FC = () => {
     <>
       <ZIonInput
         name='emailAddress'
-        label='Email Address'
-        labelPlacement='floating'
+        label='Email Address*'
+        labelPlacement='stacked'
+        placeholder='Please enter email'
         type='email'
         // enterkeyhint='next'
         onIonChange={e => {
@@ -541,7 +542,8 @@ const ZConfirmOptTab: React.FC = () => {
         <ZIonInput
           name='otp'
           label='OTP'
-          labelPlacement='floating'
+          labelPlacement='stacked'
+          placeholder='Please enter OTP'
           type='text'
           maxlength={6}
           enterkeyhint='next'
@@ -699,7 +701,7 @@ const ZNewPasswordTab: React.FC = () => {
           urlDynamicParts: []
         });
 
-        if (_response !== undefined) {
+        if (_response !== undefined && _response !== null) {
           const _data = extractInnerData<{
             user: UserAccountType;
             token: AuthTokenResponseType;
@@ -789,7 +791,8 @@ const ZNewPasswordTab: React.FC = () => {
         <ZIonInput
           name='password'
           label='Password*'
-          labelPlacement='floating'
+          labelPlacement='stacked'
+          placeholder='Please enter new password'
           onIonChange={e => {
             handleChange(e);
             if ((e?.target?.value as string)?.length > 0) {
@@ -890,7 +893,7 @@ const ZNewPasswordTab: React.FC = () => {
       <div className='flex mt-4 ion-align-items-start'>
         <ZIonInput
           label='Confirm Password*'
-          labelPlacement='floating'
+          placeholder='Please confirm password'
           onIonChange={handleChange}
           onIonBlur={handleBlur}
           value={values.confirmPassword}

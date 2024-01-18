@@ -14,13 +14,13 @@ import {
   ZIonRow,
   ZIonGrid,
   ZIonContent,
-  ZIonTitle,
   ZIonList,
-  ZIonItem
+  ZIonItem,
+  ZIonBadge
 } from '@/components/ZIonComponents';
 
 // Global Imports
-import { ZaionsBusinessDetails } from '@/utils/constants';
+import { PRODUCT_NAME, ZaionsBusinessDetails } from '@/utils/constants';
 
 // Styles
 
@@ -38,10 +38,14 @@ const ZaionsPrivacyPolicy: React.FC = () => {
               sizeMd='11'
               sizeSm='12'
               sizeXs='12'>
-              <ZIonTitle className='mb-2 ion-no-padding'>
-                <h1>Privacy Policy</h1>
-              </ZIonTitle>
-              <ZIonText>Last updated: March 03, 2023</ZIonText>
+              <ZIonBadge
+                className='block px-2 py-1 mb-3 text-3xl font-normal rounded-sm zaions__primary_set ion-text-center ion-no-padding ion-no-margin'
+                color='primary'>
+                <ZIonText color='primary'>Privacy Policy</ZIonText>
+              </ZIonBadge>
+              <ZIonText className='mx-1 font-semibold'>
+                Last updated: March 03, 2023
+              </ZIonText>
               <ZIonText>
                 This Privacy Policy describes Our policies and procedures on the
                 collection, use and disclosure of Your information when You use
@@ -53,34 +57,49 @@ const ZaionsPrivacyPolicy: React.FC = () => {
                 using the Service, You agree to the collection and use of
                 information in accordance with this Privacy Policy.
               </ZIonText>
-              <ZIonTitle className='mt-3 mb-2 ion-no-padding'>
-                <h4 className='ion-no-margin'>
-                  Interpretation and Definitions
-                </h4>
-              </ZIonTitle>
-              <ZIonTitle className='mb-2 font-bold ion-no-padding'>
-                Interpretation
-              </ZIonTitle>
-              <ZIonText>
-                The words of which the initial letter is capitalized have
-                meanings defined under the following conditions. The following
-                definitions shall have the same meaning regardless of whether
-                they appear in singular or in plural.
-              </ZIonText>
-              <ZIonTitle className='mt-3 mb-2 font-bold ion-no-padding'>
-                Definitions
-              </ZIonTitle>
-              <ZIonText>For the purposes of this Privacy Policy:</ZIonText>
-              <ZIonList lines='none'>
-                <ZIonItem>
-                  <ZIonText>
-                    <ZIonText className='font-bold'>Account</ZIonText> means a
-                    unique account created for You to access our Service or
-                    parts of our Service.
+
+              {/* Interpretation and Definitions */}
+              <div className='pt-1 mt-4'>
+                <ZIonBadge
+                  className='inline-block px-2 text-2xl font-normal border-b-2 zaions__warning_set ion-no-padding z_border_color_light'
+                  color='warning'>
+                  <ZIonText color='dark'>
+                    Interpretation and Definitions
                   </ZIonText>
-                </ZIonItem>
-                <ZIonItem>
-                  <ZIonText>
+                </ZIonBadge>
+
+                <div className='mt-3'>
+                  <ZIonBadge
+                    className='px-2 text-lg font-normal w-max min-w-max zaions__tertiary_set py- me-1 ion-no-padding ion-no-margin h-max'
+                    color='tertiary'>
+                    <ZIonText color='tertiary'>Interpretation</ZIonText>
+                  </ZIonBadge>
+                </div>
+                <ZIonText>
+                  The words of which the initial letter is capitalized have
+                  meanings defined under the following conditions. The following
+                  definitions shall have the same meaning regardless of whether
+                  they appear in singular or in plural.
+                </ZIonText>
+
+                <div className='mt-4'>
+                  <ZIonBadge
+                    className='px-2 mt-1 text-lg font-normal w-max min-w-max zaions__tertiary_set py- me-1 ion-no-padding ion-no-margin h-max'
+                    color='tertiary'>
+                    <ZIonText color='tertiary'>Definitions</ZIonText>
+                  </ZIonBadge>
+                </div>
+                <ZIonText>For the purposes of this Privacy Policy:</ZIonText>
+
+                {/*  */}
+                <div className='mt-2 ms-2'>
+                  <ZIonText className='block pb-3'>
+                    <ZIonText className='font-bold me-1'>Account</ZIonText>
+                    means a unique account created for You to access our Service
+                    or parts of our Service.
+                  </ZIonText>
+
+                  <ZIonText className='block pb-3'>
                     <ZIonText className='font-bold'>Affiliate</ZIonText> means
                     an entity that controls, is controlled by or is under common
                     control with a party, where &quot;control&quot; means
@@ -88,50 +107,43 @@ const ZaionsPrivacyPolicy: React.FC = () => {
                     other securities entitled to vote for election of directors
                     or other managing authority.
                   </ZIonText>
-                </ZIonItem>
-                <ZIonItem>
-                  <ZIonText>
+
+                  <ZIonText className='block pb-3'>
                     <ZIonText className='font-bold'>Application</ZIonText>{' '}
-                    refers to ZLink, the software program provided by the
-                    Company.
+                    refers to {PRODUCT_NAME}, the software program provided by
+                    the Company.
                   </ZIonText>
-                </ZIonItem>
-                <ZIonItem>
-                  <ZIonText>
+
+                  <ZIonText className='block pb-3'>
                     <ZIonText className='font-bold'>Company</ZIonText> (referred
                     to as either &quot;the Company&quot;, &quot;We&quot;,
                     &quot;Us&quot; or &quot;Our&quot; in this Agreement) refers
                     to Zaions, {ZaionsBusinessDetails.WebsiteUrl}/address.
                   </ZIonText>
-                </ZIonItem>
-                <ZIonItem>
-                  <ZIonText>
+
+                  <ZIonText className='block pb-3'>
                     <ZIonText className='font-bold'>Country</ZIonText> refers
                     to: Pakistan
                   </ZIonText>
-                </ZIonItem>
-                <ZIonItem>
-                  <ZIonText>
+
+                  <ZIonText className='block pb-3'>
                     <ZIonText className='font-bold'>Device</ZIonText> means any
                     device that can access the Service such as a computer, a
                     cellphone or a digital tablet.
                   </ZIonText>
-                </ZIonItem>
-                <ZIonItem>
-                  <ZIonText>
+
+                  <ZIonText className='block pb-3'>
                     <ZIonText className='font-bold'>Personal Data</ZIonText> is
                     any information that relates to an identified or
                     identifiable individual.
                   </ZIonText>
-                </ZIonItem>
-                <ZIonItem>
-                  <ZIonText>
+
+                  <ZIonText className='block pb-3'>
                     <ZIonText className='font-bold'>Service</ZIonText> refers to
                     the Application.
                   </ZIonText>
-                </ZIonItem>
-                <ZIonItem>
-                  <ZIonText>
+
+                  <ZIonText className='block pb-3'>
                     <ZIonText className='font-bold'>Service Provider</ZIonText>{' '}
                     means any natural or legal person who processes the data on
                     behalf of the Company. It refers to third-party companies or
@@ -140,123 +152,143 @@ const ZaionsPrivacyPolicy: React.FC = () => {
                     perform services related to the Service or to assist the
                     Company in analyzing how the Service is used.
                   </ZIonText>
-                </ZIonItem>
-                <ZIonItem>
-                  <ZIonText>
+
+                  <ZIonText className='block pb-3'>
                     <ZIonText className='font-bold'>Usage Data</ZIonText> refers
                     to data collected automatically, either generated by the use
                     of the Service or from the Service infrastructure itself
                     (for example, the duration of a page visit).
                   </ZIonText>
-                </ZIonItem>
-                <ZIonItem>
-                  <ZIonText>
+
+                  <ZIonText className='block pb-3'>
                     <ZIonText className='font-bold'>You</ZIonText> means the
                     individual accessing or using the Service, or the company,
                     or other legal entity on behalf of which such individual is
                     accessing or using the Service, as applicable.
                   </ZIonText>
-                </ZIonItem>
-              </ZIonList>
-              <ZIonTitle className='mt-3 mb-2 ion-no-padding'>
-                <h4 className='ion-no-margin'>
-                  Collecting and Using Your Personal Data
-                </h4>
-              </ZIonTitle>
-              <ZIonTitle className='mb-2 font-bold ion-no-padding'>
-                Types of Data Collected
-              </ZIonTitle>
-              <ZIonTitle className='mb-2 font-bold ion-no-padding'>
-                Personal Data
-              </ZIonTitle>
-              <ZIonText>
-                While using Our Service, We may ask You to provide Us with
-                certain personally identifiable information that can be used to
-                contact or identify You. Personally identifiable information may
-                include, but is not limited to:
-              </ZIonText>
-              <ZIonList lines='none'>
-                <ZIonItem>
-                  <ZIonText>Email address</ZIonText>
-                </ZIonItem>
-                <ZIonItem>
-                  <ZIonText>First name and last name</ZIonText>
-                </ZIonItem>
-                <ZIonItem>
-                  <ZIonText>Phone number</ZIonText>
-                </ZIonItem>
-                <ZIonItem>
-                  <ZIonText>
-                    Address, State, Province, ZIP/Postal code, City
+                </div>
+              </div>
+
+              {/* Collecting and Using Your Personal Data */}
+              <div className='pt-1 mt-3'>
+                <ZIonBadge
+                  className='inline-block px-2 text-2xl font-normal border-b-2 zaions__warning_set ion-no-padding z_border_color_light'
+                  color='warning'>
+                  <ZIonText color='dark'>
+                    Collecting and Using Your Personal Data
                   </ZIonText>
-                </ZIonItem>
-                <ZIonItem>
-                  <ZIonText>Usage Data</ZIonText>
-                </ZIonItem>
-              </ZIonList>
-              <ZIonTitle className='mb-2 font-bold ion-no-padding'>
-                Usage Data
-              </ZIonTitle>
-              <ZIonText>
-                Usage Data is collected automatically when using the Service.
-              </ZIonText>
-              <ZIonText>
-                Usage Data may include information such as Your Device’s
-                Internet Protocol address (e.g. IP address), browser type,
-                browser version, the pages of our Service that You visit, the
-                time and date of Your visit, the time spent on those pages,
-                unique device identifiers and other diagnostic data.
-              </ZIonText>
-              <ZIonText>
-                When You access the Service by or through a mobile device, We
-                may collect certain information automatically, including, but
-                not limited to, the type of mobile device You use, Your mobile
-                device unique ID, the IP address of Your mobile device, Your
-                mobile operating system, the type of mobile Internet browser You
-                use, unique device identifiers and other diagnostic data.
-              </ZIonText>
-              <ZIonText>
-                We may also collect information that Your browser sends whenever
-                You visit our Service or when You access the Service by or
-                through a mobile device.
-              </ZIonText>
-              <ZIonTitle className='mt-3 mb-2 font-bold ion-no-padding'>
-                Information Collected while Using the Application
-              </ZIonTitle>
-              <ZIonText>
-                While using Our Application, in order to provide features of Our
-                Application, We may collect, with Your prior permission:
-              </ZIonText>
-              <ZIonList lines='none'>
-                <ZIonItem>Information regarding your location</ZIonItem>
-              </ZIonList>
-              <ZIonText>
-                We use this information to provide features of Our Service, to
-                improve and customize Our Service. The information may be
-                uploaded to the Company’s servers and/or a Service Provider’s
-                server or it may be simply stored on Your device.
-              </ZIonText>
-              <ZIonText>
-                You can enable or disable access to this information at any
-                time, through Your Device settings.
-              </ZIonText>
-              <ZIonTitle className='mt-3 mb-2 font-bold ion-no-padding'>
-                Use of Your Personal Data
-              </ZIonTitle>
-              <ZIonText>
-                The Company may use Personal Data for the following purposes:
-              </ZIonText>
-              <ZIonList lines='none'>
-                <ZIonItem>
-                  <ZIonText>
+                </ZIonBadge>
+
+                <div className='mt-1'>
+                  <ZIonBadge
+                    className='px-2 mt-1 text-lg font-normal w-max min-w-max zaions__tertiary_set py- me-1 ion-no-padding ion-no-margin h-max'
+                    color='tertiary'>
+                    <ZIonText color='tertiary'>
+                      Types of Data Collected
+                    </ZIonText>
+                  </ZIonBadge>
+                </div>
+
+                <div className='mt-1'>
+                  <ZIonBadge
+                    className='px-2 mt-1 text-lg font-normal w-max min-w-max zaions__tertiary_set py- me-1 ion-no-padding ion-no-margin h-max'
+                    color='tertiary'>
+                    <ZIonText color='tertiary'>Personal Data</ZIonText>
+                  </ZIonBadge>
+                </div>
+                <ZIonText>
+                  While using Our Service, We may ask You to provide Us with
+                  certain personally identifiable information that can be used
+                  to contact or identify You. Personally identifiable
+                  information may include, but is not limited to:
+                </ZIonText>
+                <ZIonText className='block mt-2'>Email address</ZIonText>
+                <ZIonText className='block mt-2'>
+                  First name and last name
+                </ZIonText>
+                <ZIonText className='block mt-2'>Phone number</ZIonText>
+                <ZIonText className='block mt-2'>
+                  Address, State, Province, ZIP/Postal code, City
+                </ZIonText>
+                <ZIonText className='block mt-2'>Usage Data</ZIonText>
+                <div className='mt-4'>
+                  <ZIonBadge
+                    className='px-2 mt-1 text-lg font-normal w-max min-w-max zaions__tertiary_set py- me-1 ion-no-padding ion-no-margin h-max'
+                    color='tertiary'>
+                    <ZIonText color='tertiary'>Usage Data</ZIonText>
+                  </ZIonBadge>
+                </div>
+                <ZIonText>
+                  Usage Data is collected automatically when using the Service.
+                </ZIonText>
+                <ZIonText>
+                  Usage Data may include information such as Your Device’s
+                  Internet Protocol address (e.g. IP address), browser type,
+                  browser version, the pages of our Service that You visit, the
+                  time and date of Your visit, the time spent on those pages,
+                  unique device identifiers and other diagnostic data.
+                </ZIonText>
+                <ZIonText>
+                  When You access the Service by or through a mobile device, We
+                  may collect certain information automatically, including, but
+                  not limited to, the type of mobile device You use, Your mobile
+                  device unique ID, the IP address of Your mobile device, Your
+                  mobile operating system, the type of mobile Internet browser
+                  You use, unique device identifiers and other diagnostic data.
+                </ZIonText>
+                <ZIonText>
+                  We may also collect information that Your browser sends
+                  whenever You visit our Service or when You access the Service
+                  by or through a mobile device.
+                </ZIonText>
+                <div className='mt-4'>
+                  <ZIonBadge
+                    className='px-2 mt-1 text-lg font-normal w-max min-w-max zaions__tertiary_set py- me-1 ion-no-padding ion-no-margin h-max'
+                    color='tertiary'>
+                    <ZIonText color='tertiary'>
+                      Information Collected while Using the Application
+                    </ZIonText>
+                  </ZIonBadge>
+                </div>
+                <ZIonText>
+                  While using Our Application, in order to provide features of
+                  Our Application, We may collect, with Your prior permission:
+                </ZIonText>
+                <ZIonList lines='none'>
+                  <ZIonItem>Information regarding your location</ZIonItem>
+                </ZIonList>
+                <ZIonText>
+                  We use this information to provide features of Our Service, to
+                  improve and customize Our Service. The information may be
+                  uploaded to the Company’s servers and/or a Service Provider’s
+                  server or it may be simply stored on Your device.
+                </ZIonText>
+                <ZIonText>
+                  You can enable or disable access to this information at any
+                  time, through Your Device settings.
+                </ZIonText>
+
+                <div className='mt-4'>
+                  <ZIonBadge
+                    className='px-2 mt-1 text-lg font-normal w-max min-w-max zaions__tertiary_set py- me-1 ion-no-padding ion-no-margin h-max'
+                    color='tertiary'>
+                    <ZIonText color='tertiary'>
+                      Use of Your Personal Data
+                    </ZIonText>
+                  </ZIonBadge>
+                </div>
+                <ZIonText>
+                  The Company may use Personal Data for the following purposes:
+                </ZIonText>
+                <div className='mt-2 ms-2'>
+                  <ZIonText className='block mt-2'>
                     <ZIonText className='font-bold'>
                       To provide and maintain our Service
                     </ZIonText>
                     , including to monitor the usage of our Service.
                   </ZIonText>
-                </ZIonItem>
-                <ZIonItem>
-                  <ZIonText>
+
+                  <ZIonText className='block mt-3'>
                     <ZIonText className='font-bold'>
                       To manage Your Account:
                     </ZIonText>{' '}
@@ -265,9 +297,8 @@ const ZaionsPrivacyPolicy: React.FC = () => {
                     functionalities of the Service that are available to You as
                     a registered user.
                   </ZIonText>
-                </ZIonItem>
-                <ZIonItem>
-                  <ZIonText>
+
+                  <ZIonText className='block mt-3'>
                     <ZIonText className='font-bold'>
                       For the performance of a contract:
                     </ZIonText>{' '}
@@ -276,9 +307,8 @@ const ZaionsPrivacyPolicy: React.FC = () => {
                     purchased or of any other contract with Us through the
                     Service.
                   </ZIonText>
-                </ZIonItem>
-                <ZIonItem>
-                  <ZIonText>
+
+                  <ZIonText className='block mt-3'>
                     <ZIonText className='font-bold'>To contact You:</ZIonText>{' '}
                     To contact You by email, telephone calls, SMS, or other
                     equivalent forms of electronic communication, such as a
@@ -288,26 +318,23 @@ const ZaionsPrivacyPolicy: React.FC = () => {
                     updates, when necessary or reasonable for their
                     implementation.
                   </ZIonText>
-                </ZIonItem>
-                <ZIonItem>
-                  <ZIonText>
+
+                  <ZIonText className='block mt-3'>
                     <ZIonText className='font-bold'>To provide You</ZIonText>{' '}
                     with news, special offers and general information about
                     other goods, services and events which we offer that are
                     similar to those that you have already purchased or enquired
                     about unless You have opted not to receive such information.
                   </ZIonText>
-                </ZIonItem>
-                <ZIonItem>
-                  <ZIonText>
+
+                  <ZIonText className='block mt-3'>
                     <ZIonText className='font-bold'>
                       To manage Your requests:
                     </ZIonText>{' '}
                     To attend and manage Your requests to Us.
                   </ZIonText>
-                </ZIonItem>
-                <ZIonItem>
-                  <ZIonText>
+
+                  <ZIonText className='block mt-3'>
                     <ZIonText className='font-bold'>
                       For business transfers:
                     </ZIonText>{' '}
@@ -318,9 +345,8 @@ const ZaionsPrivacyPolicy: React.FC = () => {
                     similar proceeding, in which Personal Data held by Us about
                     our Service users is among the assets transferred.
                   </ZIonText>
-                </ZIonItem>
-                <ZIonItem>
-                  <ZIonText>
+
+                  <ZIonText className='block mt-3'>
                     <ZIonText className='font-bold'>
                       For other purposes
                     </ZIonText>
@@ -330,60 +356,81 @@ const ZaionsPrivacyPolicy: React.FC = () => {
                     and improve our Service, products, services, marketing and
                     your experience.
                   </ZIonText>
-                </ZIonItem>
-              </ZIonList>
-              <ZIonText>
-                We may share Your personal information in the following
-                situations:
-              </ZIonText>
-              <ZIonList lines='none'>
-                <ZIonItem>
-                  <ZIonText className='font-bold'>
-                    With Service Providers:
-                  </ZIonText>{' '}
-                  We may share Your personal information with Service Providers
-                  to monitor and analyze the use of our Service, to contact You.
-                </ZIonItem>
-                <ZIonItem>
-                  <ZIonText className='font-bold'>
-                    For business transfers:
-                  </ZIonText>{' '}
-                  We may share or transfer Your personal information in
-                  connection with, or during negotiations of, any merger, sale
-                  of Company assets, financing, or acquisition of all or a
-                  portion of Our business to another company.
-                </ZIonItem>
-                <ZIonItem>
-                  <ZIonText className='font-bold'>With Affiliates:</ZIonText> We
-                  may share Your information with Our affiliates, in which case
-                  we will require those affiliates to honor this Privacy Policy.
-                  Affiliates include Our parent company and any other
-                  subsidiaries, joint venture partners or other companies that
-                  We control or that are under common control with Us.
-                </ZIonItem>
-                <ZIonItem>
-                  <ZIonText className='font-bold'>
-                    With business partners:
-                  </ZIonText>{' '}
-                  We may share Your information with Our business partners to
-                  offer You certain products, services or promotions.
-                </ZIonItem>
-                <ZIonItem>
-                  <ZIonText className='font-bold'>With other users:</ZIonText>{' '}
-                  when You share personal information or otherwise interact in
-                  the public areas with other users, such information may be
-                  viewed by all users and may be publicly distributed outside.
-                </ZIonItem>
-                <ZIonItem>
-                  <ZIonText className='font-bold'>With Your consent</ZIonText>:
-                  We may disclose Your personal information for any other
-                  purpose with Your consent.
-                </ZIonItem>
-              </ZIonList>
-              <ZIonTitle className='mt-3 mb-2 ion-no-padding'>
-                Retention of Your Personal Data
-              </ZIonTitle>
-              <ZIonText>
+                </div>
+
+                <ZIonText className='block mt-3 font-bold'>
+                  We may share Your personal information in the following
+                  situations:
+                </ZIonText>
+
+                <div className='mt-3 ms-2'>
+                  <ZIonText className='block mt-3'>
+                    <ZIonText className='font-bold me-1'>
+                      With Service Providers:
+                    </ZIonText>
+                    We may share Your personal information with Service
+                    Providers to monitor and analyze the use of our Service, to
+                    contact You.
+                  </ZIonText>
+
+                  <ZIonText className='block mt-3'>
+                    <ZIonText className='font-bold me-1'>
+                      For business transfers:
+                    </ZIonText>
+                    We may share or transfer Your personal information in
+                    connection with, or during negotiations of, any merger, sale
+                    of Company assets, financing, or acquisition of all or a
+                    portion of Our business to another company.
+                  </ZIonText>
+
+                  <ZIonText className='block mt-3'>
+                    <ZIonText className='font-bold me-1'>
+                      With Affiliates:
+                    </ZIonText>
+                    We may share Your information with Our affiliates, in which
+                    case we will require those affiliates to honor this Privacy
+                    Policy. Affiliates include Our parent company and any other
+                    subsidiaries, joint venture partners or other companies that
+                    We control or that are under common control with Us.
+                  </ZIonText>
+
+                  <ZIonText className='block mt-3'>
+                    <ZIonText className='font-bold me-1'>
+                      With business partners:
+                    </ZIonText>
+                    We may share Your information with Our business partners to
+                    offer You certain products, services or promotions.
+                  </ZIonText>
+
+                  <ZIonText className='block mt-3'>
+                    <ZIonText className='font-bold me-1'>
+                      With other users:
+                    </ZIonText>
+                    when You share personal information or otherwise interact in
+                    the public areas with other users, such information may be
+                    viewed by all users and may be publicly distributed outside.
+                  </ZIonText>
+
+                  <ZIonText className='block mt-3'>
+                    <ZIonText className='font-bold me-1'>
+                      With Your consent:
+                    </ZIonText>
+                    We may disclose Your personal information for any other
+                    purpose with Your consent.
+                  </ZIonText>
+                </div>
+              </div>
+
+              {/* Retention of Your Personal Data */}
+              <ZIonBadge
+                className='inline-block px-2 mt-4 text-2xl font-normal border-b-2 zaions__warning_set ion-no-padding z_border_color_light'
+                color='warning'>
+                <ZIonText color='dark'>
+                  Retention of Your Personal Data
+                </ZIonText>
+              </ZIonBadge>
+
+              <ZIonText className='block'>
                 The Company will retain Your Personal Data only for as long as
                 is necessary for the purposes set out in this Privacy Policy. We
                 will retain and use Your Personal Data to the extent necessary
@@ -399,10 +446,14 @@ const ZaionsPrivacyPolicy: React.FC = () => {
                 are legally obligated to retain this data for longer time
                 periods.
               </ZIonText>
-              <ZIonTitle className='mt-3 mb-2 ion-no-padding'>
-                Transfer of Your Personal Data
-              </ZIonTitle>
-              <ZIonText>
+
+              {/* Transfer of Your Personal Data */}
+              <ZIonBadge
+                className='inline-block px-2 mt-4 text-2xl font-normal border-b-2 zaions__warning_set ion-no-padding z_border_color_light'
+                color='warning'>
+                <ZIonText color='dark'>Transfer of Your Personal Data</ZIonText>
+              </ZIonBadge>
+              <ZIonText className='block'>
                 Your information, including Personal Data, is processed at the
                 Company’s operating offices and in any other places where the
                 parties involved in the processing are located. It means that
@@ -423,10 +474,14 @@ const ZaionsPrivacyPolicy: React.FC = () => {
                 controls in place including the security of Your data and other
                 personal information.
               </ZIonText>
-              <ZIonTitle className='mt-3 mb-2 ion-no-padding'>
-                Delete Your Personal Data
-              </ZIonTitle>
-              <ZIonText>
+
+              {/* Delete Your Personal Data */}
+              <ZIonBadge
+                className='inline-block px-2 mt-4 text-2xl font-normal border-b-2 zaions__warning_set ion-no-padding z_border_color_light'
+                color='warning'>
+                <ZIonText color='dark'>Delete Your Personal Data</ZIonText>
+              </ZIonBadge>
+              <ZIonText className='block'>
                 You have the right to delete or request that We assist in
                 deleting the Personal Data that We have collected about You.
               </ZIonText>
@@ -442,61 +497,89 @@ const ZaionsPrivacyPolicy: React.FC = () => {
                 correct, or delete any personal information that You have
                 provided to Us.
               </ZIonText>
-              <ZIonText>
+              <ZIonText className='block'>
                 Please note, however, that We may need to retain certain
                 information when we have a legal obligation or lawful basis to
                 do so.
               </ZIonText>
-              <ZIonTitle className='mt-3 mb-2 ion-no-padding'>
-                Disclosure of Your Personal Data
-              </ZIonTitle>
-              <ZIonTitle className='mt-3 mb-2 ion-no-padding'>
-                <h5 className='font-bold ion-no-margin'>
-                  Business Transactions
-                </h5>
-              </ZIonTitle>
+
+              {/* Disclosure of Your Personal Data */}
+              <ZIonBadge
+                className='inline-block px-2 mt-4 text-2xl font-normal border-b-2 zaions__warning_set ion-no-padding z_border_color_light'
+                color='warning'>
+                <ZIonText color='dark'>
+                  Disclosure of Your Personal Data
+                </ZIonText>
+              </ZIonBadge>
+
+              <div className='mt-2'>
+                <ZIonBadge
+                  className='px-2 mt-1 text-lg font-normal w-max min-w-max zaions__tertiary_set py- me-1 ion-no-padding ion-no-margin h-max'
+                  color='tertiary'>
+                  <ZIonText color='tertiary'>Business Transactions</ZIonText>
+                </ZIonBadge>
+              </div>
               <ZIonText>
                 If the Company is involved in a merger, acquisition or asset
                 sale, Your Personal Data may be transferred. We will provide
                 notice before Your Personal Data is transferred and becomes
                 subject to a different Privacy Policy.
               </ZIonText>
-              <ZIonTitle className='mt-3 mb-2 ion-no-padding'>
-                <h5 className='font-bold ion-no-margin'>Law enforcement</h5>
-              </ZIonTitle>
+
+              <div className='mt-2'>
+                <ZIonBadge
+                  className='px-2 mt-1 text-lg font-normal w-max min-w-max zaions__tertiary_set py- me-1 ion-no-padding ion-no-margin h-max'
+                  color='tertiary'>
+                  <ZIonText color='tertiary'>Law enforcement</ZIonText>
+                </ZIonBadge>
+              </div>
               <ZIonText>
                 Under certain circumstances, the Company may be required to
                 disclose Your Personal Data if required to do so by law or in
                 response to valid requests by public authorities (e.g. a court
                 or a government agency).
               </ZIonText>
-              <ZIonTitle className='mt-3 mb-2 ion-no-padding'>
-                <h5 className='font-bold ion-no-margin'>
-                  Other legal requirements
-                </h5>
-              </ZIonTitle>
+
+              <div className='mt-2'>
+                <ZIonBadge
+                  className='px-2 mt-1 text-lg font-normal w-max min-w-max zaions__tertiary_set py- me-1 ion-no-padding ion-no-margin h-max'
+                  color='tertiary'>
+                  <ZIonText color='tertiary'>Other legal requirements</ZIonText>
+                </ZIonBadge>
+              </div>
               <ZIonText>
                 The Company may disclose Your Personal Data in the good faith
                 belief that such action is necessary to:
               </ZIonText>
-              <ZIonList lines='none'>
-                <ZIonItem>Comply with a legal obligation</ZIonItem>
-                <ZIonItem>
+              <div className='mt-3 ms-3'>
+                <ZIonText className='block mt-3'>
+                  Comply with a legal obligation
+                </ZIonText>
+                <ZIonText className='block mt-3'>
                   Protect and defend the rights or property of the Company
-                </ZIonItem>
-                <ZIonItem>
+                </ZIonText>
+                <ZIonText className='block mt-3'>
                   Prevent or investigate possible wrongdoing in connection with
                   the Service
-                </ZIonItem>
-                <ZIonItem>
+                </ZIonText>
+                <ZIonText className='block mt-3'>
                   Protect the personal safety of Users of the Service or the
                   public
-                </ZIonItem>
-                <ZIonItem>Protect against legal liability</ZIonItem>
-              </ZIonList>
-              <ZIonTitle className='mt-3 mb-2 font-bold ion-no-padding'>
-                Security of Your Personal Data
-              </ZIonTitle>
+                </ZIonText>
+                <ZIonText className='block mt-3'>
+                  Protect against legal liability
+                </ZIonText>
+              </div>
+
+              <div className='mt-4'>
+                <ZIonBadge
+                  className='px-2 mt-1 text-lg font-normal w-max min-w-max zaions__tertiary_set py- me-1 ion-no-padding ion-no-margin h-max'
+                  color='tertiary'>
+                  <ZIonText color='tertiary'>
+                    Security of Your Personal Data
+                  </ZIonText>
+                </ZIonBadge>
+              </div>
               <ZIonText>
                 The security of Your Personal Data is important to Us, but
                 remember that no method of transmission over the Internet, or
@@ -504,9 +587,14 @@ const ZaionsPrivacyPolicy: React.FC = () => {
                 use commercially acceptable means to protect Your Personal Data,
                 We cannot guarantee its absolute security.
               </ZIonText>
-              <ZIonTitle className='mt-3 mb-2 font-bold ion-no-padding'>
-                Children’s Privacy
-              </ZIonTitle>
+
+              <div className='mt-3'>
+                <ZIonBadge
+                  className='px-2 mt-1 text-lg font-normal w-max min-w-max zaions__tertiary_set py- me-1 ion-no-padding ion-no-margin h-max'
+                  color='tertiary'>
+                  <ZIonText color='tertiary'>Children’s Privacy</ZIonText>
+                </ZIonBadge>
+              </div>
               <ZIonText>
                 Our Service does not address anyone under the age of 13. We do
                 not knowingly collect personally identifiable information from
@@ -523,9 +611,14 @@ const ZaionsPrivacyPolicy: React.FC = () => {
                 parent, We may require Your parent’s consent before We collect
                 and use that information.
               </ZIonText>
-              <ZIonTitle className='mt-3 mb-2 font-bold ion-no-padding'>
-                Links to Other Websites
-              </ZIonTitle>
+
+              <div className='mt-3'>
+                <ZIonBadge
+                  className='px-2 mt-1 text-lg font-normal w-max min-w-max zaions__tertiary_set py- me-1 ion-no-padding ion-no-margin h-max'
+                  color='tertiary'>
+                  <ZIonText color='tertiary'>Links to Other Websites</ZIonText>
+                </ZIonBadge>
+              </div>
               <ZIonText>
                 Our Service may contain links to other websites that are not
                 operated by Us. If You click on a third party link, You will be
@@ -537,9 +630,16 @@ const ZaionsPrivacyPolicy: React.FC = () => {
                 content, privacy policies or practices of any third party sites
                 or services.
               </ZIonText>
-              <ZIonTitle className='mt-3 mb-2 font-bold ion-no-padding'>
-                Changes to this Privacy Policy
-              </ZIonTitle>
+
+              <div className='mt-3'>
+                <ZIonBadge
+                  className='px-2 mt-1 text-lg font-normal w-max min-w-max zaions__tertiary_set py- me-1 ion-no-padding ion-no-margin h-max'
+                  color='tertiary'>
+                  <ZIonText color='tertiary'>
+                    Changes to this Privacy Policy
+                  </ZIonText>
+                </ZIonBadge>
+              </div>
               <ZIonText>
                 We may update Our Privacy Policy from time to time. We will
                 notify You of any changes by posting the new Privacy Policy on
@@ -550,15 +650,18 @@ const ZaionsPrivacyPolicy: React.FC = () => {
                 Service, prior to the change becoming effective and update the
                 &quot;Last updated&quot; date at the top of this Privacy Policy.
               </ZIonText>
-              <ZIonText>
+              <ZIonText className='block'>
                 You are advised to review this Privacy Policy periodically for
                 any changes. Changes to this Privacy Policy are effective when
                 they are posted on this page.
               </ZIonText>
-              <ZIonTitle className='mt-3 mb-2 font-bold ion-no-padding'>
-                Contact Us
-              </ZIonTitle>
-              <ZIonText>
+
+              <ZIonBadge
+                className='inline-block px-2 mt-4 text-2xl font-normal border-b-2 zaions__warning_set ion-no-padding z_border_color_light'
+                color='warning'>
+                <ZIonText color='dark'>Contact Us</ZIonText>
+              </ZIonBadge>
+              <ZIonText className='block'>
                 If you have any questions about this Privacy Policy, You can
                 contact us:
               </ZIonText>

@@ -491,8 +491,8 @@ import QRCodeIndexBlogLarge from './global-images/qr-code-index-blog-large-800x4
 import Q22022ProductFeaturesBlog from './global-images/q2-2022-product-features-blog-featured-800x450.webp';
 
 import ProductLogo from './global-images/product-logo.png';
-import ProductFavicon from './global-images/favicon-z-link-white-bg_720.png';
-import ProductFaviconSmall from './global-images/favicon-100-114.png';
+import ProductFavicon from './global-images/favicon-w629-h720.png';
+import ProductFaviconSmall from './global-images/favicon-w100-h120.png';
 
 import productSmLogo from './global-images/favicon-z-link-16-16.jpg';
 

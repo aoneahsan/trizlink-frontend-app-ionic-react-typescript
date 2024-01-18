@@ -91,7 +91,7 @@ const ZWorkspaceFacebookPageLayout: React.FC = () => {
           <div className='w-[10rem] flex flex-col mx-auto mt-2'>
             <ZIonText className='text-lg '>
               <ZIonRouterLink
-                routerLink={CONSTANTS.ExternalURL.FacebookUrl}
+                routerLink={CONSTANTS.ProductExternalURLFacebookUrl}
                 target='_blank'
                 color='dark'
                 className='text-lg hover:underline zaions-transition'>
@@ -102,7 +102,7 @@ const ZWorkspaceFacebookPageLayout: React.FC = () => {
               className='font-bold'
               color='medium'>
               <ZIonRouterLink
-                routerLink={CONSTANTS.ExternalURL.FacebookUrl}
+                routerLink={CONSTANTS.ProductExternalURLFacebookUrl}
                 target='_blank'
                 color='medium'
                 className='hover:underline zaions-transition'>
@@ -171,7 +171,7 @@ const ZWorkspaceFacebookPageLayout: React.FC = () => {
             })}>
             <ZIonText className='text-lg'>
               <ZIonRouterLink
-                routerLink={CONSTANTS.ExternalURL.FacebookUrl}
+                routerLink={CONSTANTS.ProductExternalURLFacebookUrl}
                 target='_blank'
                 color='dark'
                 className='text-lg hover:underline zaions-transition'>
@@ -182,7 +182,7 @@ const ZWorkspaceFacebookPageLayout: React.FC = () => {
               className='font-bold'
               color='medium'>
               <ZIonRouterLink
-                routerLink={CONSTANTS.ExternalURL.FacebookUrl}
+                routerLink={CONSTANTS.ProductExternalURLFacebookUrl}
                 target='_blank'
                 color='medium'
                 className='hover:underline zaions-transition'>

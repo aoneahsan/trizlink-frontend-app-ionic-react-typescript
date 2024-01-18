@@ -8,8 +8,6 @@ import InPageFooter from '@/components/InPageFooter';
 import ZIonPage from '@/components/ZIonPage';
 import ZaionsHPBanner from '@/components/ZaionsHomePage/HPBanner';
 import ZaionsHPConnectPlatform from '@/components/ZaionsHomePage/HPConnetPlateform';
-import ZaionsHPGlobal from '@/components/ZaionsHomePage/HPGlobal';
-import ZaionsHPBrandList from '@/components/ZaionsHomePage/HPBrandList';
 import ZaionsHPFAQuestions from '@/components/ZaionsHomePage/HPQuestions';
 import ZaionsHPUsersFeedBack from '@/components/ZaionsHomePage/HPFeedback';
 import { ZIonContent } from '@/components/ZIonComponents';
@@ -29,9 +27,9 @@ const Home: React.FC = () => {
           <ZaionsHPBanner />
           {/* <ZaionsHPShortLink /> */}
           <ZaionsHPConnectPlatform />
-          <ZaionsHPGlobal />
+          {/* <ZaionsHPGlobal /> */}
           <ZaionsHPUsersFeedBack />
-          <ZaionsHPBrandList />
+          {/* <ZaionsHPBrandList /> */}
           <ZaionsHPFAQuestions />
           {/* Page Footer */}
           <InPageFooter

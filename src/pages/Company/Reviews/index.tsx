@@ -172,7 +172,7 @@ const ZaionsReviews: React.FC = () => {
           </ZIonRow>
           <div className='w-[80%] mx-auto ion-text-end text-xs'>
             <ZIonRouterLink
-              routerLink={CONSTANTS.ExternalURL.GenericExternalURL}
+              routerLink={CONSTANTS.ProductExternalURL.GenericExternalURL}
               color={'dark'}>
               {PRODUCT_NAME} reviews sourced by G2
             </ZIonRouterLink>

@@ -526,8 +526,9 @@ const ZSendOtpTab: React.FC = () => {
     <>
       <ZIonInput
         name='emailAddress'
-        label='Email Address'
-        labelPlacement='floating'
+        label='Email Address*'
+        labelPlacement='stacked'
+        placeholder='Please enter email'
         type='email'
         // enterkeyhint='next'
         onIonChange={e => {
@@ -755,7 +756,8 @@ const ZConfirmOptTab: React.FC = () => {
         <ZIonInput
           name='otp'
           label='OTP'
-          labelPlacement='floating'
+          labelPlacement='stacked'
+          placeholder='Please enter OTP'
           type='text'
           maxlength={6}
           enterkeyhint='next'
@@ -1084,7 +1086,8 @@ const ZNewPasswordTab: React.FC = () => {
       <ZIonInput
         name='displayName'
         label='Display Name*'
-        labelPlacement='floating'
+        labelPlacement='stacked'
+        placeholder='Please enter display name'
         onIonChange={e => {
           handleChange(e);
           if (values.isDisplayNameApiError) {
@@ -1147,7 +1150,8 @@ const ZNewPasswordTab: React.FC = () => {
         <ZIonInput
           name='password'
           label='Password*'
-          labelPlacement='floating'
+          labelPlacement='stacked'
+          placeholder='Please enter password'
           onIonChange={e => {
             handleChange(e);
             if (
@@ -1256,7 +1260,8 @@ const ZNewPasswordTab: React.FC = () => {
         <ZIonInput
           label='Confirm Password*'
           name='confirm_password'
-          labelPlacement='floating'
+          labelPlacement='stacked'
+          placeholder='Please confirm password'
           onIonChange={handleChange}
           onIonBlur={handleBlur}
           value={values.confirm_password}

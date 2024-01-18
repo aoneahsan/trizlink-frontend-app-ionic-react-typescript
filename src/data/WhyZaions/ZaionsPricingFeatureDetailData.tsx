@@ -185,7 +185,7 @@ export const ZaionsPricingFeatureDetailData: ZaionsPricingFeatureDetailType[] =
             text: 'For more advanced QR Code capabilities, check out our recent acquisition:',
             link: {
               text: 'QR Code Generator →',
-              url: CONSTANTS.ExternalURL.GenericExternalURL
+              url: CONSTANTS.ProductExternalURL.GenericExternalURL
             }
           }
         }

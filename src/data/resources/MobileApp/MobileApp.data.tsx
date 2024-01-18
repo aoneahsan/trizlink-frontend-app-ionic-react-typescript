@@ -12,7 +12,7 @@ export const MobileAppData: ZaionsCardWithIconType[] = [
     title: 'Google Play | Android',
     text: `Manage your links from anywhere with the ${PRODUCT_NAME} Android app.`,
     btnText: 'Download for Free →',
-    routeLink: CONSTANTS.ExternalURL.GenericExternalURL
+    routeLink: CONSTANTS.ProductExternalURL.GenericExternalURL
   },
   {
     id: 2,
@@ -20,6 +20,6 @@ export const MobileAppData: ZaionsCardWithIconType[] = [
     title: 'App Store | iOS ',
     text: `Manage your links from anywhere with the ${PRODUCT_NAME} iOS app.`,
     btnText: 'Download for Free →',
-    routeLink: CONSTANTS.ExternalURL.GenericExternalURL
+    routeLink: CONSTANTS.ProductExternalURL.GenericExternalURL
   }
 ];

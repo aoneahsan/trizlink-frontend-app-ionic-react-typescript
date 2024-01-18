@@ -14,11 +14,13 @@ import {
   ZIonRow,
   ZIonGrid,
   ZIonContent,
-  ZIonTitle
+  ZIonBadge,
+  ZIonRouterLink
 } from '@/components/ZIonComponents';
 
 // Global Imports
 import { PRODUCT_NAME, ZaionsBusinessDetails } from '@/utils/constants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Styles
 
@@ -37,12 +39,21 @@ const ZaionsTermsOfService: React.FC = () => {
               sizeMd='11'
               sizeSm='12'
               sizeXs='12'>
-              <ZIonText>
-                <h2 className='font-bold'>{PRODUCT_NAME} Terms of Service</h2>
-              </ZIonText>
-              <ZIonTitle className='mb-2 ion-no-padding'>
-                Welcome to {PRODUCT_NAME}!
-              </ZIonTitle>
+              <ZIonBadge
+                className='block px-2 py-1 mb-3 text-3xl font-normal rounded-sm zaions__primary_set ion-text-center ion-no-padding ion-no-margin'
+                color='primary'>
+                <ZIonText color='primary'>
+                  {PRODUCT_NAME} Terms of Service
+                </ZIonText>
+              </ZIonBadge>
+
+              <div className='mt-4'>
+                <ZIonBadge
+                  className='inline-block px-2 text-2xl font-normal border-b-2 zaions__warning_set ion-no-padding z_border_color_light'
+                  color='warning'>
+                  <ZIonText color='dark'>Welcome to {PRODUCT_NAME}!</ZIonText>
+                </ZIonBadge>
+              </div>
               <ZIonText className='block mb-2 text-base'>
                 These terms and conditions outline the rules and regulations for
                 the use of {PRODUCT_NAME}’s Website, located at{' '}
@@ -74,11 +85,15 @@ const ZaionsTermsOfService: React.FC = () => {
                 interchangeable and therefore as referring to same.
               </ZIonText>
 
-              <ZIonTitle className='mt-3 ion-no-padding'>
-                <h5>
-                  <strong>Cookies</strong>
-                </h5>
-              </ZIonTitle>
+              <div className='mt-4'>
+                <ZIonBadge
+                  className='inline-block px-2 text-2xl font-normal border-b-2 zaions__warning_set ion-no-padding z_border_color_light'
+                  color='warning'>
+                  <ZIonText color='dark'>
+                    Interpretation and Definitions
+                  </ZIonText>
+                </ZIonBadge>
+              </div>
 
               <ZIonText className='block mb-2 text-base'>
                 We employ the use of cookies. By accessing {PRODUCT_NAME}, you
@@ -94,176 +109,253 @@ const ZaionsTermsOfService: React.FC = () => {
                 affiliate/advertising partners may also use cookies.
               </ZIonText>
 
-              <ZIonTitle className='mt-3 ion-no-padding'>
-                <h5>
-                  <strong>License</strong>
-                </h5>
-              </ZIonTitle>
+              <div className='mt-4'>
+                <ZIonBadge
+                  className='inline-block px-2 text-2xl font-normal border-b-2 zaions__warning_set ion-no-padding z_border_color_light'
+                  color='warning'>
+                  <ZIonText color='dark'>License</ZIonText>
+                </ZIonBadge>
+              </div>
 
               <ZIonText className='block mb-2 text-base'>
-                Unless otherwise stated, ZLink and/or its licensors own the
-                intellectual property rights for all material on ZLink. All
-                intellectual property rights are reserved. You may access this
-                from ZLink for your own personal use subjected to restrictions
-                set in these terms and conditions.
+                Unless otherwise stated, {PRODUCT_NAME} and/or its licensors own
+                the intellectual property rights for all material on{' '}
+                {PRODUCT_NAME}. All intellectual property rights are reserved.
+                You may access this from {PRODUCT_NAME} for your own personal
+                use subjected to restrictions set in these terms and conditions.
               </ZIonText>
 
-              <ZIonText>
-                <p>You must not:</p>
-                <ul>
-                  <li>Republish material from ZLink</li>
-                  <li>Sell, rent or sub-license material from ZLink</li>
-                  <li>Reproduce, duplicate or copy material from ZLink</li>
-                  <li>Redistribute content from ZLink</li>
-                </ul>
-                <p>
+              <div className='mt-3'>
+                <div>
+                  <ZIonBadge
+                    className='px-2 text-lg font-normal w-max min-w-max zaions__tertiary_set py- me-1 ion-no-padding ion-no-margin h-max'
+                    color='tertiary'>
+                    <ZIonText color='tertiary'>You must not:</ZIonText>
+                  </ZIonBadge>
+                </div>
+
+                <div className='ms-2'>
+                  <ZIonText className='block mt-1'>
+                    Republish material from {PRODUCT_NAME}
+                  </ZIonText>
+                  <ZIonText className='block mt-2'>
+                    Sell, rent or sub-license material from {PRODUCT_NAME}
+                  </ZIonText>
+                  <ZIonText className='block mt-2'>
+                    Reproduce, duplicate or copy material from {PRODUCT_NAME}
+                  </ZIonText>
+                  <ZIonText className='block mt-2'>
+                    Redistribute content from {PRODUCT_NAME}
+                  </ZIonText>
+                </div>
+
+                <ZIonText className='block mt-2'>
                   Parts of this website offer an opportunity for users to post
                   and exchange opinions and information in certain areas of the
-                  website. ZLink does not filter, edit, publish or review
-                  Comments prior to their presence on the website. Comments do
-                  not reflect the views and opinions of ZLink,its agents and/or
-                  affiliates. Comments reflect the views and opinions of the
-                  person who post their views and opinions. To the extent
-                  permitted by applicable laws, ZLink shall not be liable for
-                  the Comments or for any liability, damages or expenses caused
-                  and/or suffered as a result of any use of and/or posting of
-                  and/or appearance of the Comments on this website.
-                </p>
-                <p>
-                  ZLink reserves the right to monitor all Comments and to remove
-                  any Comments which can be considered inappropriate, offensive
-                  or causes breach of these Terms and Conditions.
-                </p>
-                <p>You warrant and represent that:</p>
-                <ul>
-                  <li>
+                  website. {PRODUCT_NAME} does not filter, edit, publish or
+                  review Comments prior to their presence on the website.
+                  Comments do not reflect the views and opinions of{' '}
+                  {PRODUCT_NAME},its agents and/or affiliates. Comments reflect
+                  the views and opinions of the person who post their views and
+                  opinions. To the extent permitted by applicable laws,{' '}
+                  {PRODUCT_NAME} shall not be liable for the Comments or for any
+                  liability, damages or expenses caused and/or suffered as a
+                  result of any use of and/or posting of and/or appearance of
+                  the Comments on this website.
+                </ZIonText>
+
+                <ZIonText className='block mt-2'>
+                  {PRODUCT_NAME} reserves the right to monitor all Comments and
+                  to remove any Comments which can be considered inappropriate,
+                  offensive or causes breach of these Terms and Conditions.
+                </ZIonText>
+
+                <div className='mt-2'>
+                  <ZIonBadge
+                    className='px-2 text-lg font-normal w-max min-w-max zaions__tertiary_set py- me-1 ion-no-padding ion-no-margin h-max'
+                    color='tertiary'>
+                    <ZIonText color='tertiary'>
+                      You warrant and represent that:
+                    </ZIonText>
+                  </ZIonBadge>
+                </div>
+                <div className='ms-2'>
+                  <ZIonText className='block mt-1'>
                     You are entitled to post the Comments on our website and
                     have all necessary licenses and consents to do so;
-                  </li>
-                  <li>
+                  </ZIonText>
+                  <ZIonText className='block mt-2'>
                     The Comments do not invade any intellectual property right,
                     including without limitation copyright, patent or trademark
                     of any third party;
-                  </li>
-                  <li>
+                  </ZIonText>
+                  <ZIonText className='block mt-2'>
                     The Comments do not contain any defamatory, libelous,
                     offensive, indecent or otherwise unlawful material which is
                     an invasion of privacy
-                  </li>
-                  <li>
+                  </ZIonText>
+                  <ZIonText className='block mt-2'>
                     The Comments will not be used to solicit or promote business
                     or custom or present commercial activities or unlawful
                     activity.
-                  </li>
-                </ul>
-                <p>
-                  You hereby grant ZLink a non-exclusive license to use,
-                  reproduce, edit and authorize others to use, reproduce and
-                  edit any of your Comments in any and all forms, formats or
+                  </ZIonText>
+                </div>
+
+                <ZIonText className='block mt-4'>
+                  You hereby grant {PRODUCT_NAME} a non-exclusive license to
+                  use, reproduce, edit and authorize others to use, reproduce
+                  and edit any of your Comments in any and all forms, formats or
                   media.
-                </p>
-                <h3>
-                  <strong>Hyperlinking to our Content</strong>
-                </h3>
-                <p>
+                </ZIonText>
+
+                <div className='mt-3'>
+                  <ZIonBadge
+                    className='px-2 text-lg font-normal w-max min-w-max zaions__tertiary_set py- me-1 ion-no-padding ion-no-margin h-max'
+                    color='tertiary'>
+                    <ZIonText color='tertiary'>
+                      Hyperlinking to our Content
+                    </ZIonText>
+                  </ZIonBadge>
+                </div>
+
+                <ZIonText className='block mt-2'>
                   The following organizations may link to our Website without
                   prior written approval:
-                </p>
-                <ul>
-                  <li>Government agencies;</li>
-                  <li>Search engines;</li>
-                  <li>News organizations;</li>
-                  <li>
+                </ZIonText>
+
+                <div className='mt-3 ms-2'>
+                  <ZIonText className='block mt-2'>
+                    Government agencies;
+                  </ZIonText>
+                  <ZIonText className='block mt-2'>Search engines;</ZIonText>
+                  <ZIonText className='block mt-2'>
+                    News organizations;
+                  </ZIonText>
+                  <ZIonText className='block mt-2'>
                     Online directory distributors may link to our Website in the
                     same manner as they hyperlink to the Websites of other
                     listed businesses; and
-                  </li>
-                  <li>
+                  </ZIonText>
+                  <ZIonText className='block mt-2'>
                     System wide Accredited Businesses except soliciting
                     non-profit organizations, charity shopping malls, and
                     charity fundraising groups which may not hyperlink to our
                     Web site.
-                  </li>
-                </ul>
-                <p>
+                  </ZIonText>
+                </div>
+
+                <ZIonText className='block mt-3'>
                   These organizations may link to our home page, to publications
                   or to other Website information so long as the link: (a) is
                   not in any way deceptive; (b) does not falsely imply
                   sponsorship, endorsement or approval of the linking party and
                   its products and/or services; and (c) fits within the context
                   of the linking party’s site.
-                </p>
-                <p>
+                </ZIonText>
+
+                <ZIonText className='block mt-3'>
                   We may consider and approve other link requests from the
                   following types of organizations:
-                </p>
-                <ul>
-                  <li>
+                </ZIonText>
+
+                <div className='mt-3 ms-2'>
+                  <ZIonText className='block mt-2'>
                     commonly-known consumer and/or business information sources;
-                  </li>
-                  <li>dot.com community sites;</li>
-                  <li>associations or other groups representing charities;</li>
-                  <li>online directory distributors;</li>
-                  <li>internet portals;</li>
-                  <li>accounting, law and consulting firms; and</li>
-                  <li>educational institutions and trade associations.</li>
-                </ul>
-                <p>
+                  </ZIonText>
+                  <ZIonText className='block mt-2'>
+                    dot.com community sites;
+                  </ZIonText>
+                  <ZIonText className='block mt-2'>
+                    associations or other groups representing charities;
+                  </ZIonText>
+                  <ZIonText className='block mt-2'>
+                    online directory distributors;
+                  </ZIonText>
+                  <ZIonText className='block mt-2'>internet portals;</ZIonText>
+                  <ZIonText className='block mt-2'>
+                    accounting, law and consulting firms; and
+                  </ZIonText>
+                  <ZIonText className='block mt-2'>
+                    educational institutions and trade associations.
+                  </ZIonText>
+                </div>
+
+                <ZIonText className='block mt-3'>
                   We will approve link requests from these organizations if we
                   decide that: (a) the link would not make us look unfavorably
                   to ourselves or to our accredited businesses; (b) the
                   organization does not have any negative records with us; (c)
                   the benefit to us from the visibility of the hyperlink
-                  compensates the absence of ZLink; and (d) the link is in the
-                  context of general resource information.
-                </p>
-                <p>
+                  compensates the absence of {PRODUCT_NAME}; and (d) the link is
+                  in the context of general resource information.
+                </ZIonText>
+
+                <ZIonText className='block mt-3'>
                   These organizations may link to our home page so long as the
                   link: (a) is not in any way deceptive; (b) does not falsely
                   imply sponsorship, endorsement or approval of the linking
                   party and its products or services; and (c) fits within the
                   context of the linking party’s site.
-                </p>
-                <p>
+                </ZIonText>
+
+                <ZIonText className='block mt-3'>
                   If you are one of the organizations listed in paragraph 2
                   above and are interested in linking to our website, you must
-                  inform us by sending an e-mail to ZLink. Please include your
-                  name, your organization name, contact information as well as
-                  the URL of your site, a list of any URLs from which you intend
-                  to link to our Website, and a list of the URLs on our site to
-                  which you would like to link. Wait 2-3 weeks for a response.
-                </p>
-                <p>
+                  inform us by sending an e-mail to {PRODUCT_NAME}. Please
+                  include your name, your organization name, contact information
+                  as well as the URL of your site, a list of any URLs from which
+                  you intend to link to our Website, and a list of the URLs on
+                  our site to which you would like to link. Wait 2-3 weeks for a
+                  response.
+                </ZIonText>
+
+                <ZIonText className='block mt-3'>
                   Approved organizations may hyperlink to our Website as
                   follows:
-                </p>
-                <ul>
-                  <li>By use of our corporate name; or</li>
-                  <li>
+                </ZIonText>
+
+                <div className='mt-3 ms-2'>
+                  <ZIonText className='block mt-2'>
+                    By use of our corporate name; or
+                  </ZIonText>
+                  <ZIonText className='block mt-2'>
                     By use of the uniform resource locator being linked to; or
-                  </li>
-                  <li>
+                  </ZIonText>
+                  <ZIonText className='block mt-2'>
                     By use of any other description of our Website being linked
                     to that makes sense within the context and format of content
                     on the linking party’s site.
-                  </li>
-                </ul>
-                <p>
-                  No use of ZLink’s logo or other artwork will be allowed for
-                  linking absent a trademark license agreement.
-                </p>
-                <h3>
-                  <strong>iFrames</strong>
-                </h3>
-                <p>
+                  </ZIonText>
+                </div>
+
+                <ZIonText className='block mt-3'>
+                  No use of {PRODUCT_NAME}’s logo or other artwork will be
+                  allowed for linking absent a trademark license agreement.
+                </ZIonText>
+
+                <div className='mt-3'>
+                  <ZIonBadge
+                    className='px-2 text-lg font-normal w-max min-w-max zaions__tertiary_set py- me-1 ion-no-padding ion-no-margin h-max'
+                    color='tertiary'>
+                    <ZIonText color='tertiary'>iFrames</ZIonText>
+                  </ZIonBadge>
+                </div>
+
+                <ZIonText className='block mt-2'>
                   Without prior approval and written permission, you may not
                   create frames around our Webpages that alter in any way the
                   visual presentation or appearance of our Website.
-                </p>
-                <h3>
-                  <strong>Content Liability</strong>
-                </h3>
-                <p>
+                </ZIonText>
+
+                <div className='mt-3'>
+                  <ZIonBadge
+                    className='px-2 text-lg font-normal w-max min-w-max zaions__tertiary_set py- me-1 ion-no-padding ion-no-margin h-max'
+                    color='tertiary'>
+                    <ZIonText color='tertiary'>Content Liability</ZIonText>
+                  </ZIonBadge>
+                </div>
+
+                <ZIonText className='block mt-2'>
                   We shall not be hold responsible for any content that appears
                   on your Website. You agree to protect and defend us against
                   all claims that is rising on your Website. No link(s) should
@@ -271,15 +363,34 @@ const ZaionsTermsOfService: React.FC = () => {
                   obscene or criminal, or which infringes, otherwise violates,
                   or advocates the infringement or other violation of, any third
                   party rights.
-                </p>
-                <h3>
-                  <strong>Your Privacy</strong>
-                </h3>
-                <p>Please read Privacy Policy</p>
-                <h3>
-                  <strong>Reservation of Rights</strong>
-                </h3>
-                <p>
+                </ZIonText>
+
+                <div className='mt-3'>
+                  <ZIonBadge
+                    className='px-2 text-lg font-normal w-max min-w-max zaions__tertiary_set py- me-1 ion-no-padding ion-no-margin h-max'
+                    color='tertiary'>
+                    <ZIonText color='tertiary'>Your Privacy</ZIonText>
+                  </ZIonBadge>
+                </div>
+
+                <ZIonText className='block mt-2'>
+                  Please read
+                  <ZIonRouterLink
+                    className='ms-1'
+                    routerLink={ZaionsRoutes.Legal.ZaionsPrivacyPolicyRoute}>
+                    Privacy Policy
+                  </ZIonRouterLink>
+                </ZIonText>
+
+                <div className='mt-3'>
+                  <ZIonBadge
+                    className='px-2 text-lg font-normal w-max min-w-max zaions__tertiary_set py- me-1 ion-no-padding ion-no-margin h-max'
+                    color='tertiary'>
+                    <ZIonText color='tertiary'>Reservation of Rights</ZIonText>
+                  </ZIonBadge>
+                </div>
+
+                <ZIonText className='block mt-2'>
                   We reserve the right to request that you remove all links or
                   any particular link to our Website. You approve to immediately
                   remove all links to our Website upon request. We also reserve
@@ -287,62 +398,80 @@ const ZaionsTermsOfService: React.FC = () => {
                   policy at any time. By continuously linking to our Website,
                   you agree to be bound to and follow these linking terms and
                   conditions.
-                </p>
-                <h3>
-                  <strong>Removal of links from our website</strong>
-                </h3>
-                <p>
+                </ZIonText>
+
+                <div className='mt-3'>
+                  <ZIonBadge
+                    className='px-2 text-lg font-normal w-max min-w-max zaions__tertiary_set py- me-1 ion-no-padding ion-no-margin h-max'
+                    color='tertiary'>
+                    <ZIonText color='tertiary'>
+                      Removal of links from our website
+                    </ZIonText>
+                  </ZIonBadge>
+                </div>
+
+                <ZIonText className='block mt-2'>
                   If you find any link on our Website that is offensive for any
                   reason, you are free to contact and inform us any moment. We
                   will consider requests to remove links but we are not
                   obligated to or so or to respond to you directly.
-                </p>
-                <p>
+                </ZIonText>
+
+                <ZIonText className='block mt-2'>
                   We do not ensure that the information on this website is
                   correct, we do not warrant its completeness or accuracy; nor
                   do we promise to ensure that the website remains available or
                   that the material on the website is kept up to date.
-                </p>
-                <h3>
-                  <strong>Disclaimer</strong>
-                </h3>
-                <p>
+                </ZIonText>
+
+                <div className='mt-3'>
+                  <ZIonBadge
+                    className='px-2 text-lg font-normal w-max min-w-max zaions__tertiary_set py- me-1 ion-no-padding ion-no-margin h-max'
+                    color='tertiary'>
+                    <ZIonText color='tertiary'>Disclaimer</ZIonText>
+                  </ZIonBadge>
+                </div>
+
+                <ZIonText className='block mt-2'>
                   To the maximum extent permitted by applicable law, we exclude
                   all representations, warranties and conditions relating to our
                   website and the use of this website. Nothing in this
                   disclaimer will:
-                </p>
-                <ul>
-                  <li>
+                </ZIonText>
+
+                <div className='mt-3 ms-2'>
+                  <ZIonText className='block mt-2'>
                     limit or exclude our or your liability for death or personal
                     injury;
-                  </li>
-                  <li>
+                  </ZIonText>
+                  <ZIonText className='block mt-2'>
                     limit or exclude our or your liability for fraud or
                     fraudulent misrepresentation;
-                  </li>
-                  <li>
+                  </ZIonText>
+                  <ZIonText className='block mt-2'>
                     limit any of our or your liabilities in any way that is not
                     permitted under applicable law; or
-                  </li>
-                  <li>
+                  </ZIonText>
+                  <ZIonText className='block mt-2'>
                     exclude any of our or your liabilities that may not be
                     excluded under applicable law.
-                  </li>
-                </ul>
-                <p>
+                  </ZIonText>
+                </div>
+
+                <ZIonText className='block mt-2'>
                   The limitations and prohibitions of liability set in this
                   Section and elsewhere in this disclaimer: (a) are subject to
                   the preceding paragraph; and (b) govern all liabilities
                   arising under the disclaimer, including liabilities arising in
                   contract, in tort and for breach of statutory duty.
-                </p>
-                <p>
+                </ZIonText>
+
+                <ZIonText className='block mt-2'>
                   As long as the website and the information and services on the
                   website are provided free of charge, we will not be liable for
                   any loss or damage of any nature.
-                </p>
-              </ZIonText>
+                </ZIonText>
+              </div>
             </ZIonCol>
             <ZIonCol></ZIonCol>
           </ZIonRow>

@@ -222,8 +222,9 @@ const ZaionsLoginForm: React.FC = () => {
               {/* Email Address Field */}
               <ZIonInput
                 name='emailAddress'
-                label='Email Address'
-                labelPlacement='floating'
+                label='Email Address*'
+                labelPlacement='stacked'
+                placeholder='Please enter email'
                 type='email'
                 enterkeyhint='next'
                 onIonChange={handleChange}
@@ -256,9 +257,10 @@ const ZaionsLoginForm: React.FC = () => {
               <div className='flex ion-align-items-start'>
                 <ZIonInput
                   name='password'
-                  label='Password'
+                  label='Password*'
+                  placeholder='Please enter password'
                   enterkeyhint='enter'
-                  labelPlacement='floating'
+                  labelPlacement='stacked'
                   type={canViewPassword ? 'text' : 'password'}
                   onIonChange={handleChange}
                   onIonBlur={handleBlur}
