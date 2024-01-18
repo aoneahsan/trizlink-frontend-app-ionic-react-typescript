@@ -9,7 +9,7 @@ export const BrowserExtensionData: ZaionsCardWithIconType[] = [
     title: 'Chrome Extension',
     text: `Click the ${PRODUCT_NAME} button in your toolbar to create a unique link to the current URL on Chrome.`,
     btnText: 'Download for Free →',
-    routeLink: CONSTANTS.ExternalURL.GenericExternalURL
+    routeLink: CONSTANTS.ProductExternalURL.GenericExternalURL
   },
   {
     id: 2,
@@ -17,7 +17,7 @@ export const BrowserExtensionData: ZaionsCardWithIconType[] = [
     title: 'Firefox Extension',
     text: `Click the ${PRODUCT_NAME} button in your toolbar to create a unique link to the current URL on Firefox.`,
     btnText: 'Download for Free →',
-    routeLink: CONSTANTS.ExternalURL.GenericExternalURL
+    routeLink: CONSTANTS.ProductExternalURL.GenericExternalURL
   },
   {
     id: 3,
@@ -25,6 +25,6 @@ export const BrowserExtensionData: ZaionsCardWithIconType[] = [
     title: 'Edge Extension',
     text: `Click the ${PRODUCT_NAME} button in your toolbar to create a unique link to the current URL on Edge.`,
     btnText: 'Download for Free →',
-    routeLink: CONSTANTS.ExternalURL.GenericExternalURL
+    routeLink: CONSTANTS.ProductExternalURL.GenericExternalURL
   }
 ];

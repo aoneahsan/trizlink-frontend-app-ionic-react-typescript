@@ -316,9 +316,14 @@ export const CurrentProductDetails = {
   Name: ''
 } as const;
 
-export const ExternalURL = {
-  GenericExternalURL: 'https://prettylinks.zaions.com',
-  FacebookUrl: 'https://www.facebook.com/'
+export const ProductExternalURL = {
+  GenericExternalURL: 'https://trizlink.com',
+  FacebookUrl: 'https://www.facebook.com/',
+  LinkeDinUrl: 'https://www.linkedin.com/in/trizlink',
+  YoutubeUrl: 'https://www.youtube.com/@TrizLink',
+  PinterestUrl: 'https://www.pinterest.com/trizlink',
+  TikTokUrl: 'https://www.tiktok.com/@trizlinkofficial',
+  TwitterUrl: 'https://twitter.com/trizlink'
 } as const;
 
 export const ZaionsInfo = {
@@ -1875,7 +1880,7 @@ const CONSTANTS = {
   DateTime,
   MENU_IDS,
   PAGE_IDS,
-  ExternalURL,
+  ProductExternalURL,
   ZTooltipIds,
   testingSelectors,
   testingSelectorsPrefix

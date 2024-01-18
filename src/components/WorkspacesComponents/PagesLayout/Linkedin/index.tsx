@@ -131,7 +131,7 @@ const ZWorkspaceLinkedinPageLayout: React.FC = () => {
           })}>
           <ZIonText className='text-lg'>
             <ZIonRouterLink
-              routerLink={CONSTANTS.ExternalURL.FacebookUrl}
+              routerLink={CONSTANTS.ProductExternalURLFacebookUrl}
               target='_blank'
               color='dark'
               className='text-lg hover:underline zaions-transition'>
@@ -142,7 +142,7 @@ const ZWorkspaceLinkedinPageLayout: React.FC = () => {
             className='text-sm'
             color='medium'>
             <ZIonRouterLink
-              routerLink={CONSTANTS.ExternalURL.FacebookUrl}
+              routerLink={CONSTANTS.ProductExternalURLFacebookUrl}
               target='_blank'
               className='hover:underline zaions-transition'>
               @zaions

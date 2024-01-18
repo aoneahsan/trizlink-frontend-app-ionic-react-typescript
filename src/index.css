@@ -531,6 +531,16 @@ span.new {
 .z_border_color_danger {
   --border-color: var(--ion-color-danger) !important;
 }
+
+.z_border_color_medium {
+  --border-color: var(--ion-color-medium) !important;
+  border-color: var(--ion-color-medium) !important;
+}
+
+.z_border_color_light {
+  --border-color: rgba(var(--ion-color-warning-rgb), 0.5) !important;
+  border-color: rgba(var(--ion-color-warning-rgb), 0.5) !important;
+}
 /* #endregion */
 
 /* #region Popovers */

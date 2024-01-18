@@ -13,7 +13,8 @@ import {
   ZIonRouterLink,
   ZIonRow,
   ZIonGrid,
-  ZIonContent
+  ZIonContent,
+  ZIonBadge
 } from '@/components/ZIonComponents';
 
 // Global Imports
@@ -37,21 +38,24 @@ const ZaionsAcceptableUsePolicy: React.FC = () => {
               sizeMd='11'
               sizeSm='12'
               sizeXs='12'>
-              <ZIonText>
-                <h2 className='font-bold'>
+              <ZIonBadge
+                className='block px-2 py-1 mb-3 text-3xl font-normal rounded-sm zaions__primary_set ion-text-center ion-no-padding ion-no-margin'
+                color='primary'>
+                <ZIonText color='primary'>
                   {PRODUCT_NAME} Acceptable Use Policy
-                </h2>
-              </ZIonText>
-              <ZIonText className='text-lg zaions__color_gray2'>
+                </ZIonText>
+              </ZIonBadge>
+              {/*  */}
+              <ZIonText className='block text-lg'>
                 Effective Date: April 22, 2022
-              </ZIonText>{' '}
-              <br />
-              <ZIonText className='pt-1 mt-3 zaions__color_gray2'>
+              </ZIonText>
+              {/*  */}
+              <ZIonText className='block pt-1 mt-3'>
                 At {PRODUCT_NAME}, our aim is to be a catalyst for connections;
                 to empower people, brands, and businesses of all sizes to engage
                 their customers anywhere at scale.
               </ZIonText>
-              <ZIonText className='mt-3 zaions__color_gray2'>
+              <ZIonText className='block mt-3'>
                 {PRODUCT_NAME} is committed to protecting and supporting the
                 right to free expression. At the same time, we take the trust
                 and safety of our platform and community of users seriously.
@@ -71,7 +75,7 @@ const ZaionsAcceptableUsePolicy: React.FC = () => {
                 may also violate applicable laws and can lead to legal action
                 and civil and criminal penalties.
               </ZIonText>
-              <ZIonText className='pt-1 mt-3 zaions__color_gray2'>
+              <ZIonText className='block pt-1 mt-3'>
                 By accessing or using the {PRODUCT_NAME} Services, you agree to
                 abide by this Acceptable Use Policy as well as the{' '}
                 {PRODUCT_NAME}{' '}
@@ -86,14 +90,20 @@ const ZaionsAcceptableUsePolicy: React.FC = () => {
                 </ZIonRouterLink>{' '}
                 and {PRODUCT_NAME}’s{' '}
                 <ZIonRouterLink
-                  routerLink={CONSTANTS.ExternalURL.GenericExternalURL}>
+                  routerLink={CONSTANTS.ProductExternalURL.GenericExternalURL}>
                   DMCA Copyright Policy
                 </ZIonRouterLink>{' '}
                 and to (collectively, the “{PRODUCT_NAME} Terms”), as may be
                 modified from time to time.
-              </ZIonText>{' '}
-              <ZIonText className='font-bold'>Eligibility</ZIonText>{' '}
-              <ZIonText className='mt-1 zaions__color_gray2'>
+              </ZIonText>
+              <div className='mt-4'>
+                <ZIonBadge
+                  className='inline-block px-2 text-2xl font-normal border-b-2 zaions__warning_set ion-no-padding z_border_color_light'
+                  color='warning'>
+                  <ZIonText color='dark'>Eligibility</ZIonText>
+                </ZIonBadge>
+              </div>
+              <ZIonText className='block mt-1'>
                 You may only use the {PRODUCT_NAME} Services in compliance with
                 the {PRODUCT_NAME}
                 Terms. If we suspend or revoke your privileges to use the{' '}
@@ -104,106 +114,137 @@ const ZaionsAcceptableUsePolicy: React.FC = () => {
                 identities) are strictly prohibited and will result in the
                 permanent disabling of such accounts and flagging them for
                 future enforcement purposes.
-              </ZIonText>{' '}
-              <ZIonText className='font-bold'>
-                Never use the {PRODUCT_NAME} Services to distribute abusive,
-                dangerous, or illegal content
-              </ZIonText>{' '}
-              <ZIonText className='zaions__color_gray2'>
+              </ZIonText>
+              <div className='mt-4'>
+                <ZIonBadge
+                  className='inline-block px-2 text-2xl font-normal border-b-2 zaions__warning_set ion-no-padding z_border_color_light'
+                  color='warning'>
+                  <ZIonText color='dark'>
+                    Never use the {PRODUCT_NAME} Services to distribute abusive,
+                    dangerous, or illegal content
+                  </ZIonText>
+                </ZIonBadge>
+              </div>
+              <ZIonText className='block mt-2'>
                 You are prohibited from using the {PRODUCT_NAME} Services to
                 distribute or promote the following types of content (including
                 but not limited to text, images, video and audio):
               </ZIonText>
-              <ul className='zaions_list_default'>
-                <li>
+              <div className='mt-3 ms-2'>
+                <ZIonText className='block mt-2'>
                   Content that attacks individuals or groups on the basis of
                   race, gender, ethnicity, national origin, immigration status,
                   religion, sex or gender identity, sexual orientation,
                   disability, or medical condition, as well as any content
                   promoting organizations with such views.
-                </li>
-                <li>Content that exploits children</li>
-                <li>
+                </ZIonText>
+                <ZIonText className='block mt-2'>
+                  Content that exploits children
+                </ZIonText>
+                <ZIonText className='block mt-2'>
                   Misinformation, including but not limited to, medical or civic
                   misinformation
-                </li>
-                <li>
+                </ZIonText>
+                <ZIonText className='block mt-2'>
                   Content that threatens, encourages, or promotes violence or
                   graphic imagery
-                </li>
-                <li>
+                </ZIonText>
+                <ZIonText className='block mt-2'>
                   Sexually explicit or intimate content shared without the
                   subject’s consent
-                </li>
-                <li>
+                </ZIonText>
+                <ZIonText className='block mt-2'>
                   Any content that glamorizes or promotes self-harm or endangers
                   your safety or the safety of others
-                </li>
-                <li>Any content that promotes terrorism</li>
-                <li>Any other content that is illegal</li>
-              </ul>
-              <ZIonText className='text-lg font-bold'>
-                Never engage in abusive, dangerous, or illegal behavior
-              </ZIonText>{' '}
-              <br />
-              <ZIonText className='zaions__color_gray2'>
+                </ZIonText>
+                <ZIonText className='block mt-2'>
+                  Any content that promotes terrorism
+                </ZIonText>
+                <ZIonText className='block mt-2'>
+                  Any other content that is illegal
+                </ZIonText>
+              </div>
+              <div className='mt-4'>
+                <ZIonBadge
+                  className='inline-block px-2 text-2xl font-normal border-b-2 zaions__warning_set ion-no-padding z_border_color_light'
+                  color='warning'>
+                  <ZIonText color='dark'>
+                    Never engage in abusive, dangerous, or illegal behavior
+                  </ZIonText>
+                </ZIonBadge>
+              </div>
+              <ZIonText className='block mt-3'>
                 You are prohibited from using the {PRODUCT_NAME} Services to
                 engage in the following types of behavior:
               </ZIonText>
-              <ul className='zaions_list_default'>
-                <li>
+              <div className='mt-3 ms-2'>
+                <ZIonText className='block mt-2'>
                   Distributing malware, viruses, badware, or other types of
                   disruptive software
-                </li>
-                <li>
+                </ZIonText>
+                <ZIonText className='block mt-2'>
                   Engaging in phishing, spoofing, hacking, or other attempts to
                   fraudulently gain access to someone’s information
-                </li>
-                <li>Sending bulk commercial emails or SMA (i.e. spam)</li>
-                <li>
+                </ZIonText>
+                <ZIonText className='block mt-2'>
+                  Sending bulk commercial emails or SMA (i.e. spam)
+                </ZIonText>
+                <ZIonText className='block mt-2'>
                   Circumventing {PRODUCT_NAME}’s systems to evade detection of
                   abuse outlined in the {PRODUCT_NAME} Terms Sharing someone’s
                   private information without their consent (i.e. doxxing)
-                </li>
-                <li>Threatening violence or harm to others</li>
-                <li>
+                </ZIonText>
+                <ZIonText className='block mt-2'>
+                  Threatening violence or harm to others
+                </ZIonText>
+                <ZIonText className='block mt-2'>
                   Bullying, harassing, or coordinated online attacks targeting
                   individuals or groups (i.e. brigading)
-                </li>
-                <li>
+                </ZIonText>
+                <ZIonText className='block mt-2'>
                   Impersonating others or misrepresenting your affiliation with
                   any people, organizations or other entities
-                </li>
-                <li>
+                </ZIonText>
+                <ZIonText className='block mt-2'>
                   Facilitating illegal activity such as the sale of prohibited
                   goods and/or services
-                </li>
-                <li>
+                </ZIonText>
+                <ZIonText className='block mt-2'>
                   Infringing another person or entity’s intellectual property
-                </li>
-              </ul>
-              <ZIonText className='text-lg font-bold'>
-                Reporting abuse and violations
-              </ZIonText>
-              <br />
-              <ZIonText className='zaions__color_gray2'>
+                </ZIonText>
+              </div>
+              <div className='mt-4'>
+                <ZIonBadge
+                  className='inline-block px-2 text-2xl font-normal border-b-2 zaions__warning_set ion-no-padding z_border_color_light'
+                  color='warning'>
+                  <ZIonText color='dark'>
+                    Reporting abuse and violations
+                  </ZIonText>
+                </ZIonBadge>
+              </div>
+              <ZIonText className='block mt-3'>
                 We encourage anyone who suspects that someone is manipulating
                 the {PRODUCT_NAME} Services or violating our Acceptable Use
                 Policy in any way to notify us. We investigate concerns
                 thoroughly and take appropriate actions, up to and including
                 terminating user accounts.
               </ZIonText>
-              <ZIonText className='pt-1 pb-0 mt-3 mb-0 font-bold'>
+              <ZIonText className='block pt-1 pb-0 mt-3 mb-0 font-bold'>
                 If you believe {PRODUCT_NAME} mistakenly flagged your activity
                 as misconduct, you can contact us and we will investigate your
                 appeal.
               </ZIonText>
-              <br /> <br />
-              <ZIonText className='text-lg font-bold'>
-                Enforcement against non-compliance
-              </ZIonText>{' '}
-              <br />
-              <ZIonText className='zaions__color_gray2'>
+
+              <div className='mt-4'>
+                <ZIonBadge
+                  className='inline-block px-2 text-2xl font-normal border-b-2 zaions__warning_set ion-no-padding z_border_color_light'
+                  color='warning'>
+                  <ZIonText color='dark'>
+                    Enforcement against non-compliance
+                  </ZIonText>
+                </ZIonBadge>
+              </div>
+              <ZIonText className='block mt-1'>
                 {PRODUCT_NAME} is committed to protecting the user experience
                 and in doing so, our actions will reflect the spirit, not merely
                 the letter, of this Acceptable Use Policy. {PRODUCT_NAME}{' '}

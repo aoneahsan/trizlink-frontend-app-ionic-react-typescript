@@ -8,7 +8,6 @@ import { useSetRecoilState } from 'recoil';
 
 // Custom Imports
 import AppRoutes from '@/AppRoutes';
-import TestingPackagesAndLogic from '@/Testing';
 import ZaionsGlobalComponent from '@/ZaionsGlobalComponents';
 
 // helpers
@@ -66,7 +65,7 @@ const App: React.FC = () => {
   return (
     <IonApp>
       <AppRoutes />
-      <TestingPackagesAndLogic />
+      {/* <TestingPackagesAndLogic /> */}
       <ToastContainer />
       <ZaionsGlobalComponent />
     </IonApp>

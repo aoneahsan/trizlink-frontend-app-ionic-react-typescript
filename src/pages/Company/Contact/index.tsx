@@ -142,7 +142,7 @@ const ZaionsContact: React.FC = () => {
                   </h2>
                 </ZIonText>
                 <ZIonRouterLink
-                  routerLink={CONSTANTS.ExternalURL.GenericExternalURL}>
+                  routerLink={CONSTANTS.ProductExternalURL.GenericExternalURL}>
                   <ZIonText className='leading-[15px] mt-3'>
                     Contact our press team. →
                   </ZIonText>

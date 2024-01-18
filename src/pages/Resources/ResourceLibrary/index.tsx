@@ -68,7 +68,7 @@ const ZaionsResourceLibrary: React.FC = () => {
           }
           bannerImg={Webinar4waysResource}
           btnText='Watch Now'
-          BtnRouteLink={CONSTANTS.ExternalURL.GenericExternalURL}
+          BtnRouteLink={CONSTANTS.ProductExternalURL.GenericExternalURL}
           rowShadow={false}
           textCenter={false}
           className='pt-5 mt-5 mb-5'

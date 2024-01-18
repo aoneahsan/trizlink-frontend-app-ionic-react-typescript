@@ -175,12 +175,12 @@ const ZInvitationSLRedirectPage: React.FC = () => {
                 the URL you entered is invalid. You might find what you&apos;re
                 searching for at
                 <ZIonRouterLink className='cursor-pointer ms-1 hover:underline'>
-                  {ExternalURL.GenericExternalURL}
+                  {ProductExternalURL.GenericExternalURL}
                 </ZIonRouterLink>
                 . Please note that our links are case sensitive. Feel free to
                 visit
                 <ZIonRouterLink className='mx-1 cursor-pointer hover:underline'>
-                  {ExternalURL.GenericExternalURL}
+                  {ProductExternalURL.GenericExternalURL}
                 </ZIonRouterLink>
                 for more information.
               </ZIonText>
