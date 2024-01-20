@@ -134,6 +134,7 @@ export enum ZShortLinkListPageTableColumnsIds {
   notes = '__z_short_link_notes__',
   url = '__z_short_link_target_url__',
   linkToShare = '__z_short_link_link_to_share__',
+  privateLink = '__z_short_link_private_link__',
   click = '__z_short_link_click__',
   actions = '__z_short_link_actions__'
 }
@@ -308,6 +309,7 @@ export interface ShortLinkType {
   utmTagInfo?: UTMTagInfoInterface | string;
   shortUrl?: ShortUrlInterface | string;
   shortUrlDomain?: string;
+  privateUrlPath?: string;
   shortUrlPath?: string;
   folderId?: string | number; // default if non is given
   notes?: string | null;
@@ -323,7 +325,11 @@ export interface ShortLinkType {
   //   size?: string;
   // };
 
-  favicon?: string;
+  favicon?: {
+    file?: File;
+    path?: string;
+    url?: string;
+  };
   status?: StatusEnum;
 
   // computed data - due to other events or calculations

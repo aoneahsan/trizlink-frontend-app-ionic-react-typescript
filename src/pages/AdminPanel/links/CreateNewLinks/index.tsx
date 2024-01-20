@@ -140,8 +140,8 @@ import { type ZLinkMutateApiType } from '@/types/ZaionsApis.type';
 import { type ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { type workspaceInterface } from '@/types/AdminPanel/workspace';
 import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type';
-import { ZWsLimitsRStateAtom } from '@/ZaionsStore/UserDashboard/Workspace/index.recoil';
 import { ZVisibilityControlPopover } from '@/components/AdminPanelComponents/VisibilityControlButton';
+import { ZWsLimitsRStateAtom } from '@/ZaionsStore/UserDashboard/Workspace/index.recoil';
 
 const AddNotes = lazy(() => import('@/components/UserDashboard/AddNotes'));
 // const EmbedWidget = lazy(
@@ -1078,7 +1078,11 @@ const AdminCreateNewLinkPages: React.FC = () => {
     //     selectedShortLink?.favicon?.featureImgFile ??
     //     null
     // }
-    favicon: selectedShortLink?.favicon ?? '',
+    favicon: {
+      path: selectedShortLink?.favicon?.path ?? '',
+      url: selectedShortLink?.favicon?.url ?? '',
+      file: selectedShortLink?.favicon?.file ?? null
+    },
     status: selectedShortLink?.status ?? StatusEnum.draft
     // complete page fields here
   };
@@ -1461,10 +1465,13 @@ const AdminCreateNewLinkPages: React.FC = () => {
               let _fileUrl = values?.featureImg?.featureImgUrl;
               let _filePath = values?.featureImg?.featureImgPath;
 
+              let _faviconUrl = values?.favicon?.url;
+              let _faviconPath = values?.favicon?.path;
+
               if (
                 (isZNonEmptyString(workspaceId) ||
                   isZNonEmptyStrings([wsShareId, shareWSMemberId])) &&
-                values?.featureImg?.featureImgUrl.trim().length > 0 &&
+                values?.featureImg?.featureImgUrl?.trim()?.length > 0 &&
                 values?.featureImg?.featureImgUrl !==
                   selectedShortLink?.featureImg?.featureImgUrl
               ) {
@@ -1495,6 +1502,18 @@ const AdminCreateNewLinkPages: React.FC = () => {
                   _fileUrl = fileUrl ?? _fileUrl;
                   _filePath = filePath ?? _filePath;
                 }
+              }
+
+              if (
+                values?.favicon?.file !== null &&
+                values?.favicon?.file !== undefined
+              ) {
+                const { filePath, fileUrl } = await uploadFileToBackend(
+                  values?.favicon?.file
+                );
+
+                _faviconUrl = fileUrl ?? _faviconUrl;
+                _faviconPath = filePath ?? _faviconPath;
               }
 
               const _zStringifyData = zStringify({
@@ -1536,7 +1555,12 @@ const AdminCreateNewLinkPages: React.FC = () => {
                   enabled: values.password.enabled
                 }),
                 createdAt: Date.now().toString(),
-                favicon: values.favicon
+                // favicon: values.favicon,
+                favicon: zStringify({
+                  file: values.favicon?.file,
+                  url: _faviconUrl,
+                  path: _faviconPath
+                })
               });
 
               await FormikSubmissionHandler(

@@ -65,15 +65,18 @@ export const ZWsRemainingLimitsRStateSelectorFamily = selectorFamily({
             let endDate = null;
 
             if (ZWsSubscription.duration === subscriptionTimeLine.monthly) {
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
               endDate = dayjs(ZWsSubscription?.startedAt).add(30, 'day');
             } else if (
               ZWsSubscription.duration === subscriptionTimeLine.yearly
             ) {
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
               endDate = dayjs(ZWsSubscription?.startedAt).add(1, 'year');
             }
 
             if (
               (_selectService?.maxLimit ?? 0) > 0 &&
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
               dayjs().isAfter(dayjs(ZWsSubscription?.startedAt)) &&
               dayjs().isBefore(dayjs(endDate)) &&
               (ZWsCurrentLimits[name] ?? 0) < (_selectService?.maxLimit ?? 0)

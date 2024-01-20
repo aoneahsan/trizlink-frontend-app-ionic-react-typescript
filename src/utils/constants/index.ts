@@ -23,7 +23,10 @@ import {
 import { IonLoaderEnum, TimeFilterEnum } from '@/types/AdminPanel/linksType';
 import { ENVS } from '@/utils/envKeys';
 import { WSRolesNameEnum } from '@/types/AdminPanel/workspace';
-import { ZTeamMemberInvitationEnum } from '@/types/AdminPanel/index.type';
+import {
+  EZGeoLocationCondition,
+  ZTeamMemberInvitationEnum
+} from '@/types/AdminPanel/index.type';
 
 // Constant
 // const ZLinkApiRootUrl = 'https://zlinkbackend.zaions.com/public/api/zlink/v1';
@@ -220,6 +223,7 @@ export const API_URLS = {
 
   // Short links
   shortLinks_list: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/short-links/page-number/${RouteParams.pageNumber}/limit/${RouteParams.paginationLimit}`,
+  view_sl_by_private_link: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/short-links/preview/${RouteParams.urlPath}`,
   shortLinks_create_list: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/short-links`,
   shortLinks_update_delete: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/short-links/${RouteParams.shortLink.shortLinkId}`,
   shortLinks_is_path_available: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/sl/is-path-available/${RouteParams.shortLink.path}`,
@@ -1714,11 +1718,14 @@ const REACT_QUERY = {
     },
     SHORT_LINKS: {
       MAIN: 'rq-short-links-list-key',
+      GET_DATA_BY_PRIVATE_LINK: 'rq-short-links-get-data-y-private-link-key',
       GET: 'rq-short-link-get-key',
       ANALYTICS: 'rq-short-link-analytics-get-key',
       IS_PATH_AVAILABLE: 'rq-short-link-is-path-available-key',
 
       SWS_MAIN: 'rq-sws-short-link-list-key',
+      GET_SWS_DATA_BY_PRIVATE_LINK:
+        'rq-sws-short-links-get-data-y-private-link-key',
       SWS_GET: 'rq-sws-short-link-get-key'
     },
     LINK_IN_BIO: {
@@ -1928,8 +1935,16 @@ const ZStatesOptions: ZaionsRSelectOptions[] = [
   { label: 'Suspended', value: ZTeamMemberInvitationEnum.suspended }
 ] as const;
 
+const conditionPriority: Record<EZGeoLocationCondition, number> = {
+  [EZGeoLocationCondition.equalTo]: 1,
+  [EZGeoLocationCondition.within]: 2,
+  [EZGeoLocationCondition.notEqualTo]: 3,
+  [EZGeoLocationCondition.notWithin]: 4
+};
+
 const CONSTANTS = {
   ZHomePageAccountBtnText,
+  conditionPriority,
   ZOptResendAfter,
   ZRequestTimeAddM,
   ZLastSeenInterval,

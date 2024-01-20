@@ -1339,8 +1339,8 @@ export const areAllObjectsFilled = (array: object[]): boolean => {
  * @param _url
  * @returns parts of url.
  */
-export const zExtractUrlParts = (_url: string): URL => {
-  const _zExtractedUrl = new URL(_url);
+export const zExtractUrlParts = (_url: string, baseUrl?: string): URL => {
+  const _zExtractedUrl = new URL(_url, baseUrl);
 
   return _zExtractedUrl;
 };
@@ -1564,6 +1564,10 @@ export const zGetRoutePermissions = ({
           permissionsEnum.viewAny_workspace,
           permissionsEnum.viewAny_shortLink
         ];
+        break;
+
+      case ZaionsRoutes.AdminPanel.ShortLinks.PrivateRedirectRoute:
+        _permissions = [permissionsEnum.viewAny_workspace];
         break;
 
       case ZaionsRoutes.AdminPanel.ShortLinks.Create:
@@ -2181,4 +2185,30 @@ export const zComponentTestingSelectorMaker = ({
       : {};
 
   return { _testinglistselector, _testingSelector, _idSelector };
+};
+
+export const getCountryFromCoordinates = async ({
+  latitude,
+  longitude
+}: {
+  latitude?: number;
+  longitude?: number;
+}): Promise<{
+  long_name: string;
+  short_name: string;
+  types: string[];
+} | null> => {
+  const response = await fetch(
+    `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${ENVS?.googleMapApiKey}`
+  );
+  const data = await response.json();
+
+  const countryComponent = (
+    data?.results?.[0]?.address_components as Array<{
+      long_name: string;
+      short_name: string;
+      types: string[];
+    }>
+  ).find(component => component.types.includes('country'));
+  return countryComponent ?? null;
 };

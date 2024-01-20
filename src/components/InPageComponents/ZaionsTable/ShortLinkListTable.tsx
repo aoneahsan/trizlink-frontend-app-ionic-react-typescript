@@ -121,6 +121,7 @@ import {
 } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
 import { LinkTypeOptionsData } from '@/data/UserDashboard/Links';
 import { ZWsLimitsRStateAtom } from '@/ZaionsStore/UserDashboard/Workspace/index.recoil';
+import { ENVS } from '@/utils/envKeys';
 
 // Styles
 
@@ -536,7 +537,6 @@ const ZInpageTable: React.FC = () => {
       header: 'Title',
       id: ZShortLinkListPageTableColumnsIds.title,
       cell: row => {
-        console.log({ c: row?.row?.original });
         return (
           <ZIonText
             className={classNames({
@@ -725,7 +725,7 @@ const ZInpageTable: React.FC = () => {
     ),
 
     // link to share
-    columnHelper.accessor(itemData => itemData.shortUrlDomain, {
+    columnHelper.accessor(itemData => itemData.shortUrlPath, {
       header: 'Link to share',
       id: ZShortLinkListPageTableColumnsIds.linkToShare,
       footer: 'Link to share',
@@ -759,6 +759,57 @@ const ZInpageTable: React.FC = () => {
               variant='info'
               className='z-50'>
               <ZIonText>{_shortLink}</ZIonText>
+            </ZRTooltip>
+          </div>
+        );
+      }
+    }),
+
+    // link to share
+    columnHelper.accessor(itemData => itemData.privateUrlPath, {
+      header: 'Private Link',
+      id: ZShortLinkListPageTableColumnsIds.privateLink,
+      footer: 'Private Link',
+      cell: ({ row }) => {
+        const _privateRedirectRoute = `${
+          ENVS.defaultShortUrlDomain
+        }${createRedirectRoute({
+          url: ZaionsRoutes.AdminPanel.ShortLinks.PrivateRedirectRoute,
+          params: [
+            CONSTANTS.RouteParams.workspace.workspaceId,
+            CONSTANTS.RouteParams.urlPath
+          ],
+          values: [
+            workspaceId ?? wsShareId ?? '',
+            row?.original?.privateUrlPath ?? ''
+          ]
+        })}`;
+
+        return (
+          <div className='ZaionsTextEllipsis'>
+            <ZIonText
+              color='primary'
+              className='block cursor-pointer hover:underline'
+              id={`z-shortlink-${row?.original?.id}`}
+              testingselector={
+                CONSTANTS.testingSelectors.shortLink.listPage.table.linkToShare
+              }
+              testinglistselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.linkToShare}-${row.original.id}`}
+              onClick={() => {
+                void navigator.clipboard.writeText(_privateRedirectRoute ?? '');
+
+                void presentZIonToast('✨ Copied', 'tertiary');
+              }}>
+              {_privateRedirectRoute}
+            </ZIonText>
+
+            <ZRTooltip
+              anchorSelect={`#z-shortlink-${row?.original?.id}`}
+              place='top'
+              onArrow={true}
+              variant='info'
+              className='z-50'>
+              <ZIonText>{_privateRedirectRoute}</ZIonText>
             </ZRTooltip>
           </div>
         );

@@ -1079,6 +1079,10 @@ ion-modal.zaions__modal_w100 {
   --padding-end: 0.3rem !important;
 }
 
+.ion-box-shadow-none {
+  --box-shadow: none !important;
+}
+
 .hover\:outline-sand {
   transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
   transition-duration: 75ms;

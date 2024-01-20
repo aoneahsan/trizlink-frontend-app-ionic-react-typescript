@@ -57,21 +57,17 @@ const LinkFavIcon: React.FC = () => {
         <ZDragAndDrop
           // setFieldValue={setFieldValue}
           // fieldName='favicon'
-          onDrop={event => {
-            if (event[0] !== undefined && event[0] !== null) {
-              void setFieldValue('favicon.file', event[0], false);
-
-              const reader = new FileReader();
-
-              reader.onload = ({ target }) => {
-                void setFieldValue(
-                  'favicon.url',
-                  target?.result as string,
-                  false
-                );
-              };
-
-              reader.readAsDataURL(event[0]);
+          onDrop={(acceptedFiles, fileRejection, event) => {
+            if (acceptedFiles.length > 0) {
+              const filePath = URL.createObjectURL(acceptedFiles[0]);
+              void setFieldValue(
+                'favicon',
+                {
+                  file: acceptedFiles[0],
+                  url: filePath
+                },
+                false
+              );
             }
           }}
           imageUrl={values?.favicon?.url}

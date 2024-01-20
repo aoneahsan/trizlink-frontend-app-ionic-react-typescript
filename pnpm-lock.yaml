@@ -51,17 +51,17 @@ dependencies:
     specifier: ^3.3.6
     version: 3.3.6(@capacitor/core@5.6.0)
   '@ionic/core':
-    specifier: ^7.6.1
-    version: 7.6.1
+    specifier: ^7.6.5
+    version: 7.6.5
   '@ionic/react':
-    specifier: ^7.6.1
-    version: 7.6.1(react-dom@18.2.0)(react@18.2.0)
+    specifier: ^7.6.5
+    version: 7.6.5(react-dom@18.2.0)(react@18.2.0)
   '@ionic/react-router':
-    specifier: ^7.6.1
-    version: 7.6.1(react-dom@18.2.0)(react-router-dom@5.3.4)(react-router@5.3.4)(react@18.2.0)
+    specifier: ^7.6.5
+    version: 7.6.5(react-dom@18.2.0)(react-router-dom@5.3.4)(react-router@5.3.4)(react@18.2.0)
   '@sentry/react':
-    specifier: ^7.88.0
-    version: 7.88.0(react@18.2.0)
+    specifier: ^7.93.0
+    version: 7.94.1(react@18.2.0)
   '@splidejs/react-splide':
     specifier: ^0.7.12
     version: 0.7.12
@@ -181,7 +181,7 @@ dependencies:
     version: 5.3.4(react@18.2.0)
   react-select:
     specifier: ^5.8.0
-    version: 5.8.0(@types/react@18.2.45)(react-dom@18.2.0)(react@18.2.0)
+    version: 5.8.0(@types/react@18.2.48)(react-dom@18.2.0)(react@18.2.0)
   react-slick:
     specifier: ^0.29.0
     version: 0.29.0(react-dom@18.2.0)(react@18.2.0)
@@ -239,8 +239,8 @@ devDependencies:
     specifier: ^6.9.10
     version: 6.9.10
   '@types/react':
-    specifier: ^18.2.45
-    version: 18.2.45
+    specifier: ^18.2.48
+    version: 18.2.48
   '@types/react-dom':
     specifier: ^18.2.18
     version: 18.2.18
@@ -2224,7 +2224,7 @@ packages:
     resolution: {integrity: sha512-W2P2c/VRW1/1tLox0mVUalvnWXxavmv/Oum2aPsRcoDJuob75FC3Y8FbpfLwUegRcxINtGUMPq0tFCvYNTBXNA==}
     dev: false
 
-  /@emotion/react@11.11.1(@types/react@18.2.45)(react@18.2.0):
+  /@emotion/react@11.11.1(@types/react@18.2.48)(react@18.2.0):
     resolution: {integrity: sha512-5mlW1DquU5HaxjLkfkGN1GA/fvVGdyHURRiX/0FHl2cfIfRxSOfmxEH5YS43edp0OldZrZ+dkBKbngxcNCdZvA==}
     peerDependencies:
       '@types/react': '*'
@@ -2240,7 +2240,7 @@ packages:
       '@emotion/use-insertion-effect-with-fallbacks': 1.0.1(react@18.2.0)
       '@emotion/utils': 1.2.1
       '@emotion/weak-memoize': 0.3.1
-      '@types/react': 18.2.45
+      '@types/react': 18.2.48
       hoist-non-react-statics: 3.3.2
       react: 18.2.0
     dev: false
@@ -3042,23 +3042,23 @@ packages:
       - supports-color
     dev: true
 
-  /@ionic/core@7.6.1:
-    resolution: {integrity: sha512-o4PSRxokfRB5H3E5DAM7xivG8XFXaXD3+U/tha0QKemiMSntqgPqy0FYX0pNEwIrV3llRzFbAGNqyvB1+BG97Q==}
+  /@ionic/core@7.6.5:
+    resolution: {integrity: sha512-koyPrPMTZ8ZbB9O0VN4KaX9yIMCXQTi2bGTGYUvOoboyx/TaXshi4wX1POII5E80TW2I1HH5YIGq8ZaFAOot/Q==}
     dependencies:
-      '@stencil/core': 4.8.2
+      '@stencil/core': 4.10.0
       ionicons: 7.2.2
       tslib: 2.6.2
     dev: false
 
-  /@ionic/react-router@7.6.1(react-dom@18.2.0)(react-router-dom@5.3.4)(react-router@5.3.4)(react@18.2.0):
-    resolution: {integrity: sha512-Ze+NTmhagsL/Wbd9DeUOqFRYExDtAJFao5qIAYZS+VghAnRWGR7/iNmghQYMHdVIrw1EZOP7yAqNcy9rnBqXCA==}
+  /@ionic/react-router@7.6.5(react-dom@18.2.0)(react-router-dom@5.3.4)(react-router@5.3.4)(react@18.2.0):
+    resolution: {integrity: sha512-/qCicwTHC53vXG5kzwQcxgjuBQ6nrVbqFEUKXUid5+myockntWWzoK6J8eD7/GIwepa4OCuK5Ssow7L04G0ZAg==}
     peerDependencies:
       react: '>=16.8.6'
       react-dom: '>=16.8.6'
       react-router: ^5.0.1
       react-router-dom: ^5.0.1
     dependencies:
-      '@ionic/react': 7.6.1(react-dom@18.2.0)(react@18.2.0)
+      '@ionic/react': 7.6.5(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       react-router: 5.3.4(react@18.2.0)
@@ -3066,13 +3066,13 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@ionic/react@7.6.1(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-Gg6IezbyvMucgNgmCMFr5vrsh2kgB/5S9j/24L07wt4mCNBy5ZGrzHkq9NSmcgU7bj/qD1GzamjoqICLH2vEzw==}
+  /@ionic/react@7.6.5(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-2CEkEfv0M7kICLZ5bb4HE9bhuM/OSXx7tToDqci1LViP2vkwhooejiHM3oon3UBuv0wXU9zdNoLNnIDsdKXxHw==}
     peerDependencies:
       react: '>=16.8.6'
       react-dom: '>=16.8.6'
     dependencies:
-      '@ionic/core': 7.6.1
+      '@ionic/core': 7.6.5
       ionicons: 7.2.2
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -3740,77 +3740,88 @@ packages:
     resolution: {integrity: sha512-UY+FGM/2jjMkzQLn8pxcHGMaVLh9aEitG3zY2CiY7XHdLiz3bZOwa6oDxNqEMv7zZkV+cj5DOdz0cQ1BP5Hjgw==}
     dev: true
 
-  /@sentry-internal/feedback@7.88.0:
-    resolution: {integrity: sha512-lbK6jgO1I0M96nZQ99mcLSZ55ebwPAP6LhEWhkmc+eAfy97VpiY+qsbmgsmOzCEPqMmEUCEcI0rEZ7fiye2v2Q==}
+  /@sentry-internal/feedback@7.94.1:
+    resolution: {integrity: sha512-NlJn/TEX1MOPfY4bb6FU0Equ6YuaewZ+lIAqYt3HuEoYI7nYApeRGaPuVLkkezN0cmI7oU/+pJ7v83PtYXCFZw==}
     engines: {node: '>=12'}
     dependencies:
-      '@sentry/core': 7.88.0
-      '@sentry/types': 7.88.0
-      '@sentry/utils': 7.88.0
+      '@sentry/core': 7.94.1
+      '@sentry/types': 7.94.1
+      '@sentry/utils': 7.94.1
     dev: false
 
-  /@sentry-internal/tracing@7.88.0:
-    resolution: {integrity: sha512-xXQdcYhsS+ourzJHjXNjZC9zakuc97udmpgaXRjEP7FjPYclIx+YXwgFBdHM2kzAwZLFOsEce5dr46GVXUDfZw==}
+  /@sentry-internal/replay-canvas@7.94.1:
+    resolution: {integrity: sha512-kCFxdIJTbo2z8wnAQ3IqNVI8y2lSOtaSSZeBgeqiertro8Pe/DS8AXUnhXnAQkluM2i2koA+AgUo6/4bUeZXuQ==}
+    engines: {node: '>=12'}
+    dependencies:
+      '@sentry/core': 7.94.1
+      '@sentry/replay': 7.94.1
+      '@sentry/types': 7.94.1
+    dev: false
+
+  /@sentry-internal/tracing@7.94.1:
+    resolution: {integrity: sha512-znxCdrz7tPXm9Bwoe46PW72Zr0Iv7bXT6+b2LNg5fxWiCQVBbQFrMuVvtXEmHxeRRJVEgTh/4TdulB7wrtQIUQ==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry/core': 7.88.0
-      '@sentry/types': 7.88.0
-      '@sentry/utils': 7.88.0
+      '@sentry/core': 7.94.1
+      '@sentry/types': 7.94.1
+      '@sentry/utils': 7.94.1
     dev: false
 
-  /@sentry/browser@7.88.0:
-    resolution: {integrity: sha512-il4x3PB99nuU/OJQw2RltgYYbo8vtnYoIgneOeEiw4m0ppK1nKkMkd3vDRipGL6E/0i7IUmQfYYy6U10J5Rx+g==}
+  /@sentry/browser@7.94.1:
+    resolution: {integrity: sha512-IUR8B/AEPEzLijZ4Uo5qJsgmIBnCudBqAWd3zAiuk3TWYYOQUEvleddFxffN3n6pFhGx3ArksB+AIQBruttLGA==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry-internal/feedback': 7.88.0
-      '@sentry-internal/tracing': 7.88.0
-      '@sentry/core': 7.88.0
-      '@sentry/replay': 7.88.0
-      '@sentry/types': 7.88.0
-      '@sentry/utils': 7.88.0
+      '@sentry-internal/feedback': 7.94.1
+      '@sentry-internal/replay-canvas': 7.94.1
+      '@sentry-internal/tracing': 7.94.1
+      '@sentry/core': 7.94.1
+      '@sentry/replay': 7.94.1
+      '@sentry/types': 7.94.1
+      '@sentry/utils': 7.94.1
     dev: false
 
-  /@sentry/core@7.88.0:
-    resolution: {integrity: sha512-Jzbb7dcwiCO7kI0a1w+32UzWxbEn2OcZWzp55QMEeAh6nZ/5CXhXwpuHi0tW7doPj+cJdmxMTMu9LqMVfdGkzQ==}
+  /@sentry/core@7.94.1:
+    resolution: {integrity: sha512-4sjiMnkbGpv9O98YHVZe7fHNwwdYl+zLoCOoEOadtrJ1EYYvnK/MSixN2HJF7g/0s22xd4xY958QyNIRVR+Iiw==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry/types': 7.88.0
-      '@sentry/utils': 7.88.0
+      '@sentry/types': 7.94.1
+      '@sentry/utils': 7.94.1
     dev: false
 
-  /@sentry/react@7.88.0(react@18.2.0):
-    resolution: {integrity: sha512-iDOImijbsc0cYLWNBXlYKhh/sG/czPK/51GcMi3GcEBkhHDDcdWSZ7cNjFAqHfdrMkPf26bYgDPIL6aJsBZwpQ==}
+  /@sentry/react@7.94.1(react@18.2.0):
+    resolution: {integrity: sha512-7uzmsssy4Y/syIxVDrSWBWoukSsqR+/BqUO98A78NCWZsG9gxDXvD+l7D/o1u6TVkZo6i1z0NNybb1CtB73hug==}
     engines: {node: '>=8'}
     peerDependencies:
       react: 15.x || 16.x || 17.x || 18.x
     dependencies:
-      '@sentry/browser': 7.88.0
-      '@sentry/types': 7.88.0
-      '@sentry/utils': 7.88.0
+      '@sentry/browser': 7.94.1
+      '@sentry/core': 7.94.1
+      '@sentry/types': 7.94.1
+      '@sentry/utils': 7.94.1
       hoist-non-react-statics: 3.3.2
       react: 18.2.0
     dev: false
 
-  /@sentry/replay@7.88.0:
-    resolution: {integrity: sha512-em5dPKLPG7c/HGDbpIj3aHrWbA4iMwqjevqTzn+++KNO1YslkOosCaGsb1whU3AL1T9c3aIFIhZ4u3rNo+DxcA==}
+  /@sentry/replay@7.94.1:
+    resolution: {integrity: sha512-4wf3CZ1LR2Neh9IiZD0rY8AORS5Dc5HlKfMug026f8KM2aeoDyneM2JFBnPT/ulRnbD2gNciV+kdZiRd5K5jiw==}
     engines: {node: '>=12'}
     dependencies:
-      '@sentry-internal/tracing': 7.88.0
-      '@sentry/core': 7.88.0
-      '@sentry/types': 7.88.0
-      '@sentry/utils': 7.88.0
+      '@sentry-internal/tracing': 7.94.1
+      '@sentry/core': 7.94.1
+      '@sentry/types': 7.94.1
+      '@sentry/utils': 7.94.1
     dev: false
 
-  /@sentry/types@7.88.0:
-    resolution: {integrity: sha512-FvwvmX1pWAZKicPj4EpKyho8Wm+C4+r5LiepbbBF8oKwSPJdD2QV1fo/LWxsrzNxWOllFIVIXF5Ed3nPYQWpTw==}
+  /@sentry/types@7.94.1:
+    resolution: {integrity: sha512-A7CdEXFSgGyWv2BT2p9cAvJfb+dypvOtsY8ZvZvdPLUa7kqCV7ndhURUqKjvMBzsL2GParHn3ehDTl2eVc7pvA==}
     engines: {node: '>=8'}
     dev: false
 
-  /@sentry/utils@7.88.0:
-    resolution: {integrity: sha512-ukminfRmdBXTzk49orwJf3Lu3hR60ZRHjE2a4IXwYhyDT6JJgJqgsq1hzGXx0AyFfyS4WhfZ6QUBy7fu3BScZQ==}
+  /@sentry/utils@7.94.1:
+    resolution: {integrity: sha512-gQ2EaMpUU1gGH3S+iqpog9gkXbCo8tlhGYA9a5FUtEtER3D3OAlp8dGFwClwzWDAwzjdLT1+X55zmEptU1cP/A==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry/types': 7.88.0
+      '@sentry/types': 7.94.1
     dev: false
 
   /@sinclair/typebox@0.24.51:
@@ -3841,6 +3852,12 @@ packages:
 
   /@splidejs/splide@4.1.4:
     resolution: {integrity: sha512-5I30evTJcAJQXt6vJ26g2xEkG+l1nXcpEw4xpKh0/FWQ8ozmAeTbtniVtVmz2sH1Es3vgfC4SS8B2X4o5JMptA==}
+    dev: false
+
+  /@stencil/core@4.10.0:
+    resolution: {integrity: sha512-7lDTPY1IxXN2/C+wQPHt3e/dYgY4YgelA8MxOsU3ZftXtpzWad/QNWhSAtKisJMrSjQh41jMDOgD0yLBwV6E7w==}
+    engines: {node: '>=16.0.0', npm: '>=7.10.0'}
+    hasBin: true
     dev: false
 
   /@stencil/core@4.8.2:
@@ -4170,7 +4187,7 @@ packages:
   /@types/draft-js@0.11.16:
     resolution: {integrity: sha512-J10gYuBxOlIb7c6rTv85zF/mu7xp/2MfarkIRH7Fu2dybmFWKRz3DAgsDUOZmmqFtOMIUM/kokzxLN20/3SK+Q==}
     dependencies:
-      '@types/react': 18.2.45
+      '@types/react': 18.2.48
       immutable: 3.7.6
     dev: true
 
@@ -4243,7 +4260,7 @@ packages:
   /@types/hoist-non-react-statics@3.3.5:
     resolution: {integrity: sha512-SbcrWzkKBw2cdwRTwQAswfpB9g9LJWfjtUeW/jvNwbhC8cpmmNYVePa+ncbUe0rGTQ7G3Ff6mYUN2VMfLVr+Sg==}
     dependencies:
-      '@types/react': 18.2.45
+      '@types/react': 18.2.48
       hoist-non-react-statics: 3.3.2
 
   /@types/html-minifier-terser@6.1.0:
@@ -4334,20 +4351,20 @@ packages:
   /@types/react-dom@18.2.18:
     resolution: {integrity: sha512-TJxDm6OfAX2KJWJdMEVTwWke5Sc/E/RlnPGvGfS0W7+6ocy2xhDVQVh/KvC2Uf7kACs+gDytdusDSdWfWkaNzw==}
     dependencies:
-      '@types/react': 18.2.45
+      '@types/react': 18.2.48
     dev: true
 
   /@types/react-responsive-masonry@2.1.3:
     resolution: {integrity: sha512-aOFUtv3QwNMmy0BgpQpvivQ/+vivMTB6ARrzf9eTSXsLzXpVnfEtjpHpSknYDnr8KaQmlgeauAj8E7wo/qMOTg==}
     dependencies:
-      '@types/react': 18.2.45
+      '@types/react': 18.2.48
     dev: true
 
   /@types/react-router-dom@5.3.3:
     resolution: {integrity: sha512-kpqnYK4wcdm5UaWI3fLcELopqLrHgLqNsdpHauzlQktfkHL3npOSwtj1Uz9oKBAzs7lFtVkV8j83voAz2D8fhw==}
     dependencies:
       '@types/history': 4.7.11
-      '@types/react': 18.2.45
+      '@types/react': 18.2.48
       '@types/react-router': 5.1.20
     dev: true
 
@@ -4355,24 +4372,24 @@ packages:
     resolution: {integrity: sha512-jGjmu/ZqS7FjSH6owMcD5qpq19+1RS9DeVRqfl1FeBMxTDQAGwlMWOcs52NDoXaNKyG3d1cYQFMs9rCrb88o9Q==}
     dependencies:
       '@types/history': 4.7.11
-      '@types/react': 18.2.45
+      '@types/react': 18.2.48
     dev: true
 
   /@types/react-transition-group@4.4.10:
     resolution: {integrity: sha512-hT/+s0VQs2ojCX823m60m5f0sL5idt9SO6Tj6Dg+rdphGPIeJbJ6CxvBYkgkGKrYeDjvIpKTR38UzmtHJOGW3Q==}
     dependencies:
-      '@types/react': 18.2.45
+      '@types/react': 18.2.48
     dev: false
 
   /@types/react-virtualized@9.21.29:
     resolution: {integrity: sha512-+ODVQ+AyKngenj4OPpg43Hz4B9Rdjuz1Naxu9ypNc3Cjo0WVZTYhqXfF/Nm38i8PV/YXECRIl4mTAZK5hq2B+g==}
     dependencies:
       '@types/prop-types': 15.7.11
-      '@types/react': 18.2.45
+      '@types/react': 18.2.48
     dev: false
 
-  /@types/react@18.2.45:
-    resolution: {integrity: sha512-TtAxCNrlrBp8GoeEp1npd5g+d/OejJHFxS3OWmrPBMFaVQMSN0OFySozJio5BHxTuTeug00AVXVAjfDSfk+lUg==}
+  /@types/react@18.2.48:
+    resolution: {integrity: sha512-qboRCl6Ie70DQQG9hhNREz81jqC1cs9EVNcjQ1AU+jH6NFfSAhVVbrrY/+nSF+Bsk4AOwm9Qa61InvMCyV+H3w==}
     dependencies:
       '@types/prop-types': 15.7.11
       '@types/scheduler': 0.16.8
@@ -4442,7 +4459,7 @@ packages:
     resolution: {integrity: sha512-mmiVvwpYklFIv9E8qfxuPyIt/OuyIrn6gMOAMOFUO3WJfSrSE+sGUoa4PiZj77Ut7bKZpaa6o1fBKS/4TOEvnA==}
     dependencies:
       '@types/hoist-non-react-statics': 3.3.5
-      '@types/react': 18.2.45
+      '@types/react': 18.2.48
       csstype: 3.1.3
     dev: true
 
@@ -12450,7 +12467,7 @@ packages:
       - webpack-plugin-serve
     dev: true
 
-  /react-select@5.8.0(@types/react@18.2.45)(react-dom@18.2.0)(react@18.2.0):
+  /react-select@5.8.0(@types/react@18.2.48)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-TfjLDo58XrhP6VG5M/Mi56Us0Yt8X7xD6cDybC7yoRMUNm7BGO7qk8J0TLQOua/prb8vUOtsfnXZwfm30HGsAA==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
@@ -12458,7 +12475,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.23.6
       '@emotion/cache': 11.11.0
-      '@emotion/react': 11.11.1(@types/react@18.2.45)(react@18.2.0)
+      '@emotion/react': 11.11.1(@types/react@18.2.48)(react@18.2.0)
       '@floating-ui/dom': 1.5.3
       '@types/react-transition-group': 4.4.10
       memoize-one: 6.0.0
@@ -12466,7 +12483,7 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       react-transition-group: 4.4.5(react-dom@18.2.0)(react@18.2.0)
-      use-isomorphic-layout-effect: 1.1.2(@types/react@18.2.45)(react@18.2.0)
+      use-isomorphic-layout-effect: 1.1.2(@types/react@18.2.48)(react@18.2.0)
     transitivePeerDependencies:
       - '@types/react'
     dev: false
@@ -14235,7 +14252,7 @@ packages:
       requires-port: 1.0.0
     dev: true
 
-  /use-isomorphic-layout-effect@1.1.2(@types/react@18.2.45)(react@18.2.0):
+  /use-isomorphic-layout-effect@1.1.2(@types/react@18.2.48)(react@18.2.0):
     resolution: {integrity: sha512-49L8yCO3iGT/ZF9QttjwLF/ZD9Iwto5LnH5LmEdk/6cFmXddqi2ulF0edxTwjj+7mqvpVVGQWvbXZdn32wRSHA==}
     peerDependencies:
       '@types/react': '*'
@@ -14244,7 +14261,7 @@ packages:
       '@types/react':
         optional: true
     dependencies:
-      '@types/react': 18.2.45
+      '@types/react': 18.2.48
       react: 18.2.0
     dev: false
 

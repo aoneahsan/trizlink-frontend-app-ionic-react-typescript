@@ -122,6 +122,7 @@ const ZaionsRoutes = {
     },
 
     ShortLinks: {
+      PrivateRedirectRoute: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/${CONSTANTS.SHORT_LINK.urlStaticPath}/${CONSTANTS.RouteParams.urlPath}`,
       Main: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/short-links/list/${CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
       Create: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/short-links/create`,
       Edit: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/short-links/edit/${CONSTANTS.RouteParams.editShortLinkIdParam}`,

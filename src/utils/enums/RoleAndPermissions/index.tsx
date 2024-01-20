@@ -243,6 +243,7 @@ export enum permissionsEnum {
   create_shortLink = 'create_shortLink',
   update_shortLink = 'update_shortLink',
   delete_shortLink = 'delete_shortLink',
+  view_by_private_link = 'view_by_private_link',
   replicate_shortLink = 'replicate_shortLink',
   restore_shortLink = 'restore_shortLink',
   forceDelete_shortLink = 'forceDelete_shortLink',
@@ -430,6 +431,7 @@ export enum shareWSPermissionEnum {
   update_sws_shortLink = 'update_sws_shortLink',
   delete_sws_shortLink = 'delete_sws_shortLink',
   replicate_sws_shortLink = 'replicate_sws_shortLink',
+  view_sws_by_private_link = 'view_sws_by_private_link',
   restore_sws_shortLink = 'restore_sws_shortLink',
   forceDelete_sws_shortLink = 'forceDelete_sws_shortLink',
   // link in bio

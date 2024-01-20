@@ -1314,6 +1314,7 @@ const ZLinkInBioActionPopover: React.FC<{
   const editLinkInBioDetails = async (): Promise<void> => {
     try {
       if (linInBioId?.trim()?.length > 0) {
+        dismissZIonPopover();
         // was using history here.
         zNavigatePushRoute(
           createRedirectRoute({

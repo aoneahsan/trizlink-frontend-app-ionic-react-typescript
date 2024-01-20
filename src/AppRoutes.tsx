@@ -20,6 +20,9 @@ const ZInvitationSLRedirectPage = lazy(
 );
 
 const ZShareWSView = lazy(() => import('./pages/AdminPanel/ShareWS/View'));
+const ZPrivateRedirectRoutePage = lazy(
+  () => import('./pages/AdminPanel/links/PrivateRedirectRoutePage')
+);
 // const TestingReactDropzone = lazy(() => import('./Testing/ReactDropZone'));
 const Z400View = lazy(() => import('./components/Errors/400'));
 const Z401View = lazy(() => import('./components/Errors/401'));
@@ -300,6 +303,12 @@ const AppRoutes = (): JSX.Element => {
           exact
           path={ZaionsRoutes.AdminPanel.ShortLinks.Main}
           Component={ZShortLinksListPage}
+        />
+
+        <PrivateRoute
+          exact
+          path={ZaionsRoutes.AdminPanel.ShortLinks.PrivateRedirectRoute}
+          Component={ZPrivateRedirectRoutePage}
         />
 
         <PrivateRoute

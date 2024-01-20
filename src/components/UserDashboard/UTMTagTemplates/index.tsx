@@ -27,7 +27,7 @@ import ZaionsAddUtmTags from '@/components/InPageComponents/ZaionsModals/AddUtmT
 // Global Constants
 import {
   formatReactSelectOption,
-  stringifyZQueryString,
+  isZNonEmptyString,
   zAddUrlProtocol,
   zExtractUrlParts
 } from '@/utils/helpers';
@@ -142,39 +142,37 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
     try {
       const { utmCampaign, utmMedium, utmSource, utmTerm, utmContent } =
         values.UTMTags;
-      const _queryParams: Record<string, string> = {};
       const _baseURL = zAddUrlProtocol(values?.target?.url ?? '');
+      const _baseUrlWithoutParams = zExtractUrlParts(_baseURL);
 
       if (isURL(_baseURL)) {
-        const _baseUrlWithoutParams = zExtractUrlParts(_baseURL).origin;
-
-        if (utmCampaign !== undefined && utmCampaign.length > 0) {
-          _queryParams.utm_campaign = utmCampaign;
+        if (utmCampaign !== undefined && isZNonEmptyString(utmCampaign)) {
+          _baseUrlWithoutParams?.searchParams?.set('utm_campaign', utmCampaign);
         }
 
-        if (utmMedium !== undefined && utmMedium.length > 0) {
-          _queryParams.utm_medium = utmMedium;
+        if (utmMedium !== undefined && isZNonEmptyString(utmMedium)) {
+          _baseUrlWithoutParams?.searchParams?.set('utm_medium', utmMedium);
         }
 
-        if (utmSource !== undefined && utmSource.length > 0) {
-          _queryParams.utm_source = utmSource;
+        if (utmSource !== undefined && isZNonEmptyString(utmSource)) {
+          _baseUrlWithoutParams?.searchParams?.set('utm_source', utmSource);
         }
 
-        if (utmTerm !== undefined && utmTerm.length > 0) {
-          _queryParams.utm_term = utmTerm;
+        if (utmTerm !== undefined && isZNonEmptyString(utmTerm)) {
+          _baseUrlWithoutParams?.searchParams?.set('utm_term', utmTerm);
         }
 
-        if (utmContent !== undefined && utmContent.length > 0) {
-          _queryParams.utm_content = utmContent;
+        if (utmContent !== undefined && isZNonEmptyString(utmContent)) {
+          _baseUrlWithoutParams?.searchParams?.set('utm_content', utmContent);
         }
 
-        const _queryStringParams = stringifyZQueryString(_queryParams);
-
-        void setFieldValue(
-          'target.url',
-          `${_baseUrlWithoutParams}${`?${_queryStringParams}` ?? ''}`,
-          false
-        );
+        if (isZNonEmptyString(_baseUrlWithoutParams?.toString())) {
+          void setFieldValue(
+            'target.url',
+            _baseUrlWithoutParams?.toString(),
+            false
+          );
+        }
       }
     } catch (error) {
       reportCustomError(error);
@@ -443,6 +441,7 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
             onChange={_value => {
               if (_value !== undefined) {
                 selectFromTemplate(
+                  // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
                   (_value as ZaionsRSelectOptions)?.value as string
                 );
               }

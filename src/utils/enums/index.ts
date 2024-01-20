@@ -142,6 +142,7 @@ export enum API_URL_ENUM {
   // Short links
   shortLinks_create_list = 'shortLinks_create_list',
   shortLinks_list = 'shortLinks_list',
+  view_sl_by_private_link = 'view_sl_by_private_link',
   shortLinks_update_delete = 'shortLinks_update_delete',
   shortLinks_is_path_available = 'shortLinks_is_path_available',
   ShortLink_folders_create_list = 'ShortLink_folders_create_list',

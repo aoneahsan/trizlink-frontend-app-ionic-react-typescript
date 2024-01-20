@@ -718,9 +718,6 @@ const ZInpageMainContent: React.FC = () => {
   // #endregion
 
   // #region Recoils.
-  const ZWsLibLimitsRState = useRecoilValue(
-    ZWsRemainingLimitsRStateSelectorFamily(planFeaturesEnum.linkInBio)
-  );
   // #endregion
 
   // #region Apis.
@@ -786,8 +783,6 @@ const ZInpageMainContent: React.FC = () => {
     }
   );
 
-  const { presentZIonModal: presentZReachedLimitModal } =
-    useZIonModal(ZReachedLimitModal);
   // #endregion
 
   // #region Functions.
@@ -1073,15 +1068,9 @@ const ZInpageMainContent: React.FC = () => {
                   CONSTANTS.testingSelectors.linkInBio.listPage.createBtn
                 }
                 onClick={() => {
-                  if (ZWsLibLimitsRState === false) {
-                    presentZReachedLimitModal({
-                      _cssClass: 'reached-limit-modal-size'
-                    });
-                  } else {
-                    presentAddLinkInBioModal({
-                      _cssClass: 'lib-create-modal-size'
-                    });
-                  }
+                  presentAddLinkInBioModal({
+                    _cssClass: 'lib-create-modal-size'
+                  });
                 }}
                 // className={classNames({
                 // 'my-2': true,
