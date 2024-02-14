@@ -364,7 +364,8 @@ const GeoLocation: React.FC = () => {
                                   }
                                   errorText={
                                     errors.geoLocation !== undefined
-                                      ? ((
+                                      ? // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
+                                        ((
                                           errors.geoLocation[
                                             _index
                                           ] as GeoLocationErrorsType

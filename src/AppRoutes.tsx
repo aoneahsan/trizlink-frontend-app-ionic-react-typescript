@@ -161,7 +161,7 @@ const ZValidateInvitationPage = lazy(
   () => import('./pages/ValidateInvitation')
 );
 
-// const ZaionsTestPage = lazy(() => import('./pages/TestPage'));
+const ZaionsTestPage = lazy(() => import('./pages/TestPage'));
 const ZWorkspaceSettings = lazy(() => import('./pages/AdminPanel/WSSettings'));
 const ZWSSettingsTeamViewPage = lazy(
   () => import('./pages/AdminPanel/WSSettings/Team/View')
@@ -229,11 +229,13 @@ const AppRoutes = (): JSX.Element => {
           component={TestingReactDropzone}
         />
 
+         */}
+
         <Route
           exact
           path={ZaionsRoutes.Testing.Page}
           component={ZaionsTestPage}
-        /> */}
+        />
 
         {/* Public Routes */}
         <PublicRoute

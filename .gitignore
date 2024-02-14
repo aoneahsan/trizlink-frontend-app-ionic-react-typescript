@@ -135,3 +135,38 @@ yarn-debug.log*
 yarn-error.log*
 
 .stencil/
+
+
+
+
+# Copied from https://github.com/ionic-team/capacitor/blob/main/.gitignore
+.idea/
+dist/
+types/
+.sourcemaps
+xcuserdata/
+node_modules/
+Pods/
+*.map
+.DS_Store
+Podfile.lock
+Build/*
+build/
+Index/
+.*.sw*
+android-template.iml
+!/build/.npmkeep
+lerna-debug.log
+local.properties
+contents.xcworkspacedata
+android-template/.gradle/
+android-template/app/app.iml
+.gradle/
+.settings/
+.project
+.env
+capacitor-build.log
+
+# Carthage and Carthage-built binaries
+Carthage
+*.xcframework.zip

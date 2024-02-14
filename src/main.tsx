@@ -13,9 +13,9 @@ const root = container !== null && createRoot(container);
 if (root !== false) {
   root.render(
     // TODO: Must re-add the "React.StrictMode back"
-    <>
+    <React.StrictMode>
       <AppEntryPoint />
-    </>
+    </React.StrictMode>
   );
 }
 

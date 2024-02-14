@@ -205,8 +205,8 @@ const ZPrivateRedirectRoutePage: React.FC = () => {
           const _linkExpiration =
             getSLDataFromPrivateUrl?.linkExpirationInfo as LinkExpirationInfoInterface;
 
-          //   const coordinates = await Geolocation.getCurrentPosition();
-          //   console.log({ _userPosition: coordinates });
+          const coordinates = await Geolocation.getCurrentPosition();
+          console.log({ _userPosition: coordinates });
           //   const _userCountry = await getCountryFromCoordinates({
           //     latitude: coordinates?.coords?.latitude,
           //     longitude: coordinates?.coords?.longitude

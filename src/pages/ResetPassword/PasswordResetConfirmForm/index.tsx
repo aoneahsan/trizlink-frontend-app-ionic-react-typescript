@@ -3,8 +3,10 @@ import React, { useEffect, useState } from 'react';
 
 // Package Imports
 import { Formik, useFormikContext } from 'formik';
+import { AxiosError } from 'axios';
 import classNames from 'classnames';
 import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
+import { useSetRecoilState } from 'recoil';
 
 // Custom Imports
 import {
@@ -49,7 +51,6 @@ import {
   showErrorNotification,
   showSuccessNotification
 } from '@/utils/notification';
-import { AxiosError } from 'axios';
 import { type ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { ZErrorCodeEnum } from '@/utils/enums/ErrorsCodes';
 import { reportCustomError, ZCustomError } from '@/utils/customErrorType';
@@ -59,14 +60,11 @@ import {
   type UserAccountType
 } from '@/types/UserAccount/index.type';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
-import { useSetRecoilState } from 'recoil';
 import {
   ZaionsAuthTokenData,
   ZaionsUserAccountRStateAtom
 } from '@/ZaionsStore/UserAccount/index.recoil';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import ZCountdown from '@/components/CustomComponents/ZCountDown';
-import dayjs from 'dayjs';
 
 // Style
 
@@ -562,40 +560,6 @@ const ZConfirmOptTab: React.FC = () => {
             'ion-invalid': values?.isOTPApiError,
             'ion-valid': touched?.otp === true && !values?.isOTPApiError
           })}
-        />
-
-        <ZCountdown
-          onTick={() => {
-            if (
-              dayjs().isAfter(
-                dayjs(values?.OTPCodeValidTill).subtract(4, 'minute')
-              )
-            ) {
-              void (async () => {
-                const userData = {
-                  email: values?.emailAddress,
-                  tab: ZSetPasswordTabEnum.confirmOptTab,
-                  OTPCodeValidTill: values?.OTPCodeValidTill,
-                  resendOTPValidCheck: true
-                };
-
-                await STORAGE.SET(
-                  LOCALSTORAGE_KEYS.FORGET_PASSWORD_USER_DATA,
-                  userData
-                );
-              })();
-              void setFieldValue('resendOTPValidCheck', true, false);
-            }
-          }}
-          countDownTime={values?.OTPCodeValidTill}
-          color='dark'
-          component={({ d, color }) => {
-            return (
-              <ZIonText className='h-full mt-4 ms-2'>
-                {d.minutes}:{d.seconds}
-              </ZIonText>
-            );
-          }}
         />
       </div>
 
