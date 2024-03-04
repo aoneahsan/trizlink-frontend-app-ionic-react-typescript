@@ -17,7 +17,7 @@ import { useParams } from 'react-router';
  * ? Like import of custom components is a custom import
  * */
 import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
-import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/userButton';
 import {
   ZIonCol,
   ZIonIcon,
