@@ -8,7 +8,6 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-// import { motion } from 'framer-motion';
 import classNames from 'classnames';
 
 /**

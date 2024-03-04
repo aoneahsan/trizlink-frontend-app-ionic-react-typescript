@@ -34,7 +34,6 @@ import {
   ZIonList,
   ZIonTitle,
   ZIonInput,
-  ZIonNote,
   ZIonButton
 } from '@/components/ZIonComponents';
 
