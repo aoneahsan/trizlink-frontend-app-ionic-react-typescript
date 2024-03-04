@@ -13,8 +13,6 @@ import { type ZIonColorType } from '@/types/zaionsAppSettings.type';
 import { type ZUIAvatarApiDefaultParamsInterface } from '@/types/ZaionsApis.type';
 import { isZNonEmptyString } from '@/utils/helpers';
 
-// Style
-
 // Component Type
 interface ZUserAvatarButtonInterface {
   style?: Record<string, unknown>;

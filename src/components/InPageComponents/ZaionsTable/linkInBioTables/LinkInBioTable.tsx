@@ -103,8 +103,6 @@ import {
   ZUserSettingTypeEnum
 } from '@/types/AdminPanel/index.type';
 
-// Styles
-
 const ZaionsLinkInBioLinksTable: React.FC<{
   showSkeleton?: boolean;
 }> = ({ showSkeleton = false }) => {
