@@ -396,7 +396,6 @@ export const useZInfiniteQuery = <T>({
           (el as unknown as { data: { currentPage: number } })?.data
             ?.currentPage
       );
-      // console.log({ pagesIndex, _pageParam });
 
       if (
         pagesIndex !== undefined &&
@@ -408,13 +407,6 @@ export const useZInfiniteQuery = <T>({
       return false;
     },
     select: data => {
-      const _data = data as { pages: unknown[]; pageParams: number[] };
-
-      // _data?.pages?.map(el => el)
-      const _items = Array.from(_data?.pages, el => [
-        ...(el as { data: { items: unknown[] } })?.data?.items
-      ]);
-      console.log({ _items });
       if (_shouldExtractData) {
         switch (_extractType) {
           case ZRQGetRequestExtractEnum.extractItems:
@@ -457,7 +449,6 @@ export const useZInfiniteQuery = <T>({
         const _error = (error as AxiosError)?.response;
         const _errorMessage = (_error?.data as { errors: { item: string[] } })
           ?.errors?.item[0];
-        console.log({ __errorMessage: _errorMessage });
         // check if it's unauthenticated error
         if (
           _error?.status !== undefined &&

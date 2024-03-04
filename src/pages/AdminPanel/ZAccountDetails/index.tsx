@@ -687,7 +687,7 @@ const ZAccountDetails: React.FC = () => {
                             </ZIonRow>
                           </ZIonItem>
 
-                          {/* zaions_tappk link redirects */}
+                          {/* Trizlink link redirects */}
                           <ZIonItem className='ion-no-padding'>
                             <ZIonRow className='w-full ion-align-items-center ion-no-padding'>
                               <ZIonCol

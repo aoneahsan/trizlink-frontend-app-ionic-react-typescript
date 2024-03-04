@@ -1202,8 +1202,6 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                             );
 
                             if (isZNonEmptyString(_result?.title)) {
-                              console.log({ c: _result });
-
                               void setFieldValue(
                                 'title',
                                 _result?.title,

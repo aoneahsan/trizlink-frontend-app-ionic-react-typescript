@@ -411,7 +411,6 @@ const WorkspacesSettings: React.FC = () => {
             {({ values, setFieldValue, dirty, handleSubmit }) => {
               // eslint-disable-next-line react-hooks/rules-of-hooks
               useEffect(() => {
-                console.log({ dirty });
                 formikDirtyHandler(dirty);
               }, [dirty]);
 

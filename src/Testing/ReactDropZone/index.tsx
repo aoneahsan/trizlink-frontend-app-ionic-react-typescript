@@ -204,7 +204,6 @@ const TestingReactDropzone: React.FC = () => {
             const reader = new FileReader();
 
             reader.onload = ({ target }) => {
-              console.log({ c: target?.result });
               setCompState(oldValues => ({
                 ...oldValues,
                 fileUrl: target?.result as string

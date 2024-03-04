@@ -891,11 +891,6 @@ export const ZInpageTable: React.FC = () => {
                   zShortLinksTable.getState().pagination.pageIndex + 1
                 );
 
-                console.log({
-                  log: 'yess',
-                  c: zShortLinksTable.getState().pagination.pageIndex
-                });
-
                 if (workspaceId !== undefined) {
                   zNavigatePushRoute(
                     createRedirectRoute({

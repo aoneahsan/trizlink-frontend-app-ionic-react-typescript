@@ -6,7 +6,7 @@ import {
   type FirebaseApp,
   initializeApp as initializeFirebaseApp
 } from 'firebase/app';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import {
   frbAnalyticsRState,
   frbAppRStateAtom,
@@ -33,11 +33,8 @@ const FirebaseHOC: React.FC<IFirebaseHOCProps> = ({ children }) => {
     isProcessing: true
   });
   const [frbAppRState, setFrbAppRState] = useRecoilState(frbAppRStateAtom);
-  const [frbRemoteConfigRState, setFrbRemoteConfigRState] = useRecoilState(
-    frbRemoteConfigRStateAtom
-  );
-  const [frbAnalyticsState, setFrbAnalyticsState] =
-    useRecoilState(frbAnalyticsRState);
+  const setFrbRemoteConfigRState = useSetRecoilState(frbRemoteConfigRStateAtom);
+  const setFrbAnalyticsState = useSetRecoilState(frbAnalyticsRState);
 
   useEffect(() => {
     // Initialize Firebase App and It's Services
@@ -51,14 +48,16 @@ const FirebaseHOC: React.FC<IFirebaseHOCProps> = ({ children }) => {
         // Firebase App Initialization
         const _firebaseApp = initializeAndSetupFirebaseApp();
 
-        // Firebase Remote Config Keys Setup
-        await fetchAndSetupFrbRemoteConfigKeys(
-          _firebaseApp,
-          setFrbRemoteConfigRState
-        );
+        if (_firebaseApp !== undefined) {
+          // Firebase Remote Config Keys Setup
+          await fetchAndSetupFrbRemoteConfigKeys(
+            _firebaseApp,
+            setFrbRemoteConfigRState
+          );
 
-        // Setup Firebase Analytics Feature
-        await setupFrbAnalytics(_firebaseApp, setFrbAnalyticsState);
+          // Setup Firebase Analytics Feature
+          await setupFrbAnalytics(_firebaseApp, setFrbAnalyticsState);
+        }
 
         setCompState(oldState => ({
           ...oldState,
@@ -71,30 +70,33 @@ const FirebaseHOC: React.FC<IFirebaseHOCProps> = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const initializeAndSetupFirebaseApp = (): FirebaseApp => {
-    const firebaseApp = initializeFirebaseApp(firebaseConfig, {
-      name: firebaseConfig.projectId,
-      automaticDataCollectionEnabled: false
-    });
+  const initializeAndSetupFirebaseApp = (): FirebaseApp | undefined => {
+    if (firebaseConfig.apiKey !== '') {
+      const firebaseApp = initializeFirebaseApp(firebaseConfig, {
+        name: firebaseConfig.projectId,
+        automaticDataCollectionEnabled: false
+      });
 
-    setFrbAppRState(oldState => ({
-      ...oldState,
-      frbAppInitialized: true,
-      frbAppInitLastTriedAt: new Date().toString(),
-      frbAppData: firebaseApp
-    }));
-
-    return firebaseApp;
+      setFrbAppRState(oldState => ({
+        ...oldState,
+        frbAppInitialized: true,
+        frbAppInitLastTriedAt: new Date().toString(),
+        frbAppData: firebaseApp
+      }));
+      return firebaseApp;
+    } else {
+      setFrbAppRState(oldState => ({
+        ...oldState,
+        frbAppInitialized: true,
+        frbAppInitLastTriedAt: new Date().toString(),
+        frbAppData: null
+      }));
+    }
   };
 
   if (compState.isProcessing) {
     return <ZFallbackIonSpinner />;
-  } else if (
-    !compState.isProcessing &&
-    frbAppRState.frbAppInitialized &&
-    frbRemoteConfigRState.isInitialized &&
-    frbAnalyticsState.isInitialized
-  ) {
+  } else if (!compState.isProcessing && frbAppRState.frbAppInitialized) {
     return <>{children}</>;
   } else {
     return <Z500View />;

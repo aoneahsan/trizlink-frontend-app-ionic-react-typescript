@@ -74,7 +74,6 @@ const ZaionsAddLinkInBioModal: React.FC<{
 }) => {
   const { getRQCDataHandler } = useZGetRQCacheData();
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
-  console.log({ workspaceId, wsShareId, shareWSMemberId });
 
   // Create new link-in-bio API.
   const { mutateAsync: createLinkInBioMutate } =

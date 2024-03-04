@@ -25,7 +25,7 @@ export const setupFrbAnalytics = async (
       // initialize the Google Analytics SDK and returns the analytics instance
       const _frbAnalytics = initializeAnalytics(_frbApp, {
         config: {
-          page_title: 'zaions_tappk - Page 1',
+          page_title: 'Trizlink - Page 1',
           description: 'description for initializeAnalytics'
         }
       });

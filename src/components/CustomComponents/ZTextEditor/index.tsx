@@ -134,14 +134,6 @@ const ZRichTextEditor: React.FC<ZTextEditorInterface> = ({
     setEditorState(newState);
   };
 
-  // const rawContentState = convertToRaw(editorState.getCurrentContent());
-
-  // useEffect(() => {
-  //   const markup = draftToHtml(rawContentState);
-
-  //   console.log({ markup });
-  // }, [rawContentState]);
-
   return (
     <div
       className={classNames(className, {

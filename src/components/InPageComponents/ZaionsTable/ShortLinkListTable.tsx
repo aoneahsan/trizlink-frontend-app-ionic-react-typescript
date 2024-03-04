@@ -400,8 +400,6 @@ const ZInpageTable: React.FC = () => {
   //   _extractType: ZRQGetRequestExtractEnum.extractPage,
   //   _pageParam: Number(pageindex)
   // });
-  // console.log({ ShortLinksInfiniteQueryData });
-  // console.log({ hasNextPage, isFetching, isFetchingNextPage, status });
 
   // Request for getting share workspace short links data.
   const { data: swsShortLinksData } = useZRQGetRequest<ShortLinkType[]>({
@@ -1234,8 +1232,6 @@ const ZInpageTable: React.FC = () => {
                 //         (el as { data: { currentPage: number } })?.data
                 //           ?.currentPage
                 //     );
-
-                //     // console.log({ pagesIndex, pageindex });
 
                 //     if (!pagesIndex?.includes(Number(pageindex) + 1)) {
                 //       await ShortLinksInfiniteQueryFetchNextPage();

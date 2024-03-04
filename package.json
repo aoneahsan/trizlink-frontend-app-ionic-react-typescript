@@ -1,7 +1,7 @@
 {
-  "name": "com.zaions_tappk.app",
-  "displayName": "zaions_tappk",
-  "description": "zaions_tappk project - Project of Zaions (https://zaions.com).",
+  "name": "com.Trizlink.app",
+  "displayName": "Trizlink",
+  "description": "Trizlink project - Project of Zaions (https://zaions.com).",
   "private": true,
   "version": "1.0.0",
   "type": "module",

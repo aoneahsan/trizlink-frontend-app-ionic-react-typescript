@@ -54,23 +54,15 @@ import {
  * ? Import of recoil states is a Recoil State import
  * */
 import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
-import {
-  useZInvalidateReactQueries,
-  useZRQGetRequest
-} from '@/ZaionsHooks/zreactquery-hooks';
-import { API_URL_ENUM, ZWSTypeEum } from '@/utils/enums';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import { API_URL_ENUM } from '@/utils/enums';
 import {
   type LinkTargetType,
   type ShortLinkType
 } from '@/types/AdminPanel/linksType';
 import CONSTANTS from '@/utils/constants';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import {
-  _getQueryKey,
-  isZNonEmptyString,
-  isZNonEmptyStrings,
-  zGenerateShortLink
-} from '@/utils/helpers';
+import { isZNonEmptyString, zGenerateShortLink } from '@/utils/helpers';
 import {
   call,
   callOutline,
@@ -135,7 +127,7 @@ const PageAnalyticsInfoBlocks = lazy(
 
 const ZShortLinkAnalytics: React.FC = () => {
   // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
-  const { workspaceId, shareWSMemberId, wsShareId, editLinkId } = useParams<{
+  const { workspaceId } = useParams<{
     editLinkId?: string;
     workspaceId?: string;
     shareWSMemberId?: string;
@@ -278,7 +270,7 @@ const ZShortLinkAnalytics: React.FC = () => {
 
 const ZInpageMainContent: React.FC = () => {
   // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
-  const { workspaceId, shareWSMemberId, wsShareId, editLinkId } = useParams<{
+  const { workspaceId, editLinkId } = useParams<{
     editLinkId?: string;
     workspaceId?: string;
     shareWSMemberId?: string;
@@ -286,8 +278,7 @@ const ZInpageMainContent: React.FC = () => {
   }>();
 
   // #region Custom hooks.
-  const { isXlScale, isMdScale, isLgScale, isSmScale } = useZMediaQueryScale(); // media query hook.
-  const { zInvalidateReactQueries } = useZInvalidateReactQueries();
+  const { isMdScale, isSmScale } = useZMediaQueryScale(); // media query hook.
   // #endregion
 
   // #region Apis.
@@ -314,39 +305,8 @@ const ZInpageMainContent: React.FC = () => {
       _extractType: ZRQGetRequestExtractEnum.extractItem,
       _showLoader: false
     });
-
-  const { data: selectedShortLinkAnalyticsData } = useZRQGetRequest({
-    _url: API_URL_ENUM.sl_analytics_list,
-    _key: _getQueryKey({
-      keys: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.ANALYTICS],
-      additionalKeys: [workspaceId, wsShareId, shareWSMemberId, editLinkId]
-    }),
-    _itemsIds: _getQueryKey({
-      keys: [
-        isZNonEmptyString(workspaceId)
-          ? ZWSTypeEum.personalWorkspace
-          : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
-          ? ZWSTypeEum.shareWorkspace
-          : ''
-      ],
-      additionalKeys: [workspaceId, shareWSMemberId, editLinkId]
-    }),
-    _urlDynamicParts: [
-      CONSTANTS.RouteParams.workspace.type,
-      CONSTANTS.RouteParams.workspace.workspaceId,
-      CONSTANTS.RouteParams.shortLink.shortLinkId
-    ],
-    _shouldFetchWhenIdPassed: !(
-      isZNonEmptyStrings([wsShareId, shareWSMemberId, editLinkId]) ||
-      isZNonEmptyStrings([workspaceId, editLinkId])
-    )
-  });
-
-  console.log({ selectedShortLinkAnalyticsData });
-
   // #endregion
 
-  //
   const _shortLink = useMemo(() => {
     let _generateShortLink: string | undefined = '';
     if (

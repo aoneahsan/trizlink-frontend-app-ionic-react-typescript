@@ -79,8 +79,6 @@ const ZaionsPricing: React.FC = () => {
       _authenticated: false,
       _checkPermissions: false
     });
-
-  console.log({ ZPlansData });
   // #endregion
 
   return (
