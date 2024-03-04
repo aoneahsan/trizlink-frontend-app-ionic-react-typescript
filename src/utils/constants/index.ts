@@ -311,13 +311,13 @@ export const API_URLS = {
 
 // Site
 export const PRODUCT_NAME = 'Trizlink';
-export const PRODUCT_DOMAIN = 'prettylinks.zaions.com';
+export const PRODUCT_DOMAIN = ENVS.frontendDomain;
 export const CurrentProductDetails = {
-  Name: ''
+  Name: 'Trizlink'
 } as const;
 
 export const ExternalURL = {
-  GenericExternalURL: 'https://prettylinks.zaions.com',
+  GenericExternalURL: `https://${ENVS.frontendDomain}`,
   FacebookUrl: 'https://www.facebook.com/'
 } as const;
 
