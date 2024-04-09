@@ -8,7 +8,7 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { motion } from 'framer-motion';
+// import { motion } from 'framer-motion';
 
 /**
  * Custom Imports go down
@@ -52,15 +52,16 @@ import { motion } from 'framer-motion';
  * */
 
 const FramerMotion: React.FC = () => {
-  const _initial = { opacity: 0, scale: 0.5 };
-  const _animate = { opacity: 1, scale: 1 };
-  const _transition = { duration: 0.5 };
+  // const _initial = { opacity: 0, scale: 0.5 };
+  // const _animate = { opacity: 1, scale: 1 };
+  // const _transition = { duration: 0.5 };
   return (
-    <motion.div
-      initial={_initial}
-      animate={_animate}
-      transition={_transition}
-    />
+    // <motion.div
+    //   initial={_initial}
+    //   animate={_animate}
+    //   transition={_transition}
+    // />
+    <>i removed the package</>
   );
 };
 
