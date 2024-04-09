@@ -56,6 +56,7 @@ import {
 import { Formik } from 'formik';
 import { reportCustomError } from '@/utils/customErrorType';
 import { showSuccessNotification } from '@/utils/notification';
+import SupportTrizlinkOnPatreon from '@/components/SupportTrizlinkOnPatreon';
 
 /**
  * Custom Imports go down
@@ -254,139 +255,142 @@ const ZLinkInBioFormSettingsModal: React.FC<{
   };
 
   return (
-    <Formik
-      initialValues={FormikInitialValues}
-      enableReinitialize
-      onSubmit={values => {
-        const zStringifyData = zStringify({
-          type: ZUserSettingTypeEnum.libFormSettings,
-          settings: zStringify({ addBlockModal: values.addBlockModal })
-        });
-        void formikSubmitHandler(zStringifyData);
-      }}>
-      {({ values, setFieldValue, submitForm, isValid, dirty }) => {
-        return (
-          <>
-            <ZIonContent className='ion-padding'>
-              <div className='ion-text-end'>
-                <ZIonIcon
-                  icon={closeOutline}
-                  className='w-6 h-6 cursor-pointer'
-                  testingselector={
-                    CONSTANTS.testingSelectors.linkInBio.formPage.design.blocks
-                      .addModal.closeModalBtn
-                  }
-                  onClick={() => {
-                    dismissZIonModal();
-                  }}
-                />
-              </div>
-
-              <div className='flex flex-col ion-text-center ion-justify-content-center'>
-                <div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter'>
-                  <ZIonImg
-                    src={ProductFaviconSmall}
-                    className='mx-auto w-11 h-11'
+    <>
+      <SupportTrizlinkOnPatreon />
+      <Formik
+        initialValues={FormikInitialValues}
+        enableReinitialize
+        onSubmit={values => {
+          const zStringifyData = zStringify({
+            type: ZUserSettingTypeEnum.libFormSettings,
+            settings: zStringify({ addBlockModal: values.addBlockModal })
+          });
+          void formikSubmitHandler(zStringifyData);
+        }}>
+        {({ values, setFieldValue, submitForm, isValid, dirty }) => {
+          return (
+            <>
+              <ZIonContent className='ion-padding'>
+                <div className='ion-text-end'>
+                  <ZIonIcon
+                    icon={closeOutline}
+                    className='w-6 h-6 cursor-pointer'
+                    testingselector={
+                      CONSTANTS.testingSelectors.linkInBio.formPage.design
+                        .blocks.addModal.closeModalBtn
+                    }
+                    onClick={() => {
+                      dismissZIonModal();
+                    }}
                   />
                 </div>
 
-                <ZIonText
-                  color='dark'
-                  className='block mt-3 text-xl font-bold ion-text-center'>
-                  Link In Bio Form Page Settings
-                </ZIonText>
-              </div>
+                <div className='flex flex-col ion-text-center ion-justify-content-center'>
+                  <div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter'>
+                    <ZIonImg
+                      src={ProductFaviconSmall}
+                      className='mx-auto w-11 h-11'
+                    />
+                  </div>
 
-              <div className='w-full h-auto mt-3'>
-                <ZIonAccordionGroup>
-                  <ZIonAccordion value='blockForm'>
-                    <ZIonItem
-                      minHeight='2.5rem'
-                      slot='header'
-                      lines='none'
-                      color='light'
-                      className='ps-1 h-[2.5rem] flex overflow-hidden rounded-lg cursor-pointer mx-auto w-[104.6%] ion-activatable'
-                      testingselector={
-                        CONSTANTS.testingSelectors.pixels.listPage.filterSidebar
-                          .columnAccordionHead
-                      }
-                      // style={zIonItemStyle}
-                    >
-                      <ZIonText
-                        className={classNames({
-                          'text-sm ion-no-margin font-semibold': true
-                        })}
-                        color='dark'>
-                        Add Block Model Type
-                      </ZIonText>
-                    </ZIonItem>
+                  <ZIonText
+                    color='dark'
+                    className='block mt-3 text-xl font-bold ion-text-center'>
+                    Link In Bio Form Page Settings
+                  </ZIonText>
+                </div>
 
-                    <div
-                      className='py-2 ms-1 zaions__light_bg'
-                      slot='content'>
-                      <ZIonRadioGroup
-                        value={values.addBlockModal.Ui}
-                        onIonChange={({ target }) => {
-                          void setFieldValue(
-                            'addBlockModal.Ui',
-                            target.value,
-                            false
-                          );
-                        }}>
-                        <ZIonList
-                          lines='none'
-                          className='px-2 z-bg-transparent'>
-                          <ZIonItem className='overflow-hidden rounded-md'>
-                            <ZIonRadio
-                              value={addBlockModalUIEnum.minimalistic}
-                              className='io'>
-                              Minimalistic UI
-                            </ZIonRadio>
-                          </ZIonItem>
-                          <ZIonItem className='mt-2 overflow-hidden rounded-md'>
-                            <ZIonRadio value={addBlockModalUIEnum.advance}>
-                              Advance UI
-                            </ZIonRadio>
-                          </ZIonItem>
-                        </ZIonList>
-                      </ZIonRadioGroup>
-                    </div>
-                  </ZIonAccordion>
-                </ZIonAccordionGroup>
-              </div>
-            </ZIonContent>
+                <div className='w-full h-auto mt-3'>
+                  <ZIonAccordionGroup>
+                    <ZIonAccordion value='blockForm'>
+                      <ZIonItem
+                        minHeight='2.5rem'
+                        slot='header'
+                        lines='none'
+                        color='light'
+                        className='ps-1 h-[2.5rem] flex overflow-hidden rounded-lg cursor-pointer mx-auto w-[104.6%] ion-activatable'
+                        testingselector={
+                          CONSTANTS.testingSelectors.pixels.listPage
+                            .filterSidebar.columnAccordionHead
+                        }
+                        // style={zIonItemStyle}
+                      >
+                        <ZIonText
+                          className={classNames({
+                            'text-sm ion-no-margin font-semibold': true
+                          })}
+                          color='dark'>
+                          Add Block Model Type
+                        </ZIonText>
+                      </ZIonItem>
 
-            <ZIonFooter>
-              <ZIonRow className='mx-3 mt-2 ion-justify-content-between ion-align-items-center'>
-                <ZIonCol>
-                  <ZIonButton
-                    fill='outline'
-                    size='default'
-                    className='ion-text-capitalize'
-                    onClick={() => {
-                      dismissZIonModal();
-                    }}>
-                    Close
-                  </ZIonButton>
-                </ZIonCol>
+                      <div
+                        className='py-2 ms-1 zaions__light_bg'
+                        slot='content'>
+                        <ZIonRadioGroup
+                          value={values.addBlockModal.Ui}
+                          onIonChange={({ target }) => {
+                            void setFieldValue(
+                              'addBlockModal.Ui',
+                              target.value,
+                              false
+                            );
+                          }}>
+                          <ZIonList
+                            lines='none'
+                            className='px-2 z-bg-transparent'>
+                            <ZIonItem className='overflow-hidden rounded-md'>
+                              <ZIonRadio
+                                value={addBlockModalUIEnum.minimalistic}
+                                className='io'>
+                                Minimalistic UI
+                              </ZIonRadio>
+                            </ZIonItem>
+                            <ZIonItem className='mt-2 overflow-hidden rounded-md'>
+                              <ZIonRadio value={addBlockModalUIEnum.advance}>
+                                Advance UI
+                              </ZIonRadio>
+                            </ZIonItem>
+                          </ZIonList>
+                        </ZIonRadioGroup>
+                      </div>
+                    </ZIonAccordion>
+                  </ZIonAccordionGroup>
+                </div>
+              </ZIonContent>
 
-                <ZIonCol className='flex gap-2 ion-justify-content-end ion-align-items-center'>
-                  <ZIonButton
-                    size='default'
-                    disabled={!isValid || !dirty}
-                    className='ion-text-capitalize'
-                    onClick={() => {
-                      void submitForm();
-                    }}>
-                    Save
-                  </ZIonButton>
-                </ZIonCol>
-              </ZIonRow>
-            </ZIonFooter>
-          </>
-        );
-      }}
-    </Formik>
+              <ZIonFooter>
+                <ZIonRow className='mx-3 mt-2 ion-justify-content-between ion-align-items-center'>
+                  <ZIonCol>
+                    <ZIonButton
+                      fill='outline'
+                      size='default'
+                      className='ion-text-capitalize'
+                      onClick={() => {
+                        dismissZIonModal();
+                      }}>
+                      Close
+                    </ZIonButton>
+                  </ZIonCol>
+
+                  <ZIonCol className='flex gap-2 ion-justify-content-end ion-align-items-center'>
+                    <ZIonButton
+                      size='default'
+                      disabled={!isValid || !dirty}
+                      className='ion-text-capitalize'
+                      onClick={() => {
+                        void submitForm();
+                      }}>
+                      Save
+                    </ZIonButton>
+                  </ZIonCol>
+                </ZIonRow>
+              </ZIonFooter>
+            </>
+          );
+        }}
+      </Formik>
+    </>
   );
 };
 

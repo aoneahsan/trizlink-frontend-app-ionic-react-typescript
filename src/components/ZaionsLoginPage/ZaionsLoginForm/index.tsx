@@ -47,6 +47,7 @@ import {
 } from '@/types/ZaionsFormik.type';
 import { type ZGenericObject } from '@/types/zaionsAppSettings.type';
 import ZInputLengthConstant from '@/utils/constants/InputLenghtConstant';
+import TermsPrivacyAcceptedNote from '@/components/TermsPrivacyAcceptedNote';
 
 // Style
 
@@ -175,12 +176,8 @@ const ZaionsLoginForm: React.FC = () => {
   return (
     <ZIonRow className='ion-justify-content-center'>
       <ZIonCol
-        className='ion-text-start'
-        size='4.2'
-        sizeLg='5'
-        sizeMd='6.2'
-        sizeSm='8.2'
-        sizeXs='11.5'>
+        className='ion-text-start ion-no-padding'
+        size='12'>
         <Formik
           // Initial Values of sign up form fields
           initialValues={formikInitialValues}
@@ -301,20 +298,6 @@ const ZaionsLoginForm: React.FC = () => {
                     />
                   </ZIonButton>
                 </ZIonInput>
-                {/* <ZIonButton
-                  fill='clear'
-                  size='large'
-                  className='ion-no-padding ion-no-margin ms-3 w-max'
-                  onClick={() => {
-                    setCanViewPassword(OldVal => !OldVal);
-                  }}
-                  testingselector={
-                    CONSTANTS.testingSelectors.loginPage.canViewPasswordButton
-                  }>
-                  <ZIonIcon
-                    icon={canViewPassword ? eyeOffOutline : eyeOutline}
-                  />
-                </ZIonButton> */}
               </div>
 
               <div className='ion-text-end'>
@@ -342,37 +325,7 @@ const ZaionsLoginForm: React.FC = () => {
                 Log in
               </ZIonButton>
 
-              {/* Some Text */}
-              <div className='mt-3 mb-4 ion-text-center'>
-                <ZIonText
-                  className='text-[14px] '
-                  color='medium'>
-                  By signing in with an account, you agree to <br />{' '}
-                  {PRODUCT_NAME}
-                  &apos;s{' '}
-                  <ZIonRouterLink
-                    routerLink={ZaionsRoutes.HomeRoute}
-                    className='underline'
-                    color='medium'>
-                    Terms of Service
-                  </ZIonRouterLink>
-                  ,{' '}
-                  <ZIonRouterLink
-                    routerLink={ZaionsRoutes.HomeRoute}
-                    className='underline'
-                    color='medium'>
-                    Privacy Policy
-                  </ZIonRouterLink>{' '}
-                  and{' '}
-                  <ZIonRouterLink
-                    routerLink={ZaionsRoutes.HomeRoute}
-                    className='underline'
-                    color='medium'>
-                    Acceptable Use Policy
-                  </ZIonRouterLink>
-                  .
-                </ZIonText>
-              </div>
+              <TermsPrivacyAcceptedNote isRegisterPage={false} />
             </>
           )}
         </Formik>

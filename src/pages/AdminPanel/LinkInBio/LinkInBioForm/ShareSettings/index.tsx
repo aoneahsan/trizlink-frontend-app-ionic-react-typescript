@@ -111,6 +111,7 @@ import {
 } from '@/types/AdminPanel/linksType';
 import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type';
 import { ENVS } from '@/utils/envKeys';
+import SupportTrizlinkOnPatreon from '@/components/SupportTrizlinkOnPatreon';
 
 /**
  * Style files Imports go down
@@ -537,521 +538,526 @@ const LinkInBioShareSettings: React.FC = () => {
   );
 
   return (
-    <Formik
-      // #region ( Initial Values Start  )
-      initialValues={formikInitialValues}
-      enableReinitialize={true}
-      // #endregion ( Initial Values End  )
+    <>
+      <SupportTrizlinkOnPatreon />
+      <Formik
+        // #region ( Initial Values Start  )
+        initialValues={formikInitialValues}
+        enableReinitialize={true}
+        // #endregion ( Initial Values End  )
 
-      // #region ( Handling Validation & Errors Start  )
-      validate={values => {
-        const errors: {
-          target: {
-            url?: string;
-            phoneNumber?: string;
-            username?: string;
-            email?: string;
-            accountId?: string;
-            subject?: string;
-            message?: string;
+        // #region ( Handling Validation & Errors Start  )
+        validate={values => {
+          const errors: {
+            target: {
+              url?: string;
+              phoneNumber?: string;
+              username?: string;
+              email?: string;
+              accountId?: string;
+              subject?: string;
+              message?: string;
+            };
+            title?: string;
+            password: {
+              value?: string;
+            };
+            linkExpiration: {
+              redirectionLink?: string;
+            };
+            rotatorABTesting: Array<{
+              redirectionLink?: string;
+              percentage?: string;
+            }>;
+            geoLocation: Array<{
+              redirectionLink?: string;
+              country?: string;
+            }>;
+          } = {
+            target: {},
+            linkExpiration: {},
+            rotatorABTesting: [],
+            geoLocation: [],
+            password: {}
           };
-          title?: string;
-          password: {
-            value?: string;
-          };
-          linkExpiration: {
-            redirectionLink?: string;
-          };
-          rotatorABTesting: Array<{
-            redirectionLink?: string;
-            percentage?: string;
-          }>;
-          geoLocation: Array<{
-            redirectionLink?: string;
-            country?: string;
-          }>;
-        } = {
-          target: {},
-          linkExpiration: {},
-          rotatorABTesting: [],
-          geoLocation: [],
-          password: {}
-        };
 
-        // Link Title Validation Starts
-        validateField('title', values, errors, VALIDATION_RULE.linkTitle);
-        // Link Title Validation End
+          // Link Title Validation Starts
+          validateField('title', values, errors, VALIDATION_RULE.linkTitle);
+          // Link Title Validation End
 
-        // Password Validation Start
-        if (values.password.enabled) {
-          validateField(
-            'value',
-            values?.password,
-            errors?.password,
-            VALIDATION_RULE.password
-          );
-        }
-        // Password Validation End
+          // Password Validation Start
+          if (values.password.enabled) {
+            validateField(
+              'value',
+              values?.password,
+              errors?.password,
+              VALIDATION_RULE.password
+            );
+          }
+          // Password Validation End
 
-        // Link Expiration Validation Start
-        if (values.linkExpiration.enabled) {
-          validateField(
-            'redirectionLink',
-            values?.linkExpiration,
-            errors?.linkExpiration,
-            VALIDATION_RULE.url
-          );
-        }
-        //  Link Expiration Validation End
+          // Link Expiration Validation Start
+          if (values.linkExpiration.enabled) {
+            validateField(
+              'redirectionLink',
+              values?.linkExpiration,
+              errors?.linkExpiration,
+              VALIDATION_RULE.url
+            );
+          }
+          //  Link Expiration Validation End
 
-        // Rotator AB Testing Field Validation Start
-        if (values.rotatorABTesting.length > 0) {
-          errors.rotatorABTesting = values.rotatorABTesting.map(() => ({}));
-          values.rotatorABTesting.forEach(
-            (el: ABTestingRotatorInterface, index) => {
-              if (
-                el.redirectionLink === undefined ||
-                el.redirectionLink === null ||
-                el.redirectionLink?.trim()?.length === 0
-              ) {
-                errors.rotatorABTesting[index].redirectionLink =
-                  MESSAGES.FORM_VALIDATIONS.LINK.ROTATOR_AB_TESTING.REQUIRED_REDIRECTION_LINK;
-              } else if (!VALIDATOR.isURL(el.redirectionLink)) {
-                errors.rotatorABTesting[index].redirectionLink =
-                  MESSAGES.FORM_VALIDATIONS.LINK.ROTATOR_AB_TESTING.INVALID_REDIRECTION_LINK;
+          // Rotator AB Testing Field Validation Start
+          if (values.rotatorABTesting.length > 0) {
+            errors.rotatorABTesting = values.rotatorABTesting.map(() => ({}));
+            values.rotatorABTesting.forEach(
+              (el: ABTestingRotatorInterface, index) => {
+                if (
+                  el.redirectionLink === undefined ||
+                  el.redirectionLink === null ||
+                  el.redirectionLink?.trim()?.length === 0
+                ) {
+                  errors.rotatorABTesting[index].redirectionLink =
+                    MESSAGES.FORM_VALIDATIONS.LINK.ROTATOR_AB_TESTING.REQUIRED_REDIRECTION_LINK;
+                } else if (!VALIDATOR.isURL(el.redirectionLink)) {
+                  errors.rotatorABTesting[index].redirectionLink =
+                    MESSAGES.FORM_VALIDATIONS.LINK.ROTATOR_AB_TESTING.INVALID_REDIRECTION_LINK;
+                }
+                if (
+                  el.percentage === undefined ||
+                  el.percentage === null ||
+                  el.percentage === 0 ||
+                  isNaN(el.percentage)
+                ) {
+                  errors.rotatorABTesting[index].percentage =
+                    MESSAGES.FORM_VALIDATIONS.LINK.ROTATOR_AB_TESTING.REQUIRED_PERCENTAGE;
+                }
               }
-              if (
-                el.percentage === undefined ||
-                el.percentage === null ||
-                el.percentage === 0 ||
-                isNaN(el.percentage)
-              ) {
-                errors.rotatorABTesting[index].percentage =
-                  MESSAGES.FORM_VALIDATIONS.LINK.ROTATOR_AB_TESTING.REQUIRED_PERCENTAGE;
+            );
+          }
+          // Rotator AB Testing Field Validation End
+
+          // Rotator Geo Location Field Validation Start
+          if (values.geoLocation.length > 0) {
+            errors.geoLocation = values.geoLocation.map(el => ({}));
+            values.geoLocation.forEach(
+              (el: GeoLocationRotatorInterface, index) => {
+                if (
+                  el.redirectionLink === undefined ||
+                  el.redirectionLink === null ||
+                  el.redirectionLink?.trim()?.length === 0
+                ) {
+                  errors.geoLocation[index].redirectionLink =
+                    MESSAGES.FORM_VALIDATIONS.LINK.GEOLOCATION.REQUIRED_REDIRECTION_LINK;
+                } else if (!VALIDATOR.isURL(el.redirectionLink)) {
+                  errors.geoLocation[index].redirectionLink =
+                    MESSAGES.FORM_VALIDATIONS.LINK.GEOLOCATION.INVALID_REDIRECTION_LINK;
+                }
+                if (
+                  el.country === undefined ||
+                  el.country === null ||
+                  el.country?.length === 0
+                ) {
+                  errors.geoLocation[index].country =
+                    MESSAGES.FORM_VALIDATIONS.LINK.GEOLOCATION.REQUIRED_COUNTRY;
+                }
               }
+            );
+          }
+          // Rotator Geo Location Field Validation End
+
+          // check for errors if there are any return errors object otherwise return []
+
+          let _total = 0;
+
+          Array.from(
+            values?.rotatorABTesting,
+            ({ percentage }) => (_total = _total + (percentage ?? 0))
+          );
+
+          if (
+            isZNonEmptyString(errors.target?.url) ||
+            isZNonEmptyString(errors.target?.accountId) ||
+            isZNonEmptyString(errors.target?.email) ||
+            isZNonEmptyString(errors.target?.message) ||
+            isZNonEmptyString(errors.target?.username) ||
+            isZNonEmptyString(errors.target?.phoneNumber) ||
+            isZNonEmptyString(errors.target?.subject) ||
+            isZNonEmptyString(errors.linkExpiration?.redirectionLink) ||
+            isZNonEmptyString(errors.title) ||
+            isZNonEmptyString(errors.password?.value) ||
+            !areAllObjectsFilled((errors.rotatorABTesting as object[]) ?? []) ||
+            !areAllObjectsFilled((errors.geoLocation as object[]) ?? []) ||
+            _total > 100
+          ) {
+            return errors;
+          } else {
+            return [];
+          }
+        }}
+        // #endregion ( Handling Validation & Errors End  )
+
+        onSubmit={async (values, { resetForm }) => {
+          // For feature image
+          if (
+            isZNonEmptyString(values?.featureImg?.featureImgUrl) &&
+            values?.featureImg?.featureImgFile !== null &&
+            values?.featureImg?.featureImgFile !== undefined
+          ) {
+            const formData = new FormData();
+            formData.append('file', values?.featureImg?.featureImgFile);
+
+            if (
+              isZNonEmptyString(selectedLinkInBio?.featureImg?.featureImgUrl)
+            ) {
+              // Deleting the file from storage
+              await deleteSingleFile({
+                requestData: zStringify({
+                  filePath: selectedLinkInBio?.featureImg.featureImgPath
+                }),
+                itemIds: [],
+                urlDynamicParts: []
+              });
             }
-          );
-        }
-        // Rotator AB Testing Field Validation End
 
-        // Rotator Geo Location Field Validation Start
-        if (values.geoLocation.length > 0) {
-          errors.geoLocation = values.geoLocation.map(el => ({}));
-          values.geoLocation.forEach(
-            (el: GeoLocationRotatorInterface, index) => {
-              if (
-                el.redirectionLink === undefined ||
-                el.redirectionLink === null ||
-                el.redirectionLink?.trim()?.length === 0
-              ) {
-                errors.geoLocation[index].redirectionLink =
-                  MESSAGES.FORM_VALIDATIONS.LINK.GEOLOCATION.REQUIRED_REDIRECTION_LINK;
-              } else if (!VALIDATOR.isURL(el.redirectionLink)) {
-                errors.geoLocation[index].redirectionLink =
-                  MESSAGES.FORM_VALIDATIONS.LINK.GEOLOCATION.INVALID_REDIRECTION_LINK;
-              }
-              if (
-                el.country === undefined ||
-                el.country === null ||
-                el.country?.length === 0
-              ) {
-                errors.geoLocation[index].country =
-                  MESSAGES.FORM_VALIDATIONS.LINK.GEOLOCATION.REQUIRED_COUNTRY;
-              }
+            const result = await uploadSingleFile(formData);
+
+            if (result !== undefined || result !== null) {
+              const _data = (
+                result as {
+                  data: {
+                    file: object;
+                    fileName: object;
+                    filePath: string;
+                    fileUrl: string;
+                  };
+                }
+              )?.data;
+
+              values.featureImg.featureImgUrl = _data.fileUrl;
+              values.featureImg.featureImgPath = _data.filePath;
             }
-          );
-        }
-        // Rotator Geo Location Field Validation End
+          }
 
-        // check for errors if there are any return errors object otherwise return []
+          // For favicon
+          if (
+            isZNonEmptyString(values.favicon?.url) &&
+            values.favicon?.file !== null
+          ) {
+            const formData = new FormData();
+            formData.append('file', values.favicon?.file);
 
-        let _total = 0;
+            if (isZNonEmptyString(selectedLinkInBio?.favicon?.path)) {
+              // Deleting the file from storage
+              await deleteSingleFile({
+                requestData: zStringify({
+                  filePath: selectedLinkInBio?.favicon?.path
+                }),
+                itemIds: [],
+                urlDynamicParts: []
+              });
+            }
 
-        Array.from(
-          values?.rotatorABTesting,
-          ({ percentage }) => (_total = _total + (percentage ?? 0))
-        );
+            const result = await uploadSingleFile(formData);
 
-        if (
-          isZNonEmptyString(errors.target?.url) ||
-          isZNonEmptyString(errors.target?.accountId) ||
-          isZNonEmptyString(errors.target?.email) ||
-          isZNonEmptyString(errors.target?.message) ||
-          isZNonEmptyString(errors.target?.username) ||
-          isZNonEmptyString(errors.target?.phoneNumber) ||
-          isZNonEmptyString(errors.target?.subject) ||
-          isZNonEmptyString(errors.linkExpiration?.redirectionLink) ||
-          isZNonEmptyString(errors.title) ||
-          isZNonEmptyString(errors.password?.value) ||
-          !areAllObjectsFilled((errors.rotatorABTesting as object[]) ?? []) ||
-          !areAllObjectsFilled((errors.geoLocation as object[]) ?? []) ||
-          _total > 100
-        ) {
-          return errors;
-        } else {
-          return [];
-        }
-      }}
-      // #endregion ( Handling Validation & Errors End  )
+            if (result !== undefined || result !== null) {
+              const _data = (
+                result as {
+                  data: {
+                    file: object;
+                    fileName: object;
+                    filePath: string;
+                    fileUrl: string;
+                  };
+                }
+              )?.data;
 
-      onSubmit={async (values, { resetForm }) => {
-        // For feature image
-        if (
-          isZNonEmptyString(values?.featureImg?.featureImgUrl) &&
-          values?.featureImg?.featureImgFile !== null &&
-          values?.featureImg?.featureImgFile !== undefined
-        ) {
-          const formData = new FormData();
-          formData.append('file', values?.featureImg?.featureImgFile);
+              values.favicon.url = _data.fileUrl;
+              values.favicon.path = _data.filePath;
+            }
+          }
 
-          if (isZNonEmptyString(selectedLinkInBio?.featureImg?.featureImgUrl)) {
-            // Deleting the file from storage
-            await deleteSingleFile({
-              requestData: zStringify({
-                filePath: selectedLinkInBio?.featureImg.featureImgPath
+          await FormikSubmissionHandler(
+            zStringify({
+              ...selectedLinkInBio,
+              theme: zStringify(selectedLinkInBio?.theme),
+              settings: zStringify(selectedLinkInBio?.settings),
+              title: values.title,
+              featureImg: zStringify({
+                featureImgUrl: values?.featureImg.featureImgUrl,
+                featureImgPath: values?.featureImg.featureImgPath
               }),
-              itemIds: [],
-              urlDynamicParts: []
-            });
-          }
-
-          const result = await uploadSingleFile(formData);
-
-          if (result !== undefined || result !== null) {
-            const _data = (
-              result as {
-                data: {
-                  file: object;
-                  fileName: object;
-                  filePath: string;
-                  fileUrl: string;
-                };
-              }
-            )?.data;
-
-            values.featureImg.featureImgUrl = _data.fileUrl;
-            values.featureImg.featureImgPath = _data.filePath;
-          }
-        }
-
-        // For favicon
-        if (
-          isZNonEmptyString(values.favicon?.url) &&
-          values.favicon?.file !== null
-        ) {
-          const formData = new FormData();
-          formData.append('file', values.favicon?.file);
-
-          if (isZNonEmptyString(selectedLinkInBio?.favicon?.path)) {
-            // Deleting the file from storage
-            await deleteSingleFile({
-              requestData: zStringify({
-                filePath: selectedLinkInBio?.favicon?.path
+              password: zStringify({
+                value: values.password.value,
+                enabled: values.password.enabled
               }),
-              itemIds: [],
-              urlDynamicParts: []
-            });
-          }
-
-          const result = await uploadSingleFile(formData);
-
-          if (result !== undefined || result !== null) {
-            const _data = (
-              result as {
-                data: {
-                  file: object;
-                  fileName: object;
-                  filePath: string;
-                  fileUrl: string;
-                };
-              }
-            )?.data;
-
-            values.favicon.url = _data.fileUrl;
-            values.favicon.path = _data.filePath;
-          }
-        }
-
-        await FormikSubmissionHandler(
-          zStringify({
-            ...selectedLinkInBio,
-            theme: zStringify(selectedLinkInBio?.theme),
-            settings: zStringify(selectedLinkInBio?.settings),
-            title: values.title,
-            featureImg: zStringify({
-              featureImgUrl: values?.featureImg.featureImgUrl,
-              featureImgPath: values?.featureImg.featureImgPath
-            }),
-            password: zStringify({
-              value: values.password.value,
-              enabled: values.password.enabled
-            }),
-            linkExpirationInfo: zStringify({
-              redirectionLink: values.linkExpiration.redirectionLink,
-              expirationDate: values.linkExpiration.expirationDate,
-              timezone: values.linkExpiration.timezone,
-              enabled: values.linkExpiration.enabled
-            }),
-            abTestingRotatorLinks: zStringify(values.rotatorABTesting),
-            geoLocationRotatorLinks: zStringify(values.geoLocation),
-            description: values.linkDescription,
-            folderId: values.folderId,
-            notes: values.linkNote,
-            pixelIds: zStringify(values.linkPixelsAccount),
-            tags: zStringify(values.tags),
-            utmTagInfo: zStringify(values.UTMTags),
-            createdAt: Date.now().toString(),
-            shortUrl: zStringify(values.shortUrl),
-            // favicon: values.favicon
-            favicon: zStringify({
-              url: values?.favicon.url,
-              path: values?.favicon.path
+              linkExpirationInfo: zStringify({
+                redirectionLink: values.linkExpiration.redirectionLink,
+                expirationDate: values.linkExpiration.expirationDate,
+                timezone: values.linkExpiration.timezone,
+                enabled: values.linkExpiration.enabled
+              }),
+              abTestingRotatorLinks: zStringify(values.rotatorABTesting),
+              geoLocationRotatorLinks: zStringify(values.geoLocation),
+              description: values.linkDescription,
+              folderId: values.folderId,
+              notes: values.linkNote,
+              pixelIds: zStringify(values.linkPixelsAccount),
+              tags: zStringify(values.tags),
+              utmTagInfo: zStringify(values.UTMTags),
+              createdAt: Date.now().toString(),
+              shortUrl: zStringify(values.shortUrl),
+              // favicon: values.favicon
+              favicon: zStringify({
+                url: values?.favicon.url,
+                path: values?.favicon.path
+              })
             })
-          })
-        );
-      }}>
-      {({ isSubmitting, isValid, dirty, submitForm }) => {
-        return (
-          <>
-            <ZIonContent color='light'>
-              {/* IonRefresher */}
-              <ZIonRefresher
-                onIonRefresh={event => {
-                  void handleRefresh(event);
-                }}>
-                <ZIonRefresherContent />
-              </ZIonRefresher>
+          );
+        }}>
+        {({ isSubmitting, isValid, dirty, submitForm }) => {
+          return (
+            <>
+              <ZIonContent color='light'>
+                {/* IonRefresher */}
+                <ZIonRefresher
+                  onIonRefresh={event => {
+                    void handleRefresh(event);
+                  }}>
+                  <ZIonRefresherContent />
+                </ZIonRefresher>
 
-              {/*  */}
-              <ZIonGrid className='h-full ion-no-padding'>
-                <ZIonRow className='h-full'>
-                  {/* Side bar */}
-                  <Suspense
-                    fallback={
-                      <ZIonCol
-                        size='.8'
-                        className='h-full zaions__medium_bg zaions-transition'>
-                        <ZFallbackIonSpinner2 />
-                      </ZIonCol>
-                    }>
-                    <AdminPanelSidebarMenu
-                      activePage={AdminPanelSidebarMenuPageEnum.linkInBio}
-                    />
-                  </Suspense>
-
-                  {/* Right-col */}
-                  <ZIonCol
-                    className='relative w-full h-full pt-2 overflow-y-scroll zaions_pretty_scrollbar zaions-transition'
-                    sizeXl={
-                      ZDashboardState?.dashboardMainSidebarIsCollabes.isExpand
-                        ? is2XlScale
-                          ? '10.5'
-                          : '10'
-                        : is2XlScale
-                        ? '11.4'
-                        : '11.2'
-                    }
-                    sizeLg={
-                      ZDashboardState?.dashboardMainSidebarIsCollabes.isExpand
-                        ? is2XlScale
-                          ? '10.5'
-                          : '10'
-                        : is2XlScale
-                        ? '11.4'
-                        : '11.2'
-                    }
-                    sizeMd='12'
-                    sizeSm='12'
-                    sizeXs='12'>
-                    {/* Custom your link Grid-1 -> Grid-3 */}
-                    <ZIonGrid
-                      className={classNames({
-                        'my-1': true,
-                        'ms-3 mr-4': isMdScale,
-                        'mx-2': !isMdScale
-                      })}>
-                      <ZIonRow
-                        className={classNames({
-                          'gap-4': isLgScale,
-                          'gap-0': !isLgScale
-                        })}>
-                        {/* Custom Your Link */}
-                        <Suspense
-                          fallback={
-                            <ZIonCol
-                              sizeXl='5.8'
-                              sizeLg='5.8'
-                              sizeMd='12'
-                              sizeSm='12'
-                              sizeXs='12'
-                              className='py-1 rounded zaions__bg_white'>
-                              <ZFallbackIonSpinner2 />
-                            </ZIonCol>
-                          }>
-                          <ZaionsCustomYourLink showSkeleton={isZFetching} />
-                        </Suspense>
-
-                        {/* Pixel Account, Utm Tags, Custom Domain */}
+                {/*  */}
+                <ZIonGrid className='h-full ion-no-padding'>
+                  <ZIonRow className='h-full'>
+                    {/* Side bar */}
+                    <Suspense
+                      fallback={
                         <ZIonCol
-                          sizeXl='5.9'
-                          sizeLg='5.8'
-                          sizeMd='12'
-                          sizeSm='12'
-                          sizeXs='12'
-                          className={classNames({
-                            'mt-4': !isLgScale
-                          })}>
-                          {/* Pixels */}
-                          <ZCan
-                            shareWSId={wsShareId}
-                            permissionType={
-                              (shareWSMemberId?.trim()?.length ?? 0) > 0 &&
-                              (wsShareId?.trim()?.length ?? 0) > 0
-                                ? permissionsTypeEnum.shareWSMemberPermissions
-                                : permissionsTypeEnum.loggedInUserPermissions
-                            }
-                            havePermissions={
-                              (shareWSMemberId?.trim()?.length ?? 0) > 0 &&
-                              (wsShareId?.trim()?.length ?? 0) > 0
-                                ? [shareWSPermissionEnum.viewAny_sws_pixel]
-                                : [permissionsEnum.viewAny_pixel]
-                            }>
-                            <Suspense
-                              fallback={
-                                <ZIonRow className='pt-1 border-bottom zaions__bg_white'>
-                                  <ZFallbackIonSpinner2 />
-                                </ZIonRow>
-                              }>
-                              <LinksPixelsAccount
-                                showSkeleton={
-                                  (workspaceId?.trim()?.length ?? 0) > 0
-                                    ? isPixelAccountsDataFetching
-                                    : (shareWSMemberId?.trim()?.length ?? 0) >
-                                        0 &&
-                                      (wsShareId?.trim()?.length ?? 0) > 0
-                                    ? isSWSPixelAccountsDataFetching
-                                    : undefined
-                                }
-                              />
-                            </Suspense>
-                          </ZCan>
-
-                          {/* UTMTags */}
-                          <ZCan
-                            shareWSId={wsShareId}
-                            permissionType={
-                              (shareWSMemberId?.trim()?.length ?? 0) > 0 &&
-                              (wsShareId?.trim()?.length ?? 0) > 0
-                                ? permissionsTypeEnum.shareWSMemberPermissions
-                                : permissionsTypeEnum.loggedInUserPermissions
-                            }
-                            havePermissions={
-                              (shareWSMemberId?.trim()?.length ?? 0) > 0 &&
-                              (wsShareId?.trim()?.length ?? 0) > 0
-                                ? [shareWSPermissionEnum.viewAny_sws_utmTag]
-                                : [permissionsEnum.viewAny_utmTag]
-                            }>
-                            <Suspense
-                              fallback={
-                                <ZIonRow className='pt-1 border-bottom zaions__bg_white'>
-                                  <ZFallbackIonSpinner2 />
-                                </ZIonRow>
-                              }>
-                              <UTMTagTemplates
-                                showSkeleton={
-                                  (workspaceId?.trim()?.length ?? 0) > 0
-                                    ? isUTMTagsDataFetching
-                                    : (wsShareId?.trim()?.length ?? 0) > 0 &&
-                                      (shareWSMemberId?.trim()?.length ?? 0) > 0
-                                    ? isSWSUTMTagsDataFetching
-                                    : undefined
-                                }
-                              />
-                            </Suspense>
-                          </ZCan>
-
-                          {/* Choose Domain Name */}
-                          <DomainName
-                            showSkeleton={isZFetching}
-                            isEditMode={true}
-                          />
+                          size='.8'
+                          className='h-full zaions__medium_bg zaions-transition'>
+                          <ZFallbackIonSpinner2 />
                         </ZIonCol>
-                      </ZIonRow>
-                    </ZIonGrid>
+                      }>
+                      <AdminPanelSidebarMenu
+                        activePage={AdminPanelSidebarMenuPageEnum.linkInBio}
+                      />
+                    </Suspense>
 
-                    {/* Advance Options Grid-1 -> Grid-4 */}
-                    <ZIonGrid className='mr-3 ms-3'>
-                      {/* Row-1 */}
-                      <Suspense fallback={<ZFallbackIonSpinner2 />}>
-                        <ZIonRow>
-                          {/* Col-1 */}
-                          <ZIonCol>
-                            {/* advance options toggler button */}
-                            <ZIonButton
-                              expand='block'
-                              // size={isMdScale ? 'large' : 'default'}
-                              testingselector={
-                                CONSTANTS.testingSelectors.shortLink.formPage
-                                  .advanceOptionsBtn
+                    {/* Right-col */}
+                    <ZIonCol
+                      className='relative w-full h-full pt-2 overflow-y-scroll zaions_pretty_scrollbar zaions-transition'
+                      sizeXl={
+                        ZDashboardState?.dashboardMainSidebarIsCollabes.isExpand
+                          ? is2XlScale
+                            ? '10.5'
+                            : '10'
+                          : is2XlScale
+                          ? '11.4'
+                          : '11.2'
+                      }
+                      sizeLg={
+                        ZDashboardState?.dashboardMainSidebarIsCollabes.isExpand
+                          ? is2XlScale
+                            ? '10.5'
+                            : '10'
+                          : is2XlScale
+                          ? '11.4'
+                          : '11.2'
+                      }
+                      sizeMd='12'
+                      sizeSm='12'
+                      sizeXs='12'>
+                      {/* Custom your link Grid-1 -> Grid-3 */}
+                      <ZIonGrid
+                        className={classNames({
+                          'my-1': true,
+                          'ms-3 mr-4': isMdScale,
+                          'mx-2': !isMdScale
+                        })}>
+                        <ZIonRow
+                          className={classNames({
+                            'gap-4': isLgScale,
+                            'gap-0': !isLgScale
+                          })}>
+                          {/* Custom Your Link */}
+                          <Suspense
+                            fallback={
+                              <ZIonCol
+                                sizeXl='5.8'
+                                sizeLg='5.8'
+                                sizeMd='12'
+                                sizeSm='12'
+                                sizeXs='12'
+                                className='py-1 rounded zaions__bg_white'>
+                                <ZFallbackIonSpinner2 />
+                              </ZIonCol>
+                            }>
+                            <ZaionsCustomYourLink showSkeleton={isZFetching} />
+                          </Suspense>
+
+                          {/* Pixel Account, Utm Tags, Custom Domain */}
+                          <ZIonCol
+                            sizeXl='5.9'
+                            sizeLg='5.8'
+                            sizeMd='12'
+                            sizeSm='12'
+                            sizeXs='12'
+                            className={classNames({
+                              'mt-4': !isLgScale
+                            })}>
+                            {/* Pixels */}
+                            <ZCan
+                              shareWSId={wsShareId}
+                              permissionType={
+                                (shareWSMemberId?.trim()?.length ?? 0) > 0 &&
+                                (wsShareId?.trim()?.length ?? 0) > 0
+                                  ? permissionsTypeEnum.shareWSMemberPermissions
+                                  : permissionsTypeEnum.loggedInUserPermissions
                               }
-                              onClick={() => {
-                                setShowAdvanceOptions(oldVal => !oldVal);
-                              }}
-                              className={classNames({
-                                'ion-text-capitalize': true,
-                                'mx-0': !isMdScale
-                              })}>
-                              <ZIonText className='flex py-2 text-lg ion-no-margin ion-align-items-center'>
-                                Advance Options
-                              </ZIonText>
-                              <ZIonIcon
-                                slot='end'
-                                icon={settingsOutline}
-                                className='w-6 h-6 ms-auto me-1'
-                              />
-                            </ZIonButton>
+                              havePermissions={
+                                (shareWSMemberId?.trim()?.length ?? 0) > 0 &&
+                                (wsShareId?.trim()?.length ?? 0) > 0
+                                  ? [shareWSPermissionEnum.viewAny_sws_pixel]
+                                  : [permissionsEnum.viewAny_pixel]
+                              }>
+                              <Suspense
+                                fallback={
+                                  <ZIonRow className='pt-1 border-bottom zaions__bg_white'>
+                                    <ZFallbackIonSpinner2 />
+                                  </ZIonRow>
+                                }>
+                                <LinksPixelsAccount
+                                  showSkeleton={
+                                    (workspaceId?.trim()?.length ?? 0) > 0
+                                      ? isPixelAccountsDataFetching
+                                      : (shareWSMemberId?.trim()?.length ?? 0) >
+                                          0 &&
+                                        (wsShareId?.trim()?.length ?? 0) > 0
+                                      ? isSWSPixelAccountsDataFetching
+                                      : undefined
+                                  }
+                                />
+                              </Suspense>
+                            </ZCan>
 
-                            {/* advance options row */}
-                            {showAdvanceOptions && (
-                              <ZIonRow
-                                className='gap-3 ion-margin-top mb-[4rem]'
+                            {/* UTMTags */}
+                            <ZCan
+                              shareWSId={wsShareId}
+                              permissionType={
+                                (shareWSMemberId?.trim()?.length ?? 0) > 0 &&
+                                (wsShareId?.trim()?.length ?? 0) > 0
+                                  ? permissionsTypeEnum.shareWSMemberPermissions
+                                  : permissionsTypeEnum.loggedInUserPermissions
+                              }
+                              havePermissions={
+                                (shareWSMemberId?.trim()?.length ?? 0) > 0 &&
+                                (wsShareId?.trim()?.length ?? 0) > 0
+                                  ? [shareWSPermissionEnum.viewAny_sws_utmTag]
+                                  : [permissionsEnum.viewAny_utmTag]
+                              }>
+                              <Suspense
+                                fallback={
+                                  <ZIonRow className='pt-1 border-bottom zaions__bg_white'>
+                                    <ZFallbackIonSpinner2 />
+                                  </ZIonRow>
+                                }>
+                                <UTMTagTemplates
+                                  showSkeleton={
+                                    (workspaceId?.trim()?.length ?? 0) > 0
+                                      ? isUTMTagsDataFetching
+                                      : (wsShareId?.trim()?.length ?? 0) > 0 &&
+                                        (shareWSMemberId?.trim()?.length ?? 0) >
+                                          0
+                                      ? isSWSUTMTagsDataFetching
+                                      : undefined
+                                  }
+                                />
+                              </Suspense>
+                            </ZCan>
+
+                            {/* Choose Domain Name */}
+                            <DomainName
+                              showSkeleton={isZFetching}
+                              isEditMode={true}
+                            />
+                          </ZIonCol>
+                        </ZIonRow>
+                      </ZIonGrid>
+
+                      {/* Advance Options Grid-1 -> Grid-4 */}
+                      <ZIonGrid className='mr-3 ms-3'>
+                        {/* Row-1 */}
+                        <Suspense fallback={<ZFallbackIonSpinner2 />}>
+                          <ZIonRow>
+                            {/* Col-1 */}
+                            <ZIonCol>
+                              {/* advance options toggler button */}
+                              <ZIonButton
+                                expand='block'
+                                // size={isMdScale ? 'large' : 'default'}
                                 testingselector={
                                   CONSTANTS.testingSelectors.shortLink.formPage
-                                    .advanceOptionsContent
-                                }>
-                                <Suspense fallback={<ZFallbackIonSpinner2 />}>
-                                  {/* Folder */}
-                                  <ZCan
-                                    returnPermissionDeniedView={true}
-                                    shareWSId={wsShareId}
-                                    permissionType={
-                                      (shareWSMemberId?.trim()?.length ?? 0) >
-                                        0 &&
-                                      (wsShareId?.trim()?.length ?? 0) > 0
-                                        ? permissionsTypeEnum.shareWSMemberPermissions
-                                        : permissionsTypeEnum.loggedInUserPermissions
-                                    }
-                                    havePermissions={
-                                      (shareWSMemberId?.trim()?.length ?? 0) >
-                                        0 &&
-                                      (wsShareId?.trim()?.length ?? 0) > 0
-                                        ? [
-                                            shareWSPermissionEnum.viewAny_sws_sl_folder
-                                          ]
-                                        : [permissionsEnum.viewAny_sl_folder]
-                                    }>
-                                    <NewLinkFolder
-                                      _state={folderState.shortlink}
-                                      showSkeleton={isLibFoldersDataFetching}
-                                      _foldersData={libLinksFoldersData ?? []}
-                                    />
-                                  </ZCan>
+                                    .advanceOptionsBtn
+                                }
+                                onClick={() => {
+                                  setShowAdvanceOptions(oldVal => !oldVal);
+                                }}
+                                className={classNames({
+                                  'ion-text-capitalize': true,
+                                  'mx-0': !isMdScale
+                                })}>
+                                <ZIonText className='flex py-2 text-lg ion-no-margin ion-align-items-center'>
+                                  Advance Options
+                                </ZIonText>
+                                <ZIonIcon
+                                  slot='end'
+                                  icon={settingsOutline}
+                                  className='w-6 h-6 ms-auto me-1'
+                                />
+                              </ZIonButton>
 
-                                  {/* Add Notes */}
-                                  <AddNotes showSkeleton={isZFetching} />
+                              {/* advance options row */}
+                              {showAdvanceOptions && (
+                                <ZIonRow
+                                  className='gap-3 ion-margin-top mb-[4rem]'
+                                  testingselector={
+                                    CONSTANTS.testingSelectors.shortLink
+                                      .formPage.advanceOptionsContent
+                                  }>
+                                  <Suspense fallback={<ZFallbackIonSpinner2 />}>
+                                    {/* Folder */}
+                                    <ZCan
+                                      returnPermissionDeniedView={true}
+                                      shareWSId={wsShareId}
+                                      permissionType={
+                                        (shareWSMemberId?.trim()?.length ?? 0) >
+                                          0 &&
+                                        (wsShareId?.trim()?.length ?? 0) > 0
+                                          ? permissionsTypeEnum.shareWSMemberPermissions
+                                          : permissionsTypeEnum.loggedInUserPermissions
+                                      }
+                                      havePermissions={
+                                        (shareWSMemberId?.trim()?.length ?? 0) >
+                                          0 &&
+                                        (wsShareId?.trim()?.length ?? 0) > 0
+                                          ? [
+                                              shareWSPermissionEnum.viewAny_sws_sl_folder
+                                            ]
+                                          : [permissionsEnum.viewAny_sl_folder]
+                                      }>
+                                      <NewLinkFolder
+                                        _state={folderState.shortlink}
+                                        showSkeleton={isLibFoldersDataFetching}
+                                        _foldersData={libLinksFoldersData ?? []}
+                                      />
+                                    </ZCan>
 
-                                  {/* Add Embed Widget */}
-                                  {/* <ZCan
+                                    {/* Add Notes */}
+                                    <AddNotes showSkeleton={isZFetching} />
+
+                                    {/* Add Embed Widget */}
+                                    {/* <ZCan
                                     returnPermissionDeniedView={true}
                                     shareWSId={wsShareId}
                                     permissionType={
@@ -1075,66 +1081,66 @@ const LinkInBioShareSettings: React.FC = () => {
                                     <EmbedWidget />
                                   </ZCan> */}
 
-                                  {/* Deep Linking */}
-                                  {/* <DeepLinking /> */}
+                                    {/* Deep Linking */}
+                                    {/* <DeepLinking /> */}
 
-                                  {/* Link Cloaking */}
-                                  {/* <LinkCloaking /> */}
+                                    {/* Link Cloaking */}
+                                    {/* <LinkCloaking /> */}
 
-                                  {/* Tags */}
-                                  <Tags />
+                                    {/* Tags */}
+                                    <Tags />
 
-                                  {/* Rotator - AB Testing */}
-                                  <RotatorABTesting />
+                                    {/* Rotator - AB Testing */}
+                                    <RotatorABTesting />
 
-                                  {/* Geo Location */}
-                                  <GeoLocation />
+                                    {/* Geo Location */}
+                                    <GeoLocation />
 
-                                  {/* Link Expiration */}
-                                  <LinkExpiration />
+                                    {/* Link Expiration */}
+                                    <LinkExpiration />
 
-                                  {/* Link Password */}
-                                  <LinkPassword />
+                                    {/* Link Password */}
+                                    <LinkPassword />
 
-                                  {/* Link Favicon */}
-                                  <LinkFavIcon />
+                                    {/* Link Favicon */}
+                                    <LinkFavIcon />
 
-                                  {/* GDPR Popup */}
-                                  {/* <GdprPopup /> */}
-                                </Suspense>
-                              </ZIonRow>
-                            )}
-                          </ZIonCol>
-                        </ZIonRow>
-                      </Suspense>
-                    </ZIonGrid>
-
-                    <ZIonFooter className='fixed bottom-0 w-[-webkit-fill-available]'>
-                      {/* Gird */}
-                      <ZIonGrid className='mx-4 mt-3'>
-                        {/* Row */}
-                        <ZIonRow>
-                          {/* Col-1 */}
-                          <ZIonCol>
-                            {/* get my link button */}
-                            <ZIonButton
-                              expand='full'
-                              onClick={() => {
-                                void submitForm();
-                              }}
-                              disabled={isSubmitting || !isValid}>
-                              Get my updated link
-                            </ZIonButton>
-                          </ZIonCol>
-                        </ZIonRow>
+                                    {/* GDPR Popup */}
+                                    {/* <GdprPopup /> */}
+                                  </Suspense>
+                                </ZIonRow>
+                              )}
+                            </ZIonCol>
+                          </ZIonRow>
+                        </Suspense>
                       </ZIonGrid>
-                    </ZIonFooter>
-                  </ZIonCol>
-                </ZIonRow>
-              </ZIonGrid>
 
-              {/*  */}
-              {/* <div className='w-full h-full'>
+                      <ZIonFooter className='fixed bottom-0 w-[-webkit-fill-available]'>
+                        {/* Gird */}
+                        <ZIonGrid className='mx-4 mt-3'>
+                          {/* Row */}
+                          <ZIonRow>
+                            {/* Col-1 */}
+                            <ZIonCol>
+                              {/* get my link button */}
+                              <ZIonButton
+                                expand='full'
+                                onClick={() => {
+                                  void submitForm();
+                                }}
+                                disabled={isSubmitting || !isValid}>
+                                Get my updated link
+                              </ZIonButton>
+                            </ZIonCol>
+                          </ZIonRow>
+                        </ZIonGrid>
+                      </ZIonFooter>
+                    </ZIonCol>
+                  </ZIonRow>
+                </ZIonGrid>
+
+                {/*  */}
+                {/* <div className='w-full h-full'>
                 {/* Custom your link Grid * /}
                 <ZIonGrid
                   className={classNames({
@@ -1233,11 +1239,12 @@ const LinkInBioShareSettings: React.FC = () => {
                   </ZIonRow>
                 </ZIonGrid>
               </div> */}
-            </ZIonContent>
-          </>
-        );
-      }}
-    </Formik>
+              </ZIonContent>
+            </>
+          );
+        }}
+      </Formik>
+    </>
   );
 };
 

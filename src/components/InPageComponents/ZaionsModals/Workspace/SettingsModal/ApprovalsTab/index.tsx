@@ -26,6 +26,7 @@ import ZWorkspaceApprovalCards from '@/components/WorkspacesComponents/ApprovalC
 import ZWorkspaceApprovalToggler from '@/components/WorkspacesComponents/ApprovalToggler';
 import CONSTANTS from '@/utils/constants';
 import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
+import SupportTrizlinkOnPatreon from '@/components/SupportTrizlinkOnPatreon';
 
 /**
  * Custom Hooks Imports go down
@@ -71,6 +72,7 @@ import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 const ZApprovalTab: React.FC<{ workspaceId: string }> = ({ workspaceId }) => {
   return (
     <ZIonGrid className='w-full h-full pt-6'>
+      <SupportTrizlinkOnPatreon />
       {/* Cards */}
       <ZWorkspaceApprovalCards workspaceId={workspaceId} />
 

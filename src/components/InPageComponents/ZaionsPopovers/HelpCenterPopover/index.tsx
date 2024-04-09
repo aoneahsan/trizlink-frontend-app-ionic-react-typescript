@@ -77,9 +77,9 @@ const ZHelpCenterPopover: React.FC<{
   dismissZIonPopover: (data?: string, role?: string | undefined) => void;
   zNavigatePushRoute: (_url: string) => void;
 }> = ({ dismissZIonPopover, zNavigatePushRoute }) => {
-  const divStyle = {
-    borderInlineStart: '1px solid rgba(5, 5, 5, 0.06)'
-  };
+  // const divStyle = {
+  //   borderInlineStart: '1px solid rgba(5, 5, 5, 0.06)'
+  // };
   return (
     <div className='px-1 py-1'>
       <ZIonText
@@ -106,9 +106,7 @@ const ZHelpCenterPopover: React.FC<{
         </ZIonText>
       </ZIonItem>
 
-      {/*  */}
-      <ZIonList lines='none'>
-        {/* What's new? */}
+      {/* <ZIonList lines='none'>
         <ZIonItem
           minHeight='2.3rem'
           className='cursor-pointer ion-activatable'
@@ -124,7 +122,6 @@ const ZHelpCenterPopover: React.FC<{
           </ZIonText>
         </ZIonItem>
 
-        {/* Suggest an idea */}
         <ZIonItem
           minHeight='2.3rem'
           className='cursor-pointer ion-activatable'
@@ -140,7 +137,6 @@ const ZHelpCenterPopover: React.FC<{
           </ZIonText>
         </ZIonItem>
 
-        {/* Help center */}
         <ZIonItem
           minHeight='2.3rem'
           className='cursor-pointer ion-activatable'
@@ -156,7 +152,6 @@ const ZHelpCenterPopover: React.FC<{
           </ZIonText>
         </ZIonItem>
 
-        {/* Price */}
         <ZIonItem
           minHeight='2.3rem'
           className='cursor-pointer ion-activatable'
@@ -170,7 +165,6 @@ const ZHelpCenterPopover: React.FC<{
           </ZIonText>
         </ZIonItem>
 
-        {/* Contact support */}
         <ZIonItem
           minHeight='2.3rem'
           className='cursor-pointer ion-activatable'
@@ -185,24 +179,22 @@ const ZHelpCenterPopover: React.FC<{
             Contact support
           </ZIonText>
         </ZIonItem>
-      </ZIonList>
+      </ZIonList> */}
 
-      <ZIonItem
+      {/* <ZIonItem
         minHeight='.1rem'
         lines='full'
         className='cursor-pointer ion-activatable'
-      />
+      /> */}
 
-      {/*  */}
-      <ZIonText
+      {/* <ZIonText
         className='block mx-3 mt-2 mb-2 text-xs tracking-widest'
         color='medium'>
         DOWNLOAD APPS
-      </ZIonText>
+      </ZIonText> */}
 
       <div className='flex gap-1 mx-3 ion-align-items-center'>
-        {/* iOS */}
-        <ZIonButton
+        {/* <ZIonButton
           className='w-1/2 ion-no-margin'
           size='small'
           fill='clear'
@@ -212,16 +204,14 @@ const ZHelpCenterPopover: React.FC<{
           }>
           <ZIonIcon icon={logoApple} />
           <ZIonText className='ps-1 mt-[3px]'>iOS</ZIonText>
-        </ZIonButton>
+        </ZIonButton> */}
 
-        {/* Middle line */}
-        <div
+        {/* <div
           className='h-[0.9em]'
-          style={divStyle}></div>
+          style={divStyle}></div> */}
 
-        {/* Android */}
-        <ZIonButton
-          className='w-1/2 ion-no-margin'
+        {/* <ZIonButton
+          className='w-full ion-no-margin'
           fill='clear'
           size='small'
           color='dark'
@@ -230,7 +220,7 @@ const ZHelpCenterPopover: React.FC<{
           }>
           <ZIonIcon icon={logoAndroid} />
           <ZIonText className='ps-1'>Android</ZIonText>
-        </ZIonButton>
+        </ZIonButton> */}
       </div>
     </div>
   );

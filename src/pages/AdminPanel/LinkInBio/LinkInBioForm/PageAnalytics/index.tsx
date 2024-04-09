@@ -56,6 +56,7 @@ import {
   linkInBioPageAnalyticsRetargetingPixelsBlock,
   linkInBioPageAnalyticsUtmTagBlock
 } from '@/assets/images';
+import SupportTrizlinkOnPatreon from '@/components/SupportTrizlinkOnPatreon';
 
 /**
  * Component props type go down
@@ -79,6 +80,7 @@ const LinkInBioPageAnalytics: React.FC = () => {
           className={classNames({
             'ion-padding ion-margin': isSmScale
           })}>
+          <SupportTrizlinkOnPatreon />
           {/* Header  */}
           <PageAnalyticsHeader />
 

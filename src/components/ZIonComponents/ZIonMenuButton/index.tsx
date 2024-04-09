@@ -24,7 +24,13 @@ interface ZIonMenuButtonType {
 const ZIonMenuButton: React.FC<ZIonMenuButtonType> = (
   props: ZIonMenuButtonType
 ) => {
-  return <IonMenuButton {...props}>{props.children}</IonMenuButton>;
+  return (
+    <IonMenuButton
+      // {...props}
+      type='button'>
+      laisdasd
+    </IonMenuButton>
+  );
 };
 
 export default ZIonMenuButton;

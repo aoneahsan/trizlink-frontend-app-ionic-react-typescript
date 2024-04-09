@@ -52,6 +52,7 @@ import {
   workspaceFormTabEnum
 } from '@/types/AdminPanel/workspace';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import SupportTrizlinkOnPatreon from '@/components/SupportTrizlinkOnPatreon';
 
 /**
  * Recoil State Imports go down
@@ -100,130 +101,136 @@ const ZWorkspaceFormApprovalTab: React.FC = () => {
   };
 
   return (
-    <Formik
-      initialValues={formikInitialValues}
-      validate={() => {
-        const errors = {};
+    <>
+      <Formik
+        initialValues={formikInitialValues}
+        validate={() => {
+          const errors = {};
 
-        return errors;
-      }}
-      onSubmit={() => {}}>
-      {({ values, setFieldValue }) => {
-        return (
-          <>
-            <ZIonContent>
-              <ZIonGrid
-                className={classNames({
-                  'mt-3': true,
-                  'mx-5': isXlScale,
-                  'mx-3': !isXlScale && isLgScale,
-                  'mx-2': !isLgScale && isMdScale,
-                  'mx-1': !isMdScale && isSmScale
-                })}>
-                {/* Approval Cards */}
-                <ZWorkspaceApprovalCards
-                  workspaceId={editWorkspaceId ?? ''}
-                  type={values.approval}
-                  onClick={type => {
-                    void setFieldValue('approval', type, false);
-                  }}
-                />
-
-                {/* Schedule posts approval */}
-                <ZIonRow className='mt-4 ion-align-items-center ion-justify-content-center'>
-                  <ZIonCol sizeXl='5'>
-                    {/* Schedule posts approval */}
-                    <ZWorkspaceApprovalToggler
-                      icon={timeOutline}
-                      text='Schedule posts automatically on approval'
-                      checked={values.schedulePostsApproval}
-                      onChange={val => {
-                        void setFieldValue('schedulePostsApproval', val, false);
-                      }}
-                    />
-
-                    {/* Lock content approval */}
-                    <ZWorkspaceApprovalToggler
-                      icon={lockClosedOutline}
-                      className='mt-2'
-                      text='Lock content after approval'
-                      checked={values.lockContentApproval}
-                      onChange={val => {
-                        void setFieldValue('lockContentApproval', val, false);
-                      }}
-                    />
-                  </ZIonCol>
-                </ZIonRow>
-              </ZIonGrid>
-            </ZIonContent>
-
-            {/* Footer */}
-            <ZIonFooter
-              className='flex py-2 align-items-center'
-              collapse='fade'>
-              <div
-                className={classNames({
-                  'mx-auto': true,
-                  'w-4/12': isXlScale,
-                  'w-5/12': !isXlScale && isLgScale,
-                  'w-6/12': !isLgScale && isMdScale,
-                  'w-7/12': !isMdScale && isSmScale,
-                  'w-full': !isSmScale
-                })}>
-                <ZIonRow
+          return errors;
+        }}
+        onSubmit={() => {}}>
+        {({ values, setFieldValue }) => {
+          return (
+            <>
+              <ZIonContent>
+                <ZIonGrid
                   className={classNames({
-                    'ion-justify-content-center':
-                      routeQSearchParams.tab ===
-                      workspaceFormTabEnum.workspaceDetailForm
+                    'mt-3': true,
+                    'mx-5': isXlScale,
+                    'mx-3': !isXlScale && isLgScale,
+                    'mx-2': !isLgScale && isMdScale,
+                    'mx-1': !isMdScale && isSmScale
                   })}>
-                  {/* Go Back button */}
-                  <ZIonCol
-                    sizeXl='6'
-                    sizeLg='6'
-                    sizeMd='6'
-                    sizeSm='6'
-                    sizeXs='12'>
-                    <ZIonButton
-                      expand='block'
-                      fill='outline'
-                      className='normal-case'
-                      routerLink={createRedirectRoute({
-                        url: ZaionsRoutes.AdminPanel.Workspaces.Edit,
-                        params: [
-                          CONSTANTS.RouteParams.workspace.editWorkspaceIdParam
-                        ],
-                        values: [editWorkspaceId ?? ''],
-                        routeSearchParams: {
-                          tab: workspaceFormTabEnum.connectPages
-                        }
-                      })}>
-                      Go Back
-                    </ZIonButton>
-                  </ZIonCol>
+                  {/* Approval Cards */}
+                  <ZWorkspaceApprovalCards
+                    workspaceId={editWorkspaceId ?? ''}
+                    type={values.approval}
+                    onClick={type => {
+                      void setFieldValue('approval', type, false);
+                    }}
+                  />
 
-                  {/* Connect Later button */}
-                  <ZIonCol
-                    sizeXl='6'
-                    sizeLg='6'
-                    sizeMd='6'
-                    sizeSm='6'
-                    sizeXs='12'>
-                    <ZIonButton
-                      expand='block'
-                      className='normal-case'>
-                      Finish
-                    </ZIonButton>
-                  </ZIonCol>
-                </ZIonRow>
+                  {/* Schedule posts approval */}
+                  <ZIonRow className='mt-4 ion-align-items-center ion-justify-content-center'>
+                    <ZIonCol sizeXl='5'>
+                      {/* Schedule posts approval */}
+                      <ZWorkspaceApprovalToggler
+                        icon={timeOutline}
+                        text='Schedule posts automatically on approval'
+                        checked={values.schedulePostsApproval}
+                        onChange={val => {
+                          void setFieldValue(
+                            'schedulePostsApproval',
+                            val,
+                            false
+                          );
+                        }}
+                      />
 
-                {/*  */}
-                <ZWorkspaceFooterSteps />
-              </div>
-            </ZIonFooter>
-          </>
-        );
-      }}
-    </Formik>
+                      {/* Lock content approval */}
+                      <ZWorkspaceApprovalToggler
+                        icon={lockClosedOutline}
+                        className='mt-2'
+                        text='Lock content after approval'
+                        checked={values.lockContentApproval}
+                        onChange={val => {
+                          void setFieldValue('lockContentApproval', val, false);
+                        }}
+                      />
+                    </ZIonCol>
+                  </ZIonRow>
+                </ZIonGrid>
+              </ZIonContent>
+
+              {/* Footer */}
+              <ZIonFooter
+                className='flex py-2 align-items-center'
+                collapse='fade'>
+                <div
+                  className={classNames({
+                    'mx-auto': true,
+                    'w-4/12': isXlScale,
+                    'w-5/12': !isXlScale && isLgScale,
+                    'w-6/12': !isLgScale && isMdScale,
+                    'w-7/12': !isMdScale && isSmScale,
+                    'w-full': !isSmScale
+                  })}>
+                  <ZIonRow
+                    className={classNames({
+                      'ion-justify-content-center':
+                        routeQSearchParams.tab ===
+                        workspaceFormTabEnum.workspaceDetailForm
+                    })}>
+                    {/* Go Back button */}
+                    <ZIonCol
+                      sizeXl='6'
+                      sizeLg='6'
+                      sizeMd='6'
+                      sizeSm='6'
+                      sizeXs='12'>
+                      <ZIonButton
+                        expand='block'
+                        fill='outline'
+                        className='normal-case'
+                        routerLink={createRedirectRoute({
+                          url: ZaionsRoutes.AdminPanel.Workspaces.Edit,
+                          params: [
+                            CONSTANTS.RouteParams.workspace.editWorkspaceIdParam
+                          ],
+                          values: [editWorkspaceId ?? ''],
+                          routeSearchParams: {
+                            tab: workspaceFormTabEnum.connectPages
+                          }
+                        })}>
+                        Go Back
+                      </ZIonButton>
+                    </ZIonCol>
+
+                    {/* Connect Later button */}
+                    <ZIonCol
+                      sizeXl='6'
+                      sizeLg='6'
+                      sizeMd='6'
+                      sizeSm='6'
+                      sizeXs='12'>
+                      <ZIonButton
+                        expand='block'
+                        className='normal-case'>
+                        Finish
+                      </ZIonButton>
+                    </ZIonCol>
+                  </ZIonRow>
+
+                  {/*  */}
+                  <ZWorkspaceFooterSteps />
+                </div>
+              </ZIonFooter>
+            </>
+          );
+        }}
+      </Formik>
+    </>
   );
 };
 

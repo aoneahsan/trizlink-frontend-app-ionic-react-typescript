@@ -83,6 +83,7 @@ import {
 import { FormMode, type LabelInterface } from '@/types/AdminPanel/index.type';
 import { type ZLinkMutateApiType } from '@/types/ZaionsApis.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import SupportTrizlinkOnPatreon from '@/components/SupportTrizlinkOnPatreon';
 
 /**
  * Recoil State Imports go down
@@ -601,545 +602,558 @@ const ZLabelsTab: React.FC<{
   // #endregion
 
   return (
-    <div className='flex flex-col w-full h-full pt-6 ion-align-items-center'>
-      <ZIonText className='py-2 text-xl'>
-        Create and edit your labels below
-      </ZIonText>
+    <>
+      <SupportTrizlinkOnPatreon />
+      <div className='flex flex-col w-full h-full pt-6 ion-align-items-center'>
+        <ZIonText className='py-2 text-xl'>
+          Create and edit your labels below
+        </ZIonText>
 
-      <Formik
-        initialValues={formikInitialValues}
-        enableReinitialize={true}
-        validate={values => {
-          const errors: {
-            title?: string;
-          } = {};
+        <Formik
+          initialValues={formikInitialValues}
+          enableReinitialize={true}
+          validate={values => {
+            const errors: {
+              title?: string;
+            } = {};
 
-          validateField('title', values, errors, VALIDATION_RULE.string);
+            validateField('title', values, errors, VALIDATION_RULE.string);
 
-          return errors;
-        }}
-        onSubmit={async values => {
-          try {
-            const _zStringifyData = zStringify({
-              title: values.title
-            });
+            return errors;
+          }}
+          onSubmit={async values => {
+            try {
+              const _zStringifyData = zStringify({
+                title: values.title
+              });
 
-            await FormikSubmissionHandler(_zStringifyData, values.mode);
-          } catch (error) {
-            reportCustomError(error);
-          }
-        }}>
-        {({
-          values,
-          errors,
-          touched,
-          isValid,
-          setFieldValue,
-          handleChange,
-          handleBlur,
-          submitForm
-        }) => {
-          return (
-            <div className='w-[25%]'>
-              <ZCan
-                shareWSId={wsShareId}
-                permissionType={
-                  wsShareId !== undefined &&
-                  wsShareId !== null &&
-                  wsShareId?.trim()?.length > 0
-                    ? permissionsTypeEnum.shareWSMemberPermissions
-                    : permissionsTypeEnum.loggedInUserPermissions
-                }
-                havePermissions={
-                  wsShareId !== undefined &&
-                  wsShareId !== null &&
-                  wsShareId?.trim()?.length > 0
-                    ? [shareWSPermissionEnum.create_sws_label]
-                    : [permissionsEnum?.create_label]
-                }>
-                <ZIonButton
-                  className='ion-no-padding'
-                  size='small'
-                  fill='clear'
-                  disabled={values.enableAddLabel}
-                  testingselector={
-                    CONSTANTS.testingSelectors.workspace.settingsModal.labels
-                      .addNewLabelButton
+              await FormikSubmissionHandler(_zStringifyData, values.mode);
+            } catch (error) {
+              reportCustomError(error);
+            }
+          }}>
+          {({
+            values,
+            errors,
+            touched,
+            isValid,
+            setFieldValue,
+            handleChange,
+            handleBlur,
+            submitForm
+          }) => {
+            return (
+              <div className='w-[25%]'>
+                <ZCan
+                  shareWSId={wsShareId}
+                  permissionType={
+                    wsShareId !== undefined &&
+                    wsShareId !== null &&
+                    wsShareId?.trim()?.length > 0
+                      ? permissionsTypeEnum.shareWSMemberPermissions
+                      : permissionsTypeEnum.loggedInUserPermissions
                   }
-                  onClick={() => {
-                    void setFieldValue('enableAddLabel', true, false);
-                    void setFieldValue('mode', FormMode.ADD, false);
-                  }}>
-                  <ZIonIcon
-                    icon={addOutline}
-                    className='me-1'
-                  />
-                  <ZIonText className='text-sm pt-[2px]'>
-                    Add new label
-                  </ZIonText>
-                </ZIonButton>
-                <ZIonButton
-                  className='ion-no-padding'
-                  size='small'
-                  fill='clear'
-                  color='medium'
-                  id='z-workspace-add-label-tooltip'
-                  testingselector={
-                    CONSTANTS.testingSelectors.workspace.settingsModal.labels
-                      .addNewLabelInfoButton
+                  havePermissions={
+                    wsShareId !== undefined &&
+                    wsShareId !== null &&
+                    wsShareId?.trim()?.length > 0
+                      ? [shareWSPermissionEnum.create_sws_label]
+                      : [permissionsEnum?.create_label]
                   }>
-                  <ZIonIcon icon={alertCircleOutline} />
-                </ZIonButton>
-                <ZRTooltip
-                  anchorSelect='#z-workspace-add-label-tooltip'
-                  place='bottom'
-                  className='z-40'>
-                  <ZIonText>
-                    Use labels to organize and group your posts around <br />
-                    campaigns, statuses or categories. A post can <br /> be
-                    assigned multiple labels. You can easily filter <br /> down
-                    posts by labels in the Filter & sort menu.
-                  </ZIonText>
-                </ZRTooltip>
-              </ZCan>
-
-              {values.enableAddLabel && (
-                <div className='flex mt-3'>
-                  <ZIonInput
-                    placeholder='Label name'
-                    minHeight='2.3rem'
-                    name='title'
-                    value={values.title}
-                    onIonChange={handleChange}
-                    onIonBlur={handleBlur}
-                    errorText={
-                      touched?.title === true ? errors?.title : undefined
-                    }
-                    testingselector={
-                      CONSTANTS.testingSelectors.workspace.settingsModal.labels
-                        .labelNameInput
-                    }
-                    className={classNames({
-                      z_ion_bg_white: true,
-                      'ion-touched': touched?.title === true,
-                      'ion-invalid': touched?.title === true && errors?.title,
-                      'ion-valid':
-                        touched?.title === true &&
-                        (errors?.title === undefined || errors?.title === null)
-                    })}
-                  />
                   <ZIonButton
-                    height='2.3rem'
-                    className='mx-1 ion-no-margin ion-no-padding'
+                    className='ion-no-padding'
                     size='small'
                     fill='clear'
+                    disabled={values.enableAddLabel}
                     testingselector={
                       CONSTANTS.testingSelectors.workspace.settingsModal.labels
-                        .closedCreateModeButton
+                        .addNewLabelButton
                     }
                     onClick={() => {
-                      void setFieldValue('enableAddLabel', false, false);
+                      void setFieldValue('enableAddLabel', true, false);
+                      void setFieldValue('mode', FormMode.ADD, false);
                     }}>
                     <ZIonIcon
-                      icon={closeOutline}
-                      color='danger'
-                      className='w-5 h-5'
+                      icon={addOutline}
+                      className='me-1'
                     />
+                    <ZIonText className='text-sm pt-[2px]'>
+                      Add new label
+                    </ZIonText>
                   </ZIonButton>
                   <ZIonButton
-                    height='2.3rem'
-                    className='mx-1 ion-no-margin ion-no-padding'
+                    className='ion-no-padding'
                     size='small'
-                    color='success'
                     fill='clear'
-                    disabled={!isValid}
+                    color='medium'
+                    id='z-workspace-add-label-tooltip'
                     testingselector={
                       CONSTANTS.testingSelectors.workspace.settingsModal.labels
-                        .closedCreateModeButton
-                    }
-                    onClick={() => {
-                      void submitForm();
-                    }}>
-                    <ZIonIcon
-                      icon={checkmark}
-                      className='w-5 h-5'
-                    />
+                        .addNewLabelInfoButton
+                    }>
+                    <ZIonIcon icon={alertCircleOutline} />
                   </ZIonButton>
-                </div>
-              )}
+                  <ZRTooltip
+                    anchorSelect='#z-workspace-add-label-tooltip'
+                    place='bottom'
+                    className='z-40'>
+                    <ZIonText>
+                      Use labels to organize and group your posts around <br />
+                      campaigns, statuses or categories. A post can <br /> be
+                      assigned multiple labels. You can easily filter <br />{' '}
+                      down posts by labels in the Filter & sort menu.
+                    </ZIonText>
+                  </ZRTooltip>
+                </ZCan>
 
-              <ZIonList
-                lines='full'
-                className='mt-1 bg-transparent'>
-                {isZFetching &&
-                  [1, 2].map(el => {
-                    return (
-                      <ZIonItem
-                        key={el}
-                        minHeight='2rem'
-                        className='ion-item-start-no-padding'
-                        style={zIonItemStyle}>
-                        <ZIonBadge className='font-normal ion-no-padding px-1 max-w-[5.5rem] tracking-wider'>
-                          <ZIonTitle className='text-sm ion-no-padding h-min'>
+                {values.enableAddLabel && (
+                  <div className='flex mt-3'>
+                    <ZIonInput
+                      placeholder='Label name'
+                      minHeight='2.3rem'
+                      name='title'
+                      value={values.title}
+                      onIonChange={handleChange}
+                      onIonBlur={handleBlur}
+                      errorText={
+                        touched?.title === true ? errors?.title : undefined
+                      }
+                      testingselector={
+                        CONSTANTS.testingSelectors.workspace.settingsModal
+                          .labels.labelNameInput
+                      }
+                      className={classNames({
+                        z_ion_bg_white: true,
+                        'ion-touched': touched?.title === true,
+                        'ion-invalid': touched?.title === true && errors?.title,
+                        'ion-valid':
+                          touched?.title === true &&
+                          (errors?.title === undefined ||
+                            errors?.title === null)
+                      })}
+                    />
+                    <ZIonButton
+                      height='2.3rem'
+                      className='mx-1 ion-no-margin ion-no-padding'
+                      size='small'
+                      fill='clear'
+                      testingselector={
+                        CONSTANTS.testingSelectors.workspace.settingsModal
+                          .labels.closedCreateModeButton
+                      }
+                      onClick={() => {
+                        void setFieldValue('enableAddLabel', false, false);
+                      }}>
+                      <ZIonIcon
+                        icon={closeOutline}
+                        color='danger'
+                        className='w-5 h-5'
+                      />
+                    </ZIonButton>
+                    <ZIonButton
+                      height='2.3rem'
+                      className='mx-1 ion-no-margin ion-no-padding'
+                      size='small'
+                      color='success'
+                      fill='clear'
+                      disabled={!isValid}
+                      testingselector={
+                        CONSTANTS.testingSelectors.workspace.settingsModal
+                          .labels.closedCreateModeButton
+                      }
+                      onClick={() => {
+                        void submitForm();
+                      }}>
+                      <ZIonIcon
+                        icon={checkmark}
+                        className='w-5 h-5'
+                      />
+                    </ZIonButton>
+                  </div>
+                )}
+
+                <ZIonList
+                  lines='full'
+                  className='mt-1 bg-transparent'>
+                  {isZFetching &&
+                    [1, 2].map(el => {
+                      return (
+                        <ZIonItem
+                          key={el}
+                          minHeight='2rem'
+                          className='ion-item-start-no-padding'
+                          style={zIonItemStyle}>
+                          <ZIonBadge className='font-normal ion-no-padding px-1 max-w-[5.5rem] tracking-wider'>
+                            <ZIonTitle className='text-sm ion-no-padding h-min'>
+                              <ZIonSkeletonText
+                                height='.9rem'
+                                width='3rem'
+                              />
+                            </ZIonTitle>
+                          </ZIonBadge>
+                          <ZIonText className='mx-2 text-sm'>
                             <ZIonSkeletonText
                               height='.9rem'
-                              width='3rem'
+                              width='2.5rem'
                             />
-                          </ZIonTitle>
-                        </ZIonBadge>
-                        <ZIonText className='mx-2 text-sm'>
-                          <ZIonSkeletonText
-                            height='.9rem'
-                            width='2.5rem'
+                          </ZIonText>
+
+                          <ZIonIcon
+                            slot='end'
+                            icon={createOutline}
+                            className='w-5 h-5'
                           />
-                        </ZIonText>
 
-                        <ZIonIcon
-                          slot='end'
-                          icon={createOutline}
-                          className='w-5 h-5'
-                        />
+                          <ZIonIcon
+                            slot='end'
+                            color='danger'
+                            icon={trashBinOutline}
+                            className='w-4 h-4 ms-2'
+                          />
+                        </ZIonItem>
+                      );
+                    })}
 
-                        <ZIonIcon
-                          slot='end'
-                          color='danger'
-                          icon={trashBinOutline}
-                          className='w-4 h-4 ms-2'
-                        />
-                      </ZIonItem>
-                    );
-                  })}
+                  <FieldArray name='allLabels'>
+                    {() => {
+                      return (
+                        <>
+                          {!isZFetching &&
+                            values?.allLabels?.map((el, index) => {
+                              return (
+                                <ZCan
+                                  shareWSId={wsShareId}
+                                  key={index}
+                                  permissionType={
+                                    wsShareId !== undefined &&
+                                    wsShareId !== null &&
+                                    wsShareId?.trim()?.length > 0
+                                      ? permissionsTypeEnum.shareWSMemberPermissions
+                                      : permissionsTypeEnum.loggedInUserPermissions
+                                  }
+                                  havePermissions={
+                                    wsShareId !== undefined &&
+                                    wsShareId !== null &&
+                                    wsShareId?.trim()?.length > 0
+                                      ? [shareWSPermissionEnum.view_sws_label]
+                                      : [permissionsEnum?.view_label]
+                                  }>
+                                  <ZIonItem
+                                    minHeight='2rem'
+                                    className='ion-item-start-no-padding'
+                                    style={zIonItemStyle}>
+                                    {(el?.editMode === false ||
+                                      el?.editMode === undefined ||
+                                      el?.editMode === null) && (
+                                      <>
+                                        <ZIonBadge className='font-normal ion-no-padding px-1 max-w-[5.5rem] tracking-wider'>
+                                          <ZIonTitle className='text-sm ion-no-padding h-min'>
+                                            {el?.title}
+                                          </ZIonTitle>
+                                        </ZIonBadge>
+                                        <ZIonText className='mx-2 text-sm'>
+                                          {el?.postsCount ?? 0} posts
+                                        </ZIonText>
 
-                <FieldArray name='allLabels'>
-                  {() => {
-                    return (
-                      <>
-                        {!isZFetching &&
-                          values?.allLabels?.map((el, index) => {
-                            return (
-                              <ZCan
-                                shareWSId={wsShareId}
-                                key={index}
-                                permissionType={
-                                  wsShareId !== undefined &&
-                                  wsShareId !== null &&
-                                  wsShareId?.trim()?.length > 0
-                                    ? permissionsTypeEnum.shareWSMemberPermissions
-                                    : permissionsTypeEnum.loggedInUserPermissions
-                                }
-                                havePermissions={
-                                  wsShareId !== undefined &&
-                                  wsShareId !== null &&
-                                  wsShareId?.trim()?.length > 0
-                                    ? [shareWSPermissionEnum.view_sws_label]
-                                    : [permissionsEnum?.view_label]
-                                }>
-                                <ZIonItem
-                                  minHeight='2rem'
-                                  className='ion-item-start-no-padding'
-                                  style={zIonItemStyle}>
-                                  {(el?.editMode === false ||
-                                    el?.editMode === undefined ||
-                                    el?.editMode === null) && (
-                                    <>
-                                      <ZIonBadge className='font-normal ion-no-padding px-1 max-w-[5.5rem] tracking-wider'>
-                                        <ZIonTitle className='text-sm ion-no-padding h-min'>
-                                          {el?.title}
-                                        </ZIonTitle>
-                                      </ZIonBadge>
-                                      <ZIonText className='mx-2 text-sm'>
-                                        {el?.postsCount ?? 0} posts
-                                      </ZIonText>
-
-                                      {/* if user as a owner or member have permission to do this action then showing element */}
-                                      <ZCan
-                                        shareWSId={wsShareId}
-                                        permissionType={
-                                          wsShareId !== undefined &&
-                                          wsShareId !== null &&
-                                          wsShareId?.trim()?.length > 0
-                                            ? permissionsTypeEnum.shareWSMemberPermissions
-                                            : permissionsTypeEnum.loggedInUserPermissions
-                                        }
-                                        havePermissions={
-                                          wsShareId !== undefined &&
-                                          wsShareId !== null &&
-                                          wsShareId?.trim()?.length > 0
-                                            ? [
-                                                shareWSPermissionEnum.update_sws_label
-                                              ]
-                                            : [permissionsEnum?.update_label]
-                                        }>
-                                        <ZIonIcon
-                                          slot='end'
-                                          icon={createOutline}
-                                          className='w-5 h-5 cursor-pointer'
-                                          id={`z-workspace-add-label-edit-${index}`}
-                                          testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.labels.editLabelButton}-${el.id}`}
-                                          testinglistselector={
-                                            CONSTANTS.testingSelectors.workspace
-                                              .settingsModal.labels
-                                              .editLabelButton
+                                        {/* if user as a owner or member have permission to do this action then showing element */}
+                                        <ZCan
+                                          shareWSId={wsShareId}
+                                          permissionType={
+                                            wsShareId !== undefined &&
+                                            wsShareId !== null &&
+                                            wsShareId?.trim()?.length > 0
+                                              ? permissionsTypeEnum.shareWSMemberPermissions
+                                              : permissionsTypeEnum.loggedInUserPermissions
                                           }
-                                          onClick={() => {
-                                            void setFieldValue(
-                                              `allLabels.${index}.editMode`,
-                                              true,
-                                              false
-                                            );
-
-                                            void setFieldValue(
-                                              'mode',
-                                              FormMode.EDIT,
-                                              false
-                                            );
-                                          }}
-                                        />
-                                        <ZRTooltip
-                                          anchorSelect={`#z-workspace-add-label-edit-${index}`}
-                                          place='left'
-                                          className='z-40 h-[2rem] p-0 text-sm'>
-                                          <ZIonText className='text-sm'>
-                                            Edit label
-                                          </ZIonText>
-                                        </ZRTooltip>
-                                      </ZCan>
-
-                                      <ZCan
-                                        shareWSId={wsShareId}
-                                        permissionType={
-                                          wsShareId !== undefined &&
-                                          wsShareId !== null &&
-                                          wsShareId?.trim()?.length > 0
-                                            ? permissionsTypeEnum.shareWSMemberPermissions
-                                            : permissionsTypeEnum.loggedInUserPermissions
-                                        }
-                                        havePermissions={
-                                          wsShareId !== undefined &&
-                                          wsShareId !== null &&
-                                          wsShareId?.trim()?.length > 0
-                                            ? [
-                                                shareWSPermissionEnum.delete_sws_label
-                                              ]
-                                            : [permissionsEnum?.delete_label]
-                                        }>
-                                        <ZIonIcon
-                                          slot='end'
-                                          color='danger'
-                                          icon={trashBinOutline}
-                                          className='w-4 h-4 cursor-pointer ms-2'
-                                          id={`z-workspace-add-label-delete-${index}`}
-                                          testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.labels.deleteLabelButton}-${el.id}`}
-                                          testinglistselector={
-                                            CONSTANTS.testingSelectors.workspace
-                                              .settingsModal.labels
-                                              .deleteLabelButton
-                                          }
-                                          onClick={() => {
-                                            if (el?.id !== null) {
-                                              void deleteLabel(el.id);
+                                          havePermissions={
+                                            wsShareId !== undefined &&
+                                            wsShareId !== null &&
+                                            wsShareId?.trim()?.length > 0
+                                              ? [
+                                                  shareWSPermissionEnum.update_sws_label
+                                                ]
+                                              : [permissionsEnum?.update_label]
+                                          }>
+                                          <ZIonIcon
+                                            slot='end'
+                                            icon={createOutline}
+                                            className='w-5 h-5 cursor-pointer'
+                                            id={`z-workspace-add-label-edit-${index}`}
+                                            testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.labels.editLabelButton}-${el.id}`}
+                                            testinglistselector={
+                                              CONSTANTS.testingSelectors
+                                                .workspace.settingsModal.labels
+                                                .editLabelButton
                                             }
-                                          }}
-                                        />
-                                        <ZRTooltip
-                                          anchorSelect={`#z-workspace-add-label-delete-${index}`}
-                                          place='left'
-                                          className='z-40 h-[2rem] p-0 text-sm'>
-                                          <ZIonText className='text-sm'>
-                                            Delete label
-                                          </ZIonText>
-                                        </ZRTooltip>
-                                      </ZCan>
-                                    </>
-                                  )}
-                                  {el?.editMode === true && (
-                                    <div className='flex w-full ion-align-items-start'>
-                                      <ZIonInput
-                                        placeholder='Label name'
-                                        minHeight='2rem'
-                                        onIonChange={handleChange}
-                                        onIonBlur={handleBlur}
-                                        errorText={
-                                          values.allLabels[index]?.title?.trim()
-                                            .length === 0
-                                            ? 'Title is required'
-                                            : undefined
-                                        }
-                                        name={`allLabels.${index}.title`}
-                                        className={classNames({
-                                          'w-full z_ion_bg_white ps-2': true,
-                                          'ion-touched':
-                                            touched?.allLabels !== undefined &&
-                                            touched.allLabels[index]?.title,
-                                          'ion-invalid':
-                                            touched?.allLabels !== undefined &&
-                                            values?.allLabels[
-                                              index
-                                            ]?.title?.trim()?.length === 0,
-                                          'ion-valid':
+                                            onClick={() => {
+                                              void setFieldValue(
+                                                `allLabels.${index}.editMode`,
+                                                true,
+                                                false
+                                              );
+
+                                              void setFieldValue(
+                                                'mode',
+                                                FormMode.EDIT,
+                                                false
+                                              );
+                                            }}
+                                          />
+                                          <ZRTooltip
+                                            anchorSelect={`#z-workspace-add-label-edit-${index}`}
+                                            place='left'
+                                            className='z-40 h-[2rem] p-0 text-sm'>
+                                            <ZIonText className='text-sm'>
+                                              Edit label
+                                            </ZIonText>
+                                          </ZRTooltip>
+                                        </ZCan>
+
+                                        <ZCan
+                                          shareWSId={wsShareId}
+                                          permissionType={
+                                            wsShareId !== undefined &&
+                                            wsShareId !== null &&
+                                            wsShareId?.trim()?.length > 0
+                                              ? permissionsTypeEnum.shareWSMemberPermissions
+                                              : permissionsTypeEnum.loggedInUserPermissions
+                                          }
+                                          havePermissions={
+                                            wsShareId !== undefined &&
+                                            wsShareId !== null &&
+                                            wsShareId?.trim()?.length > 0
+                                              ? [
+                                                  shareWSPermissionEnum.delete_sws_label
+                                                ]
+                                              : [permissionsEnum?.delete_label]
+                                          }>
+                                          <ZIonIcon
+                                            slot='end'
+                                            color='danger'
+                                            icon={trashBinOutline}
+                                            className='w-4 h-4 cursor-pointer ms-2'
+                                            id={`z-workspace-add-label-delete-${index}`}
+                                            testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.labels.deleteLabelButton}-${el.id}`}
+                                            testinglistselector={
+                                              CONSTANTS.testingSelectors
+                                                .workspace.settingsModal.labels
+                                                .deleteLabelButton
+                                            }
+                                            onClick={() => {
+                                              if (el?.id !== null) {
+                                                void deleteLabel(el.id);
+                                              }
+                                            }}
+                                          />
+                                          <ZRTooltip
+                                            anchorSelect={`#z-workspace-add-label-delete-${index}`}
+                                            place='left'
+                                            className='z-40 h-[2rem] p-0 text-sm'>
+                                            <ZIonText className='text-sm'>
+                                              Delete label
+                                            </ZIonText>
+                                          </ZRTooltip>
+                                        </ZCan>
+                                      </>
+                                    )}
+                                    {el?.editMode === true && (
+                                      <div className='flex w-full ion-align-items-start'>
+                                        <ZIonInput
+                                          placeholder='Label name'
+                                          minHeight='2rem'
+                                          onIonChange={handleChange}
+                                          onIonBlur={handleBlur}
+                                          errorText={
                                             values.allLabels[
                                               index
-                                            ].title?.trim()?.length
-                                        })}
-                                        value={values?.allLabels[index]?.title}
-                                        style={zIonInputStyle}
-                                      />
-                                      <ZIonButton
-                                        height='2.3rem'
-                                        className='mx-1 ion-no-margin ion-no-padding'
-                                        size='small'
-                                        fill='clear'
-                                        onClick={() => {
-                                          void setFieldValue(
-                                            `allLabels.${index}.title`,
-                                            compState?.labelsData[index]?.title,
-                                            false
-                                          );
-                                          void setFieldValue(
-                                            `allLabels.${index}.editMode`,
-                                            false,
-                                            false
-                                          );
-                                        }}>
-                                        <ZIonIcon
-                                          icon={closeOutline}
-                                          color='danger'
-                                          className='w-5 h-5'
-                                        />
-                                      </ZIonButton>
-
-                                      <div
-                                        className={classNames({
-                                          'h-full': true,
-                                          'cursor-not-allowed':
-                                            (values?.allLabels !== undefined &&
+                                            ]?.title?.trim().length === 0
+                                              ? 'Title is required'
+                                              : undefined
+                                          }
+                                          name={`allLabels.${index}.title`}
+                                          className={classNames({
+                                            'w-full z_ion_bg_white ps-2': true,
+                                            'ion-touched':
+                                              touched?.allLabels !==
+                                                undefined &&
+                                              touched.allLabels[index]?.title,
+                                            'ion-invalid':
+                                              touched?.allLabels !==
+                                                undefined &&
+                                              values?.allLabels[
+                                                index
+                                              ]?.title?.trim()?.length === 0,
+                                            'ion-valid':
                                               values.allLabels[
                                                 index
-                                              ]?.title?.trim().length === 0) ||
-                                            values?.allLabels[
-                                              index
-                                            ]?.title?.trim() ===
-                                              compState?.labelsData[
-                                                index
-                                              ]?.title?.trim()
-                                        })}>
+                                              ].title?.trim()?.length
+                                          })}
+                                          value={
+                                            values?.allLabels[index]?.title
+                                          }
+                                          style={zIonInputStyle}
+                                        />
                                         <ZIonButton
                                           height='2.3rem'
                                           className='mx-1 ion-no-margin ion-no-padding'
                                           size='small'
-                                          color='success'
                                           fill='clear'
-                                          disabled={
-                                            (values.allLabels !== undefined &&
-                                              values.allLabels[
-                                                index
-                                              ]?.title?.trim().length === 0) ||
-                                            values.allLabels[
-                                              index
-                                            ]?.title?.trim() ===
-                                              compState?.labelsData[
-                                                index
-                                              ]?.title?.trim()
-                                          }
                                           onClick={() => {
-                                            try {
-                                              if (
-                                                (values.allLabels !==
-                                                  undefined &&
-                                                  (values?.allLabels[
-                                                    index
-                                                  ]?.title?.trim().length ??
-                                                    0) > 0) ||
-                                                values.allLabels[
-                                                  index
-                                                ]?.title?.trim() !==
-                                                  compState?.labelsData[
-                                                    index
-                                                  ]?.title?.trim()
-                                              ) {
-                                                const _zStringifyData =
-                                                  zStringify({
-                                                    title:
-                                                      values.allLabels[index]
-                                                        .title
-                                                  });
-
-                                                void FormikSubmissionHandler(
-                                                  _zStringifyData,
-                                                  values.mode,
-                                                  el.id
-                                                );
-
-                                                void setFieldValue(
-                                                  `allLabels.${index}.editMode`,
-                                                  false,
-                                                  false
-                                                );
-
-                                                void setFieldValue(
-                                                  'mode',
-                                                  FormMode.ADD,
-                                                  false
-                                                );
-                                              }
-                                            } catch (error) {
-                                              reportCustomError(error);
-                                            }
+                                            void setFieldValue(
+                                              `allLabels.${index}.title`,
+                                              compState?.labelsData[index]
+                                                ?.title,
+                                              false
+                                            );
+                                            void setFieldValue(
+                                              `allLabels.${index}.editMode`,
+                                              false,
+                                              false
+                                            );
                                           }}>
                                           <ZIonIcon
-                                            icon={checkmark}
+                                            icon={closeOutline}
+                                            color='danger'
                                             className='w-5 h-5'
                                           />
                                         </ZIonButton>
+
+                                        <div
+                                          className={classNames({
+                                            'h-full': true,
+                                            'cursor-not-allowed':
+                                              (values?.allLabels !==
+                                                undefined &&
+                                                values.allLabels[
+                                                  index
+                                                ]?.title?.trim().length ===
+                                                  0) ||
+                                              values?.allLabels[
+                                                index
+                                              ]?.title?.trim() ===
+                                                compState?.labelsData[
+                                                  index
+                                                ]?.title?.trim()
+                                          })}>
+                                          <ZIonButton
+                                            height='2.3rem'
+                                            className='mx-1 ion-no-margin ion-no-padding'
+                                            size='small'
+                                            color='success'
+                                            fill='clear'
+                                            disabled={
+                                              (values.allLabels !== undefined &&
+                                                values.allLabels[
+                                                  index
+                                                ]?.title?.trim().length ===
+                                                  0) ||
+                                              values.allLabels[
+                                                index
+                                              ]?.title?.trim() ===
+                                                compState?.labelsData[
+                                                  index
+                                                ]?.title?.trim()
+                                            }
+                                            onClick={() => {
+                                              try {
+                                                if (
+                                                  (values.allLabels !==
+                                                    undefined &&
+                                                    (values?.allLabels[
+                                                      index
+                                                    ]?.title?.trim().length ??
+                                                      0) > 0) ||
+                                                  values.allLabels[
+                                                    index
+                                                  ]?.title?.trim() !==
+                                                    compState?.labelsData[
+                                                      index
+                                                    ]?.title?.trim()
+                                                ) {
+                                                  const _zStringifyData =
+                                                    zStringify({
+                                                      title:
+                                                        values.allLabels[index]
+                                                          .title
+                                                    });
+
+                                                  void FormikSubmissionHandler(
+                                                    _zStringifyData,
+                                                    values.mode,
+                                                    el.id
+                                                  );
+
+                                                  void setFieldValue(
+                                                    `allLabels.${index}.editMode`,
+                                                    false,
+                                                    false
+                                                  );
+
+                                                  void setFieldValue(
+                                                    'mode',
+                                                    FormMode.ADD,
+                                                    false
+                                                  );
+                                                }
+                                              } catch (error) {
+                                                reportCustomError(error);
+                                              }
+                                            }}>
+                                            <ZIonIcon
+                                              icon={checkmark}
+                                              className='w-5 h-5'
+                                            />
+                                          </ZIonButton>
+                                        </div>
                                       </div>
-                                    </div>
-                                  )}
-                                </ZIonItem>
-                              </ZCan>
-                            );
-                          })}
-                      </>
-                    );
-                  }}
-                </FieldArray>
-                {!isZFetching && values.allLabels?.length === 0 && (
-                  <div className='flex flex-col mt-4 ion-align-items-center'>
-                    <ZIonIcon
-                      icon={fileTrayOutline}
-                      color='medium'
-                      className='w-7 h-7'
-                    />
-                    <ZIonText color='medium'>
-                      No label found.
-                      <ZCan
-                        shareWSId={wsShareId}
-                        permissionType={
-                          wsShareId !== undefined &&
-                          wsShareId !== null &&
-                          wsShareId?.trim()?.length > 0
-                            ? permissionsTypeEnum.shareWSMemberPermissions
-                            : permissionsTypeEnum.loggedInUserPermissions
-                        }
-                        havePermissions={
-                          wsShareId !== undefined &&
-                          wsShareId !== null &&
-                          wsShareId?.trim()?.length > 0
-                            ? [shareWSPermissionEnum.create_sws_label]
-                            : [permissionsEnum?.create_label]
-                        }>
-                        <ZIonText className='ms-1'>
-                          please create a label
-                        </ZIonText>
-                      </ZCan>
-                    </ZIonText>
-                  </div>
-                )}
-              </ZIonList>
-            </div>
-          );
-        }}
-      </Formik>
-    </div>
+                                    )}
+                                  </ZIonItem>
+                                </ZCan>
+                              );
+                            })}
+                        </>
+                      );
+                    }}
+                  </FieldArray>
+                  {!isZFetching && values.allLabels?.length === 0 && (
+                    <div className='flex flex-col mt-4 ion-align-items-center'>
+                      <ZIonIcon
+                        icon={fileTrayOutline}
+                        color='medium'
+                        className='w-7 h-7'
+                      />
+                      <ZIonText color='medium'>
+                        No label found.
+                        <ZCan
+                          shareWSId={wsShareId}
+                          permissionType={
+                            wsShareId !== undefined &&
+                            wsShareId !== null &&
+                            wsShareId?.trim()?.length > 0
+                              ? permissionsTypeEnum.shareWSMemberPermissions
+                              : permissionsTypeEnum.loggedInUserPermissions
+                          }
+                          havePermissions={
+                            wsShareId !== undefined &&
+                            wsShareId !== null &&
+                            wsShareId?.trim()?.length > 0
+                              ? [shareWSPermissionEnum.create_sws_label]
+                              : [permissionsEnum?.create_label]
+                          }>
+                          <ZIonText className='ms-1'>
+                            please create a label
+                          </ZIonText>
+                        </ZCan>
+                      </ZIonText>
+                    </div>
+                  )}
+                </ZIonList>
+              </div>
+            );
+          }}
+        </Formik>
+      </div>
+    </>
   );
 };
 

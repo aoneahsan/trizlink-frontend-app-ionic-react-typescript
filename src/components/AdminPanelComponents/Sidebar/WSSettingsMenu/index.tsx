@@ -449,7 +449,7 @@ const ZWSSettingsMenu: React.FC = () => {
               </ZIonItem>
 
               {/* User */}
-              <ZIonItem
+              {/* <ZIonItem
                 lines='none'
                 minHeight='2rem'
                 className={classNames({
@@ -485,7 +485,7 @@ const ZWSSettingsMenu: React.FC = () => {
                     : ''
                 }>
                 User
-              </ZIonItem>
+              </ZIonItem> */}
             </div>
           </ZIonAccordion>
 

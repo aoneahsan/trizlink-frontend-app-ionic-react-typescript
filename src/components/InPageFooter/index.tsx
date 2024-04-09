@@ -45,34 +45,6 @@ const InPageFooter: React.FC<{
       <ZIonFooter
         collapse='fade'
         className='zaions__medium_set'>
-        <>
-          {/* {blueSec ? (
-            <div className='py-3 zaions__secondary_bg'>
-              <div className='flex flex-col py-5 ion-text-center ion-margin-top ion-padding-bottom ion-justify-content-center ion-align-items-center'>
-                <ZIonText
-                  color='light'
-                  className='block text-2xl'>
-                  {title === '' || title === null || title === undefined
-                    ? 'Get closer to your audience and customers today'
-                    : title}
-                </ZIonText>
-
-                {/*  * /}
-                <ZIonButton
-                  size='large'
-                  className='ion-margin-vertical ion-text-capitalize'
-                  expand={!isMdScale ? 'block' : undefined}
-                  routerLink={ZaionsRoutes.HomeRoute}>
-                  {btnText === '' || btnText === null || btnText === undefined
-                    ? 'Start for Free'
-                    : btnText}
-                </ZIonButton>
-              </div>
-            </div>
-          ) : (
-            ''
-          )} */}
-        </>
         <div className=''>
           <ZIonRow>
             <ZIonCol
@@ -91,11 +63,6 @@ const InPageFooter: React.FC<{
                 src={ProductLogo}
                 className='w-[17rem]'
               />
-              {/* <small>
-                  © 2022 {PRODUCT_NAME} | Handmade in San Francisco, Denver, New
-                  York City, Bielefeld, and all over the world.
-                </small>
-                <br /> <br /> */}
               <div className='flex mt-1 ion-align-items-center ion-justify-content-center'>
                 <ZIonRouterLink
                   href={ProductExternalURL.TwitterUrl}

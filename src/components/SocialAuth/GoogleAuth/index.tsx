@@ -200,7 +200,7 @@ const GoogleSocialAuth: React.FC<IGoogleSocialAuthProps> = () => {
     <ZIonButton
       className='me-2 ion-text-capitalize'
       color='tertiary'
-      expand={!isXsScale ? 'block' : undefined}
+      expand={'block'}
       testingselector={CONSTANTS.testingSelectors.loginPage.googleLoginButton}
       onClick={() => {
         void googleAuthHandler();

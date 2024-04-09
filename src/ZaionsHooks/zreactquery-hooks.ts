@@ -41,6 +41,7 @@ import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type
 import { ZaionsUserAccountRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
 import { appWiseIonicLoaderIsOpenedRSelector } from '@/ZaionsStore/AppRStates';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { showErrorNotification } from '@/utils/notification';
 
 /**
  * The custom hook for getting data from an API using useQuery hook from react-query package.
@@ -612,6 +613,8 @@ export const useZRQCreateRequest = <T>({
       if (errorCode !== undefined && errorCode === errorCodes.unauthenticated) {
         // clear localstorage
         await clearAuthDataFromLocalStorageAndRecoil(resetUserAccountState);
+      } else if (errorCode === errorCodes.tooManyRequests) {
+        showErrorNotification(MESSAGES.GENERAL.TOO_MANY_REQUESTS);
       }
     },
 

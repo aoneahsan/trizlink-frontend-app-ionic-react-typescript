@@ -11,7 +11,7 @@ import { linkInBio, linkMngt3, qrCode } from '@/assets/images';
 
 export const HPBCData: ZaionsHpCPDataType[] = [
   {
-    id: 1,
+    id: 'HPBCData-1',
     icon: linkMngt3,
     title: 'Link Management',
     text: `A comprehensive solution to help make every
@@ -44,7 +44,7 @@ export const HPBCData: ZaionsHpCPDataType[] = [
     secondaryBtnText: 'Learn more'
   },
   {
-    id: 2,
+    id: 'HPBCData-2',
     icon: qrCode,
     title: 'QR Codes',
     text: `A comprehensive solution to help make every
@@ -77,7 +77,7 @@ export const HPBCData: ZaionsHpCPDataType[] = [
     secondaryBtnText: 'Learn more'
   },
   {
-    id: 3,
+    id: 'HPBCData-3',
     icon: linkInBio,
     title: 'Link-in-bio ',
     text: `A comprehensive solution to help make every

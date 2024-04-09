@@ -17,13 +17,14 @@ import CONSTANTS from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { ProductFavicon } from '@/assets/images';
 import GoogleSocialAuth from '@/components/SocialAuth/GoogleAuth';
+import ZaionsSeparator from '@/components/InPageComponents/ZaionsSepatator/ZaionsSeparator';
 
 // Style
 
 const ZaionsLoginOptions: React.FC = () => {
   return (
     <>
-      <ZIonRow>
+      <ZIonRow className='mb-10'>
         <ZIonCol className='flex ion-justify-content-center'>
           <div className='w-full ion-text-center'>
             <ZIonImg
@@ -46,60 +47,25 @@ const ZaionsLoginOptions: React.FC = () => {
               </ZIonRouterLink>
             </ZIonText>
           </div>
-          <div></div>
         </ZIonCol>
       </ZIonRow>
-      <ZIonRow>
-        {/* <ZIonCol className="ion-text-center" size="3.6"> */}
-        {/* </ZIonCol> */}
-        <ZIonCol className='ion-text-center'>
+      {/* <ZIonRow>
+        <ZIonCol
+          className='mx-auto ion-text-center'
+          size='4.2'
+          sizeLg='5'
+          sizeMd='6.2'
+          sizeSm='8.2'
+          sizeXs='11.5'>
           <ZIonText
             className='block w-full mt-2 mb-3 text-[16px]'
             color='medium'>
             Log in with:
           </ZIonText>
-          {/* Google Social Auth Component */}
           <GoogleSocialAuth />
-
-          {/* <ZIonButton
-            className='me-2 ion-text-capitalize'
-            color='tertiary'
-            expand={!isXsScale ? 'block' : undefined}
-            testingselector={
-              CONSTANTS.testingSelectors.loginPage.twitterLoginButton
-            }>
-            <ZIonIcon
-              icon={logoTwitter}
-              className='font-bold me-1'></ZIonIcon>{' '}
-            Twitter
-          </ZIonButton>
-          <ZIonButton
-            className='me-2 ion-text-capitalize'
-            color='tertiary'
-            expand={!isXsScale ? 'block' : undefined}
-            testingselector={
-              CONSTANTS.testingSelectors.loginPage.facebookLoginButton
-            }>
-            <ZIonIcon
-              icon={logoFacebook}
-              className='font-bold me-1'></ZIonIcon>{' '}
-            Facebook
-          </ZIonButton>
-          <ZIonButton
-            className='me-2 ion-text-capitalize'
-            color='tertiary'
-            expand={!isXsScale ? 'block' : undefined}
-            testingselector={
-              CONSTANTS.testingSelectors.loginPage.appleLoginButton
-            }>
-            <ZIonIcon
-              icon={logoApple}
-              className='font-bold me-1'></ZIonIcon>{' '}
-            Apple
-          </ZIonButton> */}
         </ZIonCol>
-        {/* <ZIonCol className="ion-text-center" size="3.6"></ZIonCol> */}
       </ZIonRow>
+      <ZaionsSeparator className='py-2 my-6' /> */}
     </>
   );
 };

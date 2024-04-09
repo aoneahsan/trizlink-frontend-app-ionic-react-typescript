@@ -599,7 +599,7 @@ const ZProfileSettingsSettings: React.FC = () => {
                 <ZChangePassword />
 
                 {/*  2-Factor authentication */}
-                <ZIonTitle
+                {/* <ZIonTitle
                   className={classNames({
                     'block font-semibold ion-no-padding mt-4 pt-2': true,
                     'text-lg': isLgScale,
@@ -638,10 +638,10 @@ const ZProfileSettingsSettings: React.FC = () => {
                       Send verification code
                     </ZIonButton>
                   </div>
-                </div>
+                </div> */}
 
                 {/* Access history */}
-                <ZIonTitle
+                {/* <ZIonTitle
                   color='medium'
                   className={classNames({
                     'block font-semibold ion-no-padding mt-4 pt-2': true,
@@ -741,7 +741,7 @@ const ZProfileSettingsSettings: React.FC = () => {
                       </ZIonItem>
                     );
                   })}
-                </ZIonList>
+                </ZIonList> */}
               </Form>
             );
           }}

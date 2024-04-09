@@ -606,7 +606,8 @@ span.new {
 
 .z-help-center-popover-size {
   --width: 218px;
-  --height: 350px;
+  --height: 73px;
+  /* height was 350px, i commented out few buttons for now */
 }
 .z-notification-popover-size {
   --width: 40rem;
@@ -1206,4 +1207,12 @@ ion-range.z-ion-range-show-top-pin::part(pin) {
 }
 ion-range.z-ion-range-show-top-pin::part(pin)::before {
   content: none;
+}
+.work-in-progress-notice {
+  background-color: yellow;
+  color: black;
+  font-weight: bold;
+  text-align: center;
+  border: 2px solid red;
+  border-radius: 5px;
 }

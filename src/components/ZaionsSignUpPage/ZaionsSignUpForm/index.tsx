@@ -88,6 +88,8 @@ import { reloadBlockingRStateAtom } from '@/ZaionsStore/AppRStates';
 import { useLocation } from 'react-router';
 import { ProductFavicon } from '@/assets/images';
 import ZaionsSeparator from '@/components/InPageComponents/ZaionsSepatator/ZaionsSeparator';
+import TermsPrivacyAcceptedNote from '@/components/TermsPrivacyAcceptedNote';
+import { errorCodes } from '@/utils/constants/apiConstants';
 
 // Style
 
@@ -302,7 +304,7 @@ const ZaionsSignUpForm: React.FC = props => {
       }}>
       {({ values }) => (
         <>
-          <ZIonRow>
+          <ZIonRow className='mb-10'>
             <ZIonCol
               className='flex mx-auto ion-justify-content-center'
               sizeXl='6'
@@ -349,45 +351,6 @@ const ZaionsSignUpForm: React.FC = props => {
               </div>
             </ZIonCol>
           </ZIonRow>
-          {values.tab === ZSetPasswordTabEnum.sendOptTab && (
-            <>
-              <ZIonRow>
-                {/* <ZIonCol className="ion-text-center" size="3.6"> */}
-                {/* </ZIonCol> */}
-                <ZIonCol
-                  className='mx-auto mt-3 ion-text-center'
-                  sizeXl='5'
-                  sizeLg='5.7'
-                  sizeMd='6.5'
-                  sizeSm='10'
-                  sizeXs='12'>
-                  <ZIonButton
-                    className='me-2 ion-text-capitalize'
-                    color='tertiary'
-                    expand='block'
-                    testingselector={
-                      CONSTANTS.testingSelectors.signupPage.googleSignupButton
-                    }>
-                    <ZIonIcon
-                      icon={logoGoogle}
-                      className='font-bold me-1'
-                    />
-                    Sign Up with Google
-                  </ZIonButton>
-                </ZIonCol>
-                {/* <ZIonCol className="ion-text-center" size="3.6"></ZIonCol> */}
-              </ZIonRow>
-
-              <ZaionsSeparator
-                sizeXl='5'
-                sizeLg='5.7'
-                sizeMd='6.5'
-                sizeSm='10'
-                sizeXs='12'
-                className='my-5'
-              />
-            </>
-          )}
 
           <ZIonRow className='ion-justify-content-center'>
             <ZIonCol
@@ -408,6 +371,7 @@ const ZaionsSignUpForm: React.FC = props => {
               </Form>
             </ZIonCol>
           </ZIonRow>
+          <TermsPrivacyAcceptedNote isRegisterPage />
         </>
       )}
     </Formik>
@@ -494,29 +458,32 @@ const ZSendOtpTab: React.FC = () => {
       }
     } catch (error) {
       if (error instanceof AxiosError) {
-        const _apiErrorObjects = error.response?.data as {
-          errors: { item: string[] } | ZGenericObject;
-          status: number;
-        };
+        try {
+          const _apiErrorObjects = error.response?.data as {
+            errors: { item: string[] } | ZGenericObject;
+            status: number;
+          };
 
-        const _errors = formatApiRequestErrorForFormikFormField(
-          ['emailAddress'],
-          ['email'],
-          _apiErrorObjects.errors as ZGenericObject
-        );
+          const _errors = formatApiRequestErrorForFormikFormField(
+            ['emailAddress'],
+            ['email'],
+            _apiErrorObjects.errors as ZGenericObject
+          );
 
-        if (_errors !== undefined) {
-          setErrors(_errors);
-        }
+          if (_errors !== undefined) {
+            setErrors(_errors);
+          }
 
-        const _apiErrors = (_apiErrorObjects?.errors as { item: string[] })
-          ?.item;
-        const _apiErrorCode = _apiErrorObjects?.status;
+          const _apiErrors = (_apiErrorObjects?.errors as { item: string[] })
+            ?.item;
+          const _apiErrorCode = _apiErrorObjects?.status;
 
-        if (_apiErrorCode === ZErrorCodeEnum.badRequest) {
-          setFieldError('emailAddress', _apiErrors[0]);
-        }
+          if (_apiErrorCode === ZErrorCodeEnum.badRequest) {
+            setFieldError('emailAddress', _apiErrors[0]);
+          }
+        } catch (error) {}
       }
+
       reportCustomError(error);
     }
   };

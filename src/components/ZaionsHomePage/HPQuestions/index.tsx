@@ -17,7 +17,8 @@ import {
   ZIonAccordionGroup,
   ZIonItem,
   ZIonLabel,
-  ZIonButton
+  ZIonButton,
+  ZIonRouterLink
 } from '@/components/ZIonComponents';
 
 // Types
@@ -34,6 +35,7 @@ import { HPFAQData } from '@/data/HPFAQData';
 
 // Style
 import classes from './styles.module.css';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 const ZaionsHPFAQuestions: React.FC<{ className?: string }> = ({
   className
@@ -102,9 +104,14 @@ const ZaionsHPFAQuestions: React.FC<{ className?: string }> = ({
                       <>
                         <br />
                         <br />
-                        <ZIonButton className='ion-text-capitalize'>
-                          {item.button}
-                        </ZIonButton>
+                        <ZIonRouterLink
+                          routerLink={
+                            ZaionsRoutes.WhyZaions.ZaionsPricingRoute
+                          }>
+                          <ZIonButton className='ion-text-capitalize'>
+                            {item.button}
+                          </ZIonButton>
+                        </ZIonRouterLink>
                         <br />
                       </>
                     )}

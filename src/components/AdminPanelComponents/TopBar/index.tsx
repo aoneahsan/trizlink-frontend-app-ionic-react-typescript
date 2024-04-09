@@ -186,7 +186,7 @@ const ZAdminPanelTopBar: React.FC<{
         )}
 
         {/* Upgrade button */}
-        {isMdScale && (
+        {/* {isMdScale && (
           <ZIonButton
             color='secondary'
             expand={!isMdScale ? 'block' : undefined}
@@ -199,7 +199,7 @@ const ZAdminPanelTopBar: React.FC<{
             testingselector={CONSTANTS.testingSelectors.topBar.upgradeBtn}>
             Upgrade
           </ZIonButton>
-        )}
+        )} */}
 
         {/* Help button */}
         {isMdScale && (
@@ -223,7 +223,6 @@ const ZAdminPanelTopBar: React.FC<{
               icon={helpCircleOutline}
               className='w-7 h-7'
             />
-            {/* <ZIonText className='mt-[2px]'>Help</ZIonText> */}
           </ZIonButton>
         )}
 

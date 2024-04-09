@@ -71,7 +71,9 @@ const GENERAL = {
   UNAUTHENTICATED: 'Unauthenticated, Please login to continue.',
 
   // This message we will use in public, private routes component suspense.
-  ROUTE_FALLBACK_SUSPENSE_MESSAGE: 'Loading...'
+  ROUTE_FALLBACK_SUSPENSE_MESSAGE: 'Loading...',
+  TOO_MANY_REQUESTS:
+    'Too many requests, please try again later after 5 minutes.'
 };
 
 // All login messages
