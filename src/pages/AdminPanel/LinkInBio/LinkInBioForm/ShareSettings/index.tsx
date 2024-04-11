@@ -111,7 +111,7 @@ import {
 } from '@/types/AdminPanel/linksType';
 import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type';
 import { ENVS } from '@/utils/envKeys';
-import SupportTrizlinkOnPatreon from '@/components/SupportTrizlinkOnPatreon';
+import SupportOnPatreon from '@/components/SupportOnPatreon';
 
 /**
  * Style files Imports go down
@@ -539,7 +539,7 @@ const LinkInBioShareSettings: React.FC = () => {
 
   return (
     <>
-      <SupportTrizlinkOnPatreon />
+      <SupportOnPatreon />
       <Formik
         // #region ( Initial Values Start  )
         initialValues={formikInitialValues}

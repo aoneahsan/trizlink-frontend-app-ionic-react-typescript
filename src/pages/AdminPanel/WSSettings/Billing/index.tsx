@@ -4,7 +4,7 @@
  * */
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
-import SupportTrizlinkOnPatreon from '@/components/SupportTrizlinkOnPatreon';
+import SupportOnPatreon from '@/components/SupportOnPatreon';
 import {
   ZIonButton,
   ZIonCard,
@@ -209,7 +209,7 @@ const ZBillingPage: React.FC = () => {
   // #endregion
   return (
     <>
-      <SupportTrizlinkOnPatreon />
+      <SupportOnPatreon />
       <ZIonRow className='border rounded-lg zaions__light_bg ion-align-items-center ion-padding'>
         <ZIonCol
           sizeXl='6'

@@ -86,7 +86,7 @@ import { useRecoilState } from 'recoil';
 import { reloadBlockingRStateAtom } from '@/ZaionsStore/AppRStates';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import { reloadBlockingTypeEnum } from '@/types/zaionsAppSettings.type';
-import SupportTrizlinkOnPatreon from '@/components/SupportTrizlinkOnPatreon';
+import SupportOnPatreon from '@/components/SupportOnPatreon';
 
 const ZLinkInBioBlocksSection = lazy(
   () =>
@@ -320,7 +320,7 @@ const LinkInBioDesignPage: React.FC = () => {
   return (
     <Suspense fallback={<ZFallbackIonSpinner2 />}>
       <ZIonContent>
-        <SupportTrizlinkOnPatreon />
+        <SupportOnPatreon />
         <ZIonGrid className='h-full overflow-hidden ion-no-padding ion-margin-horizontal'>
           <ZIonRow className='h-full'>
             <ZIonCol

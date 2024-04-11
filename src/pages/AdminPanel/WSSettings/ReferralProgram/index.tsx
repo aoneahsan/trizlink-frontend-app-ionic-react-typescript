@@ -30,7 +30,7 @@ import {
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import { PRODUCT_NAME } from '@/utils/constants';
 import { gift } from '@/assets/images';
-import SupportTrizlinkOnPatreon from '@/components/SupportTrizlinkOnPatreon';
+import SupportOnPatreon from '@/components/SupportOnPatreon';
 
 /**
  * Global Constants Imports go down
@@ -82,7 +82,7 @@ const ZWSReferralProgramListPage: React.FC = () => {
 
   return (
     <>
-      <SupportTrizlinkOnPatreon />
+      <SupportOnPatreon />
       <ZIonRow className='border rounded-lg zaions__light_bg ion-align-items-center ion-padding'>
         <ZIonCol
           sizeXl='6'

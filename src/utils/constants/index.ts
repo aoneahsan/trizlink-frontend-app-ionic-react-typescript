@@ -26,7 +26,6 @@ import { WSRolesNameEnum } from '@/types/AdminPanel/workspace';
 import { ZTeamMemberInvitationEnum } from '@/types/AdminPanel/index.type';
 
 // Constant
-// const ZLinkApiRootUrl = 'https://zlinkbackend.zaions.com/public/api/zlink/v1';
 export const ZLinkApiRootUrl = ENVS.apiUrl;
 
 const testingSelectorsPrefix = 'ztes__';

@@ -3,7 +3,11 @@
  * ? Like Import of React is a Core Import
  * */
 import React, { useEffect } from 'react';
-import { init as sentryReactInit, BrowserTracing } from '@sentry/react';
+import {
+  init as sentryReactInit,
+  browserTracingIntegration,
+  replayIntegration
+} from '@sentry/react';
 import { ENVS } from '@/utils/envKeys';
 
 /**
@@ -24,11 +28,27 @@ const ErrorLoggingHOC: React.FC<IErrorLoggingHOC> = ({ children }) => {
       sentryReactInit({
         dsn: _sentryDNS,
         dist: '1',
-        tracesSampleRate: 1.0,
-        integrations: [new BrowserTracing()],
+        integrations: [
+          browserTracingIntegration(),
+          replayIntegration({
+            maskAllText: false,
+            blockAllMedia: false
+          })
+        ],
         enabled: true,
         enableTracing: true,
-        environment: window.location.host
+        environment: window.location.host,
+        // Performance Monitoring
+        tracesSampleRate: 1.0, //  Capture 100% of the transactions
+        // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
+        tracePropagationTargets: [
+          'localhost',
+          /^https:\/\/zaions\.com\/api/,
+          /^https:\/\/trizlink\.com\//
+        ],
+        // Session Replay
+        replaysSessionSampleRate: 0.1, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
+        replaysOnErrorSampleRate: 1.0 // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
       });
     }
   }, []);

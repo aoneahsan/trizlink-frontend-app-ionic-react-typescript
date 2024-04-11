@@ -250,7 +250,7 @@ export enum notificationTypeEnum {
 }
 
 export enum apiTypeToValidateEnum {
-  ZlinkMutationApi = 'ZlinkMutationApi'
+  MutationApi = 'MutationApi'
 }
 
 export enum zCreateElementTestingSelectorKeyEnum {

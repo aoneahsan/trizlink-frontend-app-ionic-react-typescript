@@ -79,7 +79,7 @@ import {
   type TimeSlotInterface
 } from '@/types/AdminPanel/index.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import SupportTrizlinkOnPatreon from '@/components/SupportTrizlinkOnPatreon';
+import SupportOnPatreon from '@/components/SupportOnPatreon';
 
 /**
  * Recoil State Imports go down
@@ -221,7 +221,7 @@ const ZTimetableTab: React.FC<{
 
   return (
     <>
-      <SupportTrizlinkOnPatreon />
+      <SupportOnPatreon />
       <Formik
         initialValues={formikInitialValues}
         onSubmit={() => {}}>

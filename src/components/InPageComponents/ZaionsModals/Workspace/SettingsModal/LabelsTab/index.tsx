@@ -83,7 +83,7 @@ import {
 import { FormMode, type LabelInterface } from '@/types/AdminPanel/index.type';
 import { type ZLinkMutateApiType } from '@/types/ZaionsApis.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import SupportTrizlinkOnPatreon from '@/components/SupportTrizlinkOnPatreon';
+import SupportOnPatreon from '@/components/SupportOnPatreon';
 
 /**
  * Recoil State Imports go down
@@ -603,7 +603,7 @@ const ZLabelsTab: React.FC<{
 
   return (
     <>
-      <SupportTrizlinkOnPatreon />
+      <SupportOnPatreon />
       <div className='flex flex-col w-full h-full pt-6 ion-align-items-center'>
         <ZIonText className='py-2 text-xl'>
           Create and edit your labels below

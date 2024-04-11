@@ -51,7 +51,7 @@ import { type workspaceInterface } from '@/types/AdminPanel/workspace';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import SupportTrizlinkOnPatreon from '@/components/SupportTrizlinkOnPatreon';
+import SupportOnPatreon from '@/components/SupportOnPatreon';
 
 /**
  * Recoil State Imports go down
@@ -107,7 +107,7 @@ const ZSingleWSNotificationSettings: React.FC = () => {
 
   return (
     <>
-      <SupportTrizlinkOnPatreon />
+      <SupportOnPatreon />
       <ZIonRow
         className={classNames({
           'ion-align-items-center': true,

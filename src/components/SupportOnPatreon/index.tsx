@@ -2,7 +2,7 @@ import CONSTANTS from '@/utils/constants';
 import React from 'react';
 import { ZIonButton } from '../ZIonComponents';
 
-const SupportTrizlinkOnPatreon: React.FC = () => {
+const SupportOnPatreon: React.FC = () => {
   const [compState, setCompState] = React.useState({
     hide: false
   });
@@ -39,4 +39,4 @@ const SupportTrizlinkOnPatreon: React.FC = () => {
   );
 };
 
-export default SupportTrizlinkOnPatreon;
+export default SupportOnPatreon;

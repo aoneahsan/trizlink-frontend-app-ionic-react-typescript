@@ -59,7 +59,7 @@ import {
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import classNames from 'classnames';
 import { replaceRouteParams } from '@/utils/helpers';
-import SupportTrizlinkOnPatreon from '@/components/SupportTrizlinkOnPatreon';
+import SupportOnPatreon from '@/components/SupportOnPatreon';
 
 /**
  * Recoil State Imports go down

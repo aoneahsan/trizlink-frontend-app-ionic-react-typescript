@@ -66,7 +66,7 @@ import { FormMode } from '@/types/AdminPanel/index.type';
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import { ProductFavicon } from '@/assets/images';
-import SupportTrizlinkOnPatreon from '@/components/SupportTrizlinkOnPatreon';
+import SupportOnPatreon from '@/components/SupportOnPatreon';
 
 /**
  * Component props type go down
@@ -113,7 +113,7 @@ const ZWorkspacesSharingModal: React.FC<{
 
   return (
     <>
-      <SupportTrizlinkOnPatreon />
+      <SupportOnPatreon />
       <ZIonContent>
         <div className='flex mt-2 ion-align-items-start ion-justify-content-end pe-2'>
           <ZIonIcon

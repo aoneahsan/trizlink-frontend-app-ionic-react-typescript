@@ -88,7 +88,7 @@ import { reportCustomError } from '@/utils/customErrorType';
 import { extractInnerData, zStringify } from '@/utils/helpers';
 import { useZIonToastSuccess } from '@/ZaionsHooks/zionic-hooks';
 import MESSAGES from '@/utils/messages';
-import SupportTrizlinkOnPatreon from '@/components/SupportTrizlinkOnPatreon';
+import SupportOnPatreon from '@/components/SupportOnPatreon';
 
 /**
  * Component props type go down
@@ -207,7 +207,7 @@ const ZPersonalSettings: React.FC = () => {
 
   return (
     <>
-      <SupportTrizlinkOnPatreon />
+      <SupportOnPatreon />
       <Formik
         initialValues={formikInitialValues}
         enableReinitialize={true}

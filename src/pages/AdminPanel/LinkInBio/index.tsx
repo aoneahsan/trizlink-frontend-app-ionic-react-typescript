@@ -76,7 +76,7 @@ import {
 
 // Styles
 import classes from './styles.module.css';
-import SupportTrizlinkOnPatreon from '@/components/SupportTrizlinkOnPatreon';
+import SupportOnPatreon from '@/components/SupportOnPatreon';
 
 // Lazy loads
 const ZaionsLinkInBioLinksTable = lazy(
@@ -763,7 +763,7 @@ const ZInpageMainContent: React.FC = () => {
 
   return (
     <div className='flex flex-col gap-4 ion-no-margin ion-no-padding'>
-      <SupportTrizlinkOnPatreon />
+      <SupportOnPatreon />
       {/* Switch it button & page heading */}
       <ZIonRow
         className={classNames({

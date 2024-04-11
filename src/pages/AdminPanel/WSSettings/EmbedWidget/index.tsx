@@ -51,7 +51,7 @@ import CONSTANTS from '@/utils/constants';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { FormMode } from '@/types/AdminPanel/index.type';
-import SupportTrizlinkOnPatreon from '@/components/SupportTrizlinkOnPatreon';
+import SupportOnPatreon from '@/components/SupportOnPatreon';
 
 /**
  * Recoil State Imports go down
@@ -118,7 +118,7 @@ const ZWSSettingEmbedWidgetListPage: React.FC = () => {
 
   return (
     <>
-      <SupportTrizlinkOnPatreon />
+      <SupportOnPatreon />
       {/* filter, refresh, create buttons */}
       <ZIonRow className='border rounded-lg zaions__light_bg ion-align-items-center ion-padding'>
         <ZIonCol

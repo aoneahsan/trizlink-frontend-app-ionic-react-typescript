@@ -75,7 +75,7 @@ import { reportCustomError } from '@/utils/customErrorType';
 import { extractInnerData, zStringify } from '@/utils/helpers';
 import { useZIonToastSuccess } from '@/ZaionsHooks/zionic-hooks';
 import MESSAGES from '@/utils/messages';
-import SupportTrizlinkOnPatreon from '@/components/SupportTrizlinkOnPatreon';
+import SupportOnPatreon from '@/components/SupportOnPatreon';
 
 /**
  * Recoil State Imports go down
@@ -308,7 +308,7 @@ const WorkspacesSettings: React.FC = () => {
 
   return (
     <>
-      <SupportTrizlinkOnPatreon />
+      <SupportOnPatreon />
       <ZIonRow
         className={classNames({
           'ion-align-items-center': true,

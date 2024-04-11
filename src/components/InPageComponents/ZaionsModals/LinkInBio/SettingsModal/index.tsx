@@ -56,7 +56,7 @@ import {
 import { Formik } from 'formik';
 import { reportCustomError } from '@/utils/customErrorType';
 import { showSuccessNotification } from '@/utils/notification';
-import SupportTrizlinkOnPatreon from '@/components/SupportTrizlinkOnPatreon';
+import SupportOnPatreon from '@/components/SupportOnPatreon';
 
 /**
  * Custom Imports go down
@@ -256,7 +256,7 @@ const ZLinkInBioFormSettingsModal: React.FC<{
 
   return (
     <>
-      <SupportTrizlinkOnPatreon />
+      <SupportOnPatreon />
       <Formik
         initialValues={FormikInitialValues}
         enableReinitialize

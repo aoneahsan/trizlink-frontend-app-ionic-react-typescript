@@ -52,7 +52,7 @@ import {
   workspaceFormTabEnum
 } from '@/types/AdminPanel/workspace';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
-import SupportTrizlinkOnPatreon from '@/components/SupportTrizlinkOnPatreon';
+import SupportOnPatreon from '@/components/SupportOnPatreon';
 
 /**
  * Recoil State Imports go down
