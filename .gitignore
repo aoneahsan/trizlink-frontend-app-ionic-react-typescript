@@ -137,3 +137,5 @@ yarn-error.log*
 .stencil/
 
 .history
+# Sentry Config File
+.env.sentry-build-plugin
