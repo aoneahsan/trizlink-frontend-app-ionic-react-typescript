@@ -33,7 +33,7 @@ import {
 import { ZFallbackIonSpinner2 } from '@/components/CustomComponents/FallbackSpinner';
 import ZEmailAddressesTable from '@/components/InPageComponents/ZaionsTable/UserSettings/emailAddressesTable';
 import ZCPhoneNumberInput from '@/components/CustomComponents/ZPhoneNumberInput';
-import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/userButton';
 import ZCan from '@/components/Can';
 import AddEmailModal from '@/components/InPageComponents/ZaionsModals/EmailModal';
 import ZCountdown from '@/components/CustomComponents/ZCountDown';

@@ -16,7 +16,7 @@ import {
   ZIonText,
   ZIonTextareaShort
 } from '@/components/ZIonComponents';
-import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/userButton';
 import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
 

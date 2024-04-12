@@ -82,7 +82,7 @@ import SupportOnPatreon from '@/components/SupportOnPatreon';
 const ZaionsLinkInBioLinksTable = lazy(
   () =>
     import(
-      '@/components/InPageComponents/ZaionsTable/LinkInBioTables/LinkInBioTable'
+      '@/components/InPageComponents/ZaionsTable/linkInBioTables/LinkInBioTable'
     )
 );
 const ZDashboardFolderMenu = lazy(

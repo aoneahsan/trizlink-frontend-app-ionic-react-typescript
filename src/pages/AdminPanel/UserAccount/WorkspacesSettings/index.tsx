@@ -27,7 +27,7 @@ import {
   ZIonText,
   ZIonTitle
 } from '@/components/ZIonComponents';
-import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/userButton';
 
 /**
  * Custom Hooks Imports go down

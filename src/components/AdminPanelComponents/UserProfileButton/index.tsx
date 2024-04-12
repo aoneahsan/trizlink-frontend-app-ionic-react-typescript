@@ -14,7 +14,7 @@ import React, { useMemo } from 'react';
  * ? Like import of custom components is a custom import
  * */
 import ZWorkspaceProfilePopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/ProfilePopover';
-import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/userButton';
 
 /**
  * Custom Hooks Imports go down

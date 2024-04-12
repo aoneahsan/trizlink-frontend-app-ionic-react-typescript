@@ -20,7 +20,7 @@ import {
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/userButton';
 import {
   ZIonAvatar,
   ZIonButton,
