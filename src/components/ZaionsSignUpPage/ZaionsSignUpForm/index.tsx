@@ -195,13 +195,22 @@ const ZaionsSignUpForm: React.FC = props => {
         // Setting errors on form fields
         const _apiErrors = (error.response?.data as { errors: ZGenericObject })
           ?.errors;
-        const _errors = formatApiRequestErrorForFormikFormField(
-          ['displayName', 'emailAddress', 'password'],
-          ['name', 'email', 'password'],
-          _apiErrors
-        );
 
-        setErrors(_errors);
+        if (
+          _apiErrors !== undefined &&
+          _apiErrors !== null &&
+          Object.keys(_apiErrors).length > 0
+        ) {
+          const _errors = formatApiRequestErrorForFormikFormField(
+            ['displayName', 'emailAddress', 'password'],
+            ['name', 'email', 'password'],
+            _apiErrors
+          );
+
+          setErrors(_errors);
+        } else {
+          await presentZIonErrorAlert();
+        }
       } else if (error instanceof ZCustomError || error instanceof Error) {
         // if we need to do some other type of logic reporting (like report this error to API or error logging to like sentry or datadog etc then we can do that here, otherwise if we just want to show the message of error to user in alert then we can do that in one else case no need for this check, but here we can set the title of alert to )
         await presentZIonErrorAlert();
