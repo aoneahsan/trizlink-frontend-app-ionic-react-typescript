@@ -288,7 +288,7 @@ const ZAccountDetails: React.FC = () => {
                                     'ion-no-padding': true,
                                     'pt-2 ion-text-center': !isSmScale
                                   })}>
-                                  <ZIonText>talhairshad</ZIonText>
+                                  <ZIonText>trizlink-user</ZIonText>
                                 </ZIonCol>
                                 <ZIonCol
                                   sizeXl=''

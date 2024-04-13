@@ -125,7 +125,7 @@ const ZaionsLinkSettingPanel: React.FC<{
 
         <ZIonAccordionGroup className='mb-4'>
           <ZIonAccordion
-            value='talhairshad'
+            value='trizlink-user'
             toggleIcon={caretDownCircleOutline}
             toggleIconSlot='end'>
             <ZIonItem
@@ -134,7 +134,7 @@ const ZaionsLinkSettingPanel: React.FC<{
               <ZIonLabel
                 className='font-bold ps-2'
                 color='medium'>
-                talhairshad
+                trizlink-user
               </ZIonLabel>
             </ZIonItem>
             <ZIonList

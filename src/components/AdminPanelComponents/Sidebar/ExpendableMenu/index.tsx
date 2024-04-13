@@ -48,7 +48,7 @@ import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { replaceParams, replaceRouteParams } from '@/utils/helpers';
+import { replaceRouteParams } from '@/utils/helpers';
 import { API_URL_ENUM } from '@/utils/enums';
 import {
   permissionCheckModeEnum,
@@ -77,6 +77,7 @@ import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
  * ? Import of style sheet is a style import
  * */
 import classes from './styles.module.css';
+import LogoutButton from '@/components/LogoutButton';
 
 /**
  * Images Imports go down
@@ -746,9 +747,23 @@ const AdminPanelSidebarMenu: React.FC<{
                   )
                 );
               }}>
-              Settings
+              Workspace Settings
             </ZIonSegmentButton>
           </ZCan>
+
+          {/* User Account Setting */}
+          <ZIonSegmentButton
+            value='user-account-setting'
+            className='normal-case'
+            onClick={() => {
+              zNavigatePushRoute(
+                ZaionsRoutes.AdminPanel.Setting.UserAccount.ProfileSettings
+              );
+            }}>
+            Account Settings
+          </ZIonSegmentButton>
+
+          <LogoutButton useSegmentButton />
         </ZIonSegment>
       </ZIonCol>
     );

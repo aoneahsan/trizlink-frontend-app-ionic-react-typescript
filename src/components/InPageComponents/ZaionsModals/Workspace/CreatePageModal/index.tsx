@@ -137,7 +137,7 @@ const ZWorkspaceCreatePageModal: React.FC<{
                     {/*  */}
                     <div className='ms-2 text-xl w-[64%] ion-text-end'>
                       <ZIonText className='block font-bold'>
-                        Add pages to Talha
+                        Add pages to Ahsan
                       </ZIonText>
                     </div>
 

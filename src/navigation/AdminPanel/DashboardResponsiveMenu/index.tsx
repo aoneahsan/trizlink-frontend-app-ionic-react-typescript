@@ -224,7 +224,7 @@ const ZaionsDashboardResponsiveMenu: React.FC<ZDashboardResponsiveMenu> = ({
 
               <ZIonAccordionGroup className='mb-4 me-2'>
                 <ZIonAccordion
-                  value='talhairshad'
+                  value='Ahsan Mahmood'
                   toggleIcon={caretDownCircleOutline}
                   toggleIconSlot='end'>
                   <ZIonItem
@@ -233,7 +233,7 @@ const ZaionsDashboardResponsiveMenu: React.FC<ZDashboardResponsiveMenu> = ({
                     <ZIonLabel
                       className='font-bold ps-2'
                       color='medium'>
-                      talhairshad
+                      Ahsan Mahmood
                     </ZIonLabel>
                   </ZIonItem>
                   <ZIonList
