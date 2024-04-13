@@ -1,16 +1,37 @@
 import CONSTANTS from '@/utils/constants';
 import React from 'react';
 import { ZIonButton } from '../ZIonComponents';
+import { useMediaQuery } from 'react-responsive';
+import classNames from 'classnames';
+import { Browser } from '@capacitor/browser';
 
 const SupportOnPatreon: React.FC = () => {
   const [compState, setCompState] = React.useState({
     hide: false
   });
+  const isLg = useMediaQuery({ query: '(min-width: 1024px)' });
+
+  const openSupportLink = async () => {
+    try {
+      await Browser.open({
+        url: CONSTANTS.ProductExternalURL.patreonLink,
+        presentationStyle: 'fullscreen',
+        windowName: '_blank'
+      });
+    } catch (error) {}
+  };
 
   return (
     <>
       {!compState.hide ? (
-        <div className='relative inline-block px-12 pt-6 pb-4 mx-6 my-5 work-in-progress-notice'>
+        <div
+          className={classNames(
+            'relative inline-block pb-4 mx-6 my-5 work-in-progress-notice',
+            {
+              'px-12 pt-6': isLg,
+              'px-2 pt-12': !isLg
+            }
+          )}>
           <span
             onClick={() => {
               setCompState({ ...compState, hide: true });
@@ -19,18 +40,23 @@ const SupportOnPatreon: React.FC = () => {
             Close
           </span>
           <h2
-            className='mb-4 text-[22px] text-wrap cursor-pointer'
+            className={classNames('mb-4 text-wrap cursor-pointer', {
+              'text-[22px]': isLg,
+              'text-[20px]': !isLg
+            })}
             onClick={() => {
-              window.open(CONSTANTS.ProductExternalURL.patreonLink, '_blank');
+              void openSupportLink();
             }}>
             Please Note: It's a work in-progress, right now, it's just a
             structure and not connected to actual account data, we need
             investment to continue work on the remaining features.
           </h2>
           <ZIonButton
-            href={CONSTANTS.ProductExternalURL.patreonLink}
-            target={'_blank'}
-            size='large'>
+            onClick={() => {
+              void openSupportLink();
+            }}
+            size={isLg ? 'large' : 'default'}
+            className='cursor-pointer'>
             Support Trizlink and Get this Feature
           </ZIonButton>
         </div>

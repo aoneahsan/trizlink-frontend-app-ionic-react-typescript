@@ -710,10 +710,10 @@ const AppRoutes = (): JSX.Element => {
           />
         )}
       /> */}
-        {/* <Route
+        <Route
           path={ZaionsRoutes.Asterisk}
           component={Z404View}
-        /> */}
+        />
       </Suspense>
     </>
     // </IonRouterOutlet>

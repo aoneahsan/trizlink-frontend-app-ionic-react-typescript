@@ -185,15 +185,15 @@ const AdminPanelSidebarMenu: React.FC<{
           ? '70px'
           : '80px'
         : is2XlScale
-        ? '50px'
-        : '42px',
+          ? '50px'
+          : '42px',
       height: isExpand
         ? is2XlScale
           ? '70px'
           : '80px'
         : is2XlScale
-        ? '50px'
-        : '42px'
+          ? '50px'
+          : '42px'
     }),
     [isExpand, is2XlScale]
   );
@@ -248,13 +248,13 @@ const AdminPanelSidebarMenu: React.FC<{
                               ).workspaceName
                             })
                         : (selectedWorkspace as workspaceInterface)
-                            ?.workspaceImage != null
-                        ? (selectedWorkspace as workspaceInterface)
-                            ?.workspaceImage
-                        : getUiAvatarApiUrl({
-                            name: (selectedWorkspace as workspaceInterface)
-                              ?.workspaceName
-                          })
+                              ?.workspaceImage != null
+                          ? (selectedWorkspace as workspaceInterface)
+                              ?.workspaceImage
+                          : getUiAvatarApiUrl({
+                              name: (selectedWorkspace as workspaceInterface)
+                                ?.workspaceName
+                            })
                     }
                     alt={`${PRODUCT_NAME} logo`}
                     className={classNames(classes['zaions-ap-msm-logo'], {
@@ -315,24 +315,24 @@ const AdminPanelSidebarMenu: React.FC<{
                                   ]
                                 )
                               : (wsShareId?.trim()?.length ?? 0) > 0 &&
-                                (shareWSMemberId?.trim()?.length ?? 0) > 0
-                              ? replaceRouteParams(
-                                  ZaionsRoutes.AdminPanel.ShareWS.Short_link
-                                    .Main,
-                                  [
-                                    CONSTANTS.RouteParams.workspace.wsShareId,
-                                    CONSTANTS.RouteParams.workspace
-                                      .shareWSMemberId,
-                                    CONSTANTS.RouteParams
-                                      .folderIdToGetShortLinksOrLinkInBio
-                                  ],
-                                  [
-                                    wsShareId ?? '',
-                                    shareWSMemberId ?? '',
-                                    CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
-                                  ]
-                                )
-                              : ''
+                                  (shareWSMemberId?.trim()?.length ?? 0) > 0
+                                ? replaceRouteParams(
+                                    ZaionsRoutes.AdminPanel.ShareWS.Short_link
+                                      .Main,
+                                    [
+                                      CONSTANTS.RouteParams.workspace.wsShareId,
+                                      CONSTANTS.RouteParams.workspace
+                                        .shareWSMemberId,
+                                      CONSTANTS.RouteParams
+                                        .folderIdToGetShortLinksOrLinkInBio
+                                    ],
+                                    [
+                                      wsShareId ?? '',
+                                      shareWSMemberId ?? '',
+                                      CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                                    ]
+                                  )
+                                : ''
                           }
                           className={classNames(
                             'zaions-transition cursor-pointer ion-activatable z-ion-bg-transparent',
@@ -395,24 +395,24 @@ const AdminPanelSidebarMenu: React.FC<{
                                 ]
                               )
                             : (wsShareId?.trim()?.length ?? 0) > 0 &&
-                              (shareWSMemberId?.trim()?.length ?? 0) > 0
-                            ? replaceRouteParams(
-                                ZaionsRoutes.AdminPanel.ShareWS.Link_in_bio
-                                  .Main,
-                                [
-                                  CONSTANTS.RouteParams.workspace.wsShareId,
-                                  CONSTANTS.RouteParams.workspace
-                                    .shareWSMemberId,
-                                  CONSTANTS.RouteParams
-                                    .folderIdToGetShortLinksOrLinkInBio
-                                ],
-                                [
-                                  wsShareId ?? '',
-                                  shareWSMemberId ?? '',
-                                  CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
-                                ]
-                              )
-                            : ''
+                                (shareWSMemberId?.trim()?.length ?? 0) > 0
+                              ? replaceRouteParams(
+                                  ZaionsRoutes.AdminPanel.ShareWS.Link_in_bio
+                                    .Main,
+                                  [
+                                    CONSTANTS.RouteParams.workspace.wsShareId,
+                                    CONSTANTS.RouteParams.workspace
+                                      .shareWSMemberId,
+                                    CONSTANTS.RouteParams
+                                      .folderIdToGetShortLinksOrLinkInBio
+                                  ],
+                                  [
+                                    wsShareId ?? '',
+                                    shareWSMemberId ?? '',
+                                    CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                                  ]
+                                )
+                              : ''
                         }
                         className={classNames(
                           'zaions-transition cursor-pointer ion-activatable z-ion-bg-transparent mt-2',
@@ -478,42 +478,42 @@ const AdminPanelSidebarMenu: React.FC<{
                                 [workspaceId ?? '']
                               )
                             : (wsShareId?.trim()?.length ?? 0) > 0 &&
-                              (shareWSMemberId?.trim()?.length ?? 0) > 0
-                            ? (
-                                getMemberRolePermissions as {
-                                  memberPermissions: string[];
-                                }
-                              )?.memberPermissions !== undefined &&
-                              Boolean(
-                                (
+                                (shareWSMemberId?.trim()?.length ?? 0) > 0
+                              ? (
                                   getMemberRolePermissions as {
                                     memberPermissions: string[];
                                   }
-                                )?.memberPermissions?.includes(
-                                  shareWSPermissionEnum.viewAny_sws_member
+                                )?.memberPermissions !== undefined &&
+                                Boolean(
+                                  (
+                                    getMemberRolePermissions as {
+                                      memberPermissions: string[];
+                                    }
+                                  )?.memberPermissions?.includes(
+                                    shareWSPermissionEnum.viewAny_sws_member
+                                  )
                                 )
-                              )
-                              ? replaceRouteParams(
-                                  ZaionsRoutes.AdminPanel.ShareWS
-                                    .AccountSettings.Members,
-                                  [
-                                    CONSTANTS.RouteParams.workspace.wsShareId,
-                                    CONSTANTS.RouteParams.workspace
-                                      .shareWSMemberId
-                                  ],
-                                  [wsShareId ?? '', shareWSMemberId ?? '']
-                                )
-                              : replaceRouteParams(
-                                  ZaionsRoutes.AdminPanel.ShareWS
-                                    .AccountSettings.Pixel,
-                                  [
-                                    CONSTANTS.RouteParams.workspace.wsShareId,
-                                    CONSTANTS.RouteParams.workspace
-                                      .shareWSMemberId
-                                  ],
-                                  [wsShareId ?? '', shareWSMemberId ?? '']
-                                )
-                            : ''
+                                ? replaceRouteParams(
+                                    ZaionsRoutes.AdminPanel.ShareWS
+                                      .AccountSettings.Members,
+                                    [
+                                      CONSTANTS.RouteParams.workspace.wsShareId,
+                                      CONSTANTS.RouteParams.workspace
+                                        .shareWSMemberId
+                                    ],
+                                    [wsShareId ?? '', shareWSMemberId ?? '']
+                                  )
+                                : replaceRouteParams(
+                                    ZaionsRoutes.AdminPanel.ShareWS
+                                      .AccountSettings.Pixel,
+                                    [
+                                      CONSTANTS.RouteParams.workspace.wsShareId,
+                                      CONSTANTS.RouteParams.workspace
+                                        .shareWSMemberId
+                                    ],
+                                    [wsShareId ?? '', shareWSMemberId ?? '']
+                                  )
+                              : ''
                         }
                         className={classNames(
                           'zaions-transition cursor-pointer ion-activatable z-ion-bg-transparent mt-2',
@@ -645,7 +645,7 @@ const AdminPanelSidebarMenu: React.FC<{
           </ZCan>
 
           {/* Extension */}
-          <ZIonSegmentButton
+          {/* <ZIonSegmentButton
             value='extension'
             className='normal-case'
             onClick={() => {
@@ -658,10 +658,10 @@ const AdminPanelSidebarMenu: React.FC<{
               );
             }}>
             Extension
-          </ZIonSegmentButton>
+          </ZIonSegmentButton> */}
 
           {/* Integrations */}
-          <ZIonSegmentButton
+          {/* <ZIonSegmentButton
             value='integrations'
             className='normal-case'
             onClick={() => {
@@ -674,10 +674,10 @@ const AdminPanelSidebarMenu: React.FC<{
               );
             }}>
             Integrations
-          </ZIonSegmentButton>
+          </ZIonSegmentButton> */}
 
           {/* Workspaces */}
-          <ZIonSegmentButton
+          {/* <ZIonSegmentButton
             value='Workspaces'
             className='normal-case'
             onClick={() => {
@@ -692,10 +692,10 @@ const AdminPanelSidebarMenu: React.FC<{
               // zNavigatePushRoute();
             }}>
             Workspaces
-          </ZIonSegmentButton>
+          </ZIonSegmentButton> */}
 
           {/* Help center */}
-          <ZIonSegmentButton
+          {/* <ZIonSegmentButton
             value='help-center'
             className='normal-case'
             onClick={() => {
@@ -708,7 +708,7 @@ const AdminPanelSidebarMenu: React.FC<{
               );
             }}>
             Help center
-          </ZIonSegmentButton>
+          </ZIonSegmentButton> */}
 
           {/* Settings */}
           <ZCan

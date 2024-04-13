@@ -4,9 +4,12 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import AppEntryPoint from './AppEntryPoint';
 
-// import { defineCustomElements } from '@ionic/pwa-elements/loader';
+import { defineCustomElements } from '@ionic/pwa-elements/loader';
 // import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 // import reportWebVitals from './reportWebVitals';
+
+// Call the element loader after the app has been rendered the first time
+defineCustomElements(window);
 
 const container = document.getElementById('root');
 const root = container !== null && createRoot(container);
@@ -19,8 +22,6 @@ if (root !== false) {
   );
 }
 
-// Call the element loader after the app has been rendered the first time
-// defineCustomElements(window)
 // .then()
 // .catch((err) => console.error(err));
 

@@ -4,4 +4,5 @@
     <string name="title_activity_main">Trizlink</string>
     <string name="package_name">com.trizlink.app</string>
     <string name="custom_url_scheme">com.trizlink.app</string>
+    <string name="google_api_key">AIzaSyA377nq-RmR-S-EwXvcb_FAtkDloNn-dAc</string>
 </resources>

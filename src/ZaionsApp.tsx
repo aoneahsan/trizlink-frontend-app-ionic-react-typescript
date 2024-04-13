@@ -5,6 +5,7 @@ import React, { useEffect } from 'react';
 import { IonApp } from '@ionic/react';
 import { ToastContainer } from 'react-toastify';
 import { useSetRecoilState } from 'recoil';
+import { App as CapacitorApp } from '@capacitor/app';
 
 // Custom Imports
 import AppRoutes from '@/AppRoutes';
@@ -23,15 +24,18 @@ import {
 } from '@/ZaionsStore/UserAccount/index.recoil';
 
 /* Theme variables */
-import './theme/variables.css';
+import '@/theme/variables.css';
 import { type UserAccountType } from '@/types/UserAccount/index.type';
-import { reportCustomError } from './utils/customErrorType';
+import { reportCustomError } from '@/utils/customErrorType';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 
 const App: React.FC = () => {
   const setAuthTokenState = useSetRecoilState(ZaionsAuthTokenData);
   const setUserAccountStateAtom = useSetRecoilState(
     ZaionsUserAccountRStateAtom
   );
+  const navigate = useZNavigate();
+
   // check for userData and authtoken in localstorage set that in recoil state and redirect user to authenticated screen (like dashboard), from guest screen, (mean user can not visit login screen, he is already logged in)
   useEffect(() => {
     void (async () => {
@@ -61,6 +65,28 @@ const App: React.FC = () => {
       }
     })();
   }, [setAuthTokenState, setUserAccountStateAtom]);
+
+  useEffect(() => {
+    CapacitorApp.addListener('appUrlOpen', event => {
+      try {
+        console.log('App opened with URL: ', event.url);
+
+        // example of how to handle custom URL scheme
+        if (event.url) {
+          // as we are using the domain for deep linking
+          const path = event.url.split('trizlink.com')[1];
+          if (path) {
+            navigate.zNavigatePushRoute(path);
+          }
+        }
+      } catch (error) {
+        reportCustomError({
+          errorPlacement: 'From ZaionsApp - useEffect - tryCatch',
+          error
+        });
+      }
+    });
+  }, []);
 
   return (
     <IonApp>

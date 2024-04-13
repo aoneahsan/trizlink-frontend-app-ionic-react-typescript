@@ -11,6 +11,12 @@ dependencies:
   '@capacitor/app':
     specifier: ^5.0.7
     version: 5.0.7(@capacitor/core@5.7.4)
+  '@capacitor/browser':
+    specifier: ^5.2.0
+    version: 5.2.0(@capacitor/core@5.7.4)
+  '@capacitor/camera':
+    specifier: ^5.0.9
+    version: 5.0.9(@capacitor/core@5.7.4)
   '@capacitor/clipboard':
     specifier: ^5.0.7
     version: 5.0.7(@capacitor/core@5.7.4)
@@ -23,6 +29,9 @@ dependencies:
   '@capacitor/dialog':
     specifier: ^5.0.7
     version: 5.0.7(@capacitor/core@5.7.4)
+  '@capacitor/filesystem':
+    specifier: ^5.2.1
+    version: 5.2.1(@capacitor/core@5.7.4)
   '@capacitor/geolocation':
     specifier: ^5.0.7
     version: 5.0.7(@capacitor/core@5.7.4)
@@ -38,7 +47,16 @@ dependencies:
   '@capacitor/keyboard':
     specifier: ^5.0.8
     version: 5.0.8(@capacitor/core@5.7.4)
+  '@capacitor/network':
+    specifier: ^5.0.7
+    version: 5.0.7(@capacitor/core@5.7.4)
   '@capacitor/preferences':
+    specifier: ^5.0.7
+    version: 5.0.7(@capacitor/core@5.7.4)
+  '@capacitor/screen-orientation':
+    specifier: ^5.0.7
+    version: 5.0.7(@capacitor/core@5.7.4)
+  '@capacitor/share':
     specifier: ^5.0.7
     version: 5.0.7(@capacitor/core@5.7.4)
   '@capacitor/status-bar':
@@ -53,6 +71,9 @@ dependencies:
   '@ionic/core':
     specifier: ^7.8.4
     version: 7.8.4
+  '@ionic/pwa-elements':
+    specifier: ^3.2.2
+    version: 3.2.2
   '@ionic/react':
     specifier: ^7.8.4
     version: 7.8.4(react-dom@18.2.0)(react@18.2.0)
@@ -1862,6 +1883,22 @@ packages:
       - typescript
     dev: true
 
+  /@capacitor/browser@5.2.0(@capacitor/core@5.7.4):
+    resolution: {integrity: sha512-pWFrsNPOG6DlDWGl+bJqTWLvoJ2vvV27LKaSZ/A7S4td4bK3umwZmgGlp8ispjpYiurjliT25Ae8I+ywMV8X9w==}
+    peerDependencies:
+      '@capacitor/core': ^5.0.0
+    dependencies:
+      '@capacitor/core': 5.7.4
+    dev: false
+
+  /@capacitor/camera@5.0.9(@capacitor/core@5.7.4):
+    resolution: {integrity: sha512-ibuctDzQWVABnJCtIuiFdVYvLbiQNln9gKMZGNN0bZ6oSqoxzDlN7etueJwyFaaRZZlVrXc/sMWuhOkeVJEHcQ==}
+    peerDependencies:
+      '@capacitor/core': ^5.0.0
+    dependencies:
+      '@capacitor/core': 5.7.4
+    dev: false
+
   /@capacitor/cli@5.7.4:
     resolution: {integrity: sha512-Cn7ndfMHWfMT+A/wRoeac4/mAxZWNTlZoD1Mn7UQyVV+iGxZB2JpS9omqha7gBN4xrAuTi/X9FqkzrmR+1V96A==}
     engines: {node: '>=16.0.0'}
@@ -1918,6 +1955,14 @@ packages:
       '@capacitor/core': 5.7.4
     dev: false
 
+  /@capacitor/filesystem@5.2.1(@capacitor/core@5.7.4):
+    resolution: {integrity: sha512-mexkJHUbNhydzfJywEUTIGARlB/HRogrtbjCZdA+mQxOi07T2887a70CwFaYRu1nKLMoKoliTM5UsLSsdl0PlA==}
+    peerDependencies:
+      '@capacitor/core': ^5.1.1
+    dependencies:
+      '@capacitor/core': 5.7.4
+    dev: false
+
   /@capacitor/geolocation@5.0.7(@capacitor/core@5.7.4):
     resolution: {integrity: sha512-LfCA08hjWhrBnygBVg8Q3OybbTpdmkAfW6ii+V/BO/UcO72kVsjXRnLQJH6G/U/BOu5qlwzPoNLuFKReF7t/CQ==}
     peerDependencies:
@@ -1961,8 +2006,32 @@ packages:
       '@capacitor/core': 5.7.4
     dev: false
 
+  /@capacitor/network@5.0.7(@capacitor/core@5.7.4):
+    resolution: {integrity: sha512-g+8SkNmkOyidaHnfKI9Ly8GNcx3VEwboehDXcTs5WU8bPuhCOEzbZnC0kFL5wwix3AoUQl8gEos6MtCey5cUIg==}
+    peerDependencies:
+      '@capacitor/core': ^5.0.0
+    dependencies:
+      '@capacitor/core': 5.7.4
+    dev: false
+
   /@capacitor/preferences@5.0.7(@capacitor/core@5.7.4):
     resolution: {integrity: sha512-JvfGP1m8nITWEFdBpKR9HXNeBjLKwO0q1pry7Z5lYrYmCrbyRBLWzaGZGll8py4KmGWL3F5+PZvhrpT4gPoeAQ==}
+    peerDependencies:
+      '@capacitor/core': ^5.0.0
+    dependencies:
+      '@capacitor/core': 5.7.4
+    dev: false
+
+  /@capacitor/screen-orientation@5.0.7(@capacitor/core@5.7.4):
+    resolution: {integrity: sha512-2HKWCfaz34IDpNyznr6RbnxxZ5lADA9AQJtH6TBKcd1VJm8MOvicc43zDMdg2p7qAdw9ZkvP4fYK9/MZEFwIHg==}
+    peerDependencies:
+      '@capacitor/core': ^5.0.0
+    dependencies:
+      '@capacitor/core': 5.7.4
+    dev: false
+
+  /@capacitor/share@5.0.7(@capacitor/core@5.7.4):
+    resolution: {integrity: sha512-4GraggRRxwhstxIdF9JyOEBq4QTufqFOekdB4P9GeiQYWJoA5VraSR1mwy4Trke1VFfaBjz/nGi4WQOJdHIAgg==}
     peerDependencies:
       '@capacitor/core': ^5.0.0
     dependencies:
@@ -3090,6 +3159,11 @@ packages:
       '@stencil/core': 4.12.3
       ionicons: 7.3.1
       tslib: 2.6.2
+    dev: false
+
+  /@ionic/pwa-elements@3.2.2:
+    resolution: {integrity: sha512-gCQsHdvkaWa83T3ToKsr6FOtzSmLIYFWy+zZisXVDqU3ry4Hv581dFSxDUgokgoWSxIERe/nvYnhoN8zIIEKQQ==}
+    engines: {node: '>=16.0.0', npm: '>=8.0.0'}
     dev: false
 
   /@ionic/react-router@7.8.4(react-dom@18.2.0)(react-router-dom@5.3.4)(react-router@5.3.4)(react@18.2.0):
