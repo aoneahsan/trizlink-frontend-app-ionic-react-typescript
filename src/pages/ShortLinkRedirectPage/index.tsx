@@ -208,7 +208,7 @@ const ZShortLinkRedirectPage: React.FC = () => {
     types: string[];
   } | null> => {
     const response = await fetch(
-      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${ENVS?.googleMapApiKey}`
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${ENVS.googleApiKey}`
     );
     const data = await response.json();
 

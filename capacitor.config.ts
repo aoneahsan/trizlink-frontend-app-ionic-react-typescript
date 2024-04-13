@@ -2,14 +2,13 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.trizlink.app',
-  appName: 'trizlink',
+  appName: 'Trizlink',
   webDir: 'dist',
-  bundledWebRuntime: false,
   plugins: {
     GoogleAuth: {
       scopes: ['profile', 'email'],
       serverClientId:
-        '1098579848404-v2emjb5nh94rancq1jhp2t9gljog3ken.apps.googleusercontent.com', // sir ahsan say to paste directly
+        '1098579848404-agkui3kbus8ml8skfo1qgcqpsk205jqv.apps.googleusercontent.com', // sir ahsan say to paste directly
       forceCodeForRefreshToken: true
     }
   }

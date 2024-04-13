@@ -1,4 +1,4 @@
-import { sentryVitePlugin } from "@sentry/vite-plugin";
+// import { sentryVitePlugin } from '@sentry/vite-plugin';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
@@ -9,10 +9,14 @@ const __dirname = path.dirname(__filename);
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), sentryVitePlugin({
-    org: "trizlink",
-    project: "trizlink-frontend-local"
-  })],
+  plugins: [
+    react()
+    // un-comment this when you want to enable sentry source map upload
+    // sentryVitePlugin({
+    //   org: 'trizlink',
+    //   project: 'trizlink-frontend-local'
+    // })
+  ],
 
   resolve: {
     alias: {
@@ -27,6 +31,7 @@ export default defineConfig({
   },
 
   build: {
-    sourcemap: true
+    // also change this to 'true' when you want to enable sentry source map upload
+    sourcemap: false
   }
 });

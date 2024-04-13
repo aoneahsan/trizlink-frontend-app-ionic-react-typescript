@@ -1,21 +1,43 @@
 {
-  "short_name": "Ionic App",
-  "name": "My Ionic App",
   "icons": [
     {
-      "src": "assets/icon/favicon.png",
+      "src": "favicon.png",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "assets/icon/icon.png",
+      "src": "favicon.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "maskable"
     }
   ],
-  "start_url": ".",
+  "id": "com.trizlink.app",
+  "short_name": "Trizlink",
+  "name": "Trizlink - Url Shortener, Link-in-bio & Social Media Management SAAS APP - Zaions",
+  "description": "Trizlink - Url Shortener, Link-in-bio & Social Media Management SAAS APP - developed @ Zaions(https://zaions.com/bio), to help you create pretty links for your organization long urls and get many benefits out of them.",
+  "dir": "auto",
+  "lang": "en-US",
+  "orientation": "any",
+  "scope": ".",
+  "prefer_related_applications": true,
+  "categories": [
+    "business",
+    "productivity",
+    "utilities",
+    "url shortener",
+    "pretty links",
+    "analytics",
+    "re-targeting"
+  ],
+  "related_applications": [
+    {
+      "platform": "play",
+      "id": "com.trizlink.app"
+    }
+  ],
+  "start_url": "/",
   "display": "standalone",
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff"
+  "theme_color": "#3880ff",
+  "background_color": "#eeeeee"
 }

@@ -1,6 +1,15 @@
 {
-  "appId": "io.ionic.starter",
-  "appName": "trizlink-ionic7-react-project",
-  "webDir": "dist",
-  "bundledWebRuntime": false
+	"appId": "com.trizlink.app",
+	"appName": "Trizlink",
+	"webDir": "dist",
+	"plugins": {
+		"GoogleAuth": {
+			"scopes": [
+				"profile",
+				"email"
+			],
+			"serverClientId": "1098579848404-agkui3kbus8ml8skfo1qgcqpsk205jqv.apps.googleusercontent.com",
+			"forceCodeForRefreshToken": true
+		}
+	}
 }

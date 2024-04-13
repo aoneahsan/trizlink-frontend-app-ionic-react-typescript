@@ -139,3 +139,8 @@ yarn-error.log*
 .history
 # Sentry Config File
 .env.sentry-build-plugin
+
+android/src/main/assets/public
+
+# created by "cap assets generate command for pwa icons"
+icons
