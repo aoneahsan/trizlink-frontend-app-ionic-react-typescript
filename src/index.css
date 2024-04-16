@@ -96,7 +96,7 @@ ion-app.ios ion-title {
 }
 
 /* Scrollbar */
-.zaions_pretty_scrollbar::-webkit-scrollbar {
+. ::-webkit-scrollbar {
   height: 8px;
   width: 6px; /* unless ahsan ask for a scroll for a different width this will be the default width for all scroll bars in the project */
 }
