@@ -8,11 +8,7 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import {
-  logOutOutline,
-  notificationsOutline,
-  settingsOutline
-} from 'ionicons/icons';
+import { notificationsOutline, settingsOutline } from 'ionicons/icons';
 import { useRecoilValue } from 'recoil';
 import classNames from 'classnames';
 
@@ -30,23 +26,10 @@ import {
 } from '@/components/ZIonComponents';
 
 /**
- * Custom Hooks Imports go down
- * ? Like import of custom Hook is a custom import
- * */
-import {
-  useZIonAlert,
-  useZIonErrorAlert,
-  useZIonLoading
-} from '@/ZaionsHooks/zionic-hooks';
-
-/**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import { reportCustomError } from '@/utils/customErrorType';
-import { STORAGE, zAxiosApiRequest } from '@/utils/helpers';
-import CONSTANTS, { LOCALSTORAGE_KEYS } from '@/utils/constants';
-import { API_URL_ENUM } from '@/utils/enums';
+import CONSTANTS from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
@@ -59,8 +42,8 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
  * ? Import of recoil states is a Recoil State import
  * */
 import { ZaionsUserAccountRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
-import MESSAGES from '@/utils/messages';
-import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/userButton';
+import LogoutButton from '@/components/LogoutButton';
 
 /**
  * Style files Imports go down
@@ -88,74 +71,7 @@ const ZWorkspaceProfilePopover: React.FC<{
   zNavigatePushRoute: (_url: string) => void;
 }> = ({ dismissZIonPopover, zNavigatePushRoute }) => {
   // Custom hooks.
-  const { presentZIonLoader, dismissZIonLoader } = useZIonLoading(); // hook to show loader
-  const { presentZIonErrorAlert } = useZIonErrorAlert();
-  const { presentZIonAlert } = useZIonAlert();
-
   const zUserAccountStateAtom = useRecoilValue(ZaionsUserAccountRStateAtom);
-
-  // logout confirm alert.
-  const ZLogoutAlert = async (): Promise<void> => {
-    try {
-      await presentZIonAlert({
-        header: MESSAGES.Logout.LOGOUT_ALERT.HEADER,
-        subHeader: MESSAGES.Logout.LOGOUT_ALERT.SUB_HEADER,
-        message: MESSAGES.Logout.LOGOUT_ALERT.MESSAGES,
-        buttons: [
-          {
-            text: 'Close',
-            role: 'cancel'
-          },
-          {
-            text: 'Logout',
-            cssClass: 'zaions_ion_color_danger',
-            role: 'danger',
-            handler: () => {
-              void profileLogoutHandler();
-            }
-          }
-        ]
-      });
-    } catch (error) {
-      await presentZIonErrorAlert();
-    }
-  };
-
-  const profileLogoutHandler = async (): Promise<void> => {
-    try {
-      // Loading start...
-      await presentZIonLoader('Logging out. please wait a second.');
-
-      // logout user
-      const _response = await zAxiosApiRequest<{
-        data: { isSuccess: boolean };
-      }>({
-        _url: API_URL_ENUM.logout,
-        _method: 'post',
-        _isAuthenticatedRequest: false
-      });
-
-      if (_response?.data.isSuccess === true) {
-        // clear User token.
-        void STORAGE.CLEAR(LOCALSTORAGE_KEYS.USERDATA);
-        // clear auth token.
-        void STORAGE.CLEAR(LOCALSTORAGE_KEYS.AUTHTOKEN);
-
-        // Dismiss the ion loader
-        await dismissZIonLoader();
-
-        // redirect to home
-        window.location.replace(ZaionsRoutes.LoginRoute);
-      } else {
-        throw new Error('Something went wrong please try again!');
-      }
-    } catch (error) {
-      // Dismiss the ion loader
-      await dismissZIonLoader();
-
-      reportCustomError(error);
-    }
-  };
 
   const _userAvatarUi = {
     name: zUserAccountStateAtom?.username
@@ -236,23 +152,7 @@ const ZWorkspaceProfilePopover: React.FC<{
           <ZIonLabel className='pt-1 my-0'>Notification settings</ZIonLabel>
         </ZIonItem>
 
-        <ZIonItem
-          className='text-sm cursor-pointer ion-activatable ion-focusable'
-          minHeight='40px'
-          lines='none'
-          onClick={() => {
-            void ZLogoutAlert();
-          }}
-          testingselector={
-            CONSTANTS.testingSelectors.user.profilePopover.logout
-          }>
-          <ZIonIcon
-            icon={logOutOutline}
-            className='w-5 h-5 me-1 pe-1'
-            color='danger'
-          />
-          <ZIonLabel className='pt-1 my-0'>Logout</ZIonLabel>
-        </ZIonItem>
+        <LogoutButton />
       </ZIonList>
     </>
   );

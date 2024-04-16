@@ -33,7 +33,7 @@ import {
 import { ZFallbackIonSpinner2 } from '@/components/CustomComponents/FallbackSpinner';
 import ZEmailAddressesTable from '@/components/InPageComponents/ZaionsTable/UserSettings/emailAddressesTable';
 import ZCPhoneNumberInput from '@/components/CustomComponents/ZPhoneNumberInput';
-import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/userButton';
 import ZCan from '@/components/Can';
 import AddEmailModal from '@/components/InPageComponents/ZaionsModals/EmailModal';
 import ZCountdown from '@/components/CustomComponents/ZCountDown';
@@ -599,7 +599,7 @@ const ZProfileSettingsSettings: React.FC = () => {
                 <ZChangePassword />
 
                 {/*  2-Factor authentication */}
-                <ZIonTitle
+                {/* <ZIonTitle
                   className={classNames({
                     'block font-semibold ion-no-padding mt-4 pt-2': true,
                     'text-lg': isLgScale,
@@ -638,10 +638,10 @@ const ZProfileSettingsSettings: React.FC = () => {
                       Send verification code
                     </ZIonButton>
                   </div>
-                </div>
+                </div> */}
 
                 {/* Access history */}
-                <ZIonTitle
+                {/* <ZIonTitle
                   color='medium'
                   className={classNames({
                     'block font-semibold ion-no-padding mt-4 pt-2': true,
@@ -741,7 +741,7 @@ const ZProfileSettingsSettings: React.FC = () => {
                       </ZIonItem>
                     );
                   })}
-                </ZIonList>
+                </ZIonList> */}
               </Form>
             );
           }}

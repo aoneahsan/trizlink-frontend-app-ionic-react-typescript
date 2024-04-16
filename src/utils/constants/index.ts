@@ -26,7 +26,6 @@ import { WSRolesNameEnum } from '@/types/AdminPanel/workspace';
 import { ZTeamMemberInvitationEnum } from '@/types/AdminPanel/index.type';
 
 // Constant
-// const ZLinkApiRootUrl = 'https://zlinkbackend.zaions.com/public/api/zlink/v1';
 export const ZLinkApiRootUrl = ENVS.apiUrl;
 
 const testingSelectorsPrefix = 'ztes__';
@@ -311,19 +310,21 @@ export const API_URLS = {
 
 // Site
 export const PRODUCT_NAME = 'Trizlink';
-export const PRODUCT_DOMAIN = 'prettylinks.zaions.com';
+export const PRODUCT_DOMAIN = 'trizlink.com';
 export const CurrentProductDetails = {
-  Name: ''
+  Name: 'Trizlink'
 } as const;
 
 export const ProductExternalURL = {
   GenericExternalURL: 'https://trizlink.com',
-  FacebookUrl: 'https://www.facebook.com/',
-  LinkeDinUrl: 'https://www.linkedin.com/in/trizlink',
+  FacebookUrl: 'https://zaions.com/facebook',
+  LinkeDinUrl: 'https://zaions.com/linkedin',
   YoutubeUrl: 'https://www.youtube.com/@TrizLink',
-  PinterestUrl: 'https://www.pinterest.com/trizlink',
-  TikTokUrl: 'https://www.tiktok.com/@trizlinkofficial',
-  TwitterUrl: 'https://twitter.com/trizlink'
+
+  PinterestUrl: 'https://zaions.com/pinterest',
+  TikTokUrl: 'https://zaions.com/tiktok',
+  TwitterUrl: 'https://zaions.com/twitter',
+  patreonLink: 'https://zaions.com/patreon'
 } as const;
 
 export const ZaionsInfo = {
@@ -1813,7 +1814,7 @@ const ZTimeSelectData: ZaionsRSelectOptions[] = [
     label: 'Custom range',
     value: TimeFilterEnum.customRange
   }
-] as const;
+];
 
 const ZRolesOptions: ZaionsRSelectOptions[] = [
   { label: 'Administrator', value: WSRolesNameEnum.Administrator },
@@ -1823,7 +1824,7 @@ const ZRolesOptions: ZaionsRSelectOptions[] = [
   { label: 'Approver', value: WSRolesNameEnum.Approver },
   { label: 'Commenter', value: WSRolesNameEnum.Commenter },
   { label: 'Guest', value: WSRolesNameEnum.Guest }
-] as const;
+];
 
 const ZPlatformOptions: ZaionsRSelectOptions[] = [
   { label: 'facebook', value: PixelPlatformsEnum.facebook },
@@ -1841,7 +1842,7 @@ const ZPlatformOptions: ZaionsRSelectOptions[] = [
   { label: 'twitter', value: PixelPlatformsEnum.twitter },
   { label: 'VK', value: PixelPlatformsEnum.vk },
   { label: 'google tag manager', value: PixelPlatformsEnum.google_tag_manager }
-] as const;
+];
 
 const ZStatesOptions: ZaionsRSelectOptions[] = [
   { label: 'Accepted', value: ZTeamMemberInvitationEnum.accepted },
@@ -1851,7 +1852,7 @@ const ZStatesOptions: ZaionsRSelectOptions[] = [
   { label: 'Rejected', value: ZTeamMemberInvitationEnum.rejected },
   { label: 'Resend', value: ZTeamMemberInvitationEnum.resend },
   { label: 'Suspended', value: ZTeamMemberInvitationEnum.suspended }
-] as const;
+];
 
 const CONSTANTS = {
   ZHomePageAccountBtnText,

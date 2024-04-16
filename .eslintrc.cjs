@@ -42,7 +42,7 @@ module.exports = {
     'multiline-ternary': 'off', // ahsan need to verify this, talha commented this for now.
     '@typescript-eslint/promise-function-async': 'off' // it's giving error on lazy components imports so need to debug that before we can enable this rule
   },
-  ignorePatterns: ['src/graphql/**/*']
+  ignorePatterns: ['src/graphql/**/*', './capacitor.config.ts']
 };
 
 // rules disabled for now

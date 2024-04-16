@@ -86,7 +86,6 @@ const Header: React.FC = () => {
                 className={`${classes.zaions__nav} ${
                   isXlScale ? classes.zaions_gap3 : classes.zaions_gap2
                 } ion-justify-content-start ion-align-items-center`}>
-                {/* {!isLgScale ? <ZIonMenuButton></ZIonMenuButton> : ''} */}
                 <ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
                   <ZIonImg
                     src={ProductLogo}
@@ -176,13 +175,6 @@ const Header: React.FC = () => {
                         } mb-4`}>
                         Sign up Free
                       </ZIonTitle>
-                    </ZIonRouterLink>
-
-                    <ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
-                      <ZIonButton
-                        className={`${classes.zaions_nav_button} ion-text-capitalize ms-2 mb-4`}>
-                        Get a Quote
-                      </ZIonButton>
                     </ZIonRouterLink>
                   </>
                 )}

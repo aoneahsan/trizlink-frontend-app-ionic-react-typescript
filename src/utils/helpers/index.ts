@@ -652,7 +652,7 @@ export const getApiUrl = (
       if (includeAPIDefault) {
         _url = `${ZLinkApiRootUrl}${API_URLS[url]}`;
       } else {
-        _url = `${ZLinkApiRootUrl.replace('/api/zlink/v1', '')}${
+        _url = `${ZLinkApiRootUrl.replace('/api/trizlink/v1', '')}${
           API_URLS[url]
         }`;
       }

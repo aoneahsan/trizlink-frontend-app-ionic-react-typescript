@@ -70,42 +70,19 @@ const ZaionsHPConnectPlatform: React.FC = () => {
               sizeSm='10'
               sizeXs='12'>
               <ZIonRow>
-                {isLgScale ? (
-                  loadedHPBCData.map(data => (
-                    <ZSingleCard
-                      key={data.id}
-                      id={data.id}
-                      icon={data.icon}
-                      title={data.title}
-                      text={data.text}
-                      featureListTitle={data.featureListTitle}
-                      featureListItem={data.featureListItem}
-                      primaryBtnText={data.primaryBtnText}
-                      secondaryBtnText={data.secondaryBtnText}
-                    />
-                  ))
-                ) : !isLgScale ? (
-                  <Swiper>
-                    {loadedHPBCData.map(data => (
-                      <SwiperSlide
-                        key={data.id}
-                        className='h-full'>
-                        <ZSingleCard
-                          id={data.id}
-                          icon={data.icon}
-                          title={data.title}
-                          text={data.text}
-                          featureListTitle={data.featureListTitle}
-                          featureListItem={data.featureListItem}
-                          primaryBtnText={data.primaryBtnText}
-                          secondaryBtnText={data.secondaryBtnText}
-                        />
-                      </SwiperSlide>
-                    ))}
-                  </Swiper>
-                ) : (
-                  ''
-                )}
+                {loadedHPBCData.map(data => (
+                  <ZSingleCard
+                    key={data.id}
+                    id={data.id}
+                    icon={data.icon}
+                    title={data.title}
+                    text={data.text}
+                    featureListTitle={data.featureListTitle}
+                    featureListItem={data.featureListItem}
+                    primaryBtnText={data.primaryBtnText}
+                    secondaryBtnText={data.secondaryBtnText}
+                  />
+                ))}
               </ZIonRow>
             </ZIonCol>
             <ZIonCol></ZIonCol>
@@ -130,10 +107,10 @@ const ZSingleCard: React.FC<ZaionsHpCPDataType> = ({
   return (
     <ZIonCol
       sizeXl='4'
-      sizeLg='4'
+      sizeLg='6'
       sizeMd='6'
-      sizeSm='6'
-      sizeXs='6'
+      sizeSm='12'
+      size='12'
       className={classNames({
         'h-full ': true
       })}>
@@ -180,12 +157,12 @@ const ZSingleCard: React.FC<ZaionsHpCPDataType> = ({
             </ZIonText>
           ))}
           <div className='pt-3 ion-margin-horizontal'>
-            <ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
+            <ZIonRouterLink routerLink={ZaionsRoutes.LoginRoute}>
               <ZIonButton expand='block'>{primaryBtnText}</ZIonButton>
             </ZIonRouterLink>
           </div>
           <div className='ion-margin-horizontal ion-margin-top'>
-            <ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
+            <ZIonRouterLink routerLink={ZaionsRoutes.LoginRoute}>
               <ZIonButton
                 expand='block'
                 fill='clear'>

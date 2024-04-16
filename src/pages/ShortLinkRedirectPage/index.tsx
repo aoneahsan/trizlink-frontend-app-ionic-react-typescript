@@ -46,7 +46,7 @@ import { useZRQCreateRequest } from '@/ZaionsHooks/zreactquery-hooks';
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import CONSTANTS, { ExternalURL } from '@/utils/constants';
+import CONSTANTS, { ProductExternalURL } from '@/utils/constants';
 import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
 import { ENVS } from '@/utils/envKeys';
 import {
@@ -208,7 +208,7 @@ const ZShortLinkRedirectPage: React.FC = () => {
     types: string[];
   } | null> => {
     const response = await fetch(
-      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${ENVS?.googleMapApiKey}`
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${ENVS.googleApiKey}`
     );
     const data = await response.json();
 

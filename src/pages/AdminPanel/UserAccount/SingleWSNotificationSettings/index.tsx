@@ -17,7 +17,7 @@ import { useParams } from 'react-router';
  * ? Like import of custom components is a custom import
  * */
 import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
-import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/userButton';
 import {
   ZIonCol,
   ZIonIcon,
@@ -51,6 +51,7 @@ import { type workspaceInterface } from '@/types/AdminPanel/workspace';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import SupportOnPatreon from '@/components/SupportOnPatreon';
 
 /**
  * Recoil State Imports go down
@@ -105,116 +106,119 @@ const ZSingleWSNotificationSettings: React.FC = () => {
   };
 
   return (
-    <ZIonRow
-      className={classNames({
-        'ion-align-items-center': true,
-        'ion-padding': isLgScale,
-        'p-2': !isMdScale
-      })}>
-      <ZIonCol
-        sizeXl='12'
-        sizeLg='12'
-        sizeMd='12'
-        sizeSm='12'
-        sizeXs='12'
+    <>
+      <SupportOnPatreon />
+      <ZIonRow
         className={classNames({
-          'mb-2': !isSmScale
+          'ion-align-items-center': true,
+          'ion-padding': isLgScale,
+          'p-2': !isMdScale
         })}>
-        <div className='flex w-full gap-3 mb-3'>
-          <ZIonIcon
-            icon={arrowBackCircleOutline}
-            className='w-7 h-7 mt-[3px] cursor-pointer'
-            color='primary'
-            onClick={() => {
-              zNavigatePushRoute(
-                ZaionsRoutes.AdminPanel.Setting.UserAccount
-                  .WSNotificationSettings
-              );
-            }}
-          />
-          <ZIonTitle
-            className={classNames({
-              'block font-bold ion-no-padding': true,
-              'text-2xl': isLgScale,
-              'text-xl': !isLgScale,
-              'ion-text-center': !isSmScale
-            })}>
-            Workspace notifications settings
-          </ZIonTitle>
-        </div>
-
-        <ZIonItem
-          className='mt-2'
-          lines='none'>
-          <ZUserAvatarButton
-            userAvatar={selectedWorkspace?.workspaceImage}
-            userAvatarUi={_userAvatarUi}
-            className={classNames({
-              'w-[2.5rem] h-[2.5rem]': isMdScale,
-              'w-[2rem] h-[2rem]': !isMdScale
-            })}
-          />
-          <ZIonLabel className='ms-2'>
-            <ZIonText
-              className={classNames({
-                'block font-semibold': true,
-                'text-md': isLgScale,
-                'text-sm': !isLgScale
-              })}>
-              {selectedWorkspace?.workspaceName}
-            </ZIonText>
-            <ZIonText
-              className='block text-xs'
-              color='medium'>
-              Owner by:
-              <ZIonText
-                className='font-semibold ms-1'
-                color='dark'>
-                {selectedWorkspace?.user?.username}
-              </ZIonText>
-            </ZIonText>
-          </ZIonLabel>
-        </ZIonItem>
-
-        {/*  */}
-        <ZIonList
-          className='mt-2 border rounded-lg'
-          lines='full'>
-          <ZIonItem className='mx-2 ion-padding-start-1rem ion-padding-end-0'>
+        <ZIonCol
+          sizeXl='12'
+          sizeLg='12'
+          sizeMd='12'
+          sizeSm='12'
+          sizeXs='12'
+          className={classNames({
+            'mb-2': !isSmScale
+          })}>
+          <div className='flex w-full gap-3 mb-3'>
             <ZIonIcon
-              icon={notificationsOutline}
-              className='me-3 w-7 h-7'
+              icon={arrowBackCircleOutline}
+              className='w-7 h-7 mt-[3px] cursor-pointer'
+              color='primary'
+              onClick={() => {
+                zNavigatePushRoute(
+                  ZaionsRoutes.AdminPanel.Setting.UserAccount
+                    .WSNotificationSettings
+                );
+              }}
             />
+            <ZIonTitle
+              className={classNames({
+                'block font-bold ion-no-padding': true,
+                'text-2xl': isLgScale,
+                'text-xl': !isLgScale,
+                'ion-text-center': !isSmScale
+              })}>
+              Workspace notifications settings
+            </ZIonTitle>
+          </div>
 
-            <ZIonLabel>
-              <ZIonText className='block'>
-                Workspace notification on your profile
+          <ZIonItem
+            className='mt-2'
+            lines='none'>
+            <ZUserAvatarButton
+              userAvatar={selectedWorkspace?.workspaceImage}
+              userAvatarUi={_userAvatarUi}
+              className={classNames({
+                'w-[2.5rem] h-[2.5rem]': isMdScale,
+                'w-[2rem] h-[2rem]': !isMdScale
+              })}
+            />
+            <ZIonLabel className='ms-2'>
+              <ZIonText
+                className={classNames({
+                  'block font-semibold': true,
+                  'text-md': isLgScale,
+                  'text-sm': !isLgScale
+                })}>
+                {selectedWorkspace?.workspaceName}
               </ZIonText>
-              <ZIonText className='block'>
-                Don&apos;t miss updates about your workspace
-                <ZIonText className='font-semibold ms-1'>
-                  {selectedWorkspace?.workspaceName}
+              <ZIonText
+                className='block text-xs'
+                color='medium'>
+                Owner by:
+                <ZIonText
+                  className='font-semibold ms-1'
+                  color='dark'>
+                  {selectedWorkspace?.user?.username}
                 </ZIonText>
               </ZIonText>
             </ZIonLabel>
-
-            <ZIonText slot='end'>
-              <ZRCSwitch />
-            </ZIonText>
           </ZIonItem>
 
-          <ZIonItem
-            lines='none'
-            className='mx-2 ion-padding-start-1rem ion-padding-end-0'>
-            <ZIonText>Allow push notification</ZIonText>
+          {/*  */}
+          <ZIonList
+            className='mt-2 border rounded-lg'
+            lines='full'>
+            <ZIonItem className='mx-2 ion-padding-start-1rem ion-padding-end-0'>
+              <ZIonIcon
+                icon={notificationsOutline}
+                className='me-3 w-7 h-7'
+              />
 
-            <ZIonText slot='end'>
-              <ZRCSwitch />
-            </ZIonText>
-          </ZIonItem>
-        </ZIonList>
-      </ZIonCol>
-    </ZIonRow>
+              <ZIonLabel>
+                <ZIonText className='block'>
+                  Workspace notification on your profile
+                </ZIonText>
+                <ZIonText className='block'>
+                  Don&apos;t miss updates about your workspace
+                  <ZIonText className='font-semibold ms-1'>
+                    {selectedWorkspace?.workspaceName}
+                  </ZIonText>
+                </ZIonText>
+              </ZIonLabel>
+
+              <ZIonText slot='end'>
+                <ZRCSwitch />
+              </ZIonText>
+            </ZIonItem>
+
+            <ZIonItem
+              lines='none'
+              className='mx-2 ion-padding-start-1rem ion-padding-end-0'>
+              <ZIonText>Allow push notification</ZIonText>
+
+              <ZIonText slot='end'>
+                <ZRCSwitch />
+              </ZIonText>
+            </ZIonItem>
+          </ZIonList>
+        </ZIonCol>
+      </ZIonRow>
+    </>
   );
 };
 

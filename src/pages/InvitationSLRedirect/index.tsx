@@ -36,7 +36,7 @@ import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import CONSTANTS, { ExternalURL } from '@/utils/constants';
+import CONSTANTS, { ProductExternalURL } from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { API_URL_ENUM } from '@/utils/enums';
 import { createRedirectRoute } from '@/utils/helpers';

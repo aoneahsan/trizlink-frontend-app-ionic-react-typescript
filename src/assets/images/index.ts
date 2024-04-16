@@ -58,8 +58,8 @@ import IlloDesktop from './pages/company/partners/illo-desktop-1440x651-1.jpg';
 import IlloMobile from './pages/company/partners/illo-mobile-810x480-1.jpg';
 
 // company / Press Page (images)
-import ZaionsMomentumLeadershipPressPreview from './pages/company/press/zlink-momentum-leadership-press-preview-888x650-1.png';
-import ZaionsPress from './pages/company/press/zlink-press.png';
+import ZaionsMomentumLeadershipPressPreview from './pages/company/press/momentum-leadership-press-preview-888x650-1.png';
+import ZaionsPress from './pages/company/press/press.png';
 
 // company / Press Page / Products (images)
 import GeneralProductMarketingImg from './pages/company/press/products-images/General_ProductMarketing_Img.png';
@@ -463,7 +463,7 @@ import CampaignAndAnalytics from './pages/campaign-management-analytics/campaign
 // Social Media
 import WebinarPromoteBrandResource from './pages/solution/Webinar-Promote-Brand-Resource.png';
 import Ebook30WaysResource from './pages/solution/Ebook_30-ways_Resource.png';
-import EbookHowMktUseSite from './pages/solution/Ebook-How-Mkt-Use-zlink-Site.png';
+import EbookHowMktUseSite from './pages/solution/Ebook-How-Mkt-Use-it.png';
 import DemoCreateSMSResource from './pages/solution/Demo_Create-SMS_Resource.png';
 import WebinarSocialMediaStrategyUseV2Resource from './pages/solution/Webinar_Social-Media-Strategy-Use_v2_Resource.png';
 import brandConsistencyResource from './pages/solution/brand-consistency_resource.png';
@@ -520,7 +520,7 @@ import smsLinkManagement from './pages/products/sms-link-management.png';
 import brandingLinkManagement from './pages/products/branding_link-management.png';
 import linkManagementMobile from './pages/products/link-management_mobile.png';
 import ManageLinksLIB from './pages/products/Manage-Links-LIB.png';
-import brandingLIB from './pages/products/zlink-branding-LIB.png';
+import brandingLIB from './pages/products/branding-LIB.png';
 import linkInBioDriveTraffic from './pages/products/link-in-bio-drive-traffic.png';
 
 import qrCodesMobile from './pages/products/qr-codes_mobile.png';

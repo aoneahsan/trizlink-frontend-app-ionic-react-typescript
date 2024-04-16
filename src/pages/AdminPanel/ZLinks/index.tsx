@@ -354,7 +354,7 @@ const ZLinks: React.FC = () => {
                             <ZIonText>
                               {selectedShortLinkData.createdAt ??
                                 CONSTANTS.NO_VALUE_FOUND}{' '}
-                              by talhairshad
+                              by trizlink-user
                             </ZIonText>
                           </ZIonText>
                           <ZIonText className='block mt-3'>
@@ -457,7 +457,7 @@ const ZLinks: React.FC = () => {
                               className='text-base'
                             />
                             3
-                            https://github.com/MuhmmadTalhaIrshad/health_tech?utm_source...
+                            https://github.com/Muhmmadtrizlink-user/health_tech?utm_source...
                           </ZIonText>
                           <ZIonButton
                             fill='clear'

@@ -13,7 +13,7 @@ const GoogleMapsCapacitorPackageTest: React.FC = () => {
       await GoogleMap.create({
         id: 'my-cool-map',
         element: mapRef.current,
-        apiKey: ENVS.googleMapApiKey,
+        apiKey: ENVS.googleApiKey,
         config: {
           center: {
             lat: 33.6,
@@ -33,7 +33,7 @@ const GoogleMapsCapacitorPackageTest: React.FC = () => {
     await GoogleMap.create({
       id: 'my-cool-map',
       element: mapRef.current,
-      apiKey: ENVS.googleMapApiKey,
+      apiKey: ENVS.googleApiKey,
       config: {
         center: {
           lat: place.geometry?.location?.lat() ?? 33.6,
@@ -55,7 +55,7 @@ const GoogleMapsCapacitorPackageTest: React.FC = () => {
         }}></capacitor-google-map>
       <br />
       <RGAutoComplete
-        apiKey={ENVS.googleMapApiKey}
+        apiKey={ENVS.googleApiKey}
         onPlaceSelected={onLocationSelectHandler}
       />
     </div>

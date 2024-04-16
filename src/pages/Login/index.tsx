@@ -5,10 +5,14 @@ import React from 'react';
 
 // Custom Imports
 import ZIonPage from '@/components/ZIonPage';
-import ZaionsSeparator from '@/components/InPageComponents/ZaionsSepatator/ZaionsSeparator';
 import ZaionsLoginOptions from '@/components/ZaionsLoginPage/ZaionsLoginOptions';
 import ZaionsLoginForm from '@/components/ZaionsLoginPage/ZaionsLoginForm';
-import { ZIonContent, ZIonGrid } from '@/components/ZIonComponents';
+import {
+  ZIonCol,
+  ZIonContent,
+  ZIonGrid,
+  ZIonRow
+} from '@/components/ZIonComponents';
 import ZaionsSecondaryHeader from '@/components/InPageComponents/ZaionsSecondaryHeader';
 
 //
@@ -20,8 +24,18 @@ const Login: React.FC = () => {
         <ZaionsSecondaryHeader />
         <ZIonGrid>
           <ZaionsLoginOptions />
-          <ZaionsSeparator className='py-2 my-6' />
-          <ZaionsLoginForm />
+
+          <ZIonRow>
+            <ZIonCol
+              className='mx-auto ion-text-center'
+              size='4.2'
+              sizeLg='5'
+              sizeMd='6.2'
+              sizeSm='8.2'
+              sizeXs='11.5'>
+              <ZaionsLoginForm />
+            </ZIonCol>
+          </ZIonRow>
         </ZIonGrid>
       </ZIonContent>
     </ZIonPage>

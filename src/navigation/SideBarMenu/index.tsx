@@ -160,7 +160,6 @@ const SideBarMenu: React.FC<SideBarMenuPropsType> = ({ menuSide }) => {
               <div className='px-1 pb-2 '>
                 {isMdScale && (
                   <ZIonRouterLink routerLink={ZaionsRoutes.LoginRoute}>
-                    {' '}
                     <ZIonButton
                       expand='block'
                       className={'mb-4 font-bold'}
@@ -172,23 +171,11 @@ const SideBarMenu: React.FC<SideBarMenuPropsType> = ({ menuSide }) => {
                 {isMdScale && (
                   <ZIonRouterLink
                     routerLink={ZaionsRoutes.WhyZaions.ZaionsPricingRoute}>
-                    {' '}
                     <ZIonButton
                       expand='block'
                       className={`mb-4 ${classes.zaions__sidebar_signupbtn}`}
                       fill='clear'>
                       Sign up Free
-                    </ZIonButton>
-                  </ZIonRouterLink>
-                )}
-                {isMdScale && (
-                  <ZIonRouterLink
-                    routerLink={ZaionsRoutes.DiscoverEnterpriseRoute}>
-                    {' '}
-                    <ZIonButton
-                      expand='block'
-                      className={'mb-4'}>
-                      Get a Quote
                     </ZIonButton>
                   </ZIonRouterLink>
                 )}

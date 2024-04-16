@@ -181,7 +181,7 @@ const ZIntegration: React.FC = () => {
                             label='Default app group (required)'
                             labelPlacement='stacked'>
                             <ZIonSelectOption value='1'>
-                              talhaIrshad (talhaIrshad)
+                              trizlink-user (trizlink-user)
                             </ZIonSelectOption>
                           </ZIonSelect>
                         </ZIonItem>

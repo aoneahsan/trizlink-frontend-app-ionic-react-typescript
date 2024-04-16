@@ -24,7 +24,7 @@ import {
   ZIonRow,
   ZIonText
 } from '@/components/ZIonComponents';
-import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/userButton';
 import ZWorkspaceMemberActionPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/MemberActionPopover';
 
 /**
@@ -106,7 +106,7 @@ const ZMembersTab: React.FC = () => {
                 'ion-align-items-center': isLgScale,
                 'flex-col ion-align-items-start': !isLgScale
               })}>
-              <ZIonText>Muhammad talha Irshad (you)</ZIonText>
+              <ZIonText>trizlink-user (you)</ZIonText>
               <ZIonBadge
                 className={classNames({
                   'ms-2': isLgScale
@@ -117,7 +117,7 @@ const ZMembersTab: React.FC = () => {
             <ZIonLabel
               className='block text-sm'
               color='medium'>
-              talhaarshaad5@gmail.com
+              support@trizlink.com
             </ZIonLabel>
           </div>
         </ZIonCol>

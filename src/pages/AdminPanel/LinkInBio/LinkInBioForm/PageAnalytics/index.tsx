@@ -56,6 +56,7 @@ import {
   linkInBioPageAnalyticsRetargetingPixelsBlock,
   linkInBioPageAnalyticsUtmTagBlock
 } from '@/assets/images';
+import SupportOnPatreon from '@/components/SupportOnPatreon';
 
 /**
  * Component props type go down
@@ -79,6 +80,7 @@ const LinkInBioPageAnalytics: React.FC = () => {
           className={classNames({
             'ion-padding ion-margin': isSmScale
           })}>
+          <SupportOnPatreon />
           {/* Header  */}
           <PageAnalyticsHeader />
 

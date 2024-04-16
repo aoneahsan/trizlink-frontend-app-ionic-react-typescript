@@ -29,7 +29,7 @@ export const useZValidateRequestResponse = (): {
     resultObj, // the result object that you went to validate.
     successNotificationType = notificationTypeEnum.toast, // the type of notification that you went to show in it success.
     errorNotificationType = notificationTypeEnum.sideNotification, // the type of notification that you went to show in it error.
-    apiTypeToValidate = apiTypeToValidateEnum.ZlinkMutationApi // structure of object.
+    apiTypeToValidate = apiTypeToValidateEnum.MutationApi // structure of object.
   }: validateRequestResponseInterface): Promise<void> => {
     try {
       if (resultObj !== undefined) {
@@ -38,7 +38,7 @@ export const useZValidateRequestResponse = (): {
          * As different API request return different type of objects so the switch will extract accounting to the object structure and check the success key and return the notification accounting to success.
          */
         switch (apiTypeToValidate) {
-          case apiTypeToValidateEnum.ZlinkMutationApi:
+          case apiTypeToValidateEnum.MutationApi:
             if ((resultObj as ZLinkMutateApiType<unknown>).success) {
               await presentZNotification({
                 message: (resultObj as ZLinkMutateApiType<unknown>).message,

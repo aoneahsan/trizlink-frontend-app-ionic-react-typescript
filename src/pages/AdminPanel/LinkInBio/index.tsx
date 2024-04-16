@@ -76,12 +76,13 @@ import {
 
 // Styles
 import classes from './styles.module.css';
+import SupportOnPatreon from '@/components/SupportOnPatreon';
 
 // Lazy loads
 const ZaionsLinkInBioLinksTable = lazy(
   () =>
     import(
-      '@/components/InPageComponents/ZaionsTable/LinkInBioTables/LinkInBioTable'
+      '@/components/InPageComponents/ZaionsTable/linkInBioTables/LinkInBioTable'
     )
 );
 const ZDashboardFolderMenu = lazy(
@@ -762,6 +763,7 @@ const ZInpageMainContent: React.FC = () => {
 
   return (
     <div className='flex flex-col gap-4 ion-no-margin ion-no-padding'>
+      <SupportOnPatreon />
       {/* Switch it button & page heading */}
       <ZIonRow
         className={classNames({

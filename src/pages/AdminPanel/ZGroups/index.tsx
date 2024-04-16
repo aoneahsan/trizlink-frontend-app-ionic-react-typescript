@@ -157,7 +157,7 @@ const ZGroups: React.FC = () => {
                           <ZTableTBody>
                             <ZTableRow>
                               <ZTableRowCol>
-                                <ZIonRouterLink>talhairshad</ZIonRouterLink>
+                                <ZIonRouterLink>trizlink-user</ZIonRouterLink>
                               </ZTableRowCol>
                               <ZTableRowCol>
                                 Sep 18, 2022, 2:42 PM GMT+5

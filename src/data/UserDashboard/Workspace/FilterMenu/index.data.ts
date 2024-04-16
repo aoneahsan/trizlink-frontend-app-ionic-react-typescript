@@ -208,6 +208,6 @@ export const filterMenuOptions: Array<{
     label: 'Author',
     icon: personOutline,
     filterType: workspaceFilterAccordionContentEnum.checkbox,
-    filterItems: [{ title: 'Muhammad Talha Irshad' }, { title: 'Hamza' }]
+    filterItems: [{ title: 'trizlink-user' }, { title: 'Hamza' }]
   }
 ];

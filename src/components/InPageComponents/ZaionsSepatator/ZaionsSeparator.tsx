@@ -23,8 +23,7 @@ interface ZaionsSeparatorType {
 }
 
 const ZaionsSeparator: React.FC<ZaionsSeparatorType> = ({
-  sizeXl = '4.2',
-  sizeLg = '5',
+  sizeLg = '4.8',
   sizeMd = '6.2',
   sizeSm = '8.2',
   sizeXs = '11.2',
@@ -38,7 +37,6 @@ const ZaionsSeparator: React.FC<ZaionsSeparatorType> = ({
       })}>
       <ZIonCol
         className='ion-text-center ion-no-padding'
-        sizeXl={sizeXl}
         sizeLg={sizeLg}
         sizeMd={sizeMd}
         sizeSm={sizeSm}

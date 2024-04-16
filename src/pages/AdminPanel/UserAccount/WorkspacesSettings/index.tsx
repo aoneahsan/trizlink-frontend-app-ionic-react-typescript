@@ -27,7 +27,7 @@ import {
   ZIonText,
   ZIonTitle
 } from '@/components/ZIonComponents';
-import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/userButton';
 
 /**
  * Custom Hooks Imports go down
@@ -75,6 +75,7 @@ import { reportCustomError } from '@/utils/customErrorType';
 import { extractInnerData, zStringify } from '@/utils/helpers';
 import { useZIonToastSuccess } from '@/ZaionsHooks/zionic-hooks';
 import MESSAGES from '@/utils/messages';
+import SupportOnPatreon from '@/components/SupportOnPatreon';
 
 /**
  * Recoil State Imports go down
@@ -306,90 +307,14 @@ const WorkspacesSettings: React.FC = () => {
   const _userAvatarUi = { name: compState?.selectedWS?.workspaceName };
 
   return (
-    <ZIonRow
-      className={classNames({
-        'ion-align-items-center': true,
-        'ion-padding': isLgScale,
-        'p-2': !isMdScale
-      })}>
-      <ZIonCol
-        sizeXl='12'
-        sizeLg='12'
-        sizeMd='12'
-        sizeSm='12'
-        sizeXs='12'
+    <>
+      <SupportOnPatreon />
+      <ZIonRow
         className={classNames({
-          'mb-2': !isSmScale
+          'ion-align-items-center': true,
+          'ion-padding': isLgScale,
+          'p-2': !isMdScale
         })}>
-        <ZIonTitle
-          className={classNames({
-            'block font-bold ion-no-padding': true,
-            'text-2xl': isLgScale,
-            'text-xl': !isLgScale,
-            'ion-text-center': !isSmScale
-          })}>
-          Workspaces notifications settings
-        </ZIonTitle>
-      </ZIonCol>
-
-      <ZIonCol
-        sizeXl='12'
-        sizeLg='12'
-        sizeMd='12'
-        sizeSm='12'
-        sizeXs='12'
-        className='mt-4'>
-        {!isWSShareDataFetching && !isWorkspacesDataFetching && (
-          <div>
-            <ZIonLabel>Select a workspace</ZIonLabel>
-            <div
-              className={classNames({
-                'cursor-not-allowed': compState?.disabledWSSelector
-              })}>
-              <ZaionsRSelect
-                options={zSelectOptions}
-                disabled={compState?.disabledWSSelector}
-                isDisabled={compState?.disabledWSSelector}
-                onChange={option => {
-                  if (!compState?.disabledWSSelector) {
-                    SelectWSHandler(
-                      option as SingleValue<ZaionsRSelectOptions>
-                    );
-                  }
-                }}
-              />
-            </div>
-          </div>
-        )}
-
-        {isWSShareDataFetching && isWorkspacesDataFetching && (
-          <div className=''>
-            <ZIonSkeletonText
-              width='9rem'
-              height='.9rem'
-            />
-            <ZIonSkeletonText
-              className='mt-1 overflow-hidden rounded-sm'
-              width='100%'
-              height='2rem'
-            />
-          </div>
-        )}
-      </ZIonCol>
-
-      {compState?.isProcessingWorkspace ||
-      isWSNotificationSettingsDataFetching ? (
-        <div className='flex w-full pt-4 mt-5 ion-align-items-center ion-justify-content-center'>
-          <ZIonSpinner className='w-9 h-9' />
-        </div>
-      ) : null}
-
-      {!compState?.isProcessingWorkspace &&
-      !isWSNotificationSettingsDataFetching &&
-      !compState?.isError &&
-      compState?.selectedWS !== null &&
-      compState?.selectedWS !== undefined &&
-      (compState?.selectedWS?.id?.trim()?.length ?? 0) > 0 ? (
         <ZIonCol
           sizeXl='12'
           sizeLg='12'
@@ -397,157 +322,236 @@ const WorkspacesSettings: React.FC = () => {
           sizeSm='12'
           sizeXs='12'
           className={classNames({
-            'mt-5': true,
             'mb-2': !isSmScale
           })}>
-          <Formik
-            initialValues={formikInitialValues}
-            enableReinitialize={true}
-            onSubmit={values => {
-              const zStringifyData = zStringify(values);
+          <ZIonTitle
+            className={classNames({
+              'block font-bold ion-no-padding': true,
+              'text-2xl': isLgScale,
+              'text-xl': !isLgScale,
+              'ion-text-center': !isSmScale
+            })}>
+            Workspaces notifications settings
+          </ZIonTitle>
+        </ZIonCol>
 
-              void formikSubmitHandler(zStringifyData);
-            }}>
-            {({ values, setFieldValue, dirty, handleSubmit }) => {
-              // eslint-disable-next-line react-hooks/rules-of-hooks
-              useEffect(() => {
-                console.log({ dirty });
-                formikDirtyHandler(dirty);
-              }, [dirty]);
+        <ZIonCol
+          sizeXl='12'
+          sizeLg='12'
+          sizeMd='12'
+          sizeSm='12'
+          sizeXs='12'
+          className='mt-4'>
+          {!isWSShareDataFetching && !isWorkspacesDataFetching && (
+            <div>
+              <ZIonLabel>Select a workspace</ZIonLabel>
+              <div
+                className={classNames({
+                  'cursor-not-allowed': compState?.disabledWSSelector
+                })}>
+                <ZaionsRSelect
+                  options={zSelectOptions}
+                  disabled={compState?.disabledWSSelector}
+                  isDisabled={compState?.disabledWSSelector}
+                  onChange={option => {
+                    if (!compState?.disabledWSSelector) {
+                      SelectWSHandler(
+                        option as SingleValue<ZaionsRSelectOptions>
+                      );
+                    }
+                  }}
+                />
+              </div>
+            </div>
+          )}
 
-              return (
-                <>
-                  <ZIonItem
-                    className='mt-2'
-                    lines='none'>
-                    <ZUserAvatarButton
-                      userAvatar={compState?.selectedWS?.workspaceImage}
-                      userAvatarUi={_userAvatarUi}
-                      className={classNames({
-                        'w-[2.5rem] h-[2.5rem]': isMdScale,
-                        'w-[2rem] h-[2rem]': !isMdScale
-                      })}
-                    />
-                    <ZIonLabel className='ms-2'>
-                      <ZIonText
+          {isWSShareDataFetching && isWorkspacesDataFetching && (
+            <div className=''>
+              <ZIonSkeletonText
+                width='9rem'
+                height='.9rem'
+              />
+              <ZIonSkeletonText
+                className='mt-1 overflow-hidden rounded-sm'
+                width='100%'
+                height='2rem'
+              />
+            </div>
+          )}
+        </ZIonCol>
+
+        {compState?.isProcessingWorkspace ||
+        isWSNotificationSettingsDataFetching ? (
+          <div className='flex w-full pt-4 mt-5 ion-align-items-center ion-justify-content-center'>
+            <ZIonSpinner className='w-9 h-9' />
+          </div>
+        ) : null}
+
+        {!compState?.isProcessingWorkspace &&
+        !isWSNotificationSettingsDataFetching &&
+        !compState?.isError &&
+        compState?.selectedWS !== null &&
+        compState?.selectedWS !== undefined &&
+        (compState?.selectedWS?.id?.trim()?.length ?? 0) > 0 ? (
+          <ZIonCol
+            sizeXl='12'
+            sizeLg='12'
+            sizeMd='12'
+            sizeSm='12'
+            sizeXs='12'
+            className={classNames({
+              'mt-5': true,
+              'mb-2': !isSmScale
+            })}>
+            <Formik
+              initialValues={formikInitialValues}
+              enableReinitialize={true}
+              onSubmit={values => {
+                const zStringifyData = zStringify(values);
+
+                void formikSubmitHandler(zStringifyData);
+              }}>
+              {({ values, setFieldValue, dirty, handleSubmit }) => {
+                // eslint-disable-next-line react-hooks/rules-of-hooks
+                useEffect(() => {
+                  console.log({ dirty });
+                  formikDirtyHandler(dirty);
+                }, [dirty]);
+
+                return (
+                  <>
+                    <ZIonItem
+                      className='mt-2'
+                      lines='none'>
+                      <ZUserAvatarButton
+                        userAvatar={compState?.selectedWS?.workspaceImage}
+                        userAvatarUi={_userAvatarUi}
                         className={classNames({
-                          'block font-semibold': true,
-                          'text-md': isLgScale,
-                          'text-sm': !isLgScale
-                        })}>
-                        {compState?.selectedWS?.workspaceName}
-                      </ZIonText>
-                      <ZIonText
-                        className='block text-xs'
-                        color='medium'>
-                        Owner by:
-                        <ZIonText
-                          className='font-semibold ms-1'
-                          color='dark'>
-                          {compState?.selectedWS?.user?.username}
-                        </ZIonText>
-                      </ZIonText>
-                    </ZIonLabel>
-
-                    <div
-                      className={classNames({
-                        'w-max h-max': true,
-                        'cursor-not-allowed': !dirty
-                      })}>
-                      <ZIonButton
-                        className='ion-no-margin'
-                        size='default'
-                        disabled={!dirty}
-                        onClick={() => {
-                          if (dirty) {
-                            handleSubmit();
-                          }
-                        }}>
-                        Save
-                      </ZIonButton>
-                    </div>
-                  </ZIonItem>
-
-                  {/*  */}
-                  <ZIonList
-                    className='mt-2 border rounded-lg'
-                    lines='full'>
-                    <ZIonItem className='mx-2 ion-padding-start-1rem ion-padding-end-0'>
-                      <ZIonIcon
-                        icon={notificationsOutline}
-                        className='me-3 w-7 h-7'
+                          'w-[2.5rem] h-[2.5rem]': isMdScale,
+                          'w-[2rem] h-[2rem]': !isMdScale
+                        })}
                       />
-
-                      <ZIonLabel>
-                        <ZIonText className='block'>
-                          Workspace notification on your profile
+                      <ZIonLabel className='ms-2'>
+                        <ZIonText
+                          className={classNames({
+                            'block font-semibold': true,
+                            'text-md': isLgScale,
+                            'text-sm': !isLgScale
+                          })}>
+                          {compState?.selectedWS?.workspaceName}
                         </ZIonText>
-                        <ZIonText className='block'>
-                          Don&apos;t miss updates about your workspace
-                          <ZIonText className='font-semibold ms-1'>
-                            {compState?.selectedWS?.workspaceName}
+                        <ZIonText
+                          className='block text-xs'
+                          color='medium'>
+                          Owner by:
+                          <ZIonText
+                            className='font-semibold ms-1'
+                            color='dark'>
+                            {compState?.selectedWS?.user?.username}
                           </ZIonText>
                         </ZIonText>
                       </ZIonLabel>
 
-                      <ZIonText slot='end'>
-                        <ZRCSwitch
-                          checked={values?.notificationOnProfile}
-                          onChange={checked => {
-                            void setFieldValue(
-                              'notificationOnProfile',
-                              checked,
-                              false
-                            );
-                          }}
-                        />
-                      </ZIonText>
+                      <div
+                        className={classNames({
+                          'w-max h-max': true,
+                          'cursor-not-allowed': !dirty
+                        })}>
+                        <ZIonButton
+                          className='ion-no-margin'
+                          size='default'
+                          disabled={!dirty}
+                          onClick={() => {
+                            if (dirty) {
+                              handleSubmit();
+                            }
+                          }}>
+                          Save
+                        </ZIonButton>
+                      </div>
                     </ZIonItem>
 
-                    <ZIonItem
-                      lines='none'
-                      className='mx-2 ion-padding-start-1rem ion-padding-end-0'>
-                      <ZIonText>Allow push notification</ZIonText>
-
-                      <ZIonText slot='end'>
-                        <ZRCSwitch
-                          checked={values?.allowPushNotification}
-                          onChange={checked => {
-                            void setFieldValue(
-                              'allowPushNotification',
-                              checked,
-                              false
-                            );
-                          }}
+                    {/*  */}
+                    <ZIonList
+                      className='mt-2 border rounded-lg'
+                      lines='full'>
+                      <ZIonItem className='mx-2 ion-padding-start-1rem ion-padding-end-0'>
+                        <ZIonIcon
+                          icon={notificationsOutline}
+                          className='me-3 w-7 h-7'
                         />
-                      </ZIonText>
-                    </ZIonItem>
-                  </ZIonList>
-                </>
-              );
-            }}
-          </Formik>
-        </ZIonCol>
-      ) : null}
 
-      {!compState?.isProcessingWorkspace &&
-      !isWSNotificationSettingsDataFetching &&
-      !compState?.isError &&
-      ((compState?.selectedWS?.id?.trim()?.length ?? 0) === 0 ||
-        compState?.selectedWS === null ||
-        compState?.selectedWS === undefined) ? (
-        <div className='flex flex-col w-full pt-4 mt-5 ion-align-items-center ion-justify-content-center'>
-          <ZIonText
-            className='text-lg'
-            color='medium'>
-            No workspace selected. Click here to choose a workspace and manage
-            notifications.
-          </ZIonText>
-        </div>
-      ) : (
-        ''
-      )}
-    </ZIonRow>
+                        <ZIonLabel>
+                          <ZIonText className='block'>
+                            Workspace notification on your profile
+                          </ZIonText>
+                          <ZIonText className='block'>
+                            Don&apos;t miss updates about your workspace
+                            <ZIonText className='font-semibold ms-1'>
+                              {compState?.selectedWS?.workspaceName}
+                            </ZIonText>
+                          </ZIonText>
+                        </ZIonLabel>
+
+                        <ZIonText slot='end'>
+                          <ZRCSwitch
+                            checked={values?.notificationOnProfile}
+                            onChange={checked => {
+                              void setFieldValue(
+                                'notificationOnProfile',
+                                checked,
+                                false
+                              );
+                            }}
+                          />
+                        </ZIonText>
+                      </ZIonItem>
+
+                      <ZIonItem
+                        lines='none'
+                        className='mx-2 ion-padding-start-1rem ion-padding-end-0'>
+                        <ZIonText>Allow push notification</ZIonText>
+
+                        <ZIonText slot='end'>
+                          <ZRCSwitch
+                            checked={values?.allowPushNotification}
+                            onChange={checked => {
+                              void setFieldValue(
+                                'allowPushNotification',
+                                checked,
+                                false
+                              );
+                            }}
+                          />
+                        </ZIonText>
+                      </ZIonItem>
+                    </ZIonList>
+                  </>
+                );
+              }}
+            </Formik>
+          </ZIonCol>
+        ) : null}
+
+        {!compState?.isProcessingWorkspace &&
+        !isWSNotificationSettingsDataFetching &&
+        !compState?.isError &&
+        ((compState?.selectedWS?.id?.trim()?.length ?? 0) === 0 ||
+          compState?.selectedWS === null ||
+          compState?.selectedWS === undefined) ? (
+          <div className='flex flex-col w-full pt-4 mt-5 ion-align-items-center ion-justify-content-center'>
+            <ZIonText
+              className='text-lg'
+              color='medium'>
+              No workspace selected. Click here to choose a workspace and manage
+              notifications.
+            </ZIonText>
+          </div>
+        ) : (
+          ''
+        )}
+      </ZIonRow>
+    </>
   );
 };
 

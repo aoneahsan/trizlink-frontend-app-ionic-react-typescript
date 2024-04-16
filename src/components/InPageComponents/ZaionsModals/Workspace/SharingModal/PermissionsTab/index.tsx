@@ -30,7 +30,7 @@ import {
   ZIonRow,
   ZIonText
 } from '@/components/ZIonComponents';
-import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/userButton';
 
 /**
  * Custom Hooks Imports go down
@@ -178,7 +178,7 @@ const ZPermissionsTab: React.FC = () => {
                 'flex-col ion-align-items-start': !isLgScale
               })}>
               <ZIonLabel className='text-sm font-bold'>
-                Muhammad talha Irshad (you)
+                trizlink-user (you)
               </ZIonLabel>
               <ZIonBadge
                 className={classNames({
@@ -191,7 +191,7 @@ const ZPermissionsTab: React.FC = () => {
             <ZIonLabel
               className='block text-sm'
               color='medium'>
-              talhaarshaad5@gmail.com
+              support@trizlink.com
             </ZIonLabel>
           </div>
         </ZIonCol>

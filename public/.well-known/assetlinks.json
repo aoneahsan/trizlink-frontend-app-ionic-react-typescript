@@ -4,7 +4,9 @@
     "target": {
       "namespace": "android_app",
       "package_name": "com.trizlink.app",
-      "sha256_cert_fingerprints": ["sha1 key"]
+      "sha256_cert_fingerprints": [
+        "14:3C:68:7C:70:F1:A5:95:A4:74:A7:E7:FB:31:EB:BB:54:92:8C:E5:75:F3:E0:FD:75:CA:6B:9D:69:3D:38:0D"
+      ]
     }
   }
 ]

@@ -107,7 +107,7 @@ const ZWorkspaceTiktokPageLayout: React.FC = () => {
           })}>
           <ZIonText className='text-lg'>
             <ZIonRouterLink
-              routerLink={CONSTANTS.ProductExternalURLFacebookUrl}
+              routerLink={CONSTANTS.ProductExternalURL.FacebookUrl}
               target='_blank'
               color='dark'
               className='text-3xl font-bolder zaions-transition'>
@@ -116,7 +116,7 @@ const ZWorkspaceTiktokPageLayout: React.FC = () => {
           </ZIonText>
           <ZIonText className='text-sm'>
             <ZIonRouterLink
-              routerLink={CONSTANTS.ProductExternalURLFacebookUrl}
+              routerLink={CONSTANTS.ProductExternalURL.FacebookUrl}
               target='_blank'
               className='font-bold hover:underline zaions-transition'
               color='dark'>

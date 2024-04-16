@@ -25,7 +25,8 @@ import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 import ZWorkspaceApprovalCards from '@/components/WorkspacesComponents/ApprovalCards';
 import ZWorkspaceApprovalToggler from '@/components/WorkspacesComponents/ApprovalToggler';
 import CONSTANTS from '@/utils/constants';
-import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/userButton';
+import SupportOnPatreon from '@/components/SupportOnPatreon';
 
 /**
  * Custom Hooks Imports go down
@@ -71,6 +72,7 @@ import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 const ZApprovalTab: React.FC<{ workspaceId: string }> = ({ workspaceId }) => {
   return (
     <ZIonGrid className='w-full h-full pt-6'>
+      <SupportOnPatreon />
       {/* Cards */}
       <ZWorkspaceApprovalCards workspaceId={workspaceId} />
 
@@ -87,10 +89,10 @@ const ZApprovalTab: React.FC<{ workspaceId: string }> = ({ workspaceId }) => {
               <ZUserAvatarButton />
               <div>
                 <ZIonText className='flex gap-1 ion-align-items-center'>
-                  Muhammad talha Irshad (you) <ZIonBadge>Team</ZIonBadge>
+                  trizlink-user (you) <ZIonBadge>Team</ZIonBadge>
                 </ZIonText>
                 <ZIonText className='block text-[14px]'>
-                  talhaarshaad5@gmail.com
+                  support@trizlink.com
                 </ZIonText>
               </div>
             </ZIonCol>

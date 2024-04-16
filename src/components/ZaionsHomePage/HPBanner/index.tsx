@@ -64,14 +64,6 @@ const ZaionsHPBanner: React.FC = () => {
                 Get Started For Free
               </ZIonButton>
             </ZIonRouterLink>
-            {/* <br /> */}
-            <ZIonRouterLink routerLink={ZaionsRoutes.DiscoverEnterpriseRoute}>
-              <ZIonText
-                className={`${classes.zaions__bannerQuote_btn} ion-text-capitalize mt-1 block`}
-                color='primary'>
-                Get a Quote
-              </ZIonText>
-            </ZIonRouterLink>
           </div>
         </ZIonCol>
         <ZIonCol

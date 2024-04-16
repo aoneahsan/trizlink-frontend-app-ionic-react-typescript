@@ -91,6 +91,7 @@ import PABrowserBlock from '@/components/AdminPanelComponents/Analytics/PABrowse
 import PADevicesBlock from '@/components/AdminPanelComponents/Analytics/PADeviceBlock';
 import PAUtmBlock from '@/components/AdminPanelComponents/Analytics/PAUtmBlock';
 import PAPixelBlock from '@/components/AdminPanelComponents/Analytics/PAPixelBlock';
+import SupportOnPatreon from '@/components/SupportOnPatreon';
 
 /**
  * Style files Imports go down
@@ -244,6 +245,9 @@ const ZShortLinkAnalytics: React.FC = () => {
 
                 {/* Col-2 Row-2 */}
                 <ZIonRow className='h-[calc(100%-4rem)] w-full'>
+                  <ZIonCol>
+                    <SupportOnPatreon />
+                  </ZIonCol>
                   {/* Col-2 Row-2 col-1 */}
                   <ZIonCol
                     className='h-full zaions-transition'

@@ -79,6 +79,7 @@ import {
   type TimeSlotInterface
 } from '@/types/AdminPanel/index.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import SupportOnPatreon from '@/components/SupportOnPatreon';
 
 /**
  * Recoil State Imports go down
@@ -219,190 +220,195 @@ const ZTimetableTab: React.FC<{
   // #endregion
 
   return (
-    <Formik
-      initialValues={formikInitialValues}
-      onSubmit={() => {}}>
-      {() => {
-        return (
-          <div className='w-full h-full px-2 py-3'>
-            <ZIonRow className='gap-2 border ion-text-center'>
-              <ZIonCol>
-                <ZIonText className='text-sm font-normal'>Monday</ZIonText>
-              </ZIonCol>
-              <ZIonCol>
-                <ZIonText className='text-sm font-normal'>Tuesday</ZIonText>
-              </ZIonCol>
-              <ZIonCol>
-                <ZIonText className='text-sm font-normal'>Wednesday</ZIonText>
-              </ZIonCol>
-              <ZIonCol>
-                <ZIonText className='text-sm font-normal'>Thursday</ZIonText>
-              </ZIonCol>
-              <ZIonCol>
-                <ZIonText className='text-sm font-normal'>Friday</ZIonText>
-              </ZIonCol>
-              <ZIonCol>
-                <ZIonText className='text-sm font-normal'>Saturday</ZIonText>
-              </ZIonCol>
-              <ZIonCol>
-                <ZIonText className='text-sm font-normal'>Sunday</ZIonText>
-              </ZIonCol>
-            </ZIonRow>
+    <>
+      <SupportOnPatreon />
+      <Formik
+        initialValues={formikInitialValues}
+        onSubmit={() => {}}>
+        {() => {
+          return (
+            <div className='w-full h-full px-2 py-3'>
+              <ZIonRow className='gap-2 border ion-text-center'>
+                <ZIonCol>
+                  <ZIonText className='text-sm font-normal'>Monday</ZIonText>
+                </ZIonCol>
+                <ZIonCol>
+                  <ZIonText className='text-sm font-normal'>Tuesday</ZIonText>
+                </ZIonCol>
+                <ZIonCol>
+                  <ZIonText className='text-sm font-normal'>Wednesday</ZIonText>
+                </ZIonCol>
+                <ZIonCol>
+                  <ZIonText className='text-sm font-normal'>Thursday</ZIonText>
+                </ZIonCol>
+                <ZIonCol>
+                  <ZIonText className='text-sm font-normal'>Friday</ZIonText>
+                </ZIonCol>
+                <ZIonCol>
+                  <ZIonText className='text-sm font-normal'>Saturday</ZIonText>
+                </ZIonCol>
+                <ZIonCol>
+                  <ZIonText className='text-sm font-normal'>Sunday</ZIonText>
+                </ZIonCol>
+              </ZIonRow>
 
-            <ZIonRow className='h-[92%] gap-2 mt-3 ion-text-center'>
-              {ZDays.map((_element, _elementIndex) => {
-                return (
-                  <ZIonCol
-                    className='h-full zaions__bg_white'
-                    key={_elementIndex}>
-                    {!isZFetching &&
-                      compState?.timeSlotData?.map(
-                        (_timeSlot, _timeSlotIndex) => {
-                          if (_element.day === _timeSlot?.day) {
-                            const divStyle = {
-                              borderColor: _timeSlot?.color
-                            };
+              <ZIonRow className='h-[92%] gap-2 mt-3 ion-text-center'>
+                {ZDays.map((_element, _elementIndex) => {
+                  return (
+                    <ZIonCol
+                      className='h-full zaions__bg_white'
+                      key={_elementIndex}>
+                      {!isZFetching &&
+                        compState?.timeSlotData?.map(
+                          (_timeSlot, _timeSlotIndex) => {
+                            if (_element.day === _timeSlot?.day) {
+                              const divStyle = {
+                                borderColor: _timeSlot?.color
+                              };
 
-                            const zIonIconStyle = {
-                              color: _timeSlot?.color
-                            };
+                              const zIonIconStyle = {
+                                color: _timeSlot?.color
+                              };
 
-                            return (
-                              <div
-                                key={_timeSlotIndex}
-                                className='w-full h-[2.4rem] mb-3 shadow-sm zaions__bg_white rounded border flex ion-align-items-center ion-justify-content-between px-2'
-                                style={divStyle}>
-                                <ZIonText className='flex ion-align-items-center'>
-                                  <ZIonIcon
-                                    icon={timeOutline}
-                                    className='w-6 h-6'
-                                    style={zIonIconStyle}
-                                  />
-                                  <ZIonText className='mt-[2px] text-sm ms-2'>
-                                    {_timeSlot?.time}
+                              return (
+                                <div
+                                  key={_timeSlotIndex}
+                                  className='w-full h-[2.4rem] mb-3 shadow-sm zaions__bg_white rounded border flex ion-align-items-center ion-justify-content-between px-2'
+                                  style={divStyle}>
+                                  <ZIonText className='flex ion-align-items-center'>
+                                    <ZIonIcon
+                                      icon={timeOutline}
+                                      className='w-6 h-6'
+                                      style={zIonIconStyle}
+                                    />
+                                    <ZIonText className='mt-[2px] text-sm ms-2'>
+                                      {_timeSlot?.time}
+                                    </ZIonText>
                                   </ZIonText>
-                                </ZIonText>
 
-                                <ZCan
-                                  shareWSId={wsShareId}
-                                  checkMode={permissionCheckModeEnum.any}
-                                  permissionType={
-                                    wsShareId !== undefined
-                                      ? permissionsTypeEnum.shareWSMemberPermissions
-                                      : permissionsTypeEnum.loggedInUserPermissions
-                                  }
-                                  havePermissions={
-                                    wsShareId !== undefined
-                                      ? [
-                                          shareWSPermissionEnum.update_sws_timeSlot,
-                                          shareWSPermissionEnum.delete_sws_timeSlot
-                                        ]
-                                      : [
-                                          permissionsEnum.update_workspace,
-                                          permissionsEnum.delete_workspace
-                                        ]
-                                  }>
-                                  <ZIonIcon
-                                    testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.timetable.timeActionButton}-${_timeSlot.id}`}
-                                    testinglistselector={
-                                      CONSTANTS.testingSelectors.workspace
-                                        .settingsModal.timetable
-                                        .timeActionButton
+                                  <ZCan
+                                    shareWSId={wsShareId}
+                                    checkMode={permissionCheckModeEnum.any}
+                                    permissionType={
+                                      wsShareId !== undefined
+                                        ? permissionsTypeEnum.shareWSMemberPermissions
+                                        : permissionsTypeEnum.loggedInUserPermissions
                                     }
-                                    onClick={(event: unknown) => {
-                                      if (_timeSlot?.id !== null) {
-                                        setCompState(oldValues => ({
-                                          ...oldValues,
-                                          timeSlotId: _timeSlot.id as string
-                                        }));
-
-                                        //
-                                        presentZTimeSlotActionPopover({
-                                          _event: event as Event,
-                                          _cssClass:
-                                            'zaions_present_folder_Action_popover_width',
-                                          _dismissOnSelect: false
-                                        });
+                                    havePermissions={
+                                      wsShareId !== undefined
+                                        ? [
+                                            shareWSPermissionEnum.update_sws_timeSlot,
+                                            shareWSPermissionEnum.delete_sws_timeSlot
+                                          ]
+                                        : [
+                                            permissionsEnum.update_workspace,
+                                            permissionsEnum.delete_workspace
+                                          ]
+                                    }>
+                                    <ZIonIcon
+                                      testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.timetable.timeActionButton}-${_timeSlot.id}`}
+                                      testinglistselector={
+                                        CONSTANTS.testingSelectors.workspace
+                                          .settingsModal.timetable
+                                          .timeActionButton
                                       }
-                                    }}
-                                    icon={ellipsisHorizontalOutline}
-                                    className='w-5 h-5 cursor-pointer'
-                                  />
-                                </ZCan>
-                              </div>
-                            );
-                          } else {
-                            return null;
+                                      onClick={(event: unknown) => {
+                                        if (_timeSlot?.id !== null) {
+                                          setCompState(oldValues => ({
+                                            ...oldValues,
+                                            timeSlotId: _timeSlot.id as string
+                                          }));
+
+                                          //
+                                          presentZTimeSlotActionPopover({
+                                            _event: event as Event,
+                                            _cssClass:
+                                              'zaions_present_folder_Action_popover_width',
+                                            _dismissOnSelect: false
+                                          });
+                                        }
+                                      }}
+                                      icon={ellipsisHorizontalOutline}
+                                      className='w-5 h-5 cursor-pointer'
+                                    />
+                                  </ZCan>
+                                </div>
+                              );
+                            } else {
+                              return null;
+                            }
                           }
-                        }
-                      )}
+                        )}
 
-                    {isZFetching &&
-                      [...Array(_element.loop)].map((el, _loopIndex) => {
-                        return (
-                          <div
-                            className='w-full h-[2.4rem] mb-3 shadow-sm zaions__bg_white rounded border flex ion-align-items-center ion-justify-content-between px-2'
-                            key={_loopIndex}>
-                            <ZIonText className='flex ion-align-items-center'>
-                              <ZIonIcon
-                                icon={timeOutline}
-                                className='w-6 h-6'
-                              />
-                              <ZIonText className='mt-[2px] text-sm ms-2'>
-                                <ZIonSkeletonText
-                                  height='.9rem'
-                                  width='4rem'
+                      {isZFetching &&
+                        [...Array(_element.loop)].map((el, _loopIndex) => {
+                          return (
+                            <div
+                              className='w-full h-[2.4rem] mb-3 shadow-sm zaions__bg_white rounded border flex ion-align-items-center ion-justify-content-between px-2'
+                              key={_loopIndex}>
+                              <ZIonText className='flex ion-align-items-center'>
+                                <ZIonIcon
+                                  icon={timeOutline}
+                                  className='w-6 h-6'
                                 />
+                                <ZIonText className='mt-[2px] text-sm ms-2'>
+                                  <ZIonSkeletonText
+                                    height='.9rem'
+                                    width='4rem'
+                                  />
+                                </ZIonText>
                               </ZIonText>
-                            </ZIonText>
-                            <ZIonIcon
-                              icon={ellipsisHorizontalOutline}
-                              className='w-5 h-5'
-                            />
-                          </div>
-                        );
-                      })}
+                              <ZIonIcon
+                                icon={ellipsisHorizontalOutline}
+                                className='w-5 h-5'
+                              />
+                            </div>
+                          );
+                        })}
 
-                    <ZCan
-                      shareWSId={wsShareId}
-                      permissionType={
-                        wsShareId !== undefined
-                          ? permissionsTypeEnum.shareWSMemberPermissions
-                          : permissionsTypeEnum.loggedInUserPermissions
-                      }
-                      havePermissions={
-                        wsShareId !== undefined
-                          ? [shareWSPermissionEnum.create_sws_timeSlot]
-                          : [permissionsEnum?.create_timeSlot]
-                      }>
-                      <ZIonButton
-                        expand='block'
-                        disabled={isZFetching}
-                        className='mb-3'
-                        fill='outline'
-                        testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.timetable.addTimeButton}-${_element.day}`}
-                        onClick={() => {
-                          setCompState(oldValues => ({
-                            ...oldValues,
-                            timeSlotDay: _element.day
-                          }));
+                      <ZCan
+                        shareWSId={wsShareId}
+                        permissionType={
+                          wsShareId !== undefined
+                            ? permissionsTypeEnum.shareWSMemberPermissions
+                            : permissionsTypeEnum.loggedInUserPermissions
+                        }
+                        havePermissions={
+                          wsShareId !== undefined
+                            ? [shareWSPermissionEnum.create_sws_timeSlot]
+                            : [permissionsEnum?.create_timeSlot]
+                        }>
+                        <ZIonButton
+                          expand='block'
+                          disabled={isZFetching}
+                          className='mb-3'
+                          fill='outline'
+                          testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.timetable.addTimeButton}-${_element.day}`}
+                          onClick={() => {
+                            setCompState(oldValues => ({
+                              ...oldValues,
+                              timeSlotDay: _element.day
+                            }));
 
-                          presentZWorkspaceTimeSlotFormModal({
-                            _cssClass: 'workspace-create-time-slot-modal'
-                          });
-                        }}>
-                        <ZIonIcon icon={addOutline} />
-                        <ZIonText className='ms-1 pt-[2px]'>Add Time</ZIonText>
-                      </ZIonButton>
-                    </ZCan>
-                  </ZIonCol>
-                );
-              })}
-            </ZIonRow>
-          </div>
-        );
-      }}
-    </Formik>
+                            presentZWorkspaceTimeSlotFormModal({
+                              _cssClass: 'workspace-create-time-slot-modal'
+                            });
+                          }}>
+                          <ZIonIcon icon={addOutline} />
+                          <ZIonText className='ms-1 pt-[2px]'>
+                            Add Time
+                          </ZIonText>
+                        </ZIonButton>
+                      </ZCan>
+                    </ZIonCol>
+                  );
+                })}
+              </ZIonRow>
+            </div>
+          );
+        }}
+      </Formik>
+    </>
   );
 };
 

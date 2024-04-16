@@ -66,6 +66,7 @@ import { FormMode } from '@/types/AdminPanel/index.type';
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import { ProductFavicon } from '@/assets/images';
+import SupportOnPatreon from '@/components/SupportOnPatreon';
 
 /**
  * Component props type go down
@@ -112,123 +113,7 @@ const ZWorkspacesSharingModal: React.FC<{
 
   return (
     <>
-      {/* header  */}
-      {/* <ZIonHeader>
-        <div className='w-full pt-1 ion-text-end pe-1'>
-          <ZIonIcon
-            slot='icon-only'
-            icon={closeOutline}
-            className='w-6 h-6 cursor-pointer'
-            onClick={() => {
-              dismissZIonModal();
-            }}
-          />
-        </div>
-        <div className='pb-1 w-full ion-text-center mt-[-13px]'>
-          <ZIonText className='text-2xl h-max'>Team sharing</ZIonText>
-        </div>
-        <ZIonSegment
-          scrollable={true}
-          value={compState.activeTab}
-          className={classNames({
-            'w-[85%] mx-auto': true,
-            'w-full': !isLgScale
-          })}>
-          {/* Timetable * /}
-          <ZIonSegmentButton
-            value={WorkspaceSharingTabEnum.invite}
-            className='normal-case ion-text-center ion-no-padding'
-            onClick={() => {
-              setCompState(oldValues => ({
-                ...oldValues,
-                activeTab: WorkspaceSharingTabEnum.invite
-              }));
-            }}>
-            <ZIonIcon
-              icon={personAddOutline}
-              className='w-5 h-5 pt-1'
-            />
-            <ZIonText
-              className={classNames({
-                'text-sm': true,
-                'pb-3': isMdScale
-              })}>
-              Invite
-            </ZIonText>
-          </ZIonSegmentButton>
-
-          {/* Labels * /}
-          <ZIonSegmentButton
-            value={WorkspaceSharingTabEnum.members}
-            className='normal-case ion-text-center ion-no-padding'
-            onClick={() => {
-              setCompState(oldValues => ({
-                ...oldValues,
-                activeTab: WorkspaceSharingTabEnum.members
-              }));
-            }}>
-            <ZIonIcon
-              icon={peopleOutline}
-              className='w-5 h-5 pt-1'
-            />
-            <ZIonText
-              className={classNames({
-                'text-sm': true,
-                'pb-3': isMdScale
-              })}>
-              Members
-            </ZIonText>
-          </ZIonSegmentButton>
-
-          {/* Settings * /}
-          <ZIonSegmentButton
-            value={WorkspaceSharingTabEnum.permissions}
-            className='normal-case ion-text-center ion-no-padding'
-            onClick={() => {
-              setCompState(oldValues => ({
-                ...oldValues,
-                activeTab: WorkspaceSharingTabEnum.permissions
-              }));
-            }}>
-            <ZIonIcon
-              icon={checkboxOutline}
-              className='w-5 h-5 pt-1'
-            />
-            <ZIonText
-              className={classNames({
-                'text-sm': true,
-                'pb-3': isMdScale
-              })}>
-              Permissions
-            </ZIonText>
-          </ZIonSegmentButton>
-
-          {/* Approvals * /}
-          <ZIonSegmentButton
-            value={WorkspaceSharingTabEnum.notifications}
-            className='normal-case ion-text-center ion-no-padding'
-            onClick={() => {
-              setCompState(oldValues => ({
-                ...oldValues,
-                activeTab: WorkspaceSharingTabEnum.notifications
-              }));
-            }}>
-            <ZIonIcon
-              icon={notificationsOutline}
-              className='w-5 h-5 pt-1'
-            />
-            <ZIonText
-              className={classNames({
-                'text-sm': true,
-                'pb-3': isMdScale
-              })}>
-              Notifications
-            </ZIonText>
-          </ZIonSegmentButton>
-        </ZIonSegment>
-      </ZIonHeader> */}
-
-      {/* Content */}
+      <SupportOnPatreon />
       <ZIonContent>
         <div className='flex mt-2 ion-align-items-start ion-justify-content-end pe-2'>
           <ZIonIcon
@@ -265,9 +150,6 @@ const ZWorkspacesSharingModal: React.FC<{
                   'text-2xl': isSmScale,
                   'text-xl': !isSmScale
                 })}>
-                {/* {role !== undefined && role !== null && role?.trim()?.length > 0
-                  ? 'Update member role'
-                  : 'Invite a member'} */}
                 Invite a member
               </ZIonText>
             </div>
