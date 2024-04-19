@@ -421,54 +421,72 @@ const WorkspacesSettings: React.FC = () => {
                 return (
                   <>
                     <ZIonItem
-                      className='mt-2'
+                      className={classNames('mt-2', {
+                        'ion-item-start-no-padding ion-inner-padding-end-0 px-[3px]':
+                          !isSmScale
+                      })}
                       lines='none'>
-                      <ZUserAvatarButton
-                        userAvatar={compState?.selectedWS?.workspaceImage}
-                        userAvatarUi={_userAvatarUi}
-                        className={classNames({
-                          'w-[2.5rem] h-[2.5rem]': isMdScale,
-                          'w-[2rem] h-[2rem]': !isMdScale
-                        })}
-                      />
-                      <ZIonLabel className='ms-2'>
-                        <ZIonText
+                      <ZIonLabel
+                        className={classNames(
+                          '!flex items-center ion-no-margin my-1',
+                          {
+                            'flex-col justify-center ion-text-center':
+                              !isSmScale
+                          }
+                        )}>
+                        <ZUserAvatarButton
+                          userAvatar={compState?.selectedWS?.workspaceImage}
+                          userAvatarUi={_userAvatarUi}
                           className={classNames({
-                            'block font-semibold': true,
-                            'text-md': isLgScale,
-                            'text-sm': !isLgScale
-                          })}>
-                          {compState?.selectedWS?.workspaceName}
-                        </ZIonText>
-                        <ZIonText
-                          className='block text-xs'
-                          color='medium'>
-                          Owner by:
+                            'w-[2.5rem] h-[2.5rem]': isMdScale,
+                            'w-[2rem] h-[2rem]': !isMdScale && isSmScale,
+                            'w-[1.5rem] h-[1.5rem]': !isSmScale
+                          })}
+                        />
+                        <ZIonLabel className='ms-2'>
                           <ZIonText
-                            className='font-semibold ms-1'
-                            color='dark'>
-                            {compState?.selectedWS?.user?.username}
+                            className={classNames({
+                              'block font-semibold': true,
+                              'text-md': isLgScale,
+                              'text-sm': !isLgScale
+                            })}>
+                            {compState?.selectedWS?.workspaceName}
                           </ZIonText>
-                        </ZIonText>
-                      </ZIonLabel>
+                          <ZIonText
+                            className='block text-xs'
+                            color='medium'>
+                            Owner by:
+                            <ZIonText
+                              className='font-semibold ms-1'
+                              color='dark'>
+                              {compState?.selectedWS?.user?.username}
+                            </ZIonText>
+                          </ZIonText>
+                        </ZIonLabel>
 
-                      <div
-                        className={classNames({
-                          'w-max h-max': true,
-                          'cursor-not-allowed': !dirty
-                        })}>
-                        <ZIonButton
-                          className='ion-no-margin'
-                          size='default'
-                          disabled={!dirty}
-                          onClick={() => {
-                            if (dirty) {
-                              handleSubmit();
-                            }
-                          }}>
-                          Save
-                        </ZIonButton>
-                      </div>
+                        <div
+                          className={classNames({
+                            'h-max': true,
+                            'cursor-not-allowed': !dirty,
+                            'ms-auto w-max': isSmScale,
+                            'mt-2 w-full': !isSmScale
+                          })}>
+                          <ZIonButton
+                            size='default'
+                            disabled={!dirty}
+                            expand={!isSmScale ? 'block' : undefined}
+                            className={classNames('ion-no-margin', {
+                              'w-full': !isSmScale
+                            })}
+                            onClick={() => {
+                              if (dirty) {
+                                handleSubmit();
+                              }
+                            }}>
+                            Save
+                          </ZIonButton>
+                        </div>
+                      </ZIonLabel>
                     </ZIonItem>
 
                     {/*  */}
@@ -476,54 +494,91 @@ const WorkspacesSettings: React.FC = () => {
                       className='mt-2 border rounded-lg'
                       lines='full'>
                       <ZIonItem className='mx-2 ion-padding-start-1rem ion-padding-end-0'>
-                        <ZIonIcon
-                          icon={notificationsOutline}
-                          className='me-3 w-7 h-7'
-                        />
+                        <ZIonLabel
+                          className={classNames(
+                            '!flex items-center ion-no-margin my-1',
+                            {
+                              'flex-col justify-center ion-text-center':
+                                !isSmScale
+                            }
+                          )}>
+                          <ZIonIcon
+                            icon={notificationsOutline}
+                            className='me-3 w-7 h-7'
+                          />
 
-                        <ZIonLabel>
-                          <ZIonText className='block'>
-                            Workspace notification on your profile
-                          </ZIonText>
-                          <ZIonText className='block'>
-                            Don&apos;t miss updates about your workspace
-                            <ZIonText className='font-semibold ms-1'>
-                              {compState?.selectedWS?.workspaceName}
+                          <ZIonLabel>
+                            <ZIonText
+                              className={classNames('block', {
+                                'text-sm': !isSmScale
+                              })}>
+                              Workspace notification on your profile
                             </ZIonText>
+                            <ZIonText
+                              className={classNames('block', {
+                                'text-sm': !isSmScale
+                              })}>
+                              Don&apos;t miss updates about your workspace
+                              <ZIonText className='font-semibold ms-1'>
+                                {compState?.selectedWS?.workspaceName}
+                              </ZIonText>
+                            </ZIonText>
+                          </ZIonLabel>
+
+                          <ZIonText
+                            className={classNames({
+                              'ms-auto': isSmScale,
+                              'mb-3': !isSmScale
+                            })}>
+                            <ZRCSwitch
+                              checked={values?.notificationOnProfile}
+                              onChange={checked => {
+                                void setFieldValue(
+                                  'notificationOnProfile',
+                                  checked,
+                                  false
+                                );
+                              }}
+                            />
                           </ZIonText>
                         </ZIonLabel>
-
-                        <ZIonText slot='end'>
-                          <ZRCSwitch
-                            checked={values?.notificationOnProfile}
-                            onChange={checked => {
-                              void setFieldValue(
-                                'notificationOnProfile',
-                                checked,
-                                false
-                              );
-                            }}
-                          />
-                        </ZIonText>
                       </ZIonItem>
 
                       <ZIonItem
                         lines='none'
                         className='mx-2 ion-padding-start-1rem ion-padding-end-0'>
-                        <ZIonText>Allow push notification</ZIonText>
+                        <ZIonLabel
+                          className={classNames(
+                            '!flex items-center ion-no-margin my-1',
+                            {
+                              'flex-col justify-center ion-text-center':
+                                !isSmScale
+                            }
+                          )}>
+                          <ZIonText
+                            className={classNames({
+                              'text-sm': !isSmScale
+                            })}>
+                            Allow push notification
+                          </ZIonText>
 
-                        <ZIonText slot='end'>
-                          <ZRCSwitch
-                            checked={values?.allowPushNotification}
-                            onChange={checked => {
-                              void setFieldValue(
-                                'allowPushNotification',
-                                checked,
-                                false
-                              );
-                            }}
-                          />
-                        </ZIonText>
+                          <ZIonText
+                            className={classNames({
+                              'ms-auto': isSmScale,
+                              'mt-1': !isSmScale
+                            })}>
+                            <ZRCSwitch
+                              checked={values?.allowPushNotification}
+                              onChange={checked => {
+                                void setFieldValue(
+                                  'allowPushNotification',
+                                  checked,
+                                  false
+                                );
+                              }}
+                            />
+                          </ZIonText>
+                        </ZIonLabel>
                       </ZIonItem>
                     </ZIonList>
                   </>

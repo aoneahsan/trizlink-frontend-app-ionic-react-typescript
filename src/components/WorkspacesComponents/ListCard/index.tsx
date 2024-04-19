@@ -96,6 +96,8 @@ import { type UserAccountType } from '@/types/UserAccount/index.type';
  * */
 import classes from './styles.module.css';
 import { ZaionsUserAccountRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import ZWSActionsButton from './ActionsBtn';
 
 /**
  * Images Imports go down
@@ -143,6 +145,7 @@ const ZWorkspacesCard: React.FC<{
   const { zNavigatePushRoute } = useZNavigate();
   const { presentZIonErrorAlert } = useZIonErrorAlert();
   const { presentZIonAlert } = useZIonAlert();
+  const { isSmScale } = useZMediaQueryScale();
   // #endregion
 
   // #region Recoil state.
@@ -347,7 +350,6 @@ const ZWorkspacesCard: React.FC<{
     }
   };
 
-  // when member went to leave workspace and click on the leave button this function will fire and show the confirm alert.
   const {
     _testinglistselector: leaveBtnTestinglistselector,
     _testingSelector: leaveBtnTestingSelector,
@@ -359,22 +361,22 @@ const ZWorkspacesCard: React.FC<{
           type === ZWSTypeEum.favoriteWorkspace
             ? 'favorite-'
             : type === ZWSTypeEum.shareWorkspace
-            ? 'share-'
-            : 'owned-'
+              ? 'share-'
+              : 'owned-'
         }leave-${workspaceId}`,
         testinglistselector: `${
           type === ZWSTypeEum.favoriteWorkspace
             ? 'favorite-'
             : type === ZWSTypeEum.shareWorkspace
-            ? 'share-'
-            : 'owned-'
+              ? 'share-'
+              : 'owned-'
         }${CONSTANTS.testingSelectors.workspace.listPage.modals.leaveBtn}`,
         testingselector: `${
           type === ZWSTypeEum.favoriteWorkspace
             ? 'favorite-'
             : type === ZWSTypeEum.shareWorkspace
-            ? 'share-'
-            : 'owned-'
+              ? 'share-'
+              : 'owned-'
         }${
           CONSTANTS.testingSelectors.workspace.listPage.modals.leaveBtn
         }-${workspaceId}`
@@ -393,28 +395,30 @@ const ZWorkspacesCard: React.FC<{
           type === ZWSTypeEum.favoriteWorkspace
             ? 'favorite-'
             : type === ZWSTypeEum.shareWorkspace
-            ? 'share-'
-            : 'owned-'
+              ? 'share-'
+              : 'owned-'
         }cancel-${workspaceId}`,
         testinglistselector: `${
           type === ZWSTypeEum.favoriteWorkspace
             ? 'favorite-'
             : type === ZWSTypeEum.shareWorkspace
-            ? 'share-'
-            : 'owned-'
+              ? 'share-'
+              : 'owned-'
         }${CONSTANTS.testingSelectors.workspace.listPage.modals.cancelBtn}`,
         testingselector: `${
           type === ZWSTypeEum.favoriteWorkspace
             ? 'favorite-'
             : type === ZWSTypeEum.shareWorkspace
-            ? 'share-'
-            : 'owned-'
+              ? 'share-'
+              : 'owned-'
         }${
           CONSTANTS.testingSelectors.workspace.listPage.modals.cancelBtn
         }-${workspaceId}`
       }),
     [type, workspaceId]
   );
+
+  // when member went to leave workspace and click on the leave button this function will fire and show the confirm alert.
   const LeaveWorkspaceConfirmAlert = async (): Promise<void> => {
     try {
       if (workspaceId !== undefined && memberId !== undefined) {
@@ -507,18 +511,28 @@ const ZWorkspacesCard: React.FC<{
       reportCustomError(error);
     }
   };
-
   // #endregion
 
   return (
-    <ZIonCard className='h-[11.4rem]'>
+    <ZIonCard
+      className={classNames({
+        'h-[15.4rem]': !isSmScale,
+        'h-[11.4rem]': isSmScale
+      })}>
       <ZIonRow className='flex-col h-full'>
         <ZIonCol className='flex-1'>
           {/* Card header */}
-          <ZIonCardHeader>
+          <ZIonCardHeader
+            className={classNames({
+              'px-2': !isSmScale
+            })}>
             <ZIonRow className='ion-align-items-center'>
               <ZIonCol
-                size='8'
+                sizeXl='8'
+                sizeLg='8'
+                sizeMd='8'
+                sizeSm='8'
+                sizeXs='12'
                 className='flex gap-3 ion-align-items-center'>
                 <div
                   className={classNames({
@@ -544,15 +558,15 @@ const ZWorkspacesCard: React.FC<{
                       type === ZWSTypeEum.favoriteWorkspace
                         ? 'favorite-'
                         : type === ZWSTypeEum.shareWorkspace
-                        ? 'share-'
-                        : 'owned-'
+                          ? 'share-'
+                          : 'owned-'
                     }${workspaceId}`}
                     testingselector={`${
                       type === ZWSTypeEum.favoriteWorkspace
                         ? 'favorite-'
                         : type === ZWSTypeEum.shareWorkspace
-                        ? 'share-'
-                        : 'owned-'
+                          ? 'share-'
+                          : 'owned-'
                     }${
                       CONSTANTS.testingSelectors.workspace.listPage
                         .workspaceCardImg
@@ -561,8 +575,8 @@ const ZWorkspacesCard: React.FC<{
                       type === ZWSTypeEum.favoriteWorkspace
                         ? 'favorite-'
                         : type === ZWSTypeEum.shareWorkspace
-                        ? 'share-'
-                        : 'owned-'
+                          ? 'share-'
+                          : 'owned-'
                     }${
                       CONSTANTS.testingSelectors.workspace.listPage
                         .workspaceCardImg
@@ -598,30 +612,30 @@ const ZWorkspacesCard: React.FC<{
                             ]
                           })
                         : !owned &&
-                          accountStatus === ZTeamMemberInvitationEnum.accepted
-                        ? createRedirectRoute({
-                            url: ZaionsRoutes.AdminPanel.ShareWS.Startup,
-                            params: [
-                              CONSTANTS.RouteParams.workspace.wsShareId,
-                              CONSTANTS.RouteParams.workspace.shareWSMemberId
-                            ],
-                            values: [workspaceId ?? '', memberId ?? '']
-                          })
-                        : undefined
+                            accountStatus === ZTeamMemberInvitationEnum.accepted
+                          ? createRedirectRoute({
+                              url: ZaionsRoutes.AdminPanel.ShareWS.Startup,
+                              params: [
+                                CONSTANTS.RouteParams.workspace.wsShareId,
+                                CONSTANTS.RouteParams.workspace.shareWSMemberId
+                              ],
+                              values: [workspaceId ?? '', memberId ?? '']
+                            })
+                          : undefined
                     }
                     testingidselector={`${
                       type === ZWSTypeEum.favoriteWorkspace
                         ? 'favorite-'
                         : type === ZWSTypeEum.shareWorkspace
-                        ? 'share-'
-                        : 'owned-'
+                          ? 'share-'
+                          : 'owned-'
                     }${workspaceId}`}
                     testingselector={`${
                       type === ZWSTypeEum.favoriteWorkspace
                         ? 'favorite-'
                         : type === ZWSTypeEum.shareWorkspace
-                        ? 'share-'
-                        : 'owned-'
+                          ? 'share-'
+                          : 'owned-'
                     }${
                       CONSTANTS.testingSelectors.workspace.listPage
                         .workspaceCardTitle
@@ -630,8 +644,8 @@ const ZWorkspacesCard: React.FC<{
                       type === ZWSTypeEum.favoriteWorkspace
                         ? 'favorite-'
                         : type === ZWSTypeEum.shareWorkspace
-                        ? 'share-'
-                        : 'owned-'
+                          ? 'share-'
+                          : 'owned-'
                     }${
                       CONSTANTS.testingSelectors.workspace.listPage
                         .workspaceCardTitle
@@ -651,26 +665,35 @@ const ZWorkspacesCard: React.FC<{
               </ZIonCol>
 
               {/* Add to Favorites button col */}
-              <ZIonCol className='ion-text-end'>
+              <ZIonCol
+                className={classNames({
+                  'ion-text-end': isSmScale
+                })}>
                 {owned ||
                 accountStatus === ZTeamMemberInvitationEnum.accepted ? (
                   <ZIonButton
-                    fill='clear'
                     minHeight='auto'
-                    className='mb-1 overflow-hidden rounded-full w-7 h-7 ion-no-padding ion-no-margin'
+                    expand={!isSmScale ? 'block' : undefined}
+                    fill={isSmScale ? 'clear' : 'outline'}
+                    className={classNames({
+                      'mb-1 overflow-hidden h-7 ion-no-padding ion-no-margin':
+                        true,
+                      'w-7 rounded-full': isSmScale,
+                      'mt-3': !isSmScale
+                    })}
                     testingidselector={`${
                       type === ZWSTypeEum.favoriteWorkspace
                         ? 'favorite-'
                         : type === ZWSTypeEum.shareWorkspace
-                        ? 'share-'
-                        : 'owned-'
+                          ? 'share-'
+                          : 'owned-'
                     }${workspaceId}`}
                     testingselector={`${
                       type === ZWSTypeEum.favoriteWorkspace
                         ? 'favorite-'
                         : type === ZWSTypeEum.shareWorkspace
-                        ? 'share-'
-                        : 'owned-'
+                          ? 'share-'
+                          : 'owned-'
                     }${
                       isFavorite === true
                         ? CONSTANTS.testingSelectors.workspace.listPage
@@ -682,8 +705,8 @@ const ZWorkspacesCard: React.FC<{
                       type === ZWSTypeEum.favoriteWorkspace
                         ? 'favorite-'
                         : type === ZWSTypeEum.shareWorkspace
-                        ? 'share-'
-                        : 'owned-'
+                          ? 'share-'
+                          : 'owned-'
                     }${
                       isFavorite === true
                         ? CONSTANTS.testingSelectors.workspace.listPage
@@ -714,15 +737,15 @@ const ZWorkspacesCard: React.FC<{
                         type === ZWSTypeEum.favoriteWorkspace
                           ? 'favorite-'
                           : type === ZWSTypeEum.shareWorkspace
-                          ? 'share-'
-                          : 'owned-'
+                            ? 'share-'
+                            : 'owned-'
                       }${workspaceId}`}
                       testingselector={`${
                         type === ZWSTypeEum.favoriteWorkspace
                           ? 'favorite-'
                           : type === ZWSTypeEum.shareWorkspace
-                          ? 'share-'
-                          : 'owned-'
+                            ? 'share-'
+                            : 'owned-'
                       }${
                         CONSTANTS.testingSelectors.workspace.listPage
                           .workspaceCardUserButton
@@ -731,8 +754,8 @@ const ZWorkspacesCard: React.FC<{
                         type === ZWSTypeEum.favoriteWorkspace
                           ? 'favorite-'
                           : type === ZWSTypeEum.shareWorkspace
-                          ? 'share-'
-                          : 'owned-'
+                            ? 'share-'
+                            : 'owned-'
                       }${
                         CONSTANTS.testingSelectors.workspace.listPage
                           .workspaceCardUserButton
@@ -759,8 +782,8 @@ const ZWorkspacesCard: React.FC<{
                                   name: userAccountStateAtom?.username
                                 })
                             : user?.avatar !== null
-                            ? user?.avatar
-                            : getUiAvatarApiUrl({ name: user?.username })
+                              ? user?.avatar
+                              : getUiAvatarApiUrl({ name: user?.username })
                         }
                       />
                     </ZIonButton>
@@ -771,33 +794,44 @@ const ZWorkspacesCard: React.FC<{
           </ZIonCardHeader>
         </ZIonCol>
 
-        <ZIonCol className=''>
+        <ZIonCol>
           {/* Card body */}
-          <ZIonCardContent className='flex flex-col h-full ion-justify-content-end ion-align-items-end'>
+          <ZIonCardContent
+            className={classNames({
+              'flex flex-col h-full ion-justify-content-end ion-align-items-end':
+                true,
+              'px-2': !isSmScale
+            })}>
             {/* Bottom row */}
             <ZIonRow className='w-full ion-align-items-center'>
               {owned || accountStatus === ZTeamMemberInvitationEnum.accepted ? (
                 <>
                   {/* View button */}
-                  <ZIonCol>
+                  <ZIonCol
+                    sizeXl='6'
+                    sizeLg='6'
+                    sizeMd='6'
+                    sizeSm='6'
+                    sizeXs='12'>
                     <ZCan havePermissions={[permissionsEnum.view_workspace]}>
                       <ZIonButton
                         className='normal-case'
                         color='secondary'
-                        size='default'
+                        size={isSmScale ? 'default' : 'small'}
+                        expand={!isSmScale ? 'block' : undefined}
                         testingidselector={`${
                           type === ZWSTypeEum.favoriteWorkspace
                             ? 'favorite-'
                             : type === ZWSTypeEum.shareWorkspace
-                            ? 'share-'
-                            : 'owned-'
+                              ? 'share-'
+                              : 'owned-'
                         }${workspaceId}`}
                         testingselector={`${
                           type === ZWSTypeEum.favoriteWorkspace
                             ? 'favorite-'
                             : type === ZWSTypeEum.shareWorkspace
-                            ? 'share-'
-                            : 'owned-'
+                              ? 'share-'
+                              : 'owned-'
                         }${
                           CONSTANTS.testingSelectors.workspace.listPage
                             .viewWorkspaceButton
@@ -806,8 +840,8 @@ const ZWorkspacesCard: React.FC<{
                           type === ZWSTypeEum.favoriteWorkspace
                             ? 'favorite-'
                             : type === ZWSTypeEum.shareWorkspace
-                            ? 'share-'
-                            : 'owned-'
+                              ? 'share-'
+                              : 'owned-'
                         }${
                           CONSTANTS.testingSelectors.workspace.listPage
                             .viewWorkspaceButton
@@ -854,49 +888,21 @@ const ZWorkspacesCard: React.FC<{
                   </ZIonCol>
 
                   {/* actions popover button */}
-                  <ZIonCol className='ion-text-end'>
+                  <ZIonCol
+                    className={classNames({
+                      'ion-text-end': isSmScale
+                    })}
+                    sizeXl='6'
+                    sizeLg='6'
+                    sizeMd='6'
+                    sizeSm='6'
+                    sizeXs='12'>
                     {owned && (
-                      <ZIonButton
-                        fill='clear'
-                        minHeight='auto'
-                        className='w-6 h-6 overflow-hidden normal-case rounded-full ion-no-padding ion-no-margin'
-                        color='dark'
-                        testingidselector={`${
-                          type === ZWSTypeEum.favoriteWorkspace
-                            ? 'favorite-'
-                            : type === ZWSTypeEum.shareWorkspace
-                            ? 'share-'
-                            : 'owned-'
-                        }${workspaceId}`}
-                        testingselector={`${
-                          type === ZWSTypeEum.favoriteWorkspace
-                            ? 'favorite-'
-                            : type === ZWSTypeEum.shareWorkspace
-                            ? 'share-'
-                            : 'owned-'
-                        }${
-                          CONSTANTS.testingSelectors.workspace.listPage
-                            .workspaceCardActionPopoverButton
-                        }-${workspaceId}`}
-                        testinglistselector={`${
-                          type === ZWSTypeEum.favoriteWorkspace
-                            ? 'favorite-'
-                            : type === ZWSTypeEum.shareWorkspace
-                            ? 'share-'
-                            : 'owned-'
-                        }${
-                          CONSTANTS.testingSelectors.workspace.listPage
-                            .workspaceCardActionPopoverButton
-                        }`}
-                        onClick={(event: unknown) => {
-                          presentWorkspacesActionsPopover({
-                            _event: event as Event,
-                            _cssClass: 'zaions_workspaces_actions_popover_size',
-                            _dismissOnSelect: false
-                          });
-                        }}>
-                        <ZIonIcon icon={ellipsisHorizontalOutline} />
-                      </ZIonButton>
+                      <ZWSActionsButton
+                        type={type}
+                        workspaceId={workspaceId}
+                        owned={owned}
+                      />
                     )}
                     {!owned && (
                       <ZIonButton
@@ -906,15 +912,15 @@ const ZWorkspacesCard: React.FC<{
                           type === ZWSTypeEum.favoriteWorkspace
                             ? 'favorite-'
                             : type === ZWSTypeEum.shareWorkspace
-                            ? 'share-'
-                            : 'owned-'
+                              ? 'share-'
+                              : 'owned-'
                         }${workspaceId}`}
                         testingselector={`${
                           type === ZWSTypeEum.favoriteWorkspace
                             ? 'favorite-'
                             : type === ZWSTypeEum.shareWorkspace
-                            ? 'share-'
-                            : 'owned-'
+                              ? 'share-'
+                              : 'owned-'
                         }${
                           CONSTANTS.testingSelectors.workspace.listPage
                             .leaveWorkspaceButton
@@ -923,8 +929,8 @@ const ZWorkspacesCard: React.FC<{
                           type === ZWSTypeEum.favoriteWorkspace
                             ? 'favorite-'
                             : type === ZWSTypeEum.shareWorkspace
-                            ? 'share-'
-                            : 'owned-'
+                              ? 'share-'
+                              : 'owned-'
                         }${
                           CONSTANTS.testingSelectors.workspace.listPage
                             .leaveWorkspaceButton
@@ -951,15 +957,15 @@ const ZWorkspacesCard: React.FC<{
                           type === ZWSTypeEum.favoriteWorkspace
                             ? 'favorite-'
                             : type === ZWSTypeEum.shareWorkspace
-                            ? 'share-'
-                            : 'owned-'
+                              ? 'share-'
+                              : 'owned-'
                         }${workspaceId}`}
                         testingselector={`${
                           type === ZWSTypeEum.favoriteWorkspace
                             ? 'favorite-'
                             : type === ZWSTypeEum.shareWorkspace
-                            ? 'share-'
-                            : 'owned-'
+                              ? 'share-'
+                              : 'owned-'
                         }${
                           CONSTANTS.testingSelectors.workspace.listPage
                             .acceptInvitationButton
@@ -968,8 +974,8 @@ const ZWorkspacesCard: React.FC<{
                           type === ZWSTypeEum.favoriteWorkspace
                             ? 'favorite-'
                             : type === ZWSTypeEum.shareWorkspace
-                            ? 'share-'
-                            : 'owned-'
+                              ? 'share-'
+                              : 'owned-'
                         }${
                           CONSTANTS.testingSelectors.workspace.listPage
                             .acceptInvitationButton
@@ -994,15 +1000,15 @@ const ZWorkspacesCard: React.FC<{
                         type === ZWSTypeEum.favoriteWorkspace
                           ? 'favorite-'
                           : type === ZWSTypeEum.shareWorkspace
-                          ? 'share-'
-                          : 'owned-'
+                            ? 'share-'
+                            : 'owned-'
                       }${workspaceId}`}
                       testingselector={`${
                         type === ZWSTypeEum.favoriteWorkspace
                           ? 'favorite-'
                           : type === ZWSTypeEum.shareWorkspace
-                          ? 'share-'
-                          : 'owned-'
+                            ? 'share-'
+                            : 'owned-'
                       }${
                         CONSTANTS.testingSelectors.workspace.listPage
                           .rejectInvitationButton
@@ -1011,8 +1017,8 @@ const ZWorkspacesCard: React.FC<{
                         type === ZWSTypeEum.favoriteWorkspace
                           ? 'favorite-'
                           : type === ZWSTypeEum.shareWorkspace
-                          ? 'share-'
-                          : 'owned-'
+                            ? 'share-'
+                            : 'owned-'
                       }${
                         CONSTANTS.testingSelectors.workspace.listPage
                           .rejectInvitationButton

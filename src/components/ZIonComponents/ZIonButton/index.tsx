@@ -49,20 +49,20 @@ const ZIonButton: React.FC<ZIonButtonType> = (props: ZIonButtonType) => {
     props.style !== undefined && props.height !== undefined
       ? { ...props.style, height: props.height }
       : props.style !== undefined &&
-        props.height !== undefined &&
-        props.minHeight !== undefined
-      ? { ...props.style, height: props.height, minHeight: props.minHeight }
-      : props.style !== undefined && props.minHeight !== undefined
-      ? { ...props.style, minHeight: props.minHeight }
-      : props.style !== undefined && props.height === undefined
-      ? { ...props.style }
-      : props.style !== undefined && props.minHeight === undefined
-      ? { ...props.style }
-      : props.style === undefined && props.height !== undefined
-      ? { height: props.height }
-      : props.style === undefined && props.minHeight !== undefined
-      ? { minHeight: props.minHeight }
-      : {};
+          props.height !== undefined &&
+          props.minHeight !== undefined
+        ? { ...props.style, height: props.height, minHeight: props.minHeight }
+        : props.style !== undefined && props.minHeight !== undefined
+          ? { ...props.style, minHeight: props.minHeight }
+          : props.style !== undefined && props.height === undefined
+            ? { ...props.style }
+            : props.style !== undefined && props.minHeight === undefined
+              ? { ...props.style }
+              : props.style === undefined && props.height !== undefined
+                ? { height: props.height }
+                : props.style === undefined && props.minHeight !== undefined
+                  ? { minHeight: props.minHeight }
+                  : {};
 
   const { _idSelector, _testingSelector, _testinglistselector } =
     zComponentTestingSelectorMaker({

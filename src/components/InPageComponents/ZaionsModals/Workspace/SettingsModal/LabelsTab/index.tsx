@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 /**
  * Packages Imports go down
@@ -55,6 +55,7 @@ import {
   useZIonErrorAlert,
   useZIonToastSuccess
 } from '@/ZaionsHooks/zionic-hooks';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Global Constants Imports go down
@@ -86,26 +87,6 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import SupportOnPatreon from '@/components/SupportOnPatreon';
 
 /**
- * Recoil State Imports go down
- * ? Import of recoil states is a Recoil State import
- * */
-
-/**
- * Style files Imports go down
- * ? Import of style sheet is a style import
- * */
-
-/**
- * Images Imports go down
- * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
- * */
-
-/**
- * Component props type go down
- * ? Like if you have a type for props it should be please Down
- * */
-
-/**
  * Functional Component
  * About: (Info of component here...)
  * @type {*}
@@ -128,6 +109,7 @@ const ZLabelsTab: React.FC<{
   const { presentZIonToastSuccess } = useZIonToastSuccess();
   const { presentZIonErrorAlert } = useZIonErrorAlert();
   const { presentZIonAlert } = useZIonAlert();
+  const { isLgScale, isMdScale, isSmScale } = useZMediaQueryScale();
   // #endregion
 
   // #region APIS
@@ -565,6 +547,7 @@ const ZLabelsTab: React.FC<{
   }, [shareWSLabelsData, labelsData, wsShareMemberId, wsShareId]);
   // #endregion
 
+  // #region Comp Constants
   // if owner then it will watch isFetching of owner api. to show skeleton while fetching data.
   let isZFetching = isLabelsDataFetching;
 
@@ -580,32 +563,42 @@ const ZLabelsTab: React.FC<{
     isZFetching = isShareWSLabelsDataFetching;
   }
 
-  const formikInitialValues = {
-    enableAddLabel: false,
-    title: '',
+  const formikInitialValues = useMemo(
+    () => ({
+      enableAddLabel: false,
+      title: '',
 
-    //
-    allLabels: compState?.labelsData ?? [],
+      //
+      allLabels: compState?.labelsData ?? [],
 
-    // edit
-    mode: FormMode.ADD,
-    labelId: ''
-  };
+      // edit
+      mode: FormMode.ADD,
+      labelId: ''
+    }),
+    [compState?.labelsData]
+  );
 
-  // #region Comp Constants
-  const zIonItemStyle = {
-    '--background': 'transparent',
-    '--inner-padding-end': '0px'
-  };
+  const zIonItemStyle = useMemo(
+    () => ({
+      '--background': 'transparent',
+      '--inner-padding-end': '0px'
+    }),
+    []
+  );
 
-  const zIonInputStyle = { '--padding-start': '12px' };
+  const zIonInputStyle = useMemo(() => ({ '--padding-start': '12px' }), []);
   // #endregion
 
   return (
-    <>
+    <div
+      className={classNames({
+        'w-full overflow-y-auto zaions_pretty_scrollbar': true,
+        'h-[36.5rem]': isSmScale,
+        'h-[44rem]': !isSmScale
+      })}>
       <SupportOnPatreon />
-      <div className='flex flex-col w-full h-full pt-6 ion-align-items-center'>
-        <ZIonText className='py-2 text-xl'>
+      <div className='flex flex-col w-full pt-6 ion-align-items-center'>
+        <ZIonText className='py-2 text-xl ion-text-center'>
           Create and edit your labels below
         </ZIonText>
 
@@ -643,7 +636,14 @@ const ZLabelsTab: React.FC<{
             submitForm
           }) => {
             return (
-              <div className='w-[25%]'>
+              <div
+                className={classNames({
+                  'w-[25%]': isLgScale,
+                  'w-[35%]': !isLgScale && isMdScale,
+                  'flex flex-col items-center': !isMdScale,
+                  'w-10/12': !isMdScale && isSmScale,
+                  'w-[95%]': !isSmScale
+                })}>
                 <ZCan
                   shareWSId={wsShareId}
                   permissionType={
@@ -660,50 +660,53 @@ const ZLabelsTab: React.FC<{
                       ? [shareWSPermissionEnum.create_sws_label]
                       : [permissionsEnum?.create_label]
                   }>
-                  <ZIonButton
-                    className='ion-no-padding'
-                    size='small'
-                    fill='clear'
-                    disabled={values.enableAddLabel}
-                    testingselector={
-                      CONSTANTS.testingSelectors.workspace.settingsModal.labels
-                        .addNewLabelButton
-                    }
-                    onClick={() => {
-                      void setFieldValue('enableAddLabel', true, false);
-                      void setFieldValue('mode', FormMode.ADD, false);
-                    }}>
-                    <ZIonIcon
-                      icon={addOutline}
-                      className='me-1'
-                    />
-                    <ZIonText className='text-sm pt-[2px]'>
-                      Add new label
-                    </ZIonText>
-                  </ZIonButton>
-                  <ZIonButton
-                    className='ion-no-padding'
-                    size='small'
-                    fill='clear'
-                    color='medium'
-                    id='z-workspace-add-label-tooltip'
-                    testingselector={
-                      CONSTANTS.testingSelectors.workspace.settingsModal.labels
-                        .addNewLabelInfoButton
-                    }>
-                    <ZIonIcon icon={alertCircleOutline} />
-                  </ZIonButton>
-                  <ZRTooltip
-                    anchorSelect='#z-workspace-add-label-tooltip'
-                    place='bottom'
-                    className='z-40'>
-                    <ZIonText>
-                      Use labels to organize and group your posts around <br />
-                      campaigns, statuses or categories. A post can <br /> be
-                      assigned multiple labels. You can easily filter <br />{' '}
-                      down posts by labels in the Filter & sort menu.
-                    </ZIonText>
-                  </ZRTooltip>
+                  <div className='w-max'>
+                    <ZIonButton
+                      className='ion-no-padding'
+                      size='small'
+                      fill='clear'
+                      disabled={values.enableAddLabel}
+                      testingselector={
+                        CONSTANTS.testingSelectors.workspace.settingsModal
+                          .labels.addNewLabelButton
+                      }
+                      onClick={() => {
+                        void setFieldValue('enableAddLabel', true, false);
+                        void setFieldValue('mode', FormMode.ADD, false);
+                      }}>
+                      <ZIonIcon
+                        icon={addOutline}
+                        className='me-1'
+                      />
+                      <ZIonText className='text-sm pt-[2px]'>
+                        Add new label
+                      </ZIonText>
+                    </ZIonButton>
+                    <ZIonButton
+                      className='ion-no-padding'
+                      size='small'
+                      fill='clear'
+                      color='medium'
+                      id='z-workspace-add-label-tooltip'
+                      testingselector={
+                        CONSTANTS.testingSelectors.workspace.settingsModal
+                          .labels.addNewLabelInfoButton
+                      }>
+                      <ZIonIcon icon={alertCircleOutline} />
+                    </ZIonButton>
+                    <ZRTooltip
+                      anchorSelect='#z-workspace-add-label-tooltip'
+                      place='bottom'
+                      className='z-40'>
+                      <ZIonText>
+                        Use labels to organize and group your posts around{' '}
+                        <br />
+                        campaigns, statuses or categories. A post can <br /> be
+                        assigned multiple labels. You can easily filter <br />{' '}
+                        down posts by labels in the Filter & sort menu.
+                      </ZIonText>
+                    </ZRTooltip>
+                  </div>
                 </ZCan>
 
                 {values.enableAddLabel && (
@@ -774,7 +777,7 @@ const ZLabelsTab: React.FC<{
 
                 <ZIonList
                   lines='full'
-                  className='mt-1 bg-transparent'>
+                  className='w-full mt-1 bg-transparent'>
                   {isZFetching &&
                     [1, 2].map(el => {
                       return (
@@ -839,7 +842,7 @@ const ZLabelsTab: React.FC<{
                                       : [permissionsEnum?.view_label]
                                   }>
                                   <ZIonItem
-                                    minHeight='2rem'
+                                    minHeight={isMdScale ? '2rem' : '90%'}
                                     className='ion-item-start-no-padding'
                                     style={zIonItemStyle}>
                                     {(el?.editMode === false ||
@@ -1122,7 +1125,9 @@ const ZLabelsTab: React.FC<{
                         color='medium'
                         className='w-7 h-7'
                       />
-                      <ZIonText color='medium'>
+                      <ZIonText
+                        color='medium'
+                        className='ion-text-center'>
                         No label found.
                         <ZCan
                           shareWSId={wsShareId}
@@ -1153,7 +1158,7 @@ const ZLabelsTab: React.FC<{
           }}
         </Formik>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -9,6 +9,7 @@ import React from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import { addOutline } from 'ionicons/icons';
+import classNames from 'classnames';
 
 /**
  * Custom Imports go down
@@ -23,6 +24,7 @@ import { ZIonButton, ZIonIcon } from '@/components/ZIonComponents';
  * */
 import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Global Constants Imports go down
@@ -30,14 +32,13 @@ import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
  * */
 import CONSTANTS from '@/utils/constants';
 import { API_URL_ENUM } from '@/utils/enums';
+import { isZNonEmptyString } from '@/utils/helpers';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { type workspaceInterface } from '@/types/AdminPanel/workspace';
-import classNames from 'classnames';
-import { isZNonEmptyString } from '@/utils/helpers';
 
 /**
  * Workspace create button
@@ -61,10 +62,13 @@ const ZCreateWorkspaceBtn: React.FC<{
     ZAddNewWorkspaceModal
   );
 
+  const { isLgScale } = useZMediaQueryScale();
+
   return (
     <ZIonButton
       color='secondary'
       height={height}
+      size={!isLgScale ? 'small' : undefined}
       disabled={isWorkspacesDataFetching}
       className={classNames(className, {
         'normal-case ion-no-margin': true
@@ -85,7 +89,7 @@ const ZCreateWorkspaceBtn: React.FC<{
         icon={addOutline}
         className='me-1'
       />
-      New workspace
+      {isLgScale && <span>New workspace</span>}
     </ZIonButton>
   );
 };

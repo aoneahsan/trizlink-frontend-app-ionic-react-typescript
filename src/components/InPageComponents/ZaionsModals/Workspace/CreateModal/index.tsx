@@ -38,6 +38,7 @@ import {
   useZRQCreateRequest,
   useZUpdateRQCacheData
 } from '@/ZaionsHooks/zreactquery-hooks';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Global Constants Imports go down
@@ -97,6 +98,7 @@ const ZAddNewWorkspaceModal: React.FC<{
   // Custom hooks
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
   const { getRQCDataHandler } = useZGetRQCacheData();
+  const { isSmScale } = useZMediaQueryScale();
 
   // Create new workspace API.
   const { mutateAsync: createWorkspaceMutate } = useZRQCreateRequest({
@@ -172,7 +174,11 @@ const ZAddNewWorkspaceModal: React.FC<{
   };
 
   return (
-    <ZIonContent className='ion-padding'>
+    <ZIonContent
+      className={classNames({
+        'ion-padding': isSmScale,
+        'p-2': !isSmScale
+      })}>
       {/* Close modal button */}
       <div className='ion-text-end'>
         <ZIonButton

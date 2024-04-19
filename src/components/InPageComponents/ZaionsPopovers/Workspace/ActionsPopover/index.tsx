@@ -162,22 +162,22 @@ const ZWorkspacesActionPopover: React.FC<{
           type === ZWSTypeEum.favoriteWorkspace
             ? 'favorite-'
             : type === ZWSTypeEum.shareWorkspace
-            ? 'share-'
-            : 'owned-'
+              ? 'share-'
+              : 'owned-'
         }delete-${workspaceId}`,
         testinglistselector: `${
           type === ZWSTypeEum.favoriteWorkspace
             ? 'favorite-'
             : type === ZWSTypeEum.shareWorkspace
-            ? 'share-'
-            : 'owned-'
+              ? 'share-'
+              : 'owned-'
         }${CONSTANTS.testingSelectors.workspace.listPage.modals.deleteBtn}`,
         testingselector: `${
           type === ZWSTypeEum.favoriteWorkspace
             ? 'favorite-'
             : type === ZWSTypeEum.shareWorkspace
-            ? 'share-'
-            : 'owned-'
+              ? 'share-'
+              : 'owned-'
         }${
           CONSTANTS.testingSelectors.workspace.listPage.modals.deleteBtn
         }-${workspaceId}`
@@ -196,22 +196,22 @@ const ZWorkspacesActionPopover: React.FC<{
           type === ZWSTypeEum.favoriteWorkspace
             ? 'favorite-'
             : type === ZWSTypeEum.shareWorkspace
-            ? 'share-'
-            : 'owned-'
+              ? 'share-'
+              : 'owned-'
         }cancel-${workspaceId}`,
         testinglistselector: `${
           type === ZWSTypeEum.favoriteWorkspace
             ? 'favorite-'
             : type === ZWSTypeEum.shareWorkspace
-            ? 'share-'
-            : 'owned-'
+              ? 'share-'
+              : 'owned-'
         }${CONSTANTS.testingSelectors.workspace.listPage.modals.cancelBtn}`,
         testingselector: `${
           type === ZWSTypeEum.favoriteWorkspace
             ? 'favorite-'
             : type === ZWSTypeEum.shareWorkspace
-            ? 'share-'
-            : 'owned-'
+              ? 'share-'
+              : 'owned-'
         }${
           CONSTANTS.testingSelectors.workspace.listPage.modals.cancelBtn
         }-${workspaceId}`
@@ -328,22 +328,22 @@ const ZWorkspacesActionPopover: React.FC<{
             type === ZWSTypeEum.favoriteWorkspace
               ? 'favorite-'
               : type === ZWSTypeEum.shareWorkspace
-              ? 'share-'
-              : 'owned-'
+                ? 'share-'
+                : 'owned-'
           }${workspaceId}`}
           testinglistselector={`${
             type === ZWSTypeEum.favoriteWorkspace
               ? 'favorite-'
               : type === ZWSTypeEum.shareWorkspace
-              ? 'share-'
-              : 'owned-'
+                ? 'share-'
+                : 'owned-'
           }${CONSTANTS.testingSelectors.workspace.actionsPopover.manageUsers}`}
           testingselector={`${
             type === ZWSTypeEum.favoriteWorkspace
               ? 'favorite-'
               : type === ZWSTypeEum.shareWorkspace
-              ? 'share-'
-              : 'owned-'
+                ? 'share-'
+                : 'owned-'
           }${
             CONSTANTS.testingSelectors.workspace.actionsPopover.manageUsers
           }-${workspaceId}`}
@@ -369,15 +369,15 @@ const ZWorkspacesActionPopover: React.FC<{
             type === ZWSTypeEum.favoriteWorkspace
               ? 'favorite-'
               : type === ZWSTypeEum.shareWorkspace
-              ? 'share-'
-              : 'owned-'
+                ? 'share-'
+                : 'owned-'
           }${workspaceId}`}
           testinglistselector={`${
             type === ZWSTypeEum.favoriteWorkspace
               ? 'favorite-'
               : type === ZWSTypeEum.shareWorkspace
-              ? 'share-'
-              : 'owned-'
+                ? 'share-'
+                : 'owned-'
           }${
             CONSTANTS.testingSelectors.workspace.actionsPopover
               .configureTimetable
@@ -386,8 +386,8 @@ const ZWorkspacesActionPopover: React.FC<{
             type === ZWSTypeEum.favoriteWorkspace
               ? 'favorite-'
               : type === ZWSTypeEum.shareWorkspace
-              ? 'share-'
-              : 'owned-'
+                ? 'share-'
+                : 'owned-'
           }${
             CONSTANTS.testingSelectors.workspace.actionsPopover
               .configureTimetable
@@ -421,16 +421,16 @@ const ZWorkspacesActionPopover: React.FC<{
             type === ZWSTypeEum.favoriteWorkspace
               ? 'favorite-'
               : type === ZWSTypeEum.shareWorkspace
-              ? 'share-'
-              : 'owned-'
+                ? 'share-'
+                : 'owned-'
           }${workspaceId}`}
           minHeight='2.3rem'
           testingselector={`${
             type === ZWSTypeEum.favoriteWorkspace
               ? 'favorite-'
               : type === ZWSTypeEum.shareWorkspace
-              ? 'share-'
-              : 'owned-'
+                ? 'share-'
+                : 'owned-'
           }${
             CONSTANTS.testingSelectors.workspace.actionsPopover.manageLabels
           }-${workspaceId}`}
@@ -438,8 +438,8 @@ const ZWorkspacesActionPopover: React.FC<{
             type === ZWSTypeEum.favoriteWorkspace
               ? 'favorite-'
               : type === ZWSTypeEum.shareWorkspace
-              ? 'share-'
-              : 'owned-'
+                ? 'share-'
+                : 'owned-'
           }${CONSTANTS.testingSelectors.workspace.actionsPopover.manageLabels}`}
           onClick={() => {
             // setting the tab with should be active in modal
@@ -468,15 +468,15 @@ const ZWorkspacesActionPopover: React.FC<{
           type === ZWSTypeEum.favoriteWorkspace
             ? 'favorite-'
             : type === ZWSTypeEum.shareWorkspace
-            ? 'share-'
-            : 'owned-'
+              ? 'share-'
+              : 'owned-'
         }${workspaceId}`}
         testingselector={`${
           type === ZWSTypeEum.favoriteWorkspace
             ? 'favorite-'
             : type === ZWSTypeEum.shareWorkspace
-            ? 'share-'
-            : 'owned-'
+              ? 'share-'
+              : 'owned-'
         }${
           CONSTANTS.testingSelectors.workspace.actionsPopover.inviteMember
         }-${workspaceId}`}
@@ -484,8 +484,8 @@ const ZWorkspacesActionPopover: React.FC<{
           type === ZWSTypeEum.favoriteWorkspace
             ? 'favorite-'
             : type === ZWSTypeEum.shareWorkspace
-            ? 'share-'
-            : 'owned-'
+              ? 'share-'
+              : 'owned-'
         }${CONSTANTS.testingSelectors.workspace.actionsPopover.inviteMember}`}
         onClick={() => {
           zNavigatePushRoute(
@@ -514,15 +514,15 @@ const ZWorkspacesActionPopover: React.FC<{
             type === ZWSTypeEum.favoriteWorkspace
               ? 'favorite-'
               : type === ZWSTypeEum.shareWorkspace
-              ? 'share-'
-              : 'owned-'
+                ? 'share-'
+                : 'owned-'
           }${workspaceId}`}
           testingselector={`${
             type === ZWSTypeEum.favoriteWorkspace
               ? 'favorite-'
               : type === ZWSTypeEum.shareWorkspace
-              ? 'share-'
-              : 'owned-'
+                ? 'share-'
+                : 'owned-'
           }${
             CONSTANTS.testingSelectors.workspace.actionsPopover.settings
           }-${workspaceId}`}
@@ -530,8 +530,8 @@ const ZWorkspacesActionPopover: React.FC<{
             type === ZWSTypeEum.favoriteWorkspace
               ? 'favorite-'
               : type === ZWSTypeEum.shareWorkspace
-              ? 'share-'
-              : 'owned-'
+                ? 'share-'
+                : 'owned-'
           }${CONSTANTS.testingSelectors.workspace.actionsPopover.settings}`}
           onClick={() => {
             // setting the tab with should be active in modal
@@ -560,15 +560,15 @@ const ZWorkspacesActionPopover: React.FC<{
           type === ZWSTypeEum.favoriteWorkspace
             ? 'favorite-'
             : type === ZWSTypeEum.shareWorkspace
-            ? 'share-'
-            : 'owned-'
+              ? 'share-'
+              : 'owned-'
         }${workspaceId}`}
         testingselector={`${
           type === ZWSTypeEum.favoriteWorkspace
             ? 'favorite-'
             : type === ZWSTypeEum.shareWorkspace
-            ? 'share-'
-            : 'owned-'
+              ? 'share-'
+              : 'owned-'
         }${
           CONSTANTS.testingSelectors.workspace.actionsPopover.approvalSettings
         }-${workspaceId}`}
@@ -576,8 +576,8 @@ const ZWorkspacesActionPopover: React.FC<{
           type === ZWSTypeEum.favoriteWorkspace
             ? 'favorite-'
             : type === ZWSTypeEum.shareWorkspace
-            ? 'share-'
-            : 'owned-'
+              ? 'share-'
+              : 'owned-'
         }${
           CONSTANTS.testingSelectors.workspace.actionsPopover.approvalSettings
         }`}
@@ -647,15 +647,15 @@ const ZWorkspacesActionPopover: React.FC<{
               type === ZWSTypeEum.favoriteWorkspace
                 ? 'favorite-'
                 : type === ZWSTypeEum.shareWorkspace
-                ? 'share-'
-                : 'owned-'
+                  ? 'share-'
+                  : 'owned-'
             }${workspaceId}`}
             testingselector={`${
               type === ZWSTypeEum.favoriteWorkspace
                 ? 'favorite-'
                 : type === ZWSTypeEum.shareWorkspace
-                ? 'share-'
-                : 'owned-'
+                  ? 'share-'
+                  : 'owned-'
             }${
               CONSTANTS.testingSelectors.workspace.actionsPopover.delete
             }-${workspaceId}`}
@@ -663,8 +663,8 @@ const ZWorkspacesActionPopover: React.FC<{
               type === ZWSTypeEum.favoriteWorkspace
                 ? 'favorite-'
                 : type === ZWSTypeEum.shareWorkspace
-                ? 'share-'
-                : 'owned-'
+                  ? 'share-'
+                  : 'owned-'
             }${CONSTANTS.testingSelectors.workspace.actionsPopover.delete}`}
             onClick={() => {
               void deleteWorkspaceConfirmModal();

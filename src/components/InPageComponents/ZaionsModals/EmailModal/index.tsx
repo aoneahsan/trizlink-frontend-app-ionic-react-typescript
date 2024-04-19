@@ -36,6 +36,7 @@ import {
   useZRQCreateRequest,
   useZUpdateRQCacheData
 } from '@/ZaionsHooks/zreactquery-hooks';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import MESSAGES from '@/utils/messages';
 import { extractInnerData, validateField, zStringify } from '@/utils/helpers';
 import {
@@ -90,6 +91,7 @@ const AddEmailModal: React.FC<{
   // #region Custom hooks.
   const { getRQCDataHandler } = useZGetRQCacheData();
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
+  const { isMdScale, isSmScale } = useZMediaQueryScale();
   // #endregion
 
   // #region APIS.
@@ -194,21 +196,38 @@ const AddEmailModal: React.FC<{
           <>
             <ZIonContent className='ion-no-padding ion-padding-horizontal'>
               <div className='mt-5'>
-                <div className='flex ion-align-items-start ion-justify-content-between'>
-                  <ZIonTitle className='mb-3 font-semibold ion-no-padding ion-no-margin'>
+                <div
+                  className={classNames(
+                    'flex ion-align-items-start ion-justify-content-between',
+                    {
+                      'flex-col-reverse': !isMdScale
+                    }
+                  )}>
+                  <ZIonTitle
+                    className={classNames(
+                      'mb-3 font-semibold ion-no-padding ion-no-margin',
+                      {
+                        'ion-text-center w-full': !isMdScale
+                      }
+                    )}>
                     Add a new email address
                   </ZIonTitle>
 
                   <ZIonIcon
                     icon={closeOutline}
-                    className='w-6 h-6 cursor-pointer'
+                    className={classNames('w-6 h-6 cursor-pointer', {
+                      'ms-auto': !isMdScale
+                    })}
                     onClick={() => {
                       dismissZIonModal();
                     }}
                   />
                 </div>
 
-                <ZIonText className='block'>
+                <ZIonText
+                  className={classNames('block', {
+                    'ion-text-center': !isMdScale
+                  })}>
                   A verification six digits <b>OTP</b> (One-time-password) will
                   be sent to this email address after clicking Save. New email
                   addresses cannot be designated as primary until they have been

@@ -8,12 +8,7 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import {
-  helpCircleOutline,
-  menu,
-  notificationsOutline,
-  refresh
-} from 'ionicons/icons';
+import { menu, notificationsOutline, refresh } from 'ionicons/icons';
 import classNames from 'classnames';
 import { useParams, useRouteMatch } from 'react-router';
 
@@ -53,31 +48,7 @@ import {
   shareWSPermissionEnum
 } from '@/utils/enums/RoleAndPermissions';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-
-/**
- * Type Imports go down
- * ? Like import of type or type of some recoil state or any external type import is a Type import
- * */
-
-/**
- * Recoil State Imports go down
- * ? Import of recoil states is a Recoil State import
- * */
-
-/**
- * Style files Imports go down
- * ? Import of style sheet is a style import
- * */
-
-/**
- * Images Imports go down
- * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
- * */
-
-/**
- * Component props type go down
- * ? Like if you have a type for props it should be please Down
- * */
+import ZHelpButton from './HelpBtn';
 
 /**
  * Functional Component
@@ -99,7 +70,7 @@ const ZAdminPanelTopBar: React.FC<{
   showInviteBtn = true,
   menuOnClickFn
 }) => {
-  const { isMdScale, isLgScale } = useZMediaQueryScale();
+  const { isMdScale, isLgScale, isSmScale } = useZMediaQueryScale();
 
   // getting current share workspace id form params.
   const { wsShareId, shareWSMemberId } = useParams<{
@@ -132,11 +103,11 @@ const ZAdminPanelTopBar: React.FC<{
   return (
     <ZIonRow
       className={classNames({
-        'zaions__light_bg shadow-[0_3px_6px_#00000029] relative z-10': true,
+        'zaions__light_bg shadow-[0_3px_6px_#00000029] relative z-10 ion-align-items-center':
+          true,
         'px-3 h-[4rem]': isMdScale,
         'px-2 py-2': !isMdScale
       })}>
-      {/*  */}
       <ZADTopBarColOne
         workspaceId={workspaceId}
         shareWSMemberId={shareWSMemberId}
@@ -146,7 +117,6 @@ const ZAdminPanelTopBar: React.FC<{
         menuOnClickFn={menuOnClickFn}
       />
 
-      {/*  */}
       <ZIonCol
         sizeXl='6'
         sizeLg='6'
@@ -154,15 +124,16 @@ const ZAdminPanelTopBar: React.FC<{
         sizeSm='8'
         sizeXs='7.5'
         className={classNames({
-          'h-full gap-2 ion-align-items-center': true,
+          'h-full ion-align-items-center gap-2': true,
           'ion-justify-content-end flex': true
-          // 'mt-1': !isMdScale
         })}>
-        {showRefreshBtn && (
+        {/* Refresh button */}
+        {isSmScale && showRefreshBtn && (
           <ZIonButton
             fill='outline'
             color='primary'
-            // expand={!isSmScale ? 'block' : undefined}
+            size='small'
+            expand={!isMdScale ? 'block' : undefined}
             height={isLgScale ? '2.3rem' : '1.9rem'}
             className={classNames({
               'normal-case': true,
@@ -174,60 +145,22 @@ const ZAdminPanelTopBar: React.FC<{
               isWsListPage === true
                 ? CONSTANTS.testingSelectors.workspace.listPage.refetchBtn
                 : isWsSlListPage === true
-                ? CONSTANTS.testingSelectors.shortLink.listPage.refetchBtn
-                : ''
+                  ? CONSTANTS.testingSelectors.shortLink.listPage.refetchBtn
+                  : ''
             }>
             <ZIonIcon
-              slot='start'
+              slot={isLgScale ? 'start' : 'icon-only'}
               icon={refresh}
             />
-            Refetch
+            {isLgScale && <span>Refresh</span>}
           </ZIonButton>
         )}
-
-        {/* Upgrade button */}
-        {/* {isMdScale && (
-          <ZIonButton
-            color='secondary'
-            expand={!isMdScale ? 'block' : undefined}
-            size={!isLgScale ? 'small' : undefined}
-            height={isLgScale ? '2.3rem' : '1.9rem'}
-            className={classNames({
-              'text-xs': !isLgScale
-              // 'ms-4': showRefreshBtn
-            })}
-            testingselector={CONSTANTS.testingSelectors.topBar.upgradeBtn}>
-            Upgrade
-          </ZIonButton>
-        )} */}
 
         {/* Help button */}
-        {isMdScale && (
-          <ZIonButton
-            color='tertiary'
-            size='small'
-            expand={!isMdScale ? 'block' : undefined}
-            height={isLgScale ? '2.3rem' : '1.9rem'}
-            className={classNames({
-              'text-xs': !isLgScale
-            })}
-            testingselector={CONSTANTS.testingSelectors.topBar.helpBtn}
-            onClick={(event: unknown) => {
-              presentZHelpCenterPopover({
-                _event: event as Event,
-                _cssClass: 'z-help-center-popover-size',
-                _dismissOnSelect: false
-              });
-            }}>
-            <ZIonIcon
-              icon={helpCircleOutline}
-              className='w-7 h-7'
-            />
-          </ZIonButton>
-        )}
+        <ZHelpButton />
 
         {/* Notification button */}
-        {isMdScale && (
+        {isMdScale ? (
           <ZIonButton
             color='tertiary'
             size='small'
@@ -251,18 +184,19 @@ const ZAdminPanelTopBar: React.FC<{
             />
             {/* <ZIonText className='mt-[2px]'>Help</ZIonText> */}
           </ZIonButton>
-        )}
+        ) : null}
 
-        {!isMdScale && showWSSwitcherBtn && (
+        {/* Workspace switcher button */}
+        {!isSmScale && showWSSwitcherBtn ? (
           <ZCan havePermissions={[permissionsEnum.viewAny_workspace]}>
             <ZWorkspaceSwitcher workspaceId={workspaceId} />
           </ZCan>
-        )}
+        ) : null}
 
         {/* User profile button */}
         <ZUserProfileButton
-          width={!isLgScale ? '35px' : '44pxs'}
-          height={!isLgScale ? '35px' : '44pxs'}
+          width={!isLgScale ? '2.1875rem' : '2.75rem'}
+          height={!isLgScale ? '2.1875rem' : '2.75rem'}
         />
       </ZIonCol>
     </ZIonRow>
@@ -315,13 +249,13 @@ const ZADTopBarColOne: React.FC<{
         : null}
       {isWorkspaceListPage === true && (
         <>
-          <ZCreateWorkspaceBtn />
+          <ZCreateWorkspaceBtn height={isLgScale ? '2.3rem' : '1.9rem'} />
         </>
       )}
 
-      {(isWorkspaceListPage === false || isWorkspaceListPage === undefined) && (
+      {isWorkspaceListPage === false || isWorkspaceListPage === undefined ? (
         <>
-          {isMdScale && showWSSwitcherBtn && (
+          {isMdScale && showWSSwitcherBtn ? (
             <ZCan havePermissions={[permissionsEnum.viewAny_workspace]}>
               <ZWorkspaceSwitcher
                 workspaceId={workspaceId}
@@ -329,9 +263,9 @@ const ZADTopBarColOne: React.FC<{
                 wsShareId={wsShareId}
               />
             </ZCan>
-          )}
+          ) : null}
 
-          {!isMdScale && (
+          {!isLgScale && (
             <ZIonButton
               minHeight='2rem'
               color='tertiary'
@@ -370,7 +304,7 @@ const ZADTopBarColOne: React.FC<{
             )}
           </ZCan>
         </>
-      )}
+      ) : null}
     </ZIonCol>
   );
 };
