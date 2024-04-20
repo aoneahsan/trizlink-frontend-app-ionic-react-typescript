@@ -1,5 +1,5 @@
 // Core Import
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 
 // Packages Imports
 import { IonApp } from '@ionic/react';
@@ -28,6 +28,7 @@ import '@/theme/variables.css';
 import { type UserAccountType } from '@/types/UserAccount/index.type';
 import { reportCustomError } from '@/utils/customErrorType';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
+import { useLocation } from 'react-router';
 
 const App: React.FC = () => {
   const setAuthTokenState = useSetRecoilState(ZaionsAuthTokenData);
@@ -35,6 +36,7 @@ const App: React.FC = () => {
     ZaionsUserAccountRStateAtom
   );
   const navigate = useZNavigate();
+  const location = useLocation();
 
   // check for userData and authtoken in localstorage set that in recoil state and redirect user to authenticated screen (like dashboard), from guest screen, (mean user can not visit login screen, he is already logged in)
   useEffect(() => {
@@ -87,6 +89,55 @@ const App: React.FC = () => {
       }
     });
   }, []);
+
+  // remove dark mode
+  const handleDarkMode = useCallback(() => {
+    try {
+      const shouldEnableDark = false;
+      document.documentElement.setAttribute(
+        'data-theme',
+        shouldEnableDark ? 'dark' : 'light'
+      );
+      if (shouldEnableDark) {
+        document.documentElement.setAttribute('native-dark-active', '');
+      } else {
+        document.documentElement.removeAttribute('native-dark-active');
+      }
+    } catch (error) {}
+  }, []);
+
+  useEffect(() => {
+    try {
+      handleDarkMode(); // Initial check
+      window.addEventListener('change', handleDarkMode); // Example: Listen to changes
+    } catch (error) {}
+
+    return () => {
+      try {
+        window.removeEventListener('change', handleDarkMode);
+      } catch (error) {}
+    };
+  }, [handleDarkMode]);
+
+  useEffect(() => {
+    handleDarkMode();
+  }, [location.pathname, handleDarkMode]);
+
+  useEffect(() => {
+    try {
+      CapacitorApp.addListener('appStateChange', state => {
+        if (state.isActive) {
+          handleDarkMode();
+        }
+      });
+    } catch (error) {}
+
+    try {
+      CapacitorApp.addListener('resume', () => {
+        handleDarkMode();
+      });
+    } catch (error) {}
+  }, [handleDarkMode]);
 
   return (
     <IonApp>
