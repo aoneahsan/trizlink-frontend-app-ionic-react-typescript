@@ -3,10 +3,15 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import AppEntryPoint from './AppEntryPoint';
+import { setupIonicReact } from '@ionic/react';
 
 import { defineCustomElements } from '@ionic/pwa-elements/loader';
 // import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 // import reportWebVitals from './reportWebVitals';
+
+setupIonicReact({
+  mode: 'md'
+});
 
 // Call the element loader after the app has been rendered the first time
 defineCustomElements(window);

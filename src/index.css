@@ -7,6 +7,11 @@ body {
 
 @import url('theme/variables.css');
 
+html,
+* {
+  color-scheme: light !important;
+}
+
 .unsetStyles,
 .unsetStyles * {
   font-size: unset;
@@ -812,7 +817,9 @@ span.new {
   width: 0;
   background: #2a5bd7;
   border: 0;
-  transition: width 150ms ease-out, left 150ms ease-out;
+  transition:
+    width 150ms ease-out,
+    left 150ms ease-out;
   transform: translate(-50%, 0);
 }
 
@@ -1203,7 +1210,9 @@ ion-range.z-ion-range-show-top-pin::part(pin) {
 
   min-width: 28px;
   height: 28px;
-  transition: transform 120ms ease, background 120ms ease;
+  transition:
+    transform 120ms ease,
+    background 120ms ease;
 }
 ion-range.z-ion-range-show-top-pin::part(pin)::before {
   content: none;
