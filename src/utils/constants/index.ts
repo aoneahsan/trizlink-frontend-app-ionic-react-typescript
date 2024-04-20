@@ -45,6 +45,8 @@ const ZHomePageAccountBtnText = 'My Account';
 // we are using this in "FetchRequiredAppDataHOCAsync" component, here 1 means 1s in time, and we are using this to call the user "updateUserStatus" api on interval, with interval set to run on this variable * with 1000 (as to convert millisecond to seconds)
 const ZLastSeenInterval = 60;
 
+const showIncompleteFeaturesInMobileApp: boolean = false;
+
 const RouteParams = {
   editShortLinkIdParam: ':editLinkId',
   editLinkInBioIdParam: ':editLinkInBioId',
@@ -1920,7 +1922,8 @@ const CONSTANTS = {
   ProductExternalURL,
   ZTooltipIds,
   testingSelectors,
-  testingSelectorsPrefix
+  testingSelectorsPrefix,
+  showIncompleteFeaturesInMobileApp
 } as const;
 
 export default CONSTANTS;

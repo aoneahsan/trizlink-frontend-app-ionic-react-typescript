@@ -233,13 +233,13 @@ const ZWSSettingTeamsListPage: React.FC = () => {
         workspaceId?.trim()?.length > 0
           ? [permissionsEnum.viewAny_ws_member]
           : wsShareId !== undefined &&
-            wsShareId !== null &&
-            wsShareId?.trim()?.length > 0 &&
-            shareWSMemberId !== undefined &&
-            shareWSMemberId !== null &&
-            shareWSMemberId?.trim()?.length > 0
-          ? [shareWSPermissionEnum.viewAny_sws_member]
-          : []
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              shareWSMemberId?.trim()?.length > 0
+            ? [shareWSPermissionEnum.viewAny_sws_member]
+            : []
       }
       permissionType={
         wsShareId !== undefined &&
@@ -350,35 +350,37 @@ const ZWSSettingTeamsListPage: React.FC = () => {
           )}
 
           {/* Refetch data button */}
-          <ZIonButton
-            fill='outline'
-            color='primary'
-            minHeight={isLgScale ? '39px' : '2rem'}
-            expand={!isLgScale ? 'block' : undefined}
-            testingselector={
-              CONSTANTS.testingSelectors.WSSettings.teamListPage.refetchBtn
-            }
-            className={classNames({
-              'my-2': true,
-              'me-2': isLgScale,
-              'text-xs ion-no-margin ion-no-padding w-[33.33%]':
-                !isLgScale && isSmScale,
-              'w-full': !isSmScale,
-              'ion-no-margin': !isSmScale
-            })}
-            onClick={() => {
-              void invalidedQueries();
-            }}>
-            <ZIonIcon
-              slot='start'
-              icon={refresh}
+          {isSmScale && (
+            <ZIonButton
+              fill='outline'
+              color='primary'
+              minHeight={isLgScale ? '39px' : '2rem'}
+              expand={!isLgScale ? 'block' : undefined}
+              testingselector={
+                CONSTANTS.testingSelectors.WSSettings.teamListPage.refetchBtn
+              }
               className={classNames({
-                'me-1': true,
-                'w-4 h-4': !isLgScale
+                'my-2': true,
+                'me-2': isLgScale,
+                'text-xs ion-no-margin ion-no-padding w-[33.33%]':
+                  !isLgScale && isSmScale,
+                'w-full': !isSmScale,
+                'ion-no-margin': !isSmScale
               })}
-            />
-            Refetch
-          </ZIonButton>
+              onClick={() => {
+                void invalidedQueries();
+              }}>
+              <ZIonIcon
+                slot='start'
+                icon={refresh}
+                className={classNames({
+                  'me-1': true,
+                  'w-4 h-4': !isLgScale
+                })}
+              />
+              Refetch
+            </ZIonButton>
+          )}
 
           <ZCan
             shareWSId={wsShareId}
@@ -388,13 +390,13 @@ const ZWSSettingTeamsListPage: React.FC = () => {
               workspaceId?.trim()?.length > 0
                 ? [permissionsEnum.send_invitation_ws_member]
                 : wsShareId !== undefined &&
-                  wsShareId !== null &&
-                  wsShareId?.trim()?.length > 0 &&
-                  shareWSMemberId !== undefined &&
-                  shareWSMemberId !== null &&
-                  shareWSMemberId?.trim()?.length > 0
-                ? [shareWSPermissionEnum.send_invitation_sws_member]
-                : []
+                    wsShareId !== null &&
+                    wsShareId?.trim()?.length > 0 &&
+                    shareWSMemberId !== undefined &&
+                    shareWSMemberId !== null &&
+                    shareWSMemberId?.trim()?.length > 0
+                  ? [shareWSPermissionEnum.send_invitation_sws_member]
+                  : []
             }
             permissionType={
               wsShareId !== undefined &&
@@ -464,13 +466,13 @@ const ZWSSettingTeamsListPage: React.FC = () => {
           workspaceId?.trim()?.length > 0
             ? [permissionsEnum.viewAny_ws_member]
             : wsShareId !== undefined &&
-              wsShareId !== null &&
-              wsShareId?.trim()?.length > 0 &&
-              shareWSMemberId !== undefined &&
-              shareWSMemberId !== null &&
-              shareWSMemberId?.trim()?.length > 0
-            ? [shareWSPermissionEnum.viewAny_sws_member]
-            : []
+                wsShareId !== null &&
+                wsShareId?.trim()?.length > 0 &&
+                shareWSMemberId !== undefined &&
+                shareWSMemberId !== null &&
+                shareWSMemberId?.trim()?.length > 0
+              ? [shareWSPermissionEnum.viewAny_sws_member]
+              : []
         }
         permissionType={
           wsShareId !== undefined &&

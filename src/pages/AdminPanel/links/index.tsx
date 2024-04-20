@@ -138,16 +138,6 @@ const ZAdminPanelTopBar = lazy(
 );
 
 /**
- * Images Imports go down
- * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
- * */
-
-/**
- * Component props type go down
- * ? Like if you have a type for props it should be please Down
- * */
-
-/**
  * Functional Component
  * About: (Info of component here...)
  * @type {*}
@@ -628,26 +618,26 @@ const ZShortLinksListPage: React.FC = () => {
               ? isSelectedWorkspaceFetching
                 ? 'Setting workspace data'
                 : isShortLinksDataFetching
-                ? 'Fetching workspace short links'
-                : isShortLinksFoldersDataFetching
-                ? 'Fetching workspace short links folders'
-                : null
+                  ? 'Fetching workspace short links'
+                  : isShortLinksFoldersDataFetching
+                    ? 'Fetching workspace short links folders'
+                    : null
               : wsShareId !== undefined &&
-                wsShareId !== null &&
-                wsShareId?.trim()?.length > 0 &&
-                shareWSMemberId !== undefined &&
-                shareWSMemberId !== null &&
-                shareWSMemberId?.trim()?.length > 0
-              ? isGetMemberRolePermissionsFetching
-                ? 'Getting & setting your permissions in this workspace'
-                : isSWSFetching
-                ? 'Setting share workspace data'
-                : isSWSShortLinksDataFetching
-                ? 'Fetching share workspace short links'
-                : isSWSShortLinksFoldersDataFetching
-                ? 'Fetching share workspace short links folders'
-                : null
-              : null}
+                  wsShareId !== null &&
+                  wsShareId?.trim()?.length > 0 &&
+                  shareWSMemberId !== undefined &&
+                  shareWSMemberId !== null &&
+                  shareWSMemberId?.trim()?.length > 0
+                ? isGetMemberRolePermissionsFetching
+                  ? 'Getting & setting your permissions in this workspace'
+                  : isSWSFetching
+                    ? 'Setting share workspace data'
+                    : isSWSShortLinksDataFetching
+                      ? 'Fetching share workspace short links'
+                      : isSWSShortLinksFoldersDataFetching
+                        ? 'Fetching share workspace short links folders'
+                        : null
+                : null}
           </ZPageLoader>
         ) : (
           <ZCan
@@ -713,8 +703,8 @@ const ZShortLinksListPage: React.FC = () => {
                           ? '10.5'
                           : '10'
                         : is2XlScale
-                        ? '11.4'
-                        : '11.2'
+                          ? '11.4'
+                          : '11.2'
                     }
                     sizeLg={
                       ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
@@ -722,8 +712,8 @@ const ZShortLinksListPage: React.FC = () => {
                           ? '10.5'
                           : '10'
                         : is2XlScale
-                        ? '11.4'
-                        : '11.2'
+                          ? '11.4'
+                          : '11.2'
                     }
                     sizeMd='12'
                     sizeSm='12'
@@ -741,7 +731,23 @@ const ZShortLinksListPage: React.FC = () => {
                             <ZFallbackIonSpinner2 />
                           </ZIonRow>
                         }>
-                        <ZAdminPanelTopBar workspaceId={workspaceId} />
+                        <ZAdminPanelTopBar
+                          workspaceId={workspaceId}
+                          showMenuBtn={true}
+                          menuOnClickFn={() => {
+                            void (async () => {
+                              await menuController.enable(
+                                true,
+                                CONSTANTS.MENU_IDS
+                                  .ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID
+                              );
+                              await menuController.open(
+                                CONSTANTS.MENU_IDS
+                                  .ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID
+                              );
+                            })();
+                          }}
+                        />
                       </Suspense>
 
                       {/* Col-2 Row-2 */}
@@ -787,14 +793,15 @@ const ZShortLinksListPage: React.FC = () => {
                                   shortLinksFoldersData?.length !== null
                                     ? shortLinksFoldersData ?? []
                                     : wsShareId !== undefined &&
-                                      wsShareId !== null &&
-                                      wsShareId?.trim()?.length > 0 &&
-                                      shareWSMemberId !== undefined &&
-                                      shareWSMemberId !== null &&
-                                      shareWSMemberId?.trim()?.length > 0 &&
-                                      swsShortLinksFoldersData?.length !== null
-                                    ? swsShortLinksFoldersData ?? []
-                                    : []
+                                        wsShareId !== null &&
+                                        wsShareId?.trim()?.length > 0 &&
+                                        shareWSMemberId !== undefined &&
+                                        shareWSMemberId !== null &&
+                                        shareWSMemberId?.trim()?.length > 0 &&
+                                        swsShortLinksFoldersData?.length !==
+                                          null
+                                      ? swsShortLinksFoldersData ?? []
+                                      : []
                                 }
                                 showFoldersSaveReorderButton={
                                   compState?.shortLinksFoldersReorder?.isEnable
@@ -1149,12 +1156,12 @@ const ZInpageMainContent: React.FC = () => {
             {workspaceId !== undefined
               ? 'Create a New Link or Manage Your Existing Ones!'
               : wsShareId !== undefined
-              ? getMemberRolePermissions?.memberPermissions?.includes(
-                  shareWSPermissionEnum.create_sws_shortLink
-                ) ?? false
-                ? 'Create a New Link or Manage Existing Ones!'
-                : 'Explore Existing Links'
-              : null}
+                ? getMemberRolePermissions?.memberPermissions?.includes(
+                    shareWSPermissionEnum.create_sws_shortLink
+                  ) ?? false
+                  ? 'Create a New Link or Manage Existing Ones!'
+                  : 'Explore Existing Links'
+                : null}
           </ZIonText>
           <ZIonText
             className={classNames({
@@ -1167,12 +1174,12 @@ const ZInpageMainContent: React.FC = () => {
             {workspaceId !== undefined
               ? 'Craft fresh links or take a peek at your existing ones. The choice is yours!'
               : wsShareId !== undefined
-              ? getMemberRolePermissions?.memberPermissions?.includes(
-                  shareWSPermissionEnum.create_sws_shortLink
-                ) ?? false
-                ? 'Craft fresh links or take a peek at existing ones. The choice is yours!'
-                : 'As new member, dive into short link world and oversee existing creations.'
-              : null}
+                ? getMemberRolePermissions?.memberPermissions?.includes(
+                    shareWSPermissionEnum.create_sws_shortLink
+                  ) ?? false
+                  ? 'Craft fresh links or take a peek at existing ones. The choice is yours!'
+                  : 'As new member, dive into short link world and oversee existing creations.'
+                : null}
           </ZIonText>
         </ZIonCol>
 
@@ -1216,7 +1223,14 @@ const ZInpageMainContent: React.FC = () => {
       </ZIonRow>
 
       {/* filter input, export, import, & create short links buttons */}
-      <ZIonRow className='mt-1 border rounded-lg ion-align-items-center ion-justify-content-between zaions__light_bg ion-padding'>
+      <ZIonRow
+        className={classNames(
+          'mt-1 border rounded-lg ion-align-items-center ion-justify-content-between zaions__light_bg',
+          {
+            'ion-padding': isMdScale,
+            'p-2': !isMdScale
+          }
+        )}>
         <ZIonCol
           sizeXl='4'
           sizeLg='5'
@@ -1241,8 +1255,8 @@ const ZInpageMainContent: React.FC = () => {
             className={classNames({
               'w-full': true,
               'ion-justify-content-end gap-3': isXlScale,
-              'ion-justify-content-between flex': !isXlScale,
-              'mt-2': !isLgScale,
+              'ion-justify-content-end gap-2 flex': !isXlScale && isLgScale,
+              'mt-2 ion-justify-content-start gap-2': !isLgScale,
               'gap-2 flex-col': !isSmScale
             })}>
             {/* Filter button */}
@@ -1283,7 +1297,7 @@ const ZInpageMainContent: React.FC = () => {
               </ZIonButton>
             )}
 
-            {!isLgScale ? (
+            {/* {!isLgScale ? (
               <ZIonButton
                 fill='outline'
                 color='primary'
@@ -1307,32 +1321,34 @@ const ZInpageMainContent: React.FC = () => {
                 }}>
                 Open folders menu
               </ZIonButton>
-            ) : null}
+            ) : null} */}
 
             {/* </ZIonMenuToggle> */}
 
-            <ZIonButton
-              fill='outline'
-              color='primary'
-              expand={!isSmScale ? 'block' : undefined}
-              height={isLgScale ? '39px' : '20px'}
-              className={classNames({
-                'my-2 normal-case': true,
-                'text-xs w-[25%]': !isLgScale,
-                'w-full': !isSmScale
-              })}
-              onClick={() => {
-                void invalidedQueries();
-              }}
-              testingselector={
-                CONSTANTS.testingSelectors.shortLink.listPage.refetchBtn
-              }>
-              <ZIonIcon
-                slot='start'
-                icon={refresh}
-              />
-              Refetch
-            </ZIonButton>
+            {isSmScale && (
+              <ZIonButton
+                fill='outline'
+                color='primary'
+                expand={!isSmScale ? 'block' : undefined}
+                height={isLgScale ? '39px' : '20px'}
+                className={classNames({
+                  'my-2 normal-case': true,
+                  'text-xs w-[25%]': !isLgScale,
+                  'w-full': !isSmScale
+                })}
+                onClick={() => {
+                  void invalidedQueries();
+                }}
+                testingselector={
+                  CONSTANTS.testingSelectors.shortLink.listPage.refetchBtn
+                }>
+                <ZIonIcon
+                  slot='start'
+                  icon={refresh}
+                />
+                Refetch
+              </ZIonButton>
+            )}
 
             <ZCan
               shareWSId={wsShareId}
@@ -1377,15 +1393,16 @@ const ZInpageMainContent: React.FC = () => {
                         workspaceId
                       )
                     : wsShareId !== undefined
-                    ? createRedirectRoute({
-                        url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Create,
-                        params: [
-                          CONSTANTS.RouteParams.workspace.wsShareId,
-                          CONSTANTS.RouteParams.workspace.shareWSMemberId
-                        ],
-                        values: [wsShareId, shareWSMemberId ?? '']
-                      })
-                    : ''
+                      ? createRedirectRoute({
+                          url: ZaionsRoutes.AdminPanel.ShareWS.Short_link
+                            .Create,
+                          params: [
+                            CONSTANTS.RouteParams.workspace.wsShareId,
+                            CONSTANTS.RouteParams.workspace.shareWSMemberId
+                          ],
+                          values: [wsShareId, shareWSMemberId ?? '']
+                        })
+                      : ''
                 }
                 testingselector={
                   CONSTANTS.testingSelectors.shortLink.listPage.createBtn

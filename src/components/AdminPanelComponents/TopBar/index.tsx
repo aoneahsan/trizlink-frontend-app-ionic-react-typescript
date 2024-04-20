@@ -60,6 +60,7 @@ const ZAdminPanelTopBar: React.FC<{
   showRefreshBtn?: boolean;
   showWSSwitcherBtn?: boolean;
   showInviteBtn?: boolean;
+  showMenuBtn?: boolean;
   menuOnClickFn?: React.MouseEventHandler<HTMLIonButtonElement>;
   refreshBtnOnClick?: React.MouseEventHandler<HTMLIonButtonElement>;
 }> = ({
@@ -68,6 +69,7 @@ const ZAdminPanelTopBar: React.FC<{
   refreshBtnOnClick,
   showWSSwitcherBtn = true,
   showInviteBtn = true,
+  showMenuBtn = false,
   menuOnClickFn
 }) => {
   const { isMdScale, isLgScale, isSmScale } = useZMediaQueryScale();
@@ -115,6 +117,7 @@ const ZAdminPanelTopBar: React.FC<{
         showWSSwitcherBtn={showWSSwitcherBtn}
         showInviteBtn={showInviteBtn}
         menuOnClickFn={menuOnClickFn}
+        showMenuBtn={showMenuBtn}
       />
 
       <ZIonCol
@@ -122,7 +125,7 @@ const ZAdminPanelTopBar: React.FC<{
         sizeLg='6'
         sizeMd='6'
         sizeSm='8'
-        sizeXs='7.5'
+        sizeXs='9'
         className={classNames({
           'h-full ion-align-items-center gap-2': true,
           'ion-justify-content-end flex': true
@@ -157,7 +160,7 @@ const ZAdminPanelTopBar: React.FC<{
         )}
 
         {/* Help button */}
-        <ZHelpButton />
+        {CONSTANTS.showIncompleteFeaturesInMobileApp && <ZHelpButton />}
 
         {/* Notification button */}
         {isMdScale ? (
@@ -187,7 +190,7 @@ const ZAdminPanelTopBar: React.FC<{
         ) : null}
 
         {/* Workspace switcher button */}
-        {!isSmScale && showWSSwitcherBtn ? (
+        {!isMdScale && showWSSwitcherBtn ? (
           <ZCan havePermissions={[permissionsEnum.viewAny_workspace]}>
             <ZWorkspaceSwitcher workspaceId={workspaceId} />
           </ZCan>
@@ -209,6 +212,7 @@ const ZADTopBarColOne: React.FC<{
   wsShareId?: string;
   showWSSwitcherBtn?: boolean;
   showInviteBtn?: boolean;
+  showMenuBtn?: boolean;
   menuOnClickFn?: React.MouseEventHandler<HTMLIonButtonElement>;
 }> = ({
   workspaceId,
@@ -216,6 +220,7 @@ const ZADTopBarColOne: React.FC<{
   wsShareId,
   showWSSwitcherBtn = true,
   showInviteBtn = true,
+  showMenuBtn = false,
   menuOnClickFn
 }) => {
   const isWorkspaceListPage = useRouteMatch(
@@ -230,8 +235,23 @@ const ZADTopBarColOne: React.FC<{
       sizeLg='6'
       sizeMd='6'
       sizeSm='4'
-      sizeXs='4.5'
+      sizeXs='3'
       className='flex h-full ion-align-items-center'>
+      {!isLgScale && showMenuBtn && (
+        <ZIonButton
+          minHeight='2rem'
+          color='tertiary'
+          fill='clear'
+          className='w-[2rem] rounded-full overflow-hidden ion-no-padding ion-no-margin'
+          onClick={menuOnClickFn}
+          testingselector={CONSTANTS.testingSelectors.topBar.openInpageMenuBtn}>
+          <ZIonIcon
+            icon={menu}
+            className='w-6 h-6'
+          />
+        </ZIonButton>
+      )}
+
       {isWorkspaceListPage === false || isWorkspaceListPage === undefined
         ? isMdScale && (
             <ZIonButton
@@ -264,23 +284,6 @@ const ZADTopBarColOne: React.FC<{
               />
             </ZCan>
           ) : null}
-
-          {!isLgScale && (
-            <ZIonButton
-              minHeight='2rem'
-              color='tertiary'
-              fill='clear'
-              className='w-[2rem] rounded-full overflow-hidden ion-no-padding ion-no-margin'
-              onClick={menuOnClickFn}
-              testingselector={
-                CONSTANTS.testingSelectors.topBar.openInpageMenuBtn
-              }>
-              <ZIonIcon
-                icon={menu}
-                className='w-6 h-6'
-              />
-            </ZIonButton>
-          )}
 
           <ZCan
             shareWSId={wsShareId}

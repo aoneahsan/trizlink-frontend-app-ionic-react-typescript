@@ -72,7 +72,7 @@ const ZEmptyTable: React.FC<{
   showBtn = true,
   btnTestingselector
 }) => {
-  const { isLgScale, isMdScale } = useZMediaQueryScale();
+  const { isLgScale, isMdScale, isSmScale } = useZMediaQueryScale();
   return (
     <div
       className={classNames({
@@ -98,7 +98,7 @@ const ZEmptyTable: React.FC<{
         })}>
         <ZIonText
           className={classNames({
-            'inline-block max-content': true,
+            'block max-content': true,
             'text-lg': isMdScale,
             'text-sm': !isMdScale
           })}
@@ -112,7 +112,8 @@ const ZEmptyTable: React.FC<{
             testingselector={btnTestingselector}
             className={classNames({
               'mt-2 ion-no-margin': true,
-              'text-xs': !isMdScale
+              'text-xs': !isMdScale,
+              'w-full': !isSmScale
             })}>
             {btnText}
           </ZIonButton>

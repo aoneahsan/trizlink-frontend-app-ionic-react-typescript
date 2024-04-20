@@ -214,13 +214,13 @@ const ZWSSettingUtmTagListPage: React.FC = () => {
         (workspaceId?.trim()?.length ?? 0) > 0
           ? [permissionsEnum.viewAny_utmTag]
           : wsShareId !== undefined &&
-            wsShareId !== null &&
-            wsShareId?.trim()?.length > 0 &&
-            shareWSMemberId !== undefined &&
-            shareWSMemberId !== null &&
-            shareWSMemberId?.trim()?.length > 0
-          ? [shareWSPermissionEnum.viewAny_sws_utmTag]
-          : []
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              shareWSMemberId?.trim()?.length > 0
+            ? [shareWSPermissionEnum.viewAny_sws_utmTag]
+            : []
       }
       permissionType={
         wsShareId !== undefined &&
@@ -333,35 +333,37 @@ const ZWSSettingUtmTagListPage: React.FC = () => {
           )}
 
           {/* Refetch data button */}
-          <ZIonButton
-            color='primary'
-            fill='outline'
-            minHeight={isLgScale ? '39px' : '2rem'}
-            expand={!isLgScale ? 'block' : undefined}
-            className={classNames({
-              'my-2': true,
-              'me-2': isLgScale,
-              'text-xs ion-no-margin ion-no-padding w-[33.33%]':
-                !isLgScale && isSmScale,
-              'w-full': !isSmScale
-            })}
-            onClick={() => {
-              void invalidedQueries();
-            }}
-            testingselector={
-              CONSTANTS.testingSelectors.utmTags.listPage.refetchBtn
-            }>
-            <ZIonIcon
-              slot='start'
-              icon={refresh}
+          {isSmScale && (
+            <ZIonButton
+              color='primary'
+              fill='outline'
+              minHeight={isLgScale ? '39px' : '2rem'}
+              expand={!isLgScale ? 'block' : undefined}
               className={classNames({
-                'me-1': true,
-                'w-4 h-4': !isLgScale,
-                'ion-no-margin': !isSmScale
+                'my-2': true,
+                'me-2': isLgScale,
+                'text-xs ion-no-margin ion-no-padding w-[33.33%]':
+                  !isLgScale && isSmScale,
+                'w-full': !isSmScale
               })}
-            />
-            Refetch
-          </ZIonButton>
+              onClick={() => {
+                void invalidedQueries();
+              }}
+              testingselector={
+                CONSTANTS.testingSelectors.utmTags.listPage.refetchBtn
+              }>
+              <ZIonIcon
+                slot='start'
+                icon={refresh}
+                className={classNames({
+                  'me-1': true,
+                  'w-4 h-4': !isLgScale,
+                  'ion-no-margin': !isSmScale
+                })}
+              />
+              Refetch
+            </ZIonButton>
+          )}
 
           {/* Create new UTM */}
           <ZCan
@@ -372,13 +374,13 @@ const ZWSSettingUtmTagListPage: React.FC = () => {
               (workspaceId?.trim()?.length ?? 0) > 0
                 ? [permissionsEnum.create_utmTag]
                 : wsShareId !== undefined &&
-                  wsShareId !== null &&
-                  wsShareId?.trim()?.length > 0 &&
-                  shareWSMemberId !== undefined &&
-                  shareWSMemberId !== null &&
-                  shareWSMemberId?.trim()?.length > 0
-                ? [shareWSPermissionEnum.create_sws_utmTag]
-                : []
+                    wsShareId !== null &&
+                    wsShareId?.trim()?.length > 0 &&
+                    shareWSMemberId !== undefined &&
+                    shareWSMemberId !== null &&
+                    shareWSMemberId?.trim()?.length > 0
+                  ? [shareWSPermissionEnum.create_sws_utmTag]
+                  : []
             }
             permissionType={
               wsShareId !== undefined &&
@@ -447,13 +449,13 @@ const ZWSSettingUtmTagListPage: React.FC = () => {
           (workspaceId?.trim()?.length ?? 0) > 0
             ? [permissionsEnum.view_utmTag]
             : wsShareId !== undefined &&
-              wsShareId !== null &&
-              wsShareId?.trim()?.length > 0 &&
-              shareWSMemberId !== undefined &&
-              shareWSMemberId !== null &&
-              shareWSMemberId?.trim()?.length > 0
-            ? [shareWSPermissionEnum.view_sws_utmTag]
-            : []
+                wsShareId !== null &&
+                wsShareId?.trim()?.length > 0 &&
+                shareWSMemberId !== undefined &&
+                shareWSMemberId !== null &&
+                shareWSMemberId?.trim()?.length > 0
+              ? [shareWSPermissionEnum.view_sws_utmTag]
+              : []
         }
         permissionType={
           wsShareId !== undefined &&

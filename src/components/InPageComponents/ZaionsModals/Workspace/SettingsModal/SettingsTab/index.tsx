@@ -556,61 +556,63 @@ const ZSettingsTab: React.FC<{
                   })}
                 />
 
-                <ZIonRow className='pt-4 ion-align-items-center'>
-                  <ZIonCol
-                    sizeXl='max-content'
-                    sizeLg='max-content'
-                    sizeMd='max-content'
-                    sizeSm='max-content'
-                    sizeXs='12'
-                    className='flex ion-align-items-center'>
-                    <ZIonIcon
-                      icon={eyeOffOutline}
-                      className='w-6 h-6 me-2'
-                    />
-                    <ZIonText>Create new posts as internal</ZIonText>
-                    <ZIonIcon
-                      icon={alertCircleOutline}
-                      className='w-6 h-6 cursor-pointer ms-2'
-                      id='z-workspace-internal-post'
-                      testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.internalPostInfoButton}-${workspaceId}`}
-                      testinglistselector={
-                        CONSTANTS.testingSelectors.workspace.settingsModal
-                          .settings.internalPostInfoButton
-                      }
-                    />
-                    <ZRTooltip
-                      anchorSelect='#z-workspace-internal-post'
-                      place='bottom'
-                      className='z-40'
-                      content='New posts will be visible only for team members.'
-                    />
-                  </ZIonCol>
+                {CONSTANTS.showIncompleteFeaturesInMobileApp && (
+                  <ZIonRow className='pt-4 ion-align-items-center'>
+                    <ZIonCol
+                      sizeXl='max-content'
+                      sizeLg='max-content'
+                      sizeMd='max-content'
+                      sizeSm='max-content'
+                      sizeXs='12'
+                      className='flex ion-align-items-center'>
+                      <ZIonIcon
+                        icon={eyeOffOutline}
+                        className='w-6 h-6 me-2'
+                      />
+                      <ZIonText>Create new posts as internal</ZIonText>
+                      <ZIonIcon
+                        icon={alertCircleOutline}
+                        className='w-6 h-6 cursor-pointer ms-2'
+                        id='z-workspace-internal-post'
+                        testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.internalPostInfoButton}-${workspaceId}`}
+                        testinglistselector={
+                          CONSTANTS.testingSelectors.workspace.settingsModal
+                            .settings.internalPostInfoButton
+                        }
+                      />
+                      <ZRTooltip
+                        anchorSelect='#z-workspace-internal-post'
+                        place='bottom'
+                        className='z-40'
+                        content='New posts will be visible only for team members.'
+                      />
+                    </ZIonCol>
 
-                  <ZIonCol
-                    className={classNames({
-                      'ion-text-end': true
-                    })}>
-                    <ZRCSwitch
-                      disabled={
-                        wsShareId !== undefined &&
-                        wsShareId !== null &&
-                        wsShareId?.trim()?.length > 0 &&
-                        wsShareMemberId !== undefined &&
-                        wsShareMemberId !== null &&
-                        wsShareMemberId?.trim()?.length > 0
-                      }
-                      testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.internalPostToggler}-${workspaceId}`}
-                      testinglistselector={
-                        CONSTANTS.testingSelectors.workspace.settingsModal
-                          .settings.internalPostToggler
-                      }
-                      onChange={value => {
-                        void setFieldValue('internalPost', value, false);
-                      }}
-                    />
-                  </ZIonCol>
-                </ZIonRow>
+                    <ZIonCol
+                      className={classNames({
+                        'ion-text-end': true
+                      })}>
+                      <ZRCSwitch
+                        disabled={
+                          wsShareId !== undefined &&
+                          wsShareId !== null &&
+                          wsShareId?.trim()?.length > 0 &&
+                          wsShareMemberId !== undefined &&
+                          wsShareMemberId !== null &&
+                          wsShareMemberId?.trim()?.length > 0
+                        }
+                        testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.internalPostToggler}-${workspaceId}`}
+                        testinglistselector={
+                          CONSTANTS.testingSelectors.workspace.settingsModal
+                            .settings.internalPostToggler
+                        }
+                        onChange={value => {
+                          void setFieldValue('internalPost', value, false);
+                        }}
+                      />
+                    </ZIonCol>
+                  </ZIonRow>
+                )}
 
                 <div className='flex w-full mt-2 ion-justify-content-end'>
                   <div

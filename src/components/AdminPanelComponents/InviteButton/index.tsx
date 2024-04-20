@@ -73,12 +73,12 @@ const ZInviteButton: React.FC<IZInviteButton> = ({
   shareWSMemberId,
   wsShareId
 }) => {
-  const { isLgScale, isMdScale } = useZMediaQueryScale();
+  const { isXlScale, isLgScale, isMdScale } = useZMediaQueryScale();
 
   return (
     <ZIonButton
-      size={!isLgScale ? 'small' : undefined}
-      height={isMdScale ? '2.3rem' : '1.9rem'}
+      size={!isXlScale ? 'small' : undefined}
+      height={isXlScale ? '2.3rem' : '1.9rem'}
       className={className}
       expand={isMdScale ? undefined : 'block'}
       testingselector={CONSTANTS.testingSelectors.topBar.teamInviteBtn}
@@ -90,23 +90,24 @@ const ZInviteButton: React.FC<IZInviteButton> = ({
               [workspaceId]
             )
           : wsShareId !== undefined &&
-            wsShareId !== null &&
-            shareWSMemberId !== undefined
-          ? replaceRouteParams(
-              ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Members,
-              [
-                CONSTANTS.RouteParams.workspace.wsShareId,
-                CONSTANTS.RouteParams.workspace.shareWSMemberId
-              ],
-              [wsShareId, shareWSMemberId]
-            )
-          : ''
+              wsShareId !== null &&
+              shareWSMemberId !== undefined
+            ? replaceRouteParams(
+                ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Members,
+                [
+                  CONSTANTS.RouteParams.workspace.wsShareId,
+                  CONSTANTS.RouteParams.workspace.shareWSMemberId
+                ],
+                [wsShareId, shareWSMemberId]
+              )
+            : ''
       }>
       <ZIonIcon
         icon={addOutline}
         className='me-1'
+        slot={!isLgScale ? 'icon-only' : undefined}
       />
-      Invite
+      {isLgScale && <span>Invite</span>}
     </ZIonButton>
   );
 };

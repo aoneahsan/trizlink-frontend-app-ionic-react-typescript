@@ -9,7 +9,7 @@ import React, { useMemo } from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import classNames from 'classnames';
-import { ellipsisHorizontalOutline, star, starOutline } from 'ionicons/icons';
+import { star, starOutline } from 'ionicons/icons';
 import { useRecoilValue } from 'recoil';
 
 /**
@@ -30,7 +30,6 @@ import {
   ZIonText
 } from '@/components/ZIonComponents';
 import ZUserInfoPopover from '@/components/InPageComponents/ZaionsPopovers/UserInfoPopover';
-import ZWorkspacesActionPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/ActionsPopover';
 import ZCan from '@/components/Can';
 
 /**
@@ -163,13 +162,6 @@ const ZWorkspacesCard: React.FC<{
       type
     }
   ); // popover hook to show UserInfoPopover
-
-  const { presentZIonPopover: presentWorkspacesActionsPopover } =
-    useZIonPopover(ZWorkspacesActionPopover, {
-      workspaceId,
-      owned,
-      type
-    }); // popover hook to show UserInfoPopover
   // #endregion
 
   // #region APIS.

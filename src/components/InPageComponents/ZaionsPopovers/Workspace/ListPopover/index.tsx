@@ -101,8 +101,8 @@ const ZWorkspacesListPopover: React.FC<{
   workspaceId: string;
   shareWSMemberId?: string;
   wsShareId?: string;
-  dismissZIonPopover: (data: string, role: string) => void;
-  zNavigatePushRoute: (_url: string) => void;
+  dismissZIonPopover?: (data?: string, role?: string) => void;
+  zNavigatePushRoute?: (_url: string) => void;
 }> = ({
   workspaceId,
   shareWSMemberId,
@@ -176,20 +176,25 @@ const ZWorkspacesListPopover: React.FC<{
                 testingselector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.singleWorkspace}-label-${el.id}`}
                 testinglistselector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.singleWorkspace}-label`}
                 onClick={() => {
-                  zNavigatePushRoute(
-                    createRedirectRoute({
-                      url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
-                      params: [
-                        CONSTANTS.RouteParams.workspace.workspaceId,
-                        CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
-                      ],
-                      values: [
-                        el?.id ?? '',
-                        CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
-                      ]
-                    })
-                  );
-                  dismissZIonPopover('', '');
+                  if (zNavigatePushRoute !== undefined) {
+                    zNavigatePushRoute(
+                      createRedirectRoute({
+                        url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+                        params: [
+                          CONSTANTS.RouteParams.workspace.workspaceId,
+                          CONSTANTS.RouteParams
+                            .folderIdToGetShortLinksOrLinkInBio
+                        ],
+                        values: [
+                          el?.id ?? '',
+                          CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                        ]
+                      })
+                    );
+                  }
+                  if (dismissZIonPopover !== undefined) {
+                    dismissZIonPopover('', '');
+                  }
                 }}>
                 {el.workspaceName}
               </ZIonLabel>
@@ -270,22 +275,27 @@ const ZWorkspacesListPopover: React.FC<{
                 testingselector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.singleWorkspace}-label-${el.id}`}
                 testinglistselector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.singleWorkspace}-label`}
                 onClick={() => {
-                  zNavigatePushRoute(
-                    createRedirectRoute({
-                      url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,
-                      params: [
-                        CONSTANTS.RouteParams.workspace.wsShareId,
-                        CONSTANTS.RouteParams.workspace.shareWSMemberId,
-                        CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
-                      ],
-                      values: [
-                        el?.workspaceId ?? '',
-                        el?.id ?? '',
-                        CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
-                      ]
-                    })
-                  );
-                  dismissZIonPopover('', '');
+                  if (zNavigatePushRoute !== undefined) {
+                    zNavigatePushRoute(
+                      createRedirectRoute({
+                        url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,
+                        params: [
+                          CONSTANTS.RouteParams.workspace.wsShareId,
+                          CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                          CONSTANTS.RouteParams
+                            .folderIdToGetShortLinksOrLinkInBio
+                        ],
+                        values: [
+                          el?.workspaceId ?? '',
+                          el?.id ?? '',
+                          CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                        ]
+                      })
+                    );
+                  }
+                  if (dismissZIonPopover !== undefined) {
+                    dismissZIonPopover('', '');
+                  }
                 }}>
                 {el.workspaceName}
               </ZIonLabel>

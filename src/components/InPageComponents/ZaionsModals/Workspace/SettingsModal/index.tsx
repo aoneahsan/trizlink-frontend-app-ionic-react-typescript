@@ -283,26 +283,28 @@ const ZWorkspacesSettingModal: React.FC<{
               </ZCan>
 
               {/* Approvals */}
-              <ZIonSegmentButton
-                value={workspaceSettingsModalTabEnum.approvals}
-                className='normal-case ion-no-padding ion-text-center'
-                testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.approvals}-${workspaceId}`}
-                testinglistselector={
-                  CONSTANTS.testingSelectors.workspace.settingsModal.tabs
-                    .approvals
-                }
-                onClick={() => {
-                  setCompState(oldValues => ({
-                    ...oldValues,
-                    activeTab: workspaceSettingsModalTabEnum.approvals
-                  }));
-                }}>
-                <ZIonIcon
-                  icon={checkmarkOutline}
-                  className='pt-1'
-                />
-                <ZIonText className='pb-3 mb-2'>Approvals</ZIonText>
-              </ZIonSegmentButton>
+              {CONSTANTS.showIncompleteFeaturesInMobileApp && (
+                <ZIonSegmentButton
+                  value={workspaceSettingsModalTabEnum.approvals}
+                  className='normal-case ion-no-padding ion-text-center'
+                  testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.approvals}-${workspaceId}`}
+                  testinglistselector={
+                    CONSTANTS.testingSelectors.workspace.settingsModal.tabs
+                      .approvals
+                  }
+                  onClick={() => {
+                    setCompState(oldValues => ({
+                      ...oldValues,
+                      activeTab: workspaceSettingsModalTabEnum.approvals
+                    }));
+                  }}>
+                  <ZIonIcon
+                    icon={checkmarkOutline}
+                    className='pt-1'
+                  />
+                  <ZIonText className='pb-3 mb-2'>Approvals</ZIonText>
+                </ZIonSegmentButton>
+              )}
             </ZIonSegment>
           ) : null}
         </div>

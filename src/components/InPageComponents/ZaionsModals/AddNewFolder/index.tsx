@@ -107,13 +107,13 @@ const ZaionsAddNewFolder: React.FC<{
       workspaceId?.trim()?.length > 0
         ? [ZWSTypeEum.personalWorkspace, workspaceId]
         : wsShareId !== undefined &&
-          wsShareId !== null &&
-          wsShareId?.trim()?.length > 0 &&
-          shareWSMemberId !== undefined &&
-          shareWSMemberId !== null &&
-          shareWSMemberId?.trim()?.length > 0
-        ? [ZWSTypeEum.shareWorkspace, shareWSMemberId]
-        : [],
+            wsShareId !== null &&
+            wsShareId?.trim()?.length > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            shareWSMemberId?.trim()?.length > 0
+          ? [ZWSTypeEum.shareWorkspace, shareWSMemberId]
+          : [],
     _urlDynamicParts: [
       CONSTANTS.RouteParams.workspace.type,
       CONSTANTS.RouteParams.workspace.workspaceId
@@ -247,17 +247,17 @@ const ZaionsAddNewFolder: React.FC<{
                     folderFormState?.id
                   ]
                 : wsShareId !== undefined &&
-                  wsShareId !== null &&
-                  wsShareId?.trim()?.length > 0 &&
-                  shareWSMemberId !== undefined &&
-                  shareWSMemberId !== null &&
-                  shareWSMemberId?.trim()?.length > 0
-                ? [
-                    ZWSTypeEum.shareWorkspace,
-                    shareWSMemberId,
-                    folderFormState?.id
-                  ]
-                : [],
+                    wsShareId !== null &&
+                    wsShareId?.trim()?.length > 0 &&
+                    shareWSMemberId !== undefined &&
+                    shareWSMemberId !== null &&
+                    shareWSMemberId?.trim()?.length > 0
+                  ? [
+                      ZWSTypeEum.shareWorkspace,
+                      shareWSMemberId,
+                      folderFormState?.id
+                    ]
+                  : [],
             urlDynamicParts: [
               CONSTANTS.RouteParams.workspace.type,
               CONSTANTS.RouteParams.workspace.workspaceId,
@@ -385,19 +385,22 @@ const ZaionsAddNewFolder: React.FC<{
                 shareWSPermissionEnum.update_sws_sl_folder
               ]
             : state === folderState.linkInBio
-            ? [
-                shareWSPermissionEnum.create_sws_lib_folder,
-                shareWSPermissionEnum.update_sws_lib_folder
-              ]
-            : []
+              ? [
+                  shareWSPermissionEnum.create_sws_lib_folder,
+                  shareWSPermissionEnum.update_sws_lib_folder
+                ]
+              : []
           : state === folderState.shortlink
-          ? [permissionsEnum.create_sl_folder, permissionsEnum.update_sl_folder]
-          : state === folderState.linkInBio
-          ? [
-              permissionsEnum.create_lib_folder,
-              permissionsEnum.update_lib_folder
-            ]
-          : []
+            ? [
+                permissionsEnum.create_sl_folder,
+                permissionsEnum.update_sl_folder
+              ]
+            : state === folderState.linkInBio
+              ? [
+                  permissionsEnum.create_lib_folder,
+                  permissionsEnum.update_lib_folder
+                ]
+              : []
       }>
       <Formik
         initialValues={formikInitialValues}
@@ -474,8 +477,8 @@ const ZaionsAddNewFolder: React.FC<{
                         {folderFormState?.formMode === FormMode.ADD
                           ? 'Create'
                           : folderFormState?.formMode === FormMode.EDIT
-                          ? 'Update'
-                          : ''}
+                            ? 'Update'
+                            : ''}
                       </ZIonButton>
                     </ZIonCol>
                   </ZIonRow>
@@ -483,7 +486,10 @@ const ZaionsAddNewFolder: React.FC<{
                 </ZIonHeader>
               )}
 
-              <ZIonContent className='ion-padding'>
+              <ZIonContent
+                className={classNames({
+                  'ion-padding': isSmScale
+                })}>
                 <div className='flex flex-col ion-text-center ion-justify-content-center ion-padding-top ion-margin-top'>
                   <div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter'>
                     <ZIonImg
@@ -506,8 +512,8 @@ const ZaionsAddNewFolder: React.FC<{
                     {folderFormState?.formMode === FormMode.ADD
                       ? 'Create a new folder'
                       : folderFormState?.formMode === FormMode.EDIT
-                      ? 'Rename Folder'
-                      : ''}
+                        ? 'Rename Folder'
+                        : ''}
                     <ZIonRouterLink
                       routerLink={ZaionsRoutes.HomeRoute}
                       className='mx-1'>
@@ -553,11 +559,23 @@ const ZaionsAddNewFolder: React.FC<{
               {appSettings?.appModalsSetting?.actions
                 ?.showActionInModalFooter && (
                 <ZIonFooter>
-                  <ZIonRow className='mx-3 mt-1 ion-justify-content-between ion-align-items-center'>
-                    <ZIonCol>
+                  <ZIonRow
+                    className={classNames(
+                      'mt-1 ion-justify-content-between ion-align-items-center',
+                      {
+                        'mx-3': isSmScale
+                      }
+                    )}>
+                    <ZIonCol
+                      sizeXl='6'
+                      sizeLg='6'
+                      sizeMd='6'
+                      sizeSm='6'
+                      sizeXs='12'>
                       <ZIonButton
                         fill='outline'
                         size='default'
+                        expand={!isSmScale ? 'block' : undefined}
                         className='ion-text-capitalize'
                         testingselector={
                           CONSTANTS.testingSelectors.folder.formModal
@@ -572,11 +590,18 @@ const ZaionsAddNewFolder: React.FC<{
                       </ZIonButton>
                     </ZIonCol>
 
-                    <ZIonCol className='ion-text-end'>
+                    <ZIonCol
+                      sizeXl='6'
+                      sizeLg='6'
+                      sizeMd='6'
+                      sizeSm='6'
+                      sizeXs='12'
+                      className='ion-text-end'>
                       <ZIonButton
                         id='submit-button-info'
                         fill='solid'
                         size='default'
+                        expand={!isSmScale ? 'block' : undefined}
                         className='ion-text-capitalize'
                         type='submit'
                         disabled={isSubmitting || !isValid}
@@ -590,8 +615,8 @@ const ZaionsAddNewFolder: React.FC<{
                         {folderFormState.formMode === FormMode.ADD
                           ? 'Create'
                           : folderFormState.formMode === FormMode.EDIT
-                          ? 'Update'
-                          : ''}
+                            ? 'Update'
+                            : ''}
                       </ZIonButton>
                     </ZIonCol>
                   </ZIonRow>

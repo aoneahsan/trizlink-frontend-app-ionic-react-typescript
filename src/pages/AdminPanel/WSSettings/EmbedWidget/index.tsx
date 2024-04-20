@@ -202,35 +202,38 @@ const ZWSSettingEmbedWidgetListPage: React.FC = () => {
           </ZIonButton>
 
           {/* Refetch data button */}
-          <ZIonButton
-            color='primary'
-            fill='outline'
-            minHeight={isLgScale ? '39px' : '2rem'}
-            expand={!isLgScale ? 'block' : undefined}
-            className={classNames({
-              'my-2': true,
-              'me-2': isLgScale,
-              'text-xs ion-no-margin ion-no-padding w-[33.33%]':
-                !isLgScale && isSmScale,
-              'w-full': !isSmScale
-            })}
-            onClick={() => {
-              void invalidedQueries();
-            }}
-            testingselector={
-              CONSTANTS.testingSelectors.WSSettings.teamListPage.refetchBtn
-            }>
-            <ZIonIcon
-              slot='start'
-              icon={refresh}
+          {isSmScale && (
+            <ZIonButton
+              color='primary'
+              fill='outline'
+              minHeight={isLgScale ? '39px' : '2rem'}
+              expand={!isLgScale ? 'block' : undefined}
               className={classNames({
-                'me-1': true,
-                'w-4 h-4': !isLgScale,
-                'ion-no-margin': !isSmScale
+                'my-2': true,
+                'me-2': isLgScale,
+                'text-xs ion-no-margin ion-no-padding w-[33.33%]':
+                  !isLgScale && isSmScale,
+                'w-full': !isSmScale
               })}
-            />
-            Refetch
-          </ZIonButton>
+              onClick={() => {
+                void invalidedQueries();
+              }}
+              testingselector={
+                CONSTANTS.testingSelectors.WSSettings.teamListPage.refetchBtn
+              }>
+              <ZIonIcon
+                slot='start'
+                icon={refresh}
+                className={classNames({
+                  'me-1': true,
+                  'w-4 h-4': !isLgScale,
+                  'ion-no-margin': !isSmScale
+                })}
+              />
+              Refetch
+            </ZIonButton>
+          )}
+
           <ZCan havePermissions={[permissionsEnum.create_embededWidget]}>
             {/* Create new embeded widget */}
             <ZIonButton

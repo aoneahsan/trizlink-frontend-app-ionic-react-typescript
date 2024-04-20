@@ -1,3 +1,4 @@
+import { isPlatform } from '@ionic/react';
 import { type permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 import { currentLoggedInUserRoleAndPermissionsRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
 import {
@@ -174,6 +175,18 @@ export const useZMediaQueryScale = (): useZMediaQueryScaleReturnInterface => {
     is1150pxScale,
     is1100pxScale
   };
+};
+
+/**
+ * Custom React hook to determine if the device is a hybrid platform and the screen size is below md.
+ * @returns An object containing a boolean value.
+ */
+export const useZHybridDeviceIsMobile = (): {
+  value: boolean;
+} => {
+  const { isMdScale } = useZMediaQueryScale();
+  const value = isPlatform('hybrid') && !isMdScale;
+  return { value };
 };
 
 /**

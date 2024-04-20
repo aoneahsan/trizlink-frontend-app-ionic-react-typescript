@@ -115,13 +115,12 @@ const ZWorkspaceListPage: React.FC = () => {
     ownedFavoriteWorkspaces: []
   });
 
-  const { presentZIonModal: presentZWorkspaceCreateModal } = useZIonModal(
-    ZAddNewWorkspaceModal
-  );
-
+  // #region Custom hooks.
   const { zInvalidateReactQueries } = useZInvalidateReactQueries();
   const { isMdScale, isSmScale } = useZMediaQueryScale();
+  // #endregion
 
+  // #region APIS requests.
   // Get workspaces data from backend.
   const { data: WorkspacesData, isFetching: isWorkspacesDataFetching } =
     useZRQGetRequest<workspaceInterface[]>({
@@ -135,7 +134,15 @@ const ZWorkspaceListPage: React.FC = () => {
       _url: API_URL_ENUM.ws_share_list,
       _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN]
     });
+  // #endregion
 
+  // #region Popovers & Modals.
+  const { presentZIonModal: presentZWorkspaceCreateModal } = useZIonModal(
+    ZAddNewWorkspaceModal
+  );
+  // #endregion
+
+  // #region useEffects
   useEffect(() => {
     const _sharedFavoriteWorkspaces = WSShareData?.filter(
       el => el?.isFavorite === 1
@@ -159,7 +166,9 @@ const ZWorkspaceListPage: React.FC = () => {
       }));
     }
   }, [WorkspacesData, WSShareData]);
+  // #endregion
 
+  // #region Functions.
   const zRefetchDataHandler = async (): Promise<void> => {
     try {
       await zInvalidateReactQueries([
@@ -184,6 +193,7 @@ const ZWorkspaceListPage: React.FC = () => {
       reportCustomError(error);
     }
   };
+  // #endregion
 
   const isZFetching = isWorkspacesDataFetching && isWSShareDataFetching;
 

@@ -144,30 +144,30 @@ const ZaionsLinkInBioLinksTable: React.FC<{
       workspaceId?.trim()?.length > 0
         ? [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN, workspaceId]
         : wsShareId !== undefined &&
-          wsShareId !== null &&
-          wsShareId?.trim()?.length > 0 &&
-          shareWSMemberId !== undefined &&
-          shareWSMemberId !== null &&
-          shareWSMemberId?.trim()?.length > 0
-        ? [
-            CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
-            wsShareId,
-            shareWSMemberId
-          ]
-        : [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN],
+            wsShareId !== null &&
+            wsShareId?.trim()?.length > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            shareWSMemberId?.trim()?.length > 0
+          ? [
+              CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
+              wsShareId,
+              shareWSMemberId
+            ]
+          : [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN],
     _itemsIds:
       workspaceId !== undefined &&
       workspaceId !== null &&
       workspaceId?.trim()?.length > 0
         ? [workspaceId, ZWSTypeEum.personalWorkspace]
         : wsShareId !== undefined &&
-          wsShareId !== null &&
-          wsShareId?.trim()?.length > 0 &&
-          shareWSMemberId !== undefined &&
-          shareWSMemberId !== null &&
-          shareWSMemberId?.trim()?.length > 0
-        ? [shareWSMemberId, ZWSTypeEum.shareWorkspace]
-        : [],
+            wsShareId !== null &&
+            wsShareId?.trim()?.length > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            shareWSMemberId?.trim()?.length > 0
+          ? [shareWSMemberId, ZWSTypeEum.shareWorkspace]
+          : [],
     _urlDynamicParts: [
       CONSTANTS.RouteParams.workspace.workspaceId,
       CONSTANTS.RouteParams.workspace.type
@@ -336,18 +336,18 @@ const ZInpageTable: React.FC<{
               ZUserSettingTypeEnum.libListPageTable
             ]
           : wsShareId !== undefined &&
-            wsShareId !== null &&
-            wsShareId?.trim()?.length > 0 &&
-            shareWSMemberId !== undefined &&
-            shareWSMemberId !== null &&
-            shareWSMemberId?.trim()?.length > 0
-          ? [
-              CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
-              wsShareId,
-              shareWSMemberId,
-              ZUserSettingTypeEnum.libListPageTable
-            ]
-          : [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET],
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              shareWSMemberId?.trim()?.length > 0
+            ? [
+                CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
+                wsShareId,
+                shareWSMemberId,
+                ZUserSettingTypeEnum.libListPageTable
+              ]
+            : [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET],
       _itemsIds:
         workspaceId !== undefined &&
         workspaceId !== null &&
@@ -358,17 +358,17 @@ const ZInpageTable: React.FC<{
               ZUserSettingTypeEnum.libListPageTable
             ]
           : wsShareId !== undefined &&
-            wsShareId !== null &&
-            wsShareId?.trim()?.length > 0 &&
-            shareWSMemberId !== undefined &&
-            shareWSMemberId !== null &&
-            shareWSMemberId?.trim()?.length > 0
-          ? [
-              ZWSTypeEum.shareWorkspace,
-              shareWSMemberId,
-              ZUserSettingTypeEnum.libListPageTable
-            ]
-          : [],
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              shareWSMemberId?.trim()?.length > 0
+            ? [
+                ZWSTypeEum.shareWorkspace,
+                shareWSMemberId,
+                ZUserSettingTypeEnum.libListPageTable
+              ]
+            : [],
       _urlDynamicParts: [
         CONSTANTS.RouteParams.workspace.type,
         CONSTANTS.RouteParams.workspace.workspaceId,
@@ -420,25 +420,25 @@ const ZInpageTable: React.FC<{
                     }
                   })
                 : (wsShareId?.trim()?.length ?? 0) > 0 &&
-                  (shareWSMemberId?.trim()?.length ?? 0) > 0
-                ? createRedirectRoute({
-                    url: ZaionsRoutes.AdminPanel.ShareWS.Link_in_bio.Edit,
-                    params: [
-                      CONSTANTS.RouteParams.workspace.wsShareId,
-                      CONSTANTS.RouteParams.workspace.shareWSMemberId,
-                      CONSTANTS.RouteParams.linkInBio.linkInBioId
-                    ],
-                    values: [
-                      wsShareId ?? '',
-                      shareWSMemberId ?? '',
-                      row?.row?.original?.id ?? ''
-                    ],
-                    routeSearchParams: {
-                      page: ZLinkInBioPageEnum.design,
-                      step: ZLinkInBioRHSComponentEnum.theme
-                    }
-                  })
-                : ''
+                    (shareWSMemberId?.trim()?.length ?? 0) > 0
+                  ? createRedirectRoute({
+                      url: ZaionsRoutes.AdminPanel.ShareWS.Link_in_bio.Edit,
+                      params: [
+                        CONSTANTS.RouteParams.workspace.wsShareId,
+                        CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                        CONSTANTS.RouteParams.linkInBio.linkInBioId
+                      ],
+                      values: [
+                        wsShareId ?? '',
+                        shareWSMemberId ?? '',
+                        row?.row?.original?.id ?? ''
+                      ],
+                      routeSearchParams: {
+                        page: ZLinkInBioPageEnum.design,
+                        step: ZLinkInBioRHSComponentEnum.theme
+                      }
+                    })
+                  : ''
             }>
             <ZIonText>{row.getValue()}</ZIonText>
           </ZIonRouterLink>
@@ -1352,13 +1352,13 @@ const ZLinkInBioActionPopover: React.FC<{
             workspaceId?.trim()?.length > 0
               ? [ZWSTypeEum.personalWorkspace, workspaceId, linInBioId]
               : wsShareId !== undefined &&
-                wsShareId !== null &&
-                wsShareId?.trim()?.length > 0 &&
-                shareWSMemberId !== undefined &&
-                shareWSMemberId !== null &&
-                shareWSMemberId?.trim()?.length > 0
-              ? [ZWSTypeEum.shareWorkspace, shareWSMemberId, linInBioId]
-              : [],
+                  wsShareId !== null &&
+                  wsShareId?.trim()?.length > 0 &&
+                  shareWSMemberId !== undefined &&
+                  shareWSMemberId !== null &&
+                  shareWSMemberId?.trim()?.length > 0
+                ? [ZWSTypeEum.shareWorkspace, shareWSMemberId, linInBioId]
+                : [],
           urlDynamicParts: [
             CONSTANTS.RouteParams.workspace.type,
             CONSTANTS.RouteParams.workspace.workspaceId,
@@ -1384,17 +1384,17 @@ const ZLinkInBioActionPopover: React.FC<{
                         workspaceId
                       ]
                     : wsShareId !== undefined &&
-                      wsShareId !== null &&
-                      wsShareId?.trim()?.length > 0 &&
-                      shareWSMemberId !== undefined &&
-                      shareWSMemberId !== null &&
-                      shareWSMemberId?.trim()?.length > 0
-                    ? [
-                        CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
-                        wsShareId,
-                        shareWSMemberId
-                      ]
-                    : [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN]
+                        wsShareId !== null &&
+                        wsShareId?.trim()?.length > 0 &&
+                        shareWSMemberId !== undefined &&
+                        shareWSMemberId !== null &&
+                        shareWSMemberId?.trim()?.length > 0
+                      ? [
+                          CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
+                          wsShareId,
+                          shareWSMemberId
+                        ]
+                      : [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN]
               }) ?? [];
 
             // getting all the LinkInBios from RQ cache.
@@ -1420,17 +1420,17 @@ const ZLinkInBioActionPopover: React.FC<{
                       workspaceId
                     ]
                   : wsShareId !== undefined &&
-                    wsShareId !== null &&
-                    wsShareId?.trim()?.length > 0 &&
-                    shareWSMemberId !== undefined &&
-                    shareWSMemberId !== null &&
-                    shareWSMemberId?.trim()?.length > 0
-                  ? [
-                      CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
-                      wsShareId,
-                      shareWSMemberId
-                    ]
-                  : [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN],
+                      wsShareId !== null &&
+                      wsShareId?.trim()?.length > 0 &&
+                      shareWSMemberId !== undefined &&
+                      shareWSMemberId !== null &&
+                      shareWSMemberId?.trim()?.length > 0
+                    ? [
+                        CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
+                        wsShareId,
+                        shareWSMemberId
+                      ]
+                    : [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN],
               data: _updatedLinkInBios,
               id: '',
               extractType: ZRQGetRequestExtractEnum.extractItems,

@@ -22,6 +22,7 @@ import {
  * */
 import { ZIonButton, ZIonIcon, ZIonText } from '@/components/ZIonComponents';
 import ZInviteButton from '../InviteButton';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Custom Hooks Imports go down
@@ -85,15 +86,16 @@ const ZUtilityButtonGroup: React.FC = () => {
         className='mt-2 ion-no-margin ion-no-padding'
         minHeight='1.9rem'
         expand='block'
-        color='primary'>
+        color='primary'
+        routerLink={ZaionsRoutes.AdminPanel.Workspaces.Main}>
         <ZIonIcon
           icon={openOutline}
           className='me-1'
         />
-        <ZIonText className='mt-1 text-xs'>Go to workspace</ZIonText>
+        <ZIonText className='mt-1 text-xs'>Go to workspaces</ZIonText>
       </ZIonButton>
 
-      <ZIonButton
+      {/* <ZIonButton
         className='mt-2 ion-no-margin ion-no-padding'
         minHeight='1.9rem'
         expand='block'
@@ -103,9 +105,9 @@ const ZUtilityButtonGroup: React.FC = () => {
           className='me-1'
         />
         <ZIonText className='mt-1 text-xs'>Help</ZIonText>
-      </ZIonButton>
+      </ZIonButton> */}
 
-      <ZIonButton
+      {/* <ZIonButton
         className='mt-2 ion-no-margin ion-no-padding'
         minHeight='1.9rem'
         expand='block'
@@ -115,7 +117,7 @@ const ZUtilityButtonGroup: React.FC = () => {
           className='me-1'
         />
         <ZIonText className='mt-1 text-xs'>Notification</ZIonText>
-      </ZIonButton>
+      </ZIonButton> */}
 
       <ZInviteButton
         className='mt-2 ion-no-margin ion-no-padding'

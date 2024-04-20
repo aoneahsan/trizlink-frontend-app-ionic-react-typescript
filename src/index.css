@@ -727,8 +727,8 @@ span.new {
 
 .folder-modal-size,
 .api-key-modal-size {
-  --height: 50vh;
-  --width: 33vw;
+  --height: 25.5rem;
+  --width: 26.1rem;
 }
 
 .create-workspace-modal-size {

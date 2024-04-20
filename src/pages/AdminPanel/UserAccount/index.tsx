@@ -298,6 +298,7 @@ const ZUserAccount: React.FC = () => {
               <ZAdminPanelTopBar
                 showWSSwitcherBtn={false}
                 showInviteBtn={false}
+                showMenuBtn={true}
                 menuOnClickFn={() => {
                   void (async () => {
                     // Open the menu by menu-id

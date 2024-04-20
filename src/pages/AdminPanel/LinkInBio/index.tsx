@@ -24,7 +24,6 @@ import {
   ZIonRow,
   ZIonGrid,
   ZIonContent,
-  ZIonMenuToggle,
   ZIonButtons,
   ZIonButton,
   ZIonRefresher,
@@ -77,6 +76,7 @@ import {
 // Styles
 import classes from './styles.module.css';
 import SupportOnPatreon from '@/components/SupportOnPatreon';
+import AdminPanelLinkInBioFolderSideMenu from '@/navigation/AdminPanel/LinkInBio/FolderSideMenu';
 
 // Lazy loads
 const ZaionsLinkInBioLinksTable = lazy(
@@ -194,31 +194,31 @@ const ZLinkInBiosListPage: React.FC = () => {
             folderState.linkInBio
           ]
         : wsShareId !== undefined &&
-          wsShareId !== null &&
-          wsShareId?.trim()?.length > 0 &&
-          shareWSMemberId !== undefined &&
-          shareWSMemberId !== null &&
-          shareWSMemberId?.trim()?.length > 0
-        ? [
-            CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
-            wsShareId,
-            shareWSMemberId,
-            folderState.linkInBio
-          ]
-        : [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
+            wsShareId !== null &&
+            wsShareId?.trim()?.length > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            shareWSMemberId?.trim()?.length > 0
+          ? [
+              CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
+              wsShareId,
+              shareWSMemberId,
+              folderState.linkInBio
+            ]
+          : [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
     _itemsIds:
       workspaceId !== undefined &&
       workspaceId !== null &&
       workspaceId?.trim()?.length > 0
         ? [ZWSTypeEum.personalWorkspace, workspaceId, folderState.linkInBio]
         : wsShareId !== undefined &&
-          wsShareId !== null &&
-          wsShareId?.trim()?.length > 0 &&
-          shareWSMemberId !== undefined &&
-          shareWSMemberId !== null &&
-          shareWSMemberId?.trim()?.length > 0
-        ? [ZWSTypeEum.shareWorkspace, shareWSMemberId, folderState.linkInBio]
-        : [],
+            wsShareId !== null &&
+            wsShareId?.trim()?.length > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            shareWSMemberId?.trim()?.length > 0
+          ? [ZWSTypeEum.shareWorkspace, shareWSMemberId, folderState.linkInBio]
+          : [],
     _shouldFetchWhenIdPassed: !(
       ((wsShareId?.trim()?.length ?? 0) === 0 &&
         (shareWSMemberId?.trim()?.length ?? 0) === 0) ||
@@ -246,30 +246,30 @@ const ZLinkInBiosListPage: React.FC = () => {
       workspaceId?.trim()?.length > 0
         ? [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN, workspaceId]
         : wsShareId !== undefined &&
-          wsShareId !== null &&
-          wsShareId?.trim()?.length > 0 &&
-          shareWSMemberId !== undefined &&
-          shareWSMemberId !== null &&
-          shareWSMemberId?.trim()?.length > 0
-        ? [
-            CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
-            wsShareId,
-            shareWSMemberId
-          ]
-        : [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN],
+            wsShareId !== null &&
+            wsShareId?.trim()?.length > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            shareWSMemberId?.trim()?.length > 0
+          ? [
+              CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
+              wsShareId,
+              shareWSMemberId
+            ]
+          : [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN],
     _itemsIds:
       workspaceId !== undefined &&
       workspaceId !== null &&
       workspaceId?.trim()?.length > 0
         ? [workspaceId, ZWSTypeEum.personalWorkspace]
         : wsShareId !== undefined &&
-          wsShareId !== null &&
-          wsShareId?.trim()?.length > 0 &&
-          shareWSMemberId !== undefined &&
-          shareWSMemberId !== null &&
-          shareWSMemberId?.trim()?.length > 0
-        ? [shareWSMemberId, ZWSTypeEum.shareWorkspace]
-        : [],
+            wsShareId !== null &&
+            wsShareId?.trim()?.length > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            shareWSMemberId?.trim()?.length > 0
+          ? [shareWSMemberId, ZWSTypeEum.shareWorkspace]
+          : [],
     _urlDynamicParts: [
       CONSTANTS.RouteParams.workspace.workspaceId,
       CONSTANTS.RouteParams.workspace.type
@@ -459,6 +459,8 @@ const ZLinkInBiosListPage: React.FC = () => {
         libData?.items !== null &&
         libData?.items?.length > 0 && <ZLinkInBioFilterMenu />}
 
+      {!isLgScale ? <AdminPanelLinkInBioFolderSideMenu /> : null}
+
       <ZIonPage
         pageTitle='Zaions link-in-bio list page'
         id={CONSTANTS.PAGE_IDS.AD_LIB_LIST_PAGE}>
@@ -470,26 +472,26 @@ const ZLinkInBiosListPage: React.FC = () => {
               ? isSelectedWorkspaceFetching
                 ? 'Setting workspace data'
                 : isLibDataFetching
-                ? 'Fetching workspace link-in-bio'
-                : isLibFoldersDataFetching
-                ? 'Fetching workspace link-in-bio folders'
-                : null
+                  ? 'Fetching workspace link-in-bio'
+                  : isLibFoldersDataFetching
+                    ? 'Fetching workspace link-in-bio folders'
+                    : null
               : wsShareId !== undefined &&
-                wsShareId !== null &&
-                wsShareId?.trim()?.length > 0 &&
-                shareWSMemberId !== undefined &&
-                shareWSMemberId !== null &&
-                shareWSMemberId?.trim()?.length > 0
-              ? isGetMemberRolePermissionsFetching
-                ? 'Getting & setting your permissions in this workspace'
-                : isSelectedWorkspaceFetching
-                ? 'Setting share workspace data'
-                : isLibDataFetching
-                ? 'Fetching share workspace link-in-bio'
-                : isLibFoldersDataFetching
-                ? 'Fetching share workspace link-in-bio folders'
-                : null
-              : null}
+                  wsShareId !== null &&
+                  wsShareId?.trim()?.length > 0 &&
+                  shareWSMemberId !== undefined &&
+                  shareWSMemberId !== null &&
+                  shareWSMemberId?.trim()?.length > 0
+                ? isGetMemberRolePermissionsFetching
+                  ? 'Getting & setting your permissions in this workspace'
+                  : isSelectedWorkspaceFetching
+                    ? 'Setting share workspace data'
+                    : isLibDataFetching
+                      ? 'Fetching share workspace link-in-bio'
+                      : isLibFoldersDataFetching
+                        ? 'Fetching share workspace link-in-bio folders'
+                        : null
+                : null}
           </ZPageLoader>
         ) : (
           <ZIonContent>
@@ -531,8 +533,8 @@ const ZLinkInBiosListPage: React.FC = () => {
                         ? '10.5'
                         : '10'
                       : is2XlScale
-                      ? '11.4'
-                      : '11.2'
+                        ? '11.4'
+                        : '11.2'
                   }
                   sizeLg={
                     ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
@@ -540,14 +542,18 @@ const ZLinkInBiosListPage: React.FC = () => {
                         ? '10.5'
                         : '10'
                       : is2XlScale
-                      ? '11.4'
-                      : '11.2'
+                        ? '11.4'
+                        : '11.2'
                   }
                   sizeMd='12'
                   sizeSm='12'
                   sizeXs='12'
                   className='h-screen zaions-transition'>
-                  <ZIonGrid className='h-full ion-no-padding'>
+                  <ZIonGrid
+                    className={classNames({
+                      'h-full ion-no-padding': true,
+                      'mt-2': !isLgScale
+                    })}>
                     {/* Col-2 Row-1 Top bar. */}
                     <Suspense
                       fallback={
@@ -555,7 +561,23 @@ const ZLinkInBiosListPage: React.FC = () => {
                           <ZFallbackIonSpinner2 />
                         </ZIonRow>
                       }>
-                      <ZAdminPanelTopBar workspaceId={workspaceId} />
+                      <ZAdminPanelTopBar
+                        workspaceId={workspaceId}
+                        showMenuBtn={true}
+                        menuOnClickFn={() => {
+                          void (async () => {
+                            await menuController.enable(
+                              true,
+                              CONSTANTS.MENU_IDS
+                                .ADMIN_PAGE_LINKS_IN_BIO_FOLDERS_MENU_ID
+                            );
+                            await menuController.open(
+                              CONSTANTS.MENU_IDS
+                                .ADMIN_PAGE_LINKS_IN_BIO_FOLDERS_MENU_ID
+                            );
+                          })();
+                        }}
+                      />
                     </Suspense>
 
                     {/* Col-2 Row-2 */}
@@ -703,13 +725,13 @@ const ZInpageMainContent: React.FC = () => {
       workspaceId?.trim()?.length > 0
         ? [workspaceId, ZWSTypeEum.personalWorkspace]
         : wsShareId !== undefined &&
-          wsShareId !== null &&
-          wsShareId?.trim()?.length > 0 &&
-          shareWSMemberId !== undefined &&
-          shareWSMemberId !== null &&
-          shareWSMemberId?.trim()?.length > 0
-        ? [shareWSMemberId, ZWSTypeEum.shareWorkspace]
-        : [],
+            wsShareId !== null &&
+            wsShareId?.trim()?.length > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            shareWSMemberId?.trim()?.length > 0
+          ? [shareWSMemberId, ZWSTypeEum.shareWorkspace]
+          : [],
     _urlDynamicParts: [
       CONSTANTS.RouteParams.workspace.workspaceId,
       CONSTANTS.RouteParams.workspace.type
@@ -762,7 +784,12 @@ const ZInpageMainContent: React.FC = () => {
   // #endregion
 
   return (
-    <div className='flex flex-col gap-4 ion-no-margin ion-no-padding'>
+    <div
+      className={classNames({
+        'flex flex-col ion-no-margin ion-no-padding': true,
+        'gap-4': isMdScale,
+        'gap-3 py-3 px-2': !isMdScale
+      })}>
       <SupportOnPatreon />
       {/* Switch it button & page heading */}
       <ZIonRow
@@ -771,33 +798,6 @@ const ZInpageMainContent: React.FC = () => {
           'mt-4 ion-padding': isLgScale,
           'mt-2 p-2': !isLgScale
         })}>
-        {!isLgScale && (
-          <ZIonCol
-            size='max-content'
-            sizeSm='max-content'
-            sizeXs='12'
-            className={classNames({
-              'order-3': !isMdScale
-            })}>
-            <ZIonMenuToggle
-              autoHide={false}
-              menu={CONSTANTS.MENU_IDS.ADMIN_PAGE_LINKS_IN_BIO_FOLDERS_MENU_ID}>
-              <ZIonButton
-                className={classNames({
-                  'normal-case': true,
-                  'open-folder-menu-button': isLgScale || isSmScale,
-                  'mt-4 ms-0': !isMdScale
-                })}
-                expand={!isSmScale ? 'block' : undefined}
-                // menu={CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID}
-                // autoHide={false}
-              >
-                Open folders menu
-              </ZIonButton>
-            </ZIonMenuToggle>
-          </ZIonCol>
-        )}
-
         <ZIonCol
           className={classNames({
             'order-1': !isLgScale
@@ -814,12 +814,12 @@ const ZInpageMainContent: React.FC = () => {
             {workspaceId !== undefined
               ? "Create a New link-in-bio's or Manage Your Existing Ones!"
               : wsShareId !== undefined
-              ? getMemberRolePermissions?.memberPermissions?.includes(
-                  shareWSPermissionEnum.create_sws_shortLink
-                ) ?? false
-                ? "Create a New link-in-bio's or Manage Existing Ones!"
-                : 'Explore Existing Links'
-              : null}
+                ? getMemberRolePermissions?.memberPermissions?.includes(
+                    shareWSPermissionEnum.create_sws_shortLink
+                  ) ?? false
+                  ? "Create a New link-in-bio's or Manage Existing Ones!"
+                  : 'Explore Existing Links'
+                : null}
           </ZIonText>
           <ZIonText
             className={classNames({
@@ -832,57 +832,66 @@ const ZInpageMainContent: React.FC = () => {
             {workspaceId !== undefined
               ? "Craft fresh link-in-bio's or take a peek at your existing ones. The choice is yours!"
               : wsShareId !== undefined
-              ? getMemberRolePermissions?.memberPermissions?.includes(
-                  shareWSPermissionEnum.create_sws_shortLink
-                ) ?? false
-                ? "Craft fresh link-in-bio's or take a peek at your existing ones. The choice is yours!"
-                : "As new member, dive into link-in-bio's world and oversee existing creations."
-              : null}
+                ? getMemberRolePermissions?.memberPermissions?.includes(
+                    shareWSPermissionEnum.create_sws_shortLink
+                  ) ?? false
+                  ? "Craft fresh link-in-bio's or take a peek at your existing ones. The choice is yours!"
+                  : "As new member, dive into link-in-bio's world and oversee existing creations."
+                : null}
           </ZIonText>
         </ZIonCol>
 
-        <ZCan
-          shareWSId={wsShareId}
-          permissionType={
-            wsShareId !== undefined &&
-            wsShareId !== null &&
-            wsShareId?.trim()?.length > 0 &&
-            shareWSMemberId !== undefined &&
-            shareWSMemberId !== null &&
-            shareWSMemberId?.trim()?.length > 0
-              ? permissionsTypeEnum.shareWSMemberPermissions
-              : permissionsTypeEnum.loggedInUserPermissions
-          }
-          havePermissions={
-            wsShareId !== undefined &&
-            wsShareId !== null &&
-            wsShareId?.trim()?.length > 0 &&
-            shareWSMemberId !== undefined &&
-            shareWSMemberId !== null &&
-            shareWSMemberId?.trim()?.length > 0
-              ? [shareWSPermissionEnum.create_sws_shortLink]
-              : [permissionsEnum.create_shortLink]
-          }>
-          <ZIonCol
-            sizeXl='4'
-            sizeLg='5'
-            sizeMd='5'
-            sizeSm='12'
-            sizeXs='12'
-            className={classNames({
-              'mt-4 order-2': !isMdScale
-            })}>
-            {/* This will create short link (not link-in-bio) */}
-            <ZaionsCreateShortLinkUrlInput />
-          </ZIonCol>
-        </ZCan>
+        {isLgScale ? (
+          <ZCan
+            shareWSId={wsShareId}
+            permissionType={
+              wsShareId !== undefined &&
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              shareWSMemberId?.trim()?.length > 0
+                ? permissionsTypeEnum.shareWSMemberPermissions
+                : permissionsTypeEnum.loggedInUserPermissions
+            }
+            havePermissions={
+              wsShareId !== undefined &&
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              shareWSMemberId?.trim()?.length > 0
+                ? [shareWSPermissionEnum.create_sws_shortLink]
+                : [permissionsEnum.create_shortLink]
+            }>
+            <ZIonCol
+              sizeXl='4'
+              sizeLg='5'
+              sizeMd='5'
+              sizeSm='12'
+              sizeXs='12'
+              className={classNames({
+                'mt-4 order-2': !isMdScale
+              })}>
+              {/* This will create short link (not link-in-bio) */}
+              <ZaionsCreateShortLinkUrlInput />
+            </ZIonCol>
+          </ZCan>
+        ) : null}
       </ZIonRow>
 
       {/* filter input, export, import, & create short links buttons */}
-      <ZIonRow className='mt-1 border rounded-lg ion-align-items-center zaions__light_bg ion-padding'>
+      <ZIonRow
+        className={classNames(
+          'mt-1 border rounded-lg ion-align-items-center ion-justify-content-between zaions__light_bg',
+          {
+            'ion-padding': isMdScale,
+            'p-2': !isMdScale
+          }
+        )}>
         <ZIonCol
           sizeXl='4'
-          sizeLg='12'
+          sizeLg='5'
           sizeMd='12'
           sizeSm='12'
           sizeXs='12'>
@@ -890,6 +899,11 @@ const ZInpageMainContent: React.FC = () => {
         </ZIonCol>
 
         <ZIonCol
+          sizeXl='8'
+          sizeLg='6'
+          sizeMd='12'
+          sizeSm='12'
+          sizeXs='12'
           className={classNames({
             'justify-content-end': isXlScale,
             'justify-content-start mt-4': !isXlScale,
@@ -898,9 +912,10 @@ const ZInpageMainContent: React.FC = () => {
           <ZIonButtons
             className={classNames({
               'w-full': true,
-              'ion-justify-content-between': !isXlScale,
               'ion-justify-content-end gap-3': isXlScale,
-              block: !isSmScale
+              'ion-justify-content-end gap-2 flex': !isXlScale && isLgScale,
+              'mt-2 ion-justify-content-start gap-2': !isLgScale,
+              'gap-2 flex-col': !isSmScale
             })}>
             {/* Filter button */}
             {(workspaceId !== undefined || wsShareId !== undefined) &&
@@ -938,7 +953,7 @@ const ZInpageMainContent: React.FC = () => {
                 </ZIonButton>
               )}
 
-            {!isLgScale ? (
+            {/* {!isLgScale ? (
               <ZIonButton
                 fill='outline'
                 color='primary'
@@ -962,30 +977,32 @@ const ZInpageMainContent: React.FC = () => {
                 }}>
                 Open folders menu
               </ZIonButton>
-            ) : null}
+            ) : null} */}
 
             {/* Refetch data button */}
-            <ZIonButton
-              color='primary'
-              fill='outline'
-              height='39px'
-              expand={!isMdScale ? 'block' : undefined}
-              testingselector={
-                CONSTANTS.testingSelectors.linkInBio.listPage.refetchBtn
-              }
-              className={classNames({
-                'ms-auto': isXlScale,
-                'my-2': !isMdScale
-              })}
-              onClick={() => {
-                void invalidedQueries();
-              }}>
-              <ZIonIcon
-                slot='start'
-                icon={refresh}
-              />
-              Refetch
-            </ZIonButton>
+            {isSmScale && (
+              <ZIonButton
+                color='primary'
+                fill='outline'
+                height='39px'
+                expand={!isMdScale ? 'block' : undefined}
+                testingselector={
+                  CONSTANTS.testingSelectors.linkInBio.listPage.refetchBtn
+                }
+                className={classNames({
+                  'ms-auto': isXlScale,
+                  'my-2': !isMdScale
+                })}
+                onClick={() => {
+                  void invalidedQueries();
+                }}>
+                <ZIonIcon
+                  slot='start'
+                  icon={refresh}
+                />
+                Refetch
+              </ZIonButton>
+            )}
 
             <ZCan
               shareWSId={wsShareId}
@@ -1012,7 +1029,7 @@ const ZInpageMainContent: React.FC = () => {
               <ZIonButton
                 color='primary'
                 fill='solid'
-                height='39px'
+                height={isLgScale ? '39px' : '20px'}
                 expand={!isSmScale ? 'block' : undefined}
                 testingselector={
                   CONSTANTS.testingSelectors.linkInBio.listPage.createBtn
@@ -1022,10 +1039,11 @@ const ZInpageMainContent: React.FC = () => {
                     _cssClass: 'folder-modal-size'
                   });
                 }}
-                // className={classNames({
-                // 'my-2': true,
-                // })}
-              >
+                className={classNames({
+                  'my-2 normal-case': true,
+                  'text-xs w-[25%]': !isLgScale,
+                  'w-full': !isSmScale
+                })}>
                 Create a new Link In Bio
               </ZIonButton>
             </ZCan>
