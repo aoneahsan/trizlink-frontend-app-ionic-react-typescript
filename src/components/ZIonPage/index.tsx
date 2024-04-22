@@ -75,7 +75,7 @@ const ZIonPage: React.FC<ZaionsIonPageType> = ({
       ) : menu === PAGE_MENU.ADMIN_PANEL_SHORT_LINKS_FOLDERS_MENU ? (
         <AdminPanelShortLinksFolderSideMenu />
       ) : menu === PAGE_MENU.ADMIN_PANEL_LINK_IN_BIO_FOLDERS_MENU ? (
-        <AdminPanelLinkInBioFolderSideMenu workspaceId={workspaceId ?? ''} />
+        <AdminPanelLinkInBioFolderSideMenu />
       ) : menu === PAGE_MENU.ADMIN_PANEL_WORKSPACE_VIEW_FILTER_MENU ? (
         <ZWorkspaceViewPageFilterMenu />
       ) : (

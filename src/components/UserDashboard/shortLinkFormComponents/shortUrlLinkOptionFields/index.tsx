@@ -48,7 +48,7 @@ import {
   parseZQueryString,
   zAddUrlProtocol
 } from '@/utils/helpers';
-import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
+import { useZIonLoading, useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
@@ -71,6 +71,7 @@ import { messengerPlatformsBlockEnum } from '@/types/AdminPanel/index.type';
 import { NewShortLinkSelectTypeOption } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
 import { LinkTypeOptionsData } from '@/data/UserDashboard/Links';
 import ZCPhoneNumberInput from '@/components/CustomComponents/ZPhoneNumberInput';
+import { zFetchPageMetadata } from '@/utils/helpers/apiHelpers';
 
 /**
  * Style files Imports go down
@@ -105,6 +106,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
   } = useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
 
   const { isLgScale, isMdScale, isSmScale } = useZMediaQueryScale();
+  const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
 
   const [newShortLinkTypeOptionDataAtom, setNewShortLinkTypeOptionDataAtom] =
     useRecoilState(NewShortLinkSelectTypeOption);
@@ -312,6 +314,32 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
         }
       }
     } catch (error) {
+      reportCustomError(error);
+    }
+  };
+
+  const fetchMetaData = async () => {
+    try {
+      presentZIonLoader();
+      const _response = await zFetchPageMetadata(values?.target?.url ?? '');
+
+      console.log({ _response });
+      if (
+        _response !== undefined &&
+        _response !== null &&
+        typeof _response === 'object'
+      ) {
+        setFieldValue('title', _response?.title?.substring(0, 65));
+        setFieldValue(
+          'linkDescription',
+          _response?.meta_description?.substring(0, 300)
+        );
+        setFieldValue('featureImg.featureImgUrl', _response?.social_image);
+      }
+
+      dismissZIonLoader();
+    } catch (error) {
+      dismissZIonLoader();
       reportCustomError(error);
     }
   };
@@ -594,7 +622,10 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
                   'ion-no-margin normal-case': true,
                   'mt-3': !isMdScale,
                   'w-full': !isSmScale
-                })}>
+                })}
+                onClick={() => {
+                  void fetchMetaData();
+                }}>
                 {!isMdScale && <ZIonText>Refresh the preview</ZIonText>}
                 <ZIonIcon
                   icon={refreshCircleOutline}

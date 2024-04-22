@@ -45,6 +45,8 @@ const ZHomePageAccountBtnText = 'My Account';
 // we are using this in "FetchRequiredAppDataHOCAsync" component, here 1 means 1s in time, and we are using this to call the user "updateUserStatus" api on interval, with interval set to run on this variable * with 1000 (as to convert millisecond to seconds)
 const ZLastSeenInterval = 60;
 
+const showIncompleteFeaturesInMobileApp: boolean = false;
+
 const RouteParams = {
   editShortLinkIdParam: ':editLinkId',
   editLinkInBioIdParam: ':editLinkInBioId',
@@ -733,6 +735,16 @@ const testingSelectors = {
       notificationSettings: 'pp-notification-settings-btn',
       logout: 'pp-logout-btn',
       addNewCompanyAccount: 'pp-add-company-account-btn'
+    },
+
+    profileSheetModal: {
+      avatar: 'psm-user-avatar',
+      displayName: 'psm-display-name',
+      email: 'psm-user-email',
+      profileSettings: 'psm-profile-settings-btn',
+      notificationSettings: 'psm-notification-settings-btn',
+      logout: 'psm-logout-btn',
+      addNewCompanyAccount: 'psm-add-company-account-btn'
     }
   },
   // #endregion
@@ -1306,33 +1318,45 @@ const testingSelectors = {
   // #region top bar
   topBar: {
     goToWorkspacesBtn: 'tb-go-to-workspaces-btn',
+
     openInpageMenuBtn: 'tb-open-page-menu-btn',
+
     workspaceSwitcherBtn: 'tb-ws-btn', // top-bar-workspace-switcher-btn.
+
     workspaceSwitcherPopover: {
       singleWorkspace: 'tb-wsp-single-workspace', // top-bar-workspace-switcher-popover-...
+
       wsCreateBtn: 'tb-wsp-create-workspace-btn',
+
       noData: {
         ownedWS: {
           item: 'tb-wsp-owned-ws-no-data-item',
           text: 'tb-wsp-owned-ws-no-data-text'
         },
+
         shareWS: {
           item: 'tb-wsp-share-ws-no-data-item',
           text: 'tb-wsp-share-ws-no-data-text'
         }
       },
+
       actionPopover: {
         // top-bar-workspace-switcher-popover-action-popover-...
         editWorkspace: 'tb-wsp-ap-edit-btn',
         deleteWorkspace: 'tb-wsp-ap-delete-btn'
       }
     },
+
     teamInviteBtn: 'tb-invite-member-btn', // top-bar-.
+
     teamInviteModal: {
       closeModalBtn: 'tb-ti-modal-close-btn'
     },
+
     upgradeBtn: 'tb-upgrade-btn',
+
     helpBtn: 'tb-help-btn',
+
     helpPopover: {
       allSystemsOperations: 'tb-hcp-aso-btn',
       whatsNew: 'tb-hcp-whats-new-btn',
@@ -1343,13 +1367,27 @@ const testingSelectors = {
       iSOAppBtn: 'tb-hcp-iSO-app-btn',
       androidAppBtn: 'tb-hcp-android-app-btn'
     },
+
+    helpSheetModal: {
+      allSystemsOperations: 'tb-hsm-aso-btn',
+      whatsNew: 'tb-hsm-whats-new-btn',
+      suggestAnIdea: 'tb-hsm-suggest-idea-btn',
+      helpCenter: 'tb-hsm-help-center-btn',
+      price: 'tb-hsm-price-btn',
+      contactSupport: 'tb-hsm-cs-btn',
+      iSOAppBtn: 'tb-hsm-iSO-app-btn',
+      androidAppBtn: 'tb-hsm-android-app-btn'
+    },
+
     notificationBtn: 'tb-notification-btn',
+
     notificationPopover: {
       tabs: {
         approvalRequests: 'tb-np-approval-requests-btn',
         updates: 'tb-np-updates-btn',
         personal: 'tb-np-personal-btn'
       },
+
       markAllAsReadBtn: 'tb-np-masr-btn',
       settingsBtn: 'tb-np-settings-btn',
       refetchBtn: 'tb-np-refetch-btn',
@@ -1884,7 +1922,8 @@ const CONSTANTS = {
   ProductExternalURL,
   ZTooltipIds,
   testingSelectors,
-  testingSelectorsPrefix
+  testingSelectorsPrefix,
+  showIncompleteFeaturesInMobileApp
 } as const;
 
 export default CONSTANTS;

@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 
 /**
  * Packages Imports go down
@@ -20,6 +20,7 @@ import {
   ZIonButton,
   ZIonIcon,
   ZIonLabel,
+  ZIonModal,
   ZIonSkeletonText
 } from '@/components/ZIonComponents';
 import ZWorkspacesListPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/ListPopover';
@@ -45,6 +46,7 @@ import { API_URL_ENUM } from '@/utils/enums';
  * */
 import { type workspaceInterface } from '@/types/AdminPanel/workspace';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 
 /**
  * Recoil State Imports go down
@@ -77,7 +79,9 @@ const ZWorkspaceSwitcher: React.FC<{
   shareWSMemberId?: string;
   wsShareId?: string;
 }> = ({ workspaceId, shareWSMemberId, wsShareId }) => {
-  const { isLgScale } = useZMediaQueryScale();
+  const [isSheetModalOpen, setIsSheetModalOpen] = useState(false);
+  const { isLgScale, isMdScale } = useZMediaQueryScale();
+  const { zNavigatePushRoute } = useZNavigate();
   // const { workspaceId } = useParams<{ workspaceId?: string }>();
   // #region popovers.
   const { presentZIonPopover: presentZWorkspacesListPopover } = useZIonPopover(
@@ -135,6 +139,13 @@ const ZWorkspaceSwitcher: React.FC<{
 
   // #endregion
 
+  // #region Functions
+  const closeSheetModal = useCallback(() => {
+    setIsSheetModalOpen(() => false);
+  }, []);
+  // #endregion
+
+  // #region comp constants
   let isZFetching = isWorkspacesDataFetching;
 
   if (workspaceId !== undefined && workspaceId !== null) {
@@ -145,78 +156,103 @@ const ZWorkspaceSwitcher: React.FC<{
 
   if (isZFetching) return <ZWorkspaceSwitcherSkeleton />;
 
-  // #region comp constants
   const _style = {
     '--border-width': '1px'
   };
   // #endregion
 
   return (
-    <ZIonButton
-      fill='outline'
-      color='tertiary'
-      height={isLgScale ? '2.3rem' : '1.9rem'}
-      size={!isLgScale ? 'small' : 'default'}
-      testingselector={CONSTANTS.testingSelectors.topBar.workspaceSwitcherBtn}
-      onClick={(event: unknown) => {
-        presentZWorkspacesListPopover({
-          _event: event as Event,
-          _cssClass: 'z-workspaces-list-popover-size',
-          _dismissOnSelect: false
-        });
-      }}
-      className={classNames({
-        'ion-text-capitalize my-0 ion-no-margin zaions__bg_white mt-[2px]':
-          true,
-        'me-2 ms-2': false,
-        'me-0 ms-1 ion-no-padding': false
-      })}
-      style={_style}>
-      <ZUserAvatarButton
-        userAvatar={
-          workspaceId !== undefined && workspaceId !== null
-            ? currentWorkspaceData?.workspaceImage
-            : wsShareId !== undefined && wsShareId !== null
-            ? getShareWSInfoData?.workspaceImage
-            : ''
-        }
-        userAvatarUi={
-          workspaceId !== undefined && workspaceId !== null
-            ? {
-                name: currentWorkspaceData?.workspaceName
-              }
-            : wsShareId !== undefined && wsShareId !== null
-            ? {
-                name: getShareWSInfoData?.workspaceName
-              }
-            : undefined
-        }
+    <>
+      <ZIonButton
+        fill='outline'
+        color='tertiary'
+        height={isLgScale ? '2.3rem' : '1.9rem'}
+        size={!isLgScale ? 'small' : 'default'}
+        testingselector={CONSTANTS.testingSelectors.topBar.workspaceSwitcherBtn}
+        onClick={(event: unknown) => {
+          if (isMdScale) {
+            presentZWorkspacesListPopover({
+              _event: event as Event,
+              _cssClass: 'z-workspaces-list-popover-size',
+              _dismissOnSelect: false
+            });
+          } else {
+            setIsSheetModalOpen(() => true);
+          }
+        }}
         className={classNames({
-          'me-2': true,
-          'w-[20px!important] h-[20px!important]': !isLgScale,
-          'w-[30px!important] h-[30px!important]': isLgScale
+          'ion-text-capitalize my-0 ion-no-margin zaions__bg_white mt-[2px]':
+            true,
+          'me-2 ms-2': false,
+          'me-0 ms-1 ion-no-padding': false
         })}
-      />
-      <div
-        className={classNames({
-          'overflow-hidden line-clamp-1 ion-text-start': true,
-          'w-[3rem]': isLgScale,
-          'w-auto': !isLgScale
-        })}>
-        <ZIonLabel>
-          {workspaceId !== undefined && workspaceId !== null
-            ? currentWorkspaceData?.workspaceName
-            : wsShareId !== undefined && wsShareId !== null
-            ? getShareWSInfoData?.workspaceName
-            : null}
-        </ZIonLabel>
-      </div>
-      <ZIonIcon
-        icon={caretDown}
-        size='small'
-        className='ms-2 w-[.8rem] mb-[3px] h-[.8rem]'
-      />
-    </ZIonButton>
+        style={_style}>
+        <ZUserAvatarButton
+          userAvatar={
+            workspaceId !== undefined && workspaceId !== null
+              ? currentWorkspaceData?.workspaceImage
+              : wsShareId !== undefined && wsShareId !== null
+                ? getShareWSInfoData?.workspaceImage
+                : ''
+          }
+          userAvatarUi={
+            workspaceId !== undefined && workspaceId !== null
+              ? {
+                  name: currentWorkspaceData?.workspaceName
+                }
+              : wsShareId !== undefined && wsShareId !== null
+                ? {
+                    name: getShareWSInfoData?.workspaceName
+                  }
+                : undefined
+          }
+          className={classNames({
+            'me-2': isLgScale,
+            'w-[20px!important] h-[20px!important]': !isLgScale,
+            'w-[30px!important] h-[30px!important]': isLgScale
+          })}
+        />
+        {isLgScale ? (
+          <div
+            className={classNames({
+              'overflow-hidden line-clamp-1 ion-text-start': true,
+              'w-[3rem]': isLgScale,
+              'w-auto': !isLgScale
+            })}>
+            <ZIonLabel>
+              {workspaceId !== undefined && workspaceId !== null
+                ? currentWorkspaceData?.workspaceName
+                : wsShareId !== undefined && wsShareId !== null
+                  ? getShareWSInfoData?.workspaceName
+                  : null}
+            </ZIonLabel>
+          </div>
+        ) : null}
+        <ZIonIcon
+          icon={caretDown}
+          size='small'
+          className='ms-2 w-[.8rem] mb-[3px] h-[.8rem]'
+        />
+      </ZIonButton>
+
+      {/* Sheet Modal shown below Md screen */}
+      <ZIonModal
+        isOpen={isSheetModalOpen}
+        initialBreakpoint={1}
+        breakpoints={[0, 1]}
+        className='z-ion-height-auto'
+        onDidDismiss={() => {
+          closeSheetModal();
+        }}>
+        <ZWorkspacesListPopover
+          workspaceId={workspaceId ?? ''}
+          shareWSMemberId={shareWSMemberId}
+          wsShareId={wsShareId}
+          zNavigatePushRoute={zNavigatePushRoute}
+          dismissZIonPopover={closeSheetModal}
+        />
+      </ZIonModal>
+    </>
   );
 };
 

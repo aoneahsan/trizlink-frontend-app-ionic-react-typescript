@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Packages Imports
-import { IonToolbar } from '@ionic/react';
+import classNames from 'classnames';
 
 // Custom Imports
 import {
@@ -10,23 +10,32 @@ import {
   ZIonGrid,
   ZIonImg,
   ZIonRouterLink,
-  ZIonRow
+  ZIonRow,
+  ZIonToolbar
 } from '@/components/ZIonComponents';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 // Global Constants
 import { PRODUCT_NAME } from '@/utils/constants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Images
 import { ProductLogo } from '@/assets/images';
-import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 const ZaionsSecondaryHeader: React.FC<{ bottomHr?: boolean }> = ({
   bottomHr = true
 }) => {
+  const { isMdScale } = useZMediaQueryScale();
   return (
     <>
-      <IonToolbar className='ion-padding-horizontal'>
-        <ZIonGrid className='pb-2 mb-2'>
+      <ZIonToolbar
+        className={classNames({
+          'ion-padding-horizontal': isMdScale
+        })}>
+        <ZIonGrid
+          className={classNames('pb-2 mb-2', {
+            'ion-no-padding': !isMdScale
+          })}>
           <ZIonRow className='pt-1'>
             <ZIonCol className='ion-justify-content-start ion-align-items-center'>
               <ZIonRouterLink
@@ -35,22 +44,26 @@ const ZaionsSecondaryHeader: React.FC<{ bottomHr?: boolean }> = ({
                 <ZIonImg
                   src={ProductLogo}
                   alt={`${PRODUCT_NAME} Logo`}
-                  className='h-[3.5rem] w-max ms-5 ion-padding-horizontal pt-2 mb-1'
+                  className={classNames('h-[3.5rem] w-max pt-2 mb-1', {
+                    'ion-padding-horizontal ms-5': isMdScale
+                  })}
                 />
               </ZIonRouterLink>
               <ZIonRow className='p-0 m-0'>
-                <ZIonCol></ZIonCol>
                 <ZIonCol
-                  size='11.2'
-                  className='pt-0'>
+                  sizeXl='11.2'
+                  sizeLg='11.2'
+                  sizeMd='11.2'
+                  sizeSm='12'
+                  sizeXs='12'
+                  className='pt-0 mx-auto'>
                   {bottomHr && <hr className='mt-2 zaions__color_gray' />}
                 </ZIonCol>
-                <ZIonCol></ZIonCol>
               </ZIonRow>
             </ZIonCol>
           </ZIonRow>
         </ZIonGrid>
-      </IonToolbar>
+      </ZIonToolbar>
     </>
   );
 };

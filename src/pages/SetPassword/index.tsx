@@ -17,6 +17,7 @@ import {
   informationCircleOutline
 } from 'ionicons/icons';
 import { useSetRecoilState } from 'recoil';
+import dayjs from 'dayjs';
 
 /**
  * Custom Imports go down
@@ -38,6 +39,8 @@ import {
 } from '@/components/ZIonComponents';
 import ZIonPage from '@/components/ZIonPage';
 import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
+import Z403View from '@/components/Errors/403';
+import ZCountdown from '@/components/CustomComponents/ZCountDown';
 
 /**
  * Custom Hooks Imports go down
@@ -46,6 +49,7 @@ import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
 import { useZRQUpdateRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import { useZIonErrorAlert } from '@/ZaionsHooks/zionic-hooks';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Global Constants Imports go down
@@ -73,6 +77,7 @@ import {
 } from '@/utils/helpers';
 import MESSAGES from '@/utils/messages';
 import { showSuccessNotification } from '@/utils/notification';
+import { errorCodes } from '@/utils/constants/apiConstants';
 
 /**
  * Type Imports go down
@@ -103,10 +108,6 @@ import {
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import { ProductFavicon } from '@/assets/images';
-import { errorCodes } from '@/utils/constants/apiConstants';
-import Z403View from '@/components/Errors/403';
-import ZCountdown from '@/components/CustomComponents/ZCountDown';
-import dayjs from 'dayjs';
 
 /**
  * Component props type go down
@@ -135,6 +136,7 @@ const ZSetPasswordPage: React.FC = () => {
     tab: ZSetPasswordTabEnum.sendOptTab,
     resendOTPValidCheck: false
   });
+  const { isMdScale, isSmScale } = useZMediaQueryScale();
 
   useEffect(() => {
     try {
@@ -243,9 +245,21 @@ const ZSetPasswordPage: React.FC = () => {
               <div className='w-full mb-5 ion-text-center'>
                 <ZIonImg
                   src={ProductFavicon}
-                  className='w-[6rem] h-[6rem] mx-auto mb-6'
+                  className={classNames('mx-auto', {
+                    'w-[6rem] h-[6rem] mb-6': isMdScale,
+                    'w-[4rem] h-[4rem] mb-4': !isMdScale && isSmScale,
+                    'w-[3.5rem] h-[3.5rem] mb-2': !isSmScale
+                  })}
                 />
-                <ZIonText className='block mb-3 text-2xl font-bold ion-text-center'>
+                <ZIonText
+                  className={classNames(
+                    'block mb-3 font-bold ion-text-center',
+                    {
+                      'text-2xl': isMdScale,
+                      'text-xl': !isMdScale && isSmScale,
+                      'text-lg': !isSmScale
+                    }
+                  )}>
                   Setup Account Password
                 </ZIonText>
 
@@ -505,8 +519,8 @@ const ZSendOtpTab: React.FC = () => {
               errors?.emailAddress?.trim()?.length > 0
               ? errors.emailAddress
               : values.isEmailAddressApiError
-              ? values?.emailAddressApiErrorText
-              : undefined
+                ? values?.emailAddressApiErrorText
+                : undefined
             : undefined
         }
         className={classNames({

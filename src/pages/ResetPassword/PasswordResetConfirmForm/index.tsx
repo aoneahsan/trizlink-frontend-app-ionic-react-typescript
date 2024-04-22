@@ -5,6 +5,9 @@ import React, { useEffect, useState } from 'react';
 import { Formik, useFormikContext } from 'formik';
 import classNames from 'classnames';
 import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
+import { AxiosError } from 'axios';
+import { useSetRecoilState } from 'recoil';
+import dayjs from 'dayjs';
 
 // Custom Imports
 import {
@@ -41,15 +44,11 @@ import {
   zStringify
 } from '@/utils/helpers';
 import CONSTANTS, { LOCALSTORAGE_KEYS } from '@/utils/constants';
-
-// Images
-import { ProductFavicon } from '@/assets/images';
 import { useZRQUpdateRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import {
   showErrorNotification,
   showSuccessNotification
 } from '@/utils/notification';
-import { AxiosError } from 'axios';
 import { type ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { ZErrorCodeEnum } from '@/utils/enums/ErrorsCodes';
 import { reportCustomError, ZCustomError } from '@/utils/customErrorType';
@@ -59,14 +58,16 @@ import {
   type UserAccountType
 } from '@/types/UserAccount/index.type';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
-import { useSetRecoilState } from 'recoil';
 import {
   ZaionsAuthTokenData,
   ZaionsUserAccountRStateAtom
 } from '@/ZaionsStore/UserAccount/index.recoil';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import ZCountdown from '@/components/CustomComponents/ZCountDown';
-import dayjs from 'dayjs';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+
+// Images
+import { ProductFavicon } from '@/assets/images';
 
 // Style
 
@@ -77,6 +78,7 @@ const ZaionsPasswordResetConfirm: React.FC = () => {
     OTPCodeValidTill?: string;
     resendOTPValidCheck?: boolean;
   }>();
+  const { isMdScale, isSmScale } = useZMediaQueryScale();
 
   useEffect(() => {
     try {
@@ -125,7 +127,7 @@ const ZaionsPasswordResetConfirm: React.FC = () => {
     <ZIonPage>
       <ZIonContent fullscreen>
         <ZaionsSecondaryHeader />
-        <ZIonGrid className=''>
+        <ZIonGrid>
           <Formik
             initialValues={formikInitialValues}
             // Validations of sign up form fields
@@ -183,20 +185,36 @@ const ZaionsPasswordResetConfirm: React.FC = () => {
                       <div className='w-full ion-text-center'>
                         <ZIonImg
                           src={ProductFavicon}
-                          className='w-[6rem] h-[6rem] mx-auto mb-6'
+                          className={classNames('mx-auto', {
+                            'w-[6rem] h-[6rem] mb-6': isMdScale,
+                            'w-[4rem] h-[4rem] mb-4': !isMdScale && isSmScale,
+                            'w-[3.5rem] h-[3.5rem] mb-2': !isSmScale
+                          })}
                         />
 
-                        <ZIonText className='block mb-3 text-2xl font-bold'>
+                        <ZIonText
+                          className={classNames(
+                            'block mb-3 font-bold ion-text-center',
+                            {
+                              'text-2xl': isMdScale,
+                              'text-xl': !isMdScale && isSmScale,
+                              'text-lg': !isSmScale
+                            }
+                          )}>
                           Forget your password
                         </ZIonText>
-                        <ZIonText className='block'>
+                        <ZIonText
+                          className={classNames('block', {
+                            'text-sm': !isSmScale
+                          })}>
                           {values.tab === ZSetPasswordTabEnum.sendOptTab
                             ? 'It happens to the best of us. Enter your email to request a OTP (one-time-password).'
                             : values.tab === ZSetPasswordTabEnum.confirmOptTab
-                            ? 'Please entry OTP (one-time-password) that has sent to your email.'
-                            : values.tab === ZSetPasswordTabEnum.newPasswordTab
-                            ? 'Entry your new password.'
-                            : null}
+                              ? 'Please entry OTP (one-time-password) that has sent to your email.'
+                              : values.tab ===
+                                  ZSetPasswordTabEnum.newPasswordTab
+                                ? 'Entry your new password.'
+                                : null}
                         </ZIonText>
                       </div>
                     </ZIonCol>
@@ -210,7 +228,7 @@ const ZaionsPasswordResetConfirm: React.FC = () => {
                       sizeLg='5'
                       sizeMd='6.2'
                       sizeSm='8.2'
-                      sizeXs='11.5'>
+                      sizeXs='11.9'>
                       {values.tab === ZSetPasswordTabEnum.sendOptTab ? (
                         <ZSendOtpTab />
                       ) : values.tab === ZSetPasswordTabEnum.confirmOptTab ? (
@@ -339,8 +357,8 @@ const ZSendOtpTab: React.FC = () => {
             ? errors.emailAddress?.trim() !== ''
               ? errors.emailAddress
               : values.isEmailAddressApiError
-              ? values?.emailAddressApiErrorText
-              : undefined
+                ? values?.emailAddressApiErrorText
+                : undefined
             : undefined
         }
         className={classNames({

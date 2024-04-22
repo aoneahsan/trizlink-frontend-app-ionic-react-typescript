@@ -66,6 +66,7 @@ import {
   type workspaceInterface,
   type wsShareInterface
 } from '@/types/AdminPanel/workspace';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 const ZWorkspacesCard = lazy(
   () => import('@/components/WorkspacesComponents/ListCard')
@@ -113,12 +114,13 @@ const ZWorkspaceListPage: React.FC = () => {
     sharedFavoriteWorkspaces: [],
     ownedFavoriteWorkspaces: []
   });
-  const { presentZIonModal: presentZWorkspaceCreateModal } = useZIonModal(
-    ZAddNewWorkspaceModal
-  );
 
+  // #region Custom hooks.
   const { zInvalidateReactQueries } = useZInvalidateReactQueries();
+  const { isMdScale, isSmScale } = useZMediaQueryScale();
+  // #endregion
 
+  // #region APIS requests.
   // Get workspaces data from backend.
   const { data: WorkspacesData, isFetching: isWorkspacesDataFetching } =
     useZRQGetRequest<workspaceInterface[]>({
@@ -132,7 +134,15 @@ const ZWorkspaceListPage: React.FC = () => {
       _url: API_URL_ENUM.ws_share_list,
       _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN]
     });
+  // #endregion
 
+  // #region Popovers & Modals.
+  const { presentZIonModal: presentZWorkspaceCreateModal } = useZIonModal(
+    ZAddNewWorkspaceModal
+  );
+  // #endregion
+
+  // #region useEffects
   useEffect(() => {
     const _sharedFavoriteWorkspaces = WSShareData?.filter(
       el => el?.isFavorite === 1
@@ -156,7 +166,9 @@ const ZWorkspaceListPage: React.FC = () => {
       }));
     }
   }, [WorkspacesData, WSShareData]);
+  // #endregion
 
+  // #region Functions.
   const zRefetchDataHandler = async (): Promise<void> => {
     try {
       await zInvalidateReactQueries([
@@ -181,6 +193,7 @@ const ZWorkspaceListPage: React.FC = () => {
       reportCustomError(error);
     }
   };
+  // #endregion
 
   const isZFetching = isWorkspacesDataFetching && isWSShareDataFetching;
 
@@ -196,8 +209,8 @@ const ZWorkspaceListPage: React.FC = () => {
             {isWorkspacesDataFetching
               ? 'Fetching workspaces'
               : isWSShareDataFetching
-              ? 'Fetching shared workspaces'
-              : ''}
+                ? 'Fetching shared workspaces'
+                : ''}
           </div>
         </ZIonContent>
       ) : (
@@ -223,6 +236,7 @@ const ZWorkspaceListPage: React.FC = () => {
                 }>
                 <ZAdminPanelTopBar
                   showRefreshBtn={true}
+                  showWSSwitcherBtn={false}
                   refreshBtnOnClick={() => {
                     void zRefetchDataHandler();
                   }}
@@ -236,12 +250,20 @@ const ZWorkspaceListPage: React.FC = () => {
                   CONSTANTS.testingSelectors.workspace.listPage
                     .favoriteWorkspaces
                 }>
-                <ZIonRow className='px-4 py-5'>
+                <ZIonRow
+                  className={classNames({
+                    'px-4 py-5': isMdScale,
+                    'p-2': !isMdScale && isSmScale,
+                    'py-2': !isSmScale
+                  })}>
                   <ZIonCol
                     size='12'
                     className='ps-3'>
                     <ZIonTitle
-                      className='font-bold tracking-wider ion-no-padding'
+                      className={classNames({
+                        'font-bold tracking-wider ion-no-padding': true,
+                        'ion-text-center': !isSmScale
+                      })}
                       color='dark'>
                       Favorite workspaces
                     </ZIonTitle>
@@ -253,14 +275,21 @@ const ZWorkspaceListPage: React.FC = () => {
                   ]?.length === 0 ? (
                     <ZIonCol
                       size='12'
-                      className='flex flex-col py-4 mt-2 rounded-lg ion-align-items-center ion-justify-content-center'
+                      className={classNames({
+                        'flex flex-col pt-4 rounded-lg ion-align-items-center ion-justify-content-center':
+                          true,
+                        'mt-2 pb-4': isMdScale
+                      })}
                       testingselector={
                         CONSTANTS.testingSelectors.workspace.listPage.fwEmpty
                           .col
                       }>
                       <ZIonIcon
                         icon={starOutline}
-                        className='w-10 h-10'
+                        className={classNames({
+                          'w-10 h-10': isMdScale,
+                          'w-8 h-8': !isMdScale
+                        })}
                         testingselector={
                           CONSTANTS.testingSelectors.workspace.listPage.fwEmpty
                             .icon
@@ -329,12 +358,20 @@ const ZWorkspaceListPage: React.FC = () => {
                 testingselector={
                   CONSTANTS.testingSelectors.workspace.listPage.ownedWorkspaces
                 }>
-                <ZIonRow className='px-4 py-5'>
+                <ZIonRow
+                  className={classNames({
+                    'px-4 py-5': isMdScale,
+                    'p-2': !isMdScale && isSmScale,
+                    'py-2': !isSmScale
+                  })}>
                   <ZIonCol
                     size='12'
                     className='ps-3'>
                     <ZIonTitle
-                      className='font-bold tracking-wider ion-no-padding'
+                      className={classNames({
+                        'font-bold tracking-wider ion-no-padding': true,
+                        'ion-text-center': !isSmScale
+                      })}
                       color='dark'>
                       Owned workspaces
                     </ZIonTitle>
@@ -343,14 +380,22 @@ const ZWorkspaceListPage: React.FC = () => {
                   {WorkspacesData?.length === 0 && (
                     <ZIonCol
                       size='12'
-                      className='flex flex-col py-4 mt-2 rounded-lg ion-align-items-center ion-justify-content-center'
+                      className={classNames({
+                        'flex flex-col pt-4 rounded-lg ion-align-items-center ion-justify-content-center':
+                          true,
+                        'mt-2 pb-4': isMdScale
+                      })}
                       testingselector={
                         CONSTANTS.testingSelectors.workspace.listPage.owEmpty
                           .col
                       }>
                       <ZIonButton
-                        className='ion-no-padding ion-no-margin rounded-full overflow-hidden w-[3rem]'
-                        height='3rem'
+                        className={classNames({
+                          'ion-no-padding ion-no-margin rounded-full overflow-hidden':
+                            true,
+                          'w-[3rem] h-[3rem]': isMdScale,
+                          'w-[2.3rem] h-[2rem]': !isMdScale
+                        })}
                         color='tertiary'
                         onClick={() => {
                           presentZWorkspaceCreateModal({
@@ -382,7 +427,7 @@ const ZWorkspaceListPage: React.FC = () => {
                       </ZIonText>
 
                       <ZIonText
-                        className='mt-1 tracking-wider'
+                        className='mt-1 tracking-wider ion-text-center'
                         color='dark'
                         testingselector={
                           CONSTANTS.testingSelectors.workspace.listPage.owEmpty
@@ -503,12 +548,20 @@ const ZWorkspaceListPage: React.FC = () => {
                     CONSTANTS.testingSelectors.workspace.listPage
                       .shareWorkspaces
                   }>
-                  <ZIonRow className='px-4 py-5'>
+                  <ZIonRow
+                    className={classNames({
+                      'px-4 py-5': isMdScale,
+                      'p-2': !isMdScale && isSmScale,
+                      'py-2': !isSmScale
+                    })}>
                     <ZIonCol
                       size='12'
                       className='ps-3'>
                       <ZIonTitle
-                        className='font-bold tracking-wider ion-no-padding'
+                        className={classNames({
+                          'font-bold tracking-wider ion-no-padding': true,
+                          'ion-text-center': !isSmScale
+                        })}
                         color='dark'>
                         Shared workspaces
                       </ZIonTitle>
@@ -519,14 +572,21 @@ const ZWorkspaceListPage: React.FC = () => {
                     {WSShareData?.length === 0 && (
                       <ZIonCol
                         size='12'
-                        className='flex flex-col py-4 mt-2 rounded-lg ion-align-items-center ion-justify-content-center'
+                        className={classNames({
+                          'flex flex-col pt-4 rounded-lg ion-align-items-center ion-justify-content-center':
+                            true,
+                          'mt-2 pb-4': isMdScale
+                        })}
                         testingselector={
                           CONSTANTS.testingSelectors.workspace.listPage.swEmpty
                             .col
                         }>
                         <ZIonIcon
                           icon={gitNetworkOutline}
-                          className='w-10 h-10'
+                          className={classNames({
+                            'w-10 h-10': isMdScale,
+                            'w-8 h-8': !isMdScale
+                          })}
                           testingselector={
                             CONSTANTS.testingSelectors.workspace.listPage
                               .swEmpty.icon
@@ -534,7 +594,7 @@ const ZWorkspaceListPage: React.FC = () => {
                         />
 
                         <ZIonText
-                          className='mt-3 tracking-wider'
+                          className='mt-3 tracking-wider ion-text-center'
                           color='dark'
                           testingselector={
                             CONSTANTS.testingSelectors.workspace.listPage

@@ -519,6 +519,8 @@ export const useZIonModal = <A extends object>(
         onDidDismiss: _onDidDismiss,
         leaveAnimation: _leaveAnimation,
         enterAnimation: _enterAnimation
+        // initialBreakpoint: 1,
+        // breakpoints: [0, 1]
       });
     };
     return { presentZIonModal, dismissZIonModal };

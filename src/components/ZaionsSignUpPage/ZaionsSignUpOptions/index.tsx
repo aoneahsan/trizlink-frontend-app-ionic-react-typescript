@@ -3,6 +3,7 @@ import React from 'react';
 
 // Packages Imports
 import { logoGoogle } from 'ionicons/icons';
+import classNames from 'classnames';
 
 // Custom Imports
 import {
@@ -16,6 +17,7 @@ import {
 } from '@/components/ZIonComponents';
 
 // Global Constants
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import CONSTANTS from '@/utils/constants';
 import { ProductFavicon } from '@/assets/images';
@@ -23,6 +25,7 @@ import { ProductFavicon } from '@/assets/images';
 // Style
 
 const ZaionsSignUpOptions: React.FC = () => {
+  const { isMdScale, isSmScale } = useZMediaQueryScale();
   return (
     <>
       <ZIonRow>
@@ -36,10 +39,19 @@ const ZaionsSignUpOptions: React.FC = () => {
           <div className='w-full ion-text-center'>
             <ZIonImg
               src={ProductFavicon}
-              className='w-[6rem] h-[6rem] mx-auto mb-6'
+              className={classNames('mx-auto', {
+                'w-[6rem] h-[6rem] mb-6': isMdScale,
+                'w-[4rem] h-[4rem] mb-4': !isMdScale && isSmScale,
+                'w-[3.5rem] h-[3.5rem] mb-2': !isSmScale
+              })}
             />
 
-            <ZIonText className='block mb-3 text-2xl font-bold'>
+            <ZIonText
+              className={classNames('block mb-3 font-bold ion-text-center', {
+                'text-2xl': isMdScale,
+                'text-xl': !isMdScale && isSmScale,
+                'text-lg': !isSmScale
+              })}>
               Sign up and start shortening
             </ZIonText>
             <ZIonText className='block'>

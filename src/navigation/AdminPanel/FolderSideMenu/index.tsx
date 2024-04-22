@@ -169,7 +169,12 @@ const AdminPanelFoldersSidebarMenu: React.FC<
             'text-xl': isLgScale,
             'text-lg': !isLgScale
           })}>
-          Short links folders
+          {state === folderState.shortlink
+            ? 'Short links'
+            : state === folderState.linkInBio
+              ? 'Link-in-bio'
+              : ''}{' '}
+          folders
         </ZIonTitle>
 
         <ZIonIcon
@@ -177,9 +182,7 @@ const AdminPanelFoldersSidebarMenu: React.FC<
           className='w-6 h-6 pt-[1px] cursor-pointer'
           onClick={() => {
             void (async () => {
-              await menuController.close(
-                CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID
-              );
+              await menuController.close(menuId);
             })();
           }}
         />
@@ -207,13 +210,13 @@ const AdminPanelFoldersSidebarMenu: React.FC<
                       ? state === folderState.shortlink
                         ? [shareWSPermissionEnum.viewAny_sws_sl_folder]
                         : state === folderState.linkInBio
-                        ? [shareWSPermissionEnum.viewAny_sws_lib_folder]
-                        : []
+                          ? [shareWSPermissionEnum.viewAny_sws_lib_folder]
+                          : []
                       : state === folderState.shortlink
-                      ? [permissionsEnum.viewAny_sl_folder]
-                      : state === folderState.linkInBio
-                      ? [permissionsEnum.viewAny_lib_folder]
-                      : []
+                        ? [permissionsEnum.viewAny_sl_folder]
+                        : state === folderState.linkInBio
+                          ? [permissionsEnum.viewAny_lib_folder]
+                          : []
                   }>
                   <ZIonItem
                     minHeight='2rem'
@@ -323,13 +326,13 @@ const AdminPanelFoldersSidebarMenu: React.FC<
                       ? state === folderState.shortlink
                         ? [shareWSPermissionEnum.viewAny_sws_sl_folder]
                         : state === folderState.linkInBio
-                        ? [shareWSPermissionEnum.viewAny_sws_lib_folder]
-                        : []
+                          ? [shareWSPermissionEnum.viewAny_sws_lib_folder]
+                          : []
                       : state === folderState.shortlink
-                      ? [permissionsEnum.viewAny_sl_folder]
-                      : state === folderState.linkInBio
-                      ? [permissionsEnum.viewAny_lib_folder]
-                      : []
+                        ? [permissionsEnum.viewAny_sl_folder]
+                        : state === folderState.linkInBio
+                          ? [permissionsEnum.viewAny_lib_folder]
+                          : []
                   }>
                   {foldersData !== undefined ? (
                     <ZIonReorderGroup
@@ -349,19 +352,19 @@ const AdminPanelFoldersSidebarMenu: React.FC<
                               ? state === folderState.shortlink
                                 ? [shareWSPermissionEnum.view_sws_sl_folder]
                                 : state === folderState.linkInBio
-                                ? [shareWSPermissionEnum.view_sws_lib_folder]
-                                : []
+                                  ? [shareWSPermissionEnum.view_sws_lib_folder]
+                                  : []
                               : state === folderState.shortlink
-                              ? [permissionsEnum.view_sl_folder]
-                              : state === folderState.linkInBio
-                              ? [permissionsEnum.view_lib_folder]
-                              : []
+                                ? [permissionsEnum.view_sl_folder]
+                                : state === folderState.linkInBio
+                                  ? [permissionsEnum.view_lib_folder]
+                                  : []
                           }>
                           <ZIonItem
                             key={el.id}
                             data-folder-id={el.id}
                             minHeight='2.3rem'
-                            className={`cursor-pointer zaions-short-link-folder-${
+                            className={`cursor-pointer zaions-folder-${
                               state != null || ''
                             }`}>
                             <ZIonLabel
@@ -447,13 +450,13 @@ const AdminPanelFoldersSidebarMenu: React.FC<
                   ? state === folderState.shortlink
                     ? [shareWSPermissionEnum.create_sws_sl_folder]
                     : state === folderState.linkInBio
-                    ? [shareWSPermissionEnum.create_sws_lib_folder]
-                    : []
+                      ? [shareWSPermissionEnum.create_sws_lib_folder]
+                      : []
                   : state === folderState.shortlink
-                  ? [permissionsEnum.create_sl_folder]
-                  : state === folderState.linkInBio
-                  ? [permissionsEnum.create_lib_folder]
-                  : []
+                    ? [permissionsEnum.create_sl_folder]
+                    : state === folderState.linkInBio
+                      ? [permissionsEnum.create_lib_folder]
+                      : []
               }>
               <ZIonButton
                 className='mt-3 mb-2 ion-text-capitalize ion-no-margin ion-no-padding'
@@ -468,7 +471,7 @@ const AdminPanelFoldersSidebarMenu: React.FC<
                     formMode: FormMode.ADD
                   }));
                   presentFolderModal({
-                    _cssClass: 'link-in-bio-folder-modal'
+                    _cssClass: 'folder-modal-size'
                   });
                 }}>
                 New Folder
@@ -492,13 +495,13 @@ const AdminPanelFoldersSidebarMenu: React.FC<
             ? state === folderState.shortlink
               ? [shareWSPermissionEnum.sort_sws_sl_folder]
               : state === folderState.linkInBio
-              ? [shareWSPermissionEnum.sort_sws_lib_folder]
-              : []
+                ? [shareWSPermissionEnum.sort_sws_lib_folder]
+                : []
             : state === folderState.shortlink
-            ? [permissionsEnum.sort_sl_folder]
-            : state === folderState.linkInBio
-            ? [permissionsEnum.sort_lib_folder]
-            : []
+              ? [permissionsEnum.sort_sl_folder]
+              : state === folderState.linkInBio
+                ? [permissionsEnum.sort_lib_folder]
+                : []
         }>
         <ZIonFooter className='py-1'>
           {showSaveReorderButton !== undefined && (

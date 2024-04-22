@@ -9,6 +9,7 @@ import React from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import { lockClosedOutline, timeOutline } from 'ionicons/icons';
+import classNames from 'classnames';
 
 /**
  * Custom Imports go down
@@ -17,14 +18,12 @@ import { lockClosedOutline, timeOutline } from 'ionicons/icons';
 import {
   ZIonBadge,
   ZIonCol,
-  ZIonGrid,
   ZIonRow,
   ZIonText
 } from '@/components/ZIonComponents';
 import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 import ZWorkspaceApprovalCards from '@/components/WorkspacesComponents/ApprovalCards';
 import ZWorkspaceApprovalToggler from '@/components/WorkspacesComponents/ApprovalToggler';
-import CONSTANTS from '@/utils/constants';
 import ZUserAvatarButton from '@/components/WorkspacesComponents/userButton';
 import SupportOnPatreon from '@/components/SupportOnPatreon';
 
@@ -32,36 +31,13 @@ import SupportOnPatreon from '@/components/SupportOnPatreon';
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-
-/**
- * Type Imports go down
- * ? Like import of type or type of some recoil state or any external type import is a Type import
- * */
-
-/**
- * Recoil State Imports go down
- * ? Import of recoil states is a Recoil State import
- * */
-
-/**
- * Style files Imports go down
- * ? Import of style sheet is a style import
- * */
-
-/**
- * Images Imports go down
- * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
- * */
-
-/**
- * Component props type go down
- * ? Like if you have a type for props it should be please Down
- * */
+import CONSTANTS from '@/utils/constants';
 
 /**
  * Functional Component
@@ -70,18 +46,37 @@ import SupportOnPatreon from '@/components/SupportOnPatreon';
  * */
 
 const ZApprovalTab: React.FC<{ workspaceId: string }> = ({ workspaceId }) => {
+  // #region Custom hooks
+  const { isSmScale, isMdScale } = useZMediaQueryScale();
+  // #endregion
+
   return (
-    <ZIonGrid className='w-full h-full pt-6'>
+    <div
+      className={classNames({
+        'w-full overflow-y-auto zaions_pretty_scrollbar': true,
+        'h-[36.5rem]': isSmScale,
+        'h-[44rem] pb-10': !isSmScale
+      })}>
       <SupportOnPatreon />
       {/* Cards */}
       <ZWorkspaceApprovalCards workspaceId={workspaceId} />
 
       {/*  */}
       <ZIonRow className='mt-4 ion-justify-content-center'>
-        <ZIonCol size='5'>
-          <ZIonText className='block text-xl'>
+        <ZIonCol
+          sizeXl='5'
+          sizeLg='5'
+          sizeMd='7'
+          sizeSm='11'
+          sizeXs='11.5'>
+          <ZIonText
+            className={classNames({
+              'block text-xl': true,
+              'ion-text-center': !isMdScale
+            })}>
             Who can approve content?
           </ZIonText>
+
           <ZIonRow>
             <ZIonCol
               className='flex gap-2 ion-align-items-center ps-0'
@@ -126,7 +121,7 @@ const ZApprovalTab: React.FC<{ workspaceId: string }> = ({ workspaceId }) => {
           />
         </ZIonCol>
       </ZIonRow>
-    </ZIonGrid>
+    </div>
   );
 };
 

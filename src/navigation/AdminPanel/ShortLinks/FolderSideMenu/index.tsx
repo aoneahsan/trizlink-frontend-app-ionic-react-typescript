@@ -165,7 +165,7 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
 
     setTimeout(() => {
       const _shortLinksFoldersEls = document.querySelectorAll(
-        `.zaions-short-link-folder-${folderState.shortlink}`
+        `.zaions-folder-${folderState.shortlink}`
       );
       const _shortLinksFoldersIds: string[] = [];
       for (let i = 0; i < _shortLinksFoldersEls.length; i++) {
@@ -245,10 +245,10 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
         (shortLinksFoldersData !== undefined || shortLinksFoldersData !== null)
           ? (shortLinksFoldersData as LinkFolderType[])
           : wsShareId !== undefined &&
-            (swsShortLinksFoldersData !== undefined ||
-              swsShortLinksFoldersData !== null)
-          ? (swsShortLinksFoldersData as LinkFolderType[])
-          : []
+              (swsShortLinksFoldersData !== undefined ||
+                swsShortLinksFoldersData !== null)
+            ? (swsShortLinksFoldersData as LinkFolderType[])
+            : []
       }
       folderActionHandlerFn={(event: unknown) => {
         presentFolderActionIonPopover({

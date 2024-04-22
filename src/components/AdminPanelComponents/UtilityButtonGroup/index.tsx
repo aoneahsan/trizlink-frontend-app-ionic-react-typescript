@@ -9,12 +9,7 @@ import React from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import { useParams } from 'react-router';
-import {
-  helpCircleOutline,
-  notificationsOutline,
-  openOutline,
-  trendingUpOutline
-} from 'ionicons/icons';
+import { openOutline, trendingUpOutline } from 'ionicons/icons';
 
 /**
  * Custom Imports go down
@@ -27,36 +22,13 @@ import ZInviteButton from '../InviteButton';
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
+import { useZHybridDeviceIsMobile } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-
-/**
- * Type Imports go down
- * ? Like import of type or type of some recoil state or any external type import is a Type import
- * */
-
-/**
- * Recoil State Imports go down
- * ? Import of recoil states is a Recoil State import
- * */
-
-/**
- * Style files Imports go down
- * ? Import of style sheet is a style import
- * */
-
-/**
- * Images Imports go down
- * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
- * */
-
-/**
- * Component props type go down
- * ? Like if you have a type for props it should be please Down
- * */
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Functional Component
@@ -66,34 +38,38 @@ import ZInviteButton from '../InviteButton';
 
 const ZUtilityButtonGroup: React.FC = () => {
   const { workspaceId } = useParams<{ workspaceId?: string }>();
+  const { value: isHybridDevice } = useZHybridDeviceIsMobile();
 
   return (
     <div>
-      <ZIonButton
-        className='mt-2 ion-no-margin ion-no-padding'
-        minHeight='1.9rem'
-        expand='block'
-        color='secondary'>
-        <ZIonIcon
-          icon={trendingUpOutline}
-          className='me-1'
-        />
-        <ZIonText className='mt-1 text-xs'>Upgrade</ZIonText>
-      </ZIonButton>
+      {!isHybridDevice ? (
+        <ZIonButton
+          className='mt-2 ion-no-margin ion-no-padding'
+          minHeight='1.9rem'
+          expand='block'
+          color='secondary'>
+          <ZIonIcon
+            icon={trendingUpOutline}
+            className='me-1'
+          />
+          <ZIonText className='mt-1 text-xs'>Upgrade</ZIonText>
+        </ZIonButton>
+      ) : null}
 
       <ZIonButton
         className='mt-2 ion-no-margin ion-no-padding'
         minHeight='1.9rem'
         expand='block'
-        color='primary'>
+        color='primary'
+        routerLink={ZaionsRoutes.AdminPanel.Workspaces.Main}>
         <ZIonIcon
           icon={openOutline}
           className='me-1'
         />
-        <ZIonText className='mt-1 text-xs'>Go to workspace</ZIonText>
+        <ZIonText className='mt-1 text-xs'>Go to workspaces</ZIonText>
       </ZIonButton>
 
-      <ZIonButton
+      {/* <ZIonButton
         className='mt-2 ion-no-margin ion-no-padding'
         minHeight='1.9rem'
         expand='block'
@@ -103,9 +79,9 @@ const ZUtilityButtonGroup: React.FC = () => {
           className='me-1'
         />
         <ZIonText className='mt-1 text-xs'>Help</ZIonText>
-      </ZIonButton>
+      </ZIonButton> */}
 
-      <ZIonButton
+      {/* <ZIonButton
         className='mt-2 ion-no-margin ion-no-padding'
         minHeight='1.9rem'
         expand='block'
@@ -115,7 +91,7 @@ const ZUtilityButtonGroup: React.FC = () => {
           className='me-1'
         />
         <ZIonText className='mt-1 text-xs'>Notification</ZIonText>
-      </ZIonButton>
+      </ZIonButton> */}
 
       <ZInviteButton
         className='mt-2 ion-no-margin ion-no-padding'

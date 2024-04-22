@@ -1044,9 +1044,9 @@ const AdminCreateNewLinkPages: React.FC = () => {
       selectedShortLink?.tags !== undefined && selectedShortLink?.tags !== null
         ? (selectedShortLink?.tags as string[])
         : swsSelectedShortLink?.tags !== undefined &&
-          swsSelectedShortLink?.tags !== null
-        ? (swsSelectedShortLink?.tags as string[])
-        : [],
+            swsSelectedShortLink?.tags !== null
+          ? (swsSelectedShortLink?.tags as string[])
+          : [],
     linkExpiration: {
       enabled:
         (selectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface)
@@ -1157,28 +1157,28 @@ const AdminCreateNewLinkPages: React.FC = () => {
               ? isSelectedShortLinkFetching
                 ? 'Fetching current short link data'
                 : isPixelAccountsDataFetching
-                ? 'Fetching workspace pixels'
-                : isUTMTagsDataFetching
-                ? 'Fetching workspace utm tags'
-                : isShortLinksFoldersDataFetching
-                ? 'Fetching workspace short links folders'
-                : null
+                  ? 'Fetching workspace pixels'
+                  : isUTMTagsDataFetching
+                    ? 'Fetching workspace utm tags'
+                    : isShortLinksFoldersDataFetching
+                      ? 'Fetching workspace short links folders'
+                      : null
               : (shareWSMemberId?.trim()?.length ?? 0) > 0 &&
-                (wsShareId?.trim()?.length ?? 0) > 0
-              ? isGetMemberRolePermissionsFetching
-                ? 'Getting & setting your permissions in this workspace'
-                : isSWSFetching
-                ? 'Setting share workspace data'
-                : isSWSSelectedShortLinkFetching
-                ? 'Fetching share workspace short links'
-                : isSWSPixelAccountsDataFetching
-                ? 'Fetching share workspace pixels'
-                : isSWSUTMTagsDataFetching
-                ? 'Fetching share workspace utm tags'
-                : isSWSShortLinksFoldersDataFetching
-                ? 'Fetching share workspace short links folders'
-                : null
-              : null}
+                  (wsShareId?.trim()?.length ?? 0) > 0
+                ? isGetMemberRolePermissionsFetching
+                  ? 'Getting & setting your permissions in this workspace'
+                  : isSWSFetching
+                    ? 'Setting share workspace data'
+                    : isSWSSelectedShortLinkFetching
+                      ? 'Fetching share workspace short links'
+                      : isSWSPixelAccountsDataFetching
+                        ? 'Fetching share workspace pixels'
+                        : isSWSUTMTagsDataFetching
+                          ? 'Fetching share workspace utm tags'
+                          : isSWSShortLinksFoldersDataFetching
+                            ? 'Fetching share workspace short links folders'
+                            : null
+                : null}
           </div>
         </ZIonContent>
       ) : (
@@ -1554,9 +1554,9 @@ const AdminCreateNewLinkPages: React.FC = () => {
                         (workspaceId?.trim()?.length ?? 0) > 0
                           ? selectedShortLink?.featureImg?.featureImgPath
                           : (wsShareId?.trim()?.length ?? 0) > 0 &&
-                            (shareWSMemberId?.trim()?.length ?? 0) > 0
-                          ? swsSelectedShortLink?.featureImg?.featureImgPath
-                          : ''
+                              (shareWSMemberId?.trim()?.length ?? 0) > 0
+                            ? swsSelectedShortLink?.featureImg?.featureImgPath
+                            : ''
                     }),
                     itemIds: [],
                     urlDynamicParts: []
@@ -1664,8 +1664,8 @@ const AdminCreateNewLinkPages: React.FC = () => {
                               ? '10.5'
                               : '10'
                             : is2XlScale
-                            ? '11.4'
-                            : '11.2'
+                              ? '11.4'
+                              : '11.2'
                         }
                         sizeLg={
                           ZDashboardState?.dashboardMainSidebarIsCollabes
@@ -1674,8 +1674,8 @@ const AdminCreateNewLinkPages: React.FC = () => {
                               ? '10.5'
                               : '10'
                             : is2XlScale
-                            ? '11.4'
-                            : '11.2'
+                              ? '11.4'
+                              : '11.2'
                         }
                         sizeMd='12'
                         sizeSm='12'
@@ -1760,10 +1760,10 @@ const AdminCreateNewLinkPages: React.FC = () => {
                                       (workspaceId?.trim()?.length ?? 0) > 0
                                         ? isPixelAccountsDataFetching
                                         : (shareWSMemberId?.trim()?.length ??
-                                            0) > 0 &&
-                                          (wsShareId?.trim()?.length ?? 0) > 0
-                                        ? isSWSPixelAccountsDataFetching
-                                        : undefined
+                                              0) > 0 &&
+                                            (wsShareId?.trim()?.length ?? 0) > 0
+                                          ? isSWSPixelAccountsDataFetching
+                                          : undefined
                                     }
                                   />
                                 </Suspense>
@@ -1795,11 +1795,11 @@ const AdminCreateNewLinkPages: React.FC = () => {
                                       (workspaceId?.trim()?.length ?? 0) > 0
                                         ? isUTMTagsDataFetching
                                         : (wsShareId?.trim()?.length ?? 0) >
-                                            0 &&
-                                          (shareWSMemberId?.trim()?.length ??
-                                            0) > 0
-                                        ? isSWSUTMTagsDataFetching
-                                        : undefined
+                                              0 &&
+                                            (shareWSMemberId?.trim()?.length ??
+                                              0) > 0
+                                          ? isSWSUTMTagsDataFetching
+                                          : undefined
                                     }
                                   />
                                 </Suspense>
@@ -1885,11 +1885,11 @@ const AdminCreateNewLinkPages: React.FC = () => {
                                             0
                                               ? isShortLinksFoldersDataFetching
                                               : (shareWSMemberId?.trim()
-                                                  ?.length ?? 0) > 0 &&
-                                                (wsShareId?.trim()?.length ??
-                                                  0) > 0
-                                              ? isSWSShortLinksFoldersDataFetching
-                                              : undefined
+                                                    ?.length ?? 0) > 0 &&
+                                                  (wsShareId?.trim()?.length ??
+                                                    0) > 0
+                                                ? isSWSShortLinksFoldersDataFetching
+                                                : undefined
                                           }
                                           _foldersData={
                                             (workspaceId?.trim()?.length ?? 0) >
@@ -1899,15 +1899,15 @@ const AdminCreateNewLinkPages: React.FC = () => {
                                                 undefined)
                                               ? shortLinksFoldersData ?? []
                                               : (shareWSMemberId?.trim()
-                                                  ?.length ?? 0) > 0 &&
-                                                (wsShareId?.trim()?.length ??
-                                                  0) > 0 &&
-                                                (swsShortLinksFoldersData !==
-                                                  null ||
-                                                  swsShortLinksFoldersData !==
-                                                    undefined)
-                                              ? swsShortLinksFoldersData ?? []
-                                              : []
+                                                    ?.length ?? 0) > 0 &&
+                                                  (wsShareId?.trim()?.length ??
+                                                    0) > 0 &&
+                                                  (swsShortLinksFoldersData !==
+                                                    null ||
+                                                    swsShortLinksFoldersData !==
+                                                      undefined)
+                                                ? swsShortLinksFoldersData ?? []
+                                                : []
                                           }
                                         />
                                       </ZCan>
@@ -2074,20 +2074,21 @@ const ZTopBar: React.FC = () => {
                       [workspaceId ?? '', CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
                     )
                   : (wsShareId?.trim()?.length ?? 0) > 0
-                  ? replaceRouteParams(
-                      ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,
-                      [
-                        CONSTANTS.RouteParams.workspace.wsShareId,
-                        CONSTANTS.RouteParams.workspace.shareWSMemberId,
-                        CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
-                      ],
-                      [
-                        wsShareId ?? '',
-                        shareWSMemberId ?? '',
-                        CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
-                      ]
-                    )
-                  : ''
+                    ? replaceRouteParams(
+                        ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,
+                        [
+                          CONSTANTS.RouteParams.workspace.wsShareId,
+                          CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                          CONSTANTS.RouteParams
+                            .folderIdToGetShortLinksOrLinkInBio
+                        ],
+                        [
+                          wsShareId ?? '',
+                          shareWSMemberId ?? '',
+                          CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                        ]
+                      )
+                    : ''
               }
               onClick={() => {
                 resetForm();

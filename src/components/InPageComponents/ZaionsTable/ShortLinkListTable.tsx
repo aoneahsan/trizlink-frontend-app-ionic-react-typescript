@@ -127,8 +127,11 @@ const ZaionsShortLinkTable: React.FC<{
     wsShareId?: string;
   }>();
 
+  // #region Custom hooks.
   const { zNavigatePushRoute } = useZNavigate();
+  // #endregion
 
+  // #region Recoil states
   // Recoil state for shortLinks.
   const setNewShortLinkFormState = useSetRecoilState(NewShortLinkFormState);
 
@@ -430,18 +433,18 @@ const ZInpageTable: React.FC = () => {
               ZUserSettingTypeEnum.shortLinkListPageTable
             ]
           : wsShareId !== undefined &&
-            wsShareId !== null &&
-            wsShareId?.trim()?.length > 0 &&
-            shareWSMemberId !== undefined &&
-            shareWSMemberId !== null &&
-            shareWSMemberId?.trim()?.length > 0
-          ? [
-              CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
-              wsShareId,
-              shareWSMemberId,
-              ZUserSettingTypeEnum.shortLinkListPageTable
-            ]
-          : [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET],
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              shareWSMemberId?.trim()?.length > 0
+            ? [
+                CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
+                wsShareId,
+                shareWSMemberId,
+                ZUserSettingTypeEnum.shortLinkListPageTable
+              ]
+            : [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET],
       _itemsIds:
         workspaceId !== undefined &&
         workspaceId !== null &&
@@ -452,17 +455,17 @@ const ZInpageTable: React.FC = () => {
               ZUserSettingTypeEnum.shortLinkListPageTable
             ]
           : wsShareId !== undefined &&
-            wsShareId !== null &&
-            wsShareId?.trim()?.length > 0 &&
-            shareWSMemberId !== undefined &&
-            shareWSMemberId !== null &&
-            shareWSMemberId?.trim()?.length > 0
-          ? [
-              ZWSTypeEum.shareWorkspace,
-              shareWSMemberId,
-              ZUserSettingTypeEnum.shortLinkListPageTable
-            ]
-          : [],
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              shareWSMemberId?.trim()?.length > 0
+            ? [
+                ZWSTypeEum.shareWorkspace,
+                shareWSMemberId,
+                ZUserSettingTypeEnum.shortLinkListPageTable
+              ]
+            : [],
       _urlDynamicParts: [
         CONSTANTS.RouteParams.workspace.type,
         CONSTANTS.RouteParams.workspace.workspaceId,
@@ -531,21 +534,21 @@ const ZInpageTable: React.FC = () => {
                     [workspaceId ?? '', row?.row?.original?.id ?? '']
                   )
                 : (wsShareId?.trim()?.length ?? 0) > 0 &&
-                  (shareWSMemberId?.trim()?.length ?? 0) > 0
-                ? replaceRouteParams(
-                    ZaionsRoutes.AdminPanel.ShareWS.Short_link.Edit,
-                    [
-                      CONSTANTS.RouteParams.workspace.wsShareId,
-                      CONSTANTS.RouteParams.workspace.shareWSMemberId,
-                      CONSTANTS.RouteParams.editShortLinkIdParam
-                    ],
-                    [
-                      wsShareId ?? '',
-                      shareWSMemberId ?? '',
-                      row?.row?.original?.id ?? ''
-                    ]
-                  )
-                : ''
+                    (shareWSMemberId?.trim()?.length ?? 0) > 0
+                  ? replaceRouteParams(
+                      ZaionsRoutes.AdminPanel.ShareWS.Short_link.Edit,
+                      [
+                        CONSTANTS.RouteParams.workspace.wsShareId,
+                        CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                        CONSTANTS.RouteParams.editShortLinkIdParam
+                      ],
+                      [
+                        wsShareId ?? '',
+                        shareWSMemberId ?? '',
+                        row?.row?.original?.id ?? ''
+                      ]
+                    )
+                  : ''
             }>
             <ZIonText>{row.getValue()}</ZIonText>
           </ZIonRouterLink>

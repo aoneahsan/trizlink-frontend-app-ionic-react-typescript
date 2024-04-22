@@ -87,9 +87,8 @@ import ZCountdown from '@/components/CustomComponents/ZCountDown';
 import { reloadBlockingRStateAtom } from '@/ZaionsStore/AppRStates';
 import { useLocation } from 'react-router';
 import { ProductFavicon } from '@/assets/images';
-import ZaionsSeparator from '@/components/InPageComponents/ZaionsSepatator/ZaionsSeparator';
 import TermsPrivacyAcceptedNote from '@/components/TermsPrivacyAcceptedNote';
-import { errorCodes } from '@/utils/constants/apiConstants';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 // Style
 
@@ -110,6 +109,7 @@ const ZaionsSignUpForm: React.FC = props => {
   const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
 
   const { zNavigatePushRoute } = useZNavigate();
+  const { isMdScale, isSmScale } = useZMediaQueryScale();
 
   const FormikSubmissionHandler = async (
     _values: Record<string, unknown>,
@@ -313,7 +313,11 @@ const ZaionsSignUpForm: React.FC = props => {
       }}>
       {({ values }) => (
         <>
-          <ZIonRow className='mb-10'>
+          <ZIonRow
+            className={classNames({
+              'mb-10': isMdScale,
+              'mb-5': !isMdScale
+            })}>
             <ZIonCol
               className='flex mx-auto ion-justify-content-center'
               sizeXl='6'
@@ -324,13 +328,22 @@ const ZaionsSignUpForm: React.FC = props => {
               <div className='w-full ion-text-center'>
                 <ZIonImg
                   src={ProductFavicon}
-                  className='w-[6rem] h-[6rem] mx-auto mb-6'
+                  className={classNames('mx-auto', {
+                    'w-[6rem] h-[6rem] mb-6': isMdScale,
+                    'w-[4rem] h-[4rem] mb-4': !isMdScale && isSmScale,
+                    'w-[3.5rem] h-[3.5rem] mb-2': !isSmScale
+                  })}
                 />
 
                 <ZIonText
-                  className={classNames({
-                    'block mb-3 text-2xl font-bold': true
-                  })}>
+                  className={classNames(
+                    'block mb-3 font-bold ion-text-center',
+                    {
+                      'text-2xl': isMdScale,
+                      'text-xl': !isMdScale && isSmScale,
+                      'text-lg': !isSmScale
+                    }
+                  )}>
                   Sign up and start shortening
                 </ZIonText>
 
@@ -343,8 +356,8 @@ const ZaionsSignUpForm: React.FC = props => {
                     {values.tab === ZSetPasswordTabEnum.sendOptTab
                       ? 'Already have an account? '
                       : values.tab === ZSetPasswordTabEnum.confirmOptTab
-                      ? 'Confirm OPT(One Time Password) send to your email.'
-                      : ''}
+                        ? 'Confirm OPT(One Time Password) send to your email.'
+                        : ''}
                   </ZIonText>
                   {values.tab === ZSetPasswordTabEnum.sendOptTab && (
                     <ZIonRouterLink
@@ -368,7 +381,7 @@ const ZaionsSignUpForm: React.FC = props => {
               sizeLg='5'
               sizeMd='6.2'
               sizeSm='8.2'
-              sizeXs='11.5'>
+              sizeXs='11.9'>
               <Form>
                 {values.tab === ZSetPasswordTabEnum.sendOptTab ? (
                   <ZSendOtpTab />
@@ -522,8 +535,8 @@ const ZSendOtpTab: React.FC = () => {
               errors.emailAddress?.trim()?.length > 0
               ? errors.emailAddress
               : values.isEmailAddressApiError
-              ? values?.emailAddressApiErrorText
-              : undefined
+                ? values?.emailAddressApiErrorText
+                : undefined
             : undefined
         }
         className={classNames({

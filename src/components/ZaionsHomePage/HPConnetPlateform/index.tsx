@@ -3,6 +3,7 @@ import React, { Fragment } from 'react';
 
 // Packages Imports
 import { useRecoilValue } from 'recoil';
+import classNames from 'classnames';
 
 // Custom Imports
 import ZaionsNewLabel from '@/components/InPageComponents/ZaionsNewLable';
@@ -23,7 +24,10 @@ import {
 } from '@/components/ZIonComponents';
 
 // Global Constant
-import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import {
+  useZHybridDeviceIsMobile,
+  useZMediaQueryScale
+} from '@/ZaionsHooks/ZGenericHooks';
 import { PRODUCT_NAME } from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
@@ -32,8 +36,6 @@ import { ZaionsHpCPData } from '@/ZaionsStore/ZaionsHPBCP.recoil';
 
 // Type
 import { type ZaionsHpCPDataType } from '@/types/ZaionsHPBCPType';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import classNames from 'classnames';
 
 // const { Item: CarouselItem } = Carousel;
 
@@ -104,6 +106,7 @@ const ZSingleCard: React.FC<ZaionsHpCPDataType> = ({
   extraData
 }) => {
   const { isSmScale } = useZMediaQueryScale();
+  const { value: isHybridDevice } = useZHybridDeviceIsMobile();
   return (
     <ZIonCol
       sizeXl='4'
@@ -161,15 +164,17 @@ const ZSingleCard: React.FC<ZaionsHpCPDataType> = ({
               <ZIonButton expand='block'>{primaryBtnText}</ZIonButton>
             </ZIonRouterLink>
           </div>
-          <div className='ion-margin-horizontal ion-margin-top'>
-            <ZIonRouterLink routerLink={ZaionsRoutes.LoginRoute}>
-              <ZIonButton
-                expand='block'
-                fill='clear'>
-                {secondaryBtnText}
-              </ZIonButton>
-            </ZIonRouterLink>
-          </div>
+          {!isHybridDevice ? (
+            <div className='ion-margin-horizontal ion-margin-top'>
+              <ZIonRouterLink routerLink={ZaionsRoutes.LoginRoute}>
+                <ZIonButton
+                  expand='block'
+                  fill='clear'>
+                  {secondaryBtnText}
+                </ZIonButton>
+              </ZIonRouterLink>
+            </div>
+          ) : null}
         </ZIonCardContent>
       </ZIonCard>
     </ZIonCol>

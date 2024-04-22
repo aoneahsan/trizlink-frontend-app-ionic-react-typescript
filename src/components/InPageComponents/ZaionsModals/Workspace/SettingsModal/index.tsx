@@ -14,20 +14,19 @@ import {
   settingsOutline,
   timeOutline
 } from 'ionicons/icons';
+import classNames from 'classnames';
 
 /**
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
 import {
-  ZIonContent,
-  ZIonHeader,
   ZIonText,
   ZIonSegment,
   ZIonSegmentButton,
   ZIonIcon,
-  ZIonGrid,
-  ZIonRow
+  ZIonRow,
+  ZIonContent
 } from '@/components/ZIonComponents';
 import ZTimetableTab from './TimetableTab';
 import ZSettingsTab from './SettingsTab';
@@ -40,6 +39,7 @@ import ZCan from '@/components/Can';
  * ? Like import of custom Hook is a custom import
  * */
 import { useZGetRQCacheData } from '@/ZaionsHooks/zreactquery-hooks';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Global Constants Imports go down
@@ -63,26 +63,6 @@ import {
   type workspaceInterface,
   workspaceSettingsModalTabEnum
 } from '@/types/AdminPanel/workspace';
-
-/**
- * Recoil State Imports go down
- * ? Import of recoil states is a Recoil State import
- * */
-
-/**
- * Style files Imports go down
- * ? Import of style sheet is a style import
- * */
-
-/**
- * Images Imports go down
- * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
- * */
-
-/**
- * Component props type go down
- * ? Like if you have a type for props it should be please Down
- * */
 
 /**
  * Functional Component
@@ -113,8 +93,12 @@ const ZWorkspacesSettingModal: React.FC<{
     activeTab: Tab
   });
 
+  // #region Custom hooks
   const { getRQCDataHandler } = useZGetRQCacheData();
+  const { isSmScale, isMdScale, isLgScale } = useZMediaQueryScale();
+  // #endregion
 
+  // #region UseEffects
   useEffect(() => {
     try {
       // workspaceId pass when the user is owner.
@@ -166,188 +150,200 @@ const ZWorkspacesSettingModal: React.FC<{
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspaceId, wsShareId]);
+  // #endregion
 
   return (
     <>
-      {/* header  */}
-      <ZIonHeader>
-        <div className='w-full py-1 mt-3 mb-1 ion-text-center'>
-          <ZIonText
-            className='text-3xl font-bold'
-            color='dark'>
-            {compState.workspace?.workspaceName}
-          </ZIonText>
-        </div>
-        <ZIonSegment
-          scrollable={true}
-          value={compState.activeTab}
-          className='h-[4rem] w-[40%] mx-auto'>
-          {/* Timetable */}
-          <ZCan
-            shareWSId={wsShareId}
-            havePermissions={
-              wsShareId !== undefined
-                ? [shareWSPermissionEnum.viewAny_sws_timeSlot]
-                : [permissionsEnum.viewAny_timeSlot]
-            }
-            permissionType={
-              wsShareId !== undefined
-                ? permissionsTypeEnum.shareWSMemberPermissions
-                : permissionsTypeEnum.loggedInUserPermissions
-            }>
-            <ZIonSegmentButton
-              value={workspaceSettingsModalTabEnum.timetable}
-              className='normal-case ion-no-padding ion-text-center'
-              testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.timetable}-${workspaceId}`}
-              testinglistselector={
-                CONSTANTS.testingSelectors.workspace.settingsModal.tabs
-                  .timetable
-              }
-              onClick={() => {
-                setCompState(oldValues => ({
-                  ...oldValues,
-                  activeTab: workspaceSettingsModalTabEnum.timetable
-                }));
-              }}>
-              <ZIonIcon
-                icon={timeOutline}
-                className='pt-1'
-              />
-              <ZIonText className='pb-3 mb-2'>Timetable</ZIonText>
-            </ZIonSegmentButton>
-          </ZCan>
-
-          {/* Labels */}
-          <ZCan
-            shareWSId={wsShareId}
-            havePermissions={
-              wsShareId !== undefined
-                ? [shareWSPermissionEnum.viewAny_sws_label]
-                : [permissionsEnum.viewAny_label]
-            }
-            permissionType={
-              wsShareId !== undefined
-                ? permissionsTypeEnum.shareWSMemberPermissions
-                : permissionsTypeEnum.loggedInUserPermissions
-            }>
-            <ZIonSegmentButton
-              value={workspaceSettingsModalTabEnum.labels}
-              className='normal-case ion-no-padding ion-text-center'
-              testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.labels}-${workspaceId}`}
-              testinglistselector={
-                CONSTANTS.testingSelectors.workspace.settingsModal.tabs.labels
-              }
-              onClick={() => {
-                setCompState(oldValues => ({
-                  ...oldValues,
-                  activeTab: workspaceSettingsModalTabEnum.labels
-                }));
-              }}>
-              <ZIonIcon
-                icon={pricetagOutline}
-                className='pt-1'
-              />
-              <ZIonText className='pb-3 mb-2'>Labels</ZIonText>
-            </ZIonSegmentButton>
-          </ZCan>
-
-          {/* Settings */}
-          <ZCan
-            shareWSId={wsShareId}
-            havePermissions={
-              wsShareId !== undefined
-                ? [shareWSPermissionEnum.update_sws_workspace]
-                : [permissionsEnum.update_workspace]
-            }
-            permissionType={
-              wsShareId !== undefined
-                ? permissionsTypeEnum.shareWSMemberPermissions
-                : permissionsTypeEnum.loggedInUserPermissions
-            }>
-            <ZIonSegmentButton
-              value={workspaceSettingsModalTabEnum.settings}
-              className='normal-case ion-no-padding ion-text-center'
-              testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.settings}-${workspaceId}`}
-              testinglistselector={
-                CONSTANTS.testingSelectors.workspace.settingsModal.tabs.settings
-              }
-              onClick={() => {
-                setCompState(oldValues => ({
-                  ...oldValues,
-                  activeTab: workspaceSettingsModalTabEnum.settings
-                }));
-              }}>
-              <ZIonIcon
-                icon={settingsOutline}
-                className='pt-1'
-              />
-              <ZIonText className='pb-3 mb-2'>Settings</ZIonText>
-            </ZIonSegmentButton>
-          </ZCan>
-
-          {/* Approvals */}
-          <ZIonSegmentButton
-            value={workspaceSettingsModalTabEnum.approvals}
-            className='normal-case ion-no-padding ion-text-center'
-            testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.approvals}-${workspaceId}`}
-            testinglistselector={
-              CONSTANTS.testingSelectors.workspace.settingsModal.tabs.approvals
-            }
-            onClick={() => {
-              setCompState(oldValues => ({
-                ...oldValues,
-                activeTab: workspaceSettingsModalTabEnum.approvals
-              }));
-            }}>
-            <ZIonIcon
-              icon={checkmarkOutline}
-              className='pt-1'
-            />
-            <ZIonText className='pb-3 mb-2'>Approvals</ZIonText>
-          </ZIonSegmentButton>
-        </ZIonSegment>
-      </ZIonHeader>
-
       {/* Content */}
-      <ZIonContent color='light'>
-        <ZIonGrid className='h-full'>
-          <ZIonRow className='h-full ion-align-items-center'>
-            {compState.activeTab === workspaceSettingsModalTabEnum.timetable ? (
-              <ZCan havePermissions={[permissionsEnum.viewAny_timeSlot]}>
-                <ZTimetableTab
-                  workspaceId={workspaceId} // if owner then pass the workspaceId, that is how we are knowing that it is a owner
-                  wsShareMemberId={wsShareMemberId} // if member then pass the wsShareMemberId, that is how we are knowing that it is a member
-                  wsShareId={wsShareId}
-                />
+      <div className='flex flex-col w-full h-full'>
+        <div className='w-full zaions__bg_white'>
+          <div className='w-full py-1 pt-3 mb-1 ion-text-center'>
+            <ZIonText
+              color='dark'
+              className={classNames({
+                'font-bold': true,
+                'text-3xl': isMdScale,
+                'text-xl': !isMdScale && isSmScale
+              })}>
+              {compState.workspace?.workspaceName}
+            </ZIonText>
+          </div>
+          {isSmScale ? (
+            <ZIonSegment
+              scrollable={true}
+              value={compState.activeTab}
+              className={classNames({
+                'h-[4rem] mx-auto': true,
+                'w-[40%]': isLgScale,
+                'w-full': !isLgScale
+              })}>
+              {/* Timetable */}
+              <ZCan
+                shareWSId={wsShareId}
+                havePermissions={
+                  wsShareId !== undefined
+                    ? [shareWSPermissionEnum.viewAny_sws_timeSlot]
+                    : [permissionsEnum.viewAny_timeSlot]
+                }
+                permissionType={
+                  wsShareId !== undefined
+                    ? permissionsTypeEnum.shareWSMemberPermissions
+                    : permissionsTypeEnum.loggedInUserPermissions
+                }>
+                <ZIonSegmentButton
+                  value={workspaceSettingsModalTabEnum.timetable}
+                  className='normal-case ion-no-padding ion-text-center'
+                  testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.timetable}-${workspaceId}`}
+                  testinglistselector={
+                    CONSTANTS.testingSelectors.workspace.settingsModal.tabs
+                      .timetable
+                  }
+                  onClick={() => {
+                    setCompState(oldValues => ({
+                      ...oldValues,
+                      activeTab: workspaceSettingsModalTabEnum.timetable
+                    }));
+                  }}>
+                  <ZIonIcon
+                    icon={timeOutline}
+                    className='pt-1'
+                  />
+                  <ZIonText className='pb-3 mb-2'>Timetable</ZIonText>
+                </ZIonSegmentButton>
               </ZCan>
-            ) : compState.activeTab === workspaceSettingsModalTabEnum.labels ? (
-              <ZCan havePermissions={[permissionsEnum.viewAny_label]}>
-                <ZLabelsTab
-                  workspaceId={workspaceId} // if owner then pass the workspaceId, that is how we are knowing that it is a owner
-                  wsShareMemberId={wsShareMemberId} // if member then pass the wsShareMemberId, that is how we are knowing that it is a member
-                  wsShareId={wsShareId}
-                />
+
+              {/* Labels */}
+              <ZCan
+                shareWSId={wsShareId}
+                havePermissions={
+                  wsShareId !== undefined
+                    ? [shareWSPermissionEnum.viewAny_sws_label]
+                    : [permissionsEnum.viewAny_label]
+                }
+                permissionType={
+                  wsShareId !== undefined
+                    ? permissionsTypeEnum.shareWSMemberPermissions
+                    : permissionsTypeEnum.loggedInUserPermissions
+                }>
+                <ZIonSegmentButton
+                  value={workspaceSettingsModalTabEnum.labels}
+                  className='normal-case ion-no-padding ion-text-center'
+                  testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.labels}-${workspaceId}`}
+                  testinglistselector={
+                    CONSTANTS.testingSelectors.workspace.settingsModal.tabs
+                      .labels
+                  }
+                  onClick={() => {
+                    setCompState(oldValues => ({
+                      ...oldValues,
+                      activeTab: workspaceSettingsModalTabEnum.labels
+                    }));
+                  }}>
+                  <ZIonIcon
+                    icon={pricetagOutline}
+                    className='pt-1'
+                  />
+                  <ZIonText className='pb-3 mb-2'>Labels</ZIonText>
+                </ZIonSegmentButton>
               </ZCan>
-            ) : compState.activeTab ===
-              workspaceSettingsModalTabEnum.settings ? (
-              <ZCan havePermissions={[permissionsEnum.update_workspace]}>
-                <ZSettingsTab
-                  zNavigatePushRoute={zNavigatePushRoute}
-                  workspaceId={workspaceId} // if owner then pass the workspaceId, that is how we are knowing that it is a owner
-                  wsShareMemberId={wsShareMemberId} // if member then pass the wsShareMemberId, that is how we are knowing that it is a member
-                  wsShareId={wsShareId}
-                  dismissZIonModal={dismissZIonModal}
-                />
+
+              {/* Settings */}
+              <ZCan
+                shareWSId={wsShareId}
+                havePermissions={
+                  wsShareId !== undefined
+                    ? [shareWSPermissionEnum.update_sws_workspace]
+                    : [permissionsEnum.update_workspace]
+                }
+                permissionType={
+                  wsShareId !== undefined
+                    ? permissionsTypeEnum.shareWSMemberPermissions
+                    : permissionsTypeEnum.loggedInUserPermissions
+                }>
+                <ZIonSegmentButton
+                  value={workspaceSettingsModalTabEnum.settings}
+                  className='normal-case ion-no-padding ion-text-center'
+                  testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.settings}-${workspaceId}`}
+                  testinglistselector={
+                    CONSTANTS.testingSelectors.workspace.settingsModal.tabs
+                      .settings
+                  }
+                  onClick={() => {
+                    setCompState(oldValues => ({
+                      ...oldValues,
+                      activeTab: workspaceSettingsModalTabEnum.settings
+                    }));
+                  }}>
+                  <ZIonIcon
+                    icon={settingsOutline}
+                    className='pt-1'
+                  />
+                  <ZIonText className='pb-3 mb-2'>Settings</ZIonText>
+                </ZIonSegmentButton>
               </ZCan>
-            ) : compState.activeTab ===
-              workspaceSettingsModalTabEnum.approvals ? (
-              <ZApprovalTab workspaceId={workspaceId} />
-            ) : (
-              ''
-            )}
-          </ZIonRow>
-        </ZIonGrid>
-      </ZIonContent>
+
+              {/* Approvals */}
+              {CONSTANTS.showIncompleteFeaturesInMobileApp && (
+                <ZIonSegmentButton
+                  value={workspaceSettingsModalTabEnum.approvals}
+                  className='normal-case ion-no-padding ion-text-center'
+                  testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.approvals}-${workspaceId}`}
+                  testinglistselector={
+                    CONSTANTS.testingSelectors.workspace.settingsModal.tabs
+                      .approvals
+                  }
+                  onClick={() => {
+                    setCompState(oldValues => ({
+                      ...oldValues,
+                      activeTab: workspaceSettingsModalTabEnum.approvals
+                    }));
+                  }}>
+                  <ZIonIcon
+                    icon={checkmarkOutline}
+                    className='pt-1'
+                  />
+                  <ZIonText className='pb-3 mb-2'>Approvals</ZIonText>
+                </ZIonSegmentButton>
+              )}
+            </ZIonSegment>
+          ) : null}
+        </div>
+
+        <ZIonRow className='h-full ion-align-items-center grow zaions__light_bg'>
+          {compState.activeTab === workspaceSettingsModalTabEnum.timetable ? (
+            <ZCan havePermissions={[permissionsEnum.viewAny_timeSlot]}>
+              <ZTimetableTab
+                workspaceId={workspaceId} // if owner then pass the workspaceId, that is how we are knowing that it is a owner
+                wsShareMemberId={wsShareMemberId} // if member then pass the wsShareMemberId, that is how we are knowing that it is a member
+                wsShareId={wsShareId}
+              />
+            </ZCan>
+          ) : compState.activeTab === workspaceSettingsModalTabEnum.labels ? (
+            <ZCan havePermissions={[permissionsEnum.viewAny_label]}>
+              <ZLabelsTab
+                workspaceId={workspaceId} // if owner then pass the workspaceId, that is how we are knowing that it is a owner
+                wsShareMemberId={wsShareMemberId} // if member then pass the wsShareMemberId, that is how we are knowing that it is a member
+                wsShareId={wsShareId}
+              />
+            </ZCan>
+          ) : compState.activeTab === workspaceSettingsModalTabEnum.settings ? (
+            <ZCan havePermissions={[permissionsEnum.update_workspace]}>
+              <ZSettingsTab
+                zNavigatePushRoute={zNavigatePushRoute}
+                workspaceId={workspaceId} // if owner then pass the workspaceId, that is how we are knowing that it is a owner
+                wsShareMemberId={wsShareMemberId} // if member then pass the wsShareMemberId, that is how we are knowing that it is a member
+                wsShareId={wsShareId}
+                dismissZIonModal={dismissZIonModal}
+              />
+            </ZCan>
+          ) : compState.activeTab ===
+            workspaceSettingsModalTabEnum.approvals ? (
+            <ZApprovalTab workspaceId={workspaceId} />
+          ) : (
+            ''
+          )}
+        </ZIonRow>
+      </div>
     </>
   );
 };

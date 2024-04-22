@@ -238,9 +238,10 @@ const ZPersonalSettings: React.FC = () => {
                 className={classNames({
                   'flex ion-align-items-center ion-justify-content-between':
                     true,
-                  'mb-2': !isSmScale
+                  'mb-2': !isSmScale,
+                  'flex-col': !isSmScale
                 })}>
-                <div className=''>
+                <div>
                   <ZIonTitle
                     className={classNames({
                       'block font-bold ion-no-padding': true,
@@ -264,14 +265,23 @@ const ZPersonalSettings: React.FC = () => {
                   </ZIonText>
                 </div>
 
-                <div className=''>
+                <div
+                  className={classNames({
+                    'w-full': !isSmScale
+                  })}>
                   <div
                     className={classNames({
-                      'flex w-max ion-align-items-center h-max': true,
-                      'cursor-not-allowed': !dirty
+                      'flex ion-align-items-center h-max': true,
+                      'cursor-not-allowed': !dirty,
+                      'w-max': isSmScale,
+                      'w-full': !isSmScale
                     })}>
                     <ZIonButton
                       disabled={!dirty}
+                      expand={!isSmScale ? 'block' : undefined}
+                      className={classNames({
+                        'w-full mt-2': !isSmScale
+                      })}
                       onClick={() => {
                         if (dirty) {
                           void submitForm();
@@ -524,7 +534,10 @@ const ZPersonalSettings: React.FC = () => {
                       </ZIonLabel>
                     </ZIonItem>
                     <div
-                      className='p-2 border border-t-0 rounded-b-lg'
+                      className={classNames({
+                        'border border-t-0 rounded-b-lg': true,
+                        'p-2': isSmScale
+                      })}
                       slot='content'>
                       <ZIonText
                         className={classNames({
@@ -547,7 +560,9 @@ const ZPersonalSettings: React.FC = () => {
                         className={classNames({
                           'rounded-lg overflow-hidden ion-activatable mb-1 ripple-parent cursor-pointer':
                             true,
-                          'text-sm': !isLgScale
+                          'text-sm': !isLgScale,
+                          'ion-item-start-no-padding ion-inner-padding-end-0 px-[3px]':
+                            !isSmScale
                         })}>
                         <ZIonIcon
                           icon={notificationsOutline}
@@ -609,7 +624,9 @@ const ZPersonalSettings: React.FC = () => {
                         className={classNames({
                           'rounded-lg overflow-hidden ion-activatable mb-1 ripple-parent cursor-pointer':
                             true,
-                          'text-sm': !isLgScale
+                          'text-sm': !isLgScale,
+                          'ion-item-start-no-padding ion-inner-padding-end-0 px-[3px]':
+                            !isSmScale
                         })}>
                         <ZIonIcon
                           icon={browsersOutline}
@@ -659,7 +676,9 @@ const ZPersonalSettings: React.FC = () => {
                         className={classNames({
                           'rounded-lg overflow-hidden ion-activatable mb-1 ripple-parent cursor-pointer':
                             true,
-                          'text-sm': !isLgScale
+                          'text-sm': !isLgScale,
+                          'ion-item-start-no-padding ion-inner-padding-end-0 px-[3px]':
+                            !isSmScale
                         })}>
                         <ZIonIcon
                           icon={mailOutline}
@@ -709,7 +728,9 @@ const ZPersonalSettings: React.FC = () => {
                         className={classNames({
                           'rounded-lg overflow-hidden ion-activatable mb-1 ripple-parent cursor-pointer':
                             true,
-                          'text-sm': !isLgScale
+                          'text-sm': !isLgScale,
+                          'ion-item-start-no-padding ion-inner-padding-end-0 px-[3px]':
+                            !isSmScale
                         })}>
                         <ZIonIcon
                           icon={chatbubbleEllipsesOutline}
@@ -814,7 +835,9 @@ const ZPersonalSettings: React.FC = () => {
                         className={classNames({
                           'rounded-lg overflow-hidden ion-activatable mb-1 ripple-parent cursor-pointer':
                             true,
-                          'text-sm': !isLgScale
+                          'text-sm': !isLgScale,
+                          'ion-item-start-no-padding ion-inner-padding-end-0 px-[3px]':
+                            !isSmScale
                         })}>
                         <ZIonIcon
                           icon={notificationsOutline}
@@ -875,7 +898,9 @@ const ZPersonalSettings: React.FC = () => {
                         className={classNames({
                           'rounded-lg overflow-hidden ion-activatable mb-1 ripple-parent cursor-pointer':
                             true,
-                          'text-sm': !isLgScale
+                          'text-sm': !isLgScale,
+                          'ion-item-start-no-padding ion-inner-padding-end-0 px-[3px]':
+                            !isSmScale
                         })}>
                         <ZIonIcon
                           icon={browsersOutline}
@@ -925,7 +950,9 @@ const ZPersonalSettings: React.FC = () => {
                         className={classNames({
                           'rounded-lg overflow-hidden ion-activatable mb-1 ripple-parent cursor-pointer':
                             true,
-                          'text-sm': !isLgScale
+                          'text-sm': !isLgScale,
+                          'ion-item-start-no-padding ion-inner-padding-end-0 px-[3px]':
+                            !isSmScale
                         })}>
                         <ZIonIcon
                           icon={mailOutline}
@@ -975,7 +1002,9 @@ const ZPersonalSettings: React.FC = () => {
                         className={classNames({
                           'rounded-lg overflow-hidden ion-activatable mb-1 ripple-parent cursor-pointer':
                             true,
-                          'text-sm': !isLgScale
+                          'text-sm': !isLgScale,
+                          'ion-item-start-no-padding ion-inner-padding-end-0 px-[3px]':
+                            !isSmScale
                         })}>
                         <ZIonIcon
                           icon={chatbubbleEllipsesOutline}
@@ -1092,7 +1121,9 @@ const ZPersonalSettings: React.FC = () => {
                           className={classNames({
                             'rounded-lg overflow-hidden ion-activatable ripple-parent cursor-pointer':
                               true,
-                            'text-sm': !isMdScale
+                            'text-sm': !isMdScale,
+                            'ion-item-start-no-padding ion-inner-padding-end-0 px-[3px]':
+                              !isSmScale
                           })}>
                           {/* <ZIonImg
                           src={chromeLogo}
@@ -1132,7 +1163,7 @@ const ZPersonalSettings: React.FC = () => {
                         </ZIonItem>
 
                         {/* Sounds */}
-                        <div className=''>
+                        <div>
                           <ZIonText
                             className={classNames({
                               'px-3 mb-1 mt-2 block': true,
@@ -1153,7 +1184,9 @@ const ZPersonalSettings: React.FC = () => {
                             className={classNames({
                               'rounded-lg overflow-hidden ion-activatable ripple-parent cursor-pointer':
                                 true,
-                              'text-sm': !isMdScale
+                              'text-sm': !isMdScale,
+                              'ion-item-start-no-padding ion-inner-padding-end-0 px-[3px]':
+                                !isSmScale
                             })}>
                             <ZIonLabel
                               className={classNames({
@@ -1196,7 +1229,9 @@ const ZPersonalSettings: React.FC = () => {
                             className={classNames({
                               'rounded-lg overflow-hidden ion-activatable ripple-parent cursor-pointer':
                                 true,
-                              'text-sm': !isMdScale
+                              'text-sm': !isMdScale,
+                              'ion-item-start-no-padding ion-inner-padding-end-0 px-[3px]':
+                                !isSmScale
                             })}>
                             <ZIonLabel
                               className={classNames({
@@ -1276,7 +1311,9 @@ const ZPersonalSettings: React.FC = () => {
                       <ZIonItem
                         lines='none'
                         className={classNames({
-                          'h-[2.7rem]': !isMdScale
+                          'h-[2.7rem]': !isMdScale,
+                          'ion-item-start-no-padding ion-inner-padding-end-0 px-[3px]':
+                            !isSmScale
                         })}>
                         <ZIonImg
                           src={emailLogo}
@@ -1315,7 +1352,7 @@ const ZPersonalSettings: React.FC = () => {
                           className={classNames({
                             'px-3 my-2 block text-md': true,
                             'my-2': isMdScale,
-                            'mb-0 mt-2': !isMdScale
+                            'mb-0 mt-2 ion-text-center': !isMdScale
                           })}>
                           Email Frequency
                         </ZIonText>
@@ -1329,7 +1366,9 @@ const ZPersonalSettings: React.FC = () => {
                               .emailNotificationAccording.allItem
                           }
                           className={classNames({
-                            'rounded-lg overflow-hidden mt-2': true
+                            'rounded-lg overflow-hidden mt-2': true,
+                            'ion-item-start-no-padding ion-inner-padding-end-0 px-[3px]':
+                              !isSmScale
                           })}
                           style={zIonItemStyle}>
                           <ZIonCheckbox
@@ -1350,7 +1389,10 @@ const ZPersonalSettings: React.FC = () => {
                                 .notificationSettingsTab
                                 .emailNotificationAccording.allToggler
                             }>
-                            <ZIonLabel className='my-0 ms-3 ion-text-wrap'>
+                            <ZIonLabel
+                              className={classNames('my-0 ion-text-wrap', {
+                                'ms-3': isSmScale
+                              })}>
                               <ZIonText
                                 className={classNames({
                                   'block font-semibold': true,
@@ -1375,7 +1417,9 @@ const ZPersonalSettings: React.FC = () => {
                               .emailNotificationAccording.suggestedItem
                           }
                           className={classNames({
-                            'rounded-lg overflow-hidden mt-2': true
+                            'rounded-lg overflow-hidden mt-2': true,
+                            'ion-item-start-no-padding ion-inner-padding-end-0 px-[3px]':
+                              !isSmScale
                           })}
                           style={zIonItemStyle}>
                           <ZIonCheckbox
@@ -1396,7 +1440,10 @@ const ZPersonalSettings: React.FC = () => {
                                 .notificationSettingsTab
                                 .emailNotificationAccording.suggestedToggler
                             }>
-                            <ZIonLabel className='my-0 ms-3 ion-text-wrap'>
+                            <ZIonLabel
+                              className={classNames('my-0 ion-text-wrap', {
+                                'ms-3': isSmScale
+                              })}>
                               <ZIonText
                                 className={classNames({
                                   'block font-semibold': true,
@@ -1422,7 +1469,9 @@ const ZPersonalSettings: React.FC = () => {
                               .emailNotificationAccording.requestedItem
                           }
                           className={classNames({
-                            'rounded-lg overflow-hidden mt-2': true
+                            'rounded-lg overflow-hidden mt-2': true,
+                            'ion-item-start-no-padding ion-inner-padding-end-0 px-[3px]':
+                              !isSmScale
                           })}
                           style={zIonItemStyle}>
                           <ZIonCheckbox
@@ -1443,7 +1492,10 @@ const ZPersonalSettings: React.FC = () => {
                                 .notificationSettingsTab
                                 .emailNotificationAccording.requestedToggler
                             }>
-                            <ZIonLabel className='my-0 ms-3 ion-text-wrap'>
+                            <ZIonLabel
+                              className={classNames('my-0 ion-text-wrap', {
+                                'ms-3': isSmScale
+                              })}>
                               <ZIonText
                                 className={classNames({
                                   'block font-semibold': true,
@@ -1466,7 +1518,8 @@ const ZPersonalSettings: React.FC = () => {
                             className={classNames({
                               'px-3 my-2 block text-md': true,
                               'my-2': isMdScale,
-                              'mb-0 mt-2': !isMdScale
+                              'mb-0 mt-2': !isMdScale,
+                              'ion-text-center': !isSmScale
                             })}>
                             Your Email Notifications
                           </ZIonText>
@@ -1476,7 +1529,9 @@ const ZPersonalSettings: React.FC = () => {
                             className={classNames({
                               'rounded-lg overflow-hidden ion-activatable ripple-parent cursor-pointer':
                                 true,
-                              'h-[2.5rem]': !isMdScale
+                              'h-[2.5rem]': !isMdScale,
+                              'ion-item-start-no-padding ion-inner-padding-end-0 px-[3px]':
+                                !isSmScale
                             })}>
                             <ZIonLabel
                               className={classNames({
@@ -1552,7 +1607,10 @@ const ZPersonalSettings: React.FC = () => {
                       slot='content'>
                       {/* SMS Frequency */}
                       <div className='mt-2'>
-                        <ZIonText className='block px-3 text-md'>
+                        <ZIonText
+                          className={classNames('block text-md', {
+                            'px-3': isSmScale
+                          })}>
                           SMS Frequency
                         </ZIonText>
                       </div>

@@ -65,26 +65,7 @@ import {
   type wsShareInterface
 } from '@/types/AdminPanel/workspace';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-
-/**
- * Recoil State Imports go down
- * ? Import of recoil states is a Recoil State import
- * */
-
-/**
- * Style files Imports go down
- * ? Import of style sheet is a style import
- * */
-
-/**
- * Images Imports go down
- * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
- * */
-
-/**
- * Component props type go down
- * ? Like if you have a type for props it should be please Down
- * */
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Functional Component
@@ -113,6 +94,7 @@ const ZSettingsTab: React.FC<{
   const { getRQCDataHandler } = useZGetRQCacheData();
   const { presentZIonErrorAlert } = useZIonErrorAlert();
   const { presentZIonAlert } = useZIonAlert();
+  const { isMdScale, isSmScale } = useZMediaQueryScale();
   // #endregion
 
   // #region APIS
@@ -481,7 +463,13 @@ const ZSettingsTab: React.FC<{
 
   return (
     <ZIonGrid className='w-full h-full pt-6'>
-      <ZIonRow className='mx-auto w-[40%]'>
+      <ZIonRow
+        className={classNames({
+          'mx-auto': true,
+          'w-[40%]': isMdScale,
+          'w-10/12': !isMdScale && isSmScale,
+          'w-full': !isSmScale
+        })}>
         <Formik
           initialValues={formikInitialValues}
           enableReinitialize={true}
@@ -568,59 +556,69 @@ const ZSettingsTab: React.FC<{
                   })}
                 />
 
-                <ZIonRow className='pt-4 ion-align-items-center'>
-                  <ZIonCol
-                    size='max-content'
-                    className='flex ion-align-items-center'>
-                    <ZIonIcon
-                      icon={eyeOffOutline}
-                      className='w-6 h-6 me-2'
-                    />
-                    <ZIonText>Create new posts as internal</ZIonText>
-                    <ZIonIcon
-                      icon={alertCircleOutline}
-                      className='w-6 h-6 cursor-pointer ms-2'
-                      id='z-workspace-internal-post'
-                      testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.internalPostInfoButton}-${workspaceId}`}
-                      testinglistselector={
-                        CONSTANTS.testingSelectors.workspace.settingsModal
-                          .settings.internalPostInfoButton
-                      }
-                    />
-                    <ZRTooltip
-                      anchorSelect='#z-workspace-internal-post'
-                      place='bottom'
-                      className='z-40'
-                      content='New posts will be visible only for team members.'
-                    />
-                  </ZIonCol>
+                {CONSTANTS.showIncompleteFeaturesInMobileApp && (
+                  <ZIonRow className='pt-4 ion-align-items-center'>
+                    <ZIonCol
+                      sizeXl='max-content'
+                      sizeLg='max-content'
+                      sizeMd='max-content'
+                      sizeSm='max-content'
+                      sizeXs='12'
+                      className='flex ion-align-items-center'>
+                      <ZIonIcon
+                        icon={eyeOffOutline}
+                        className='w-6 h-6 me-2'
+                      />
+                      <ZIonText>Create new posts as internal</ZIonText>
+                      <ZIonIcon
+                        icon={alertCircleOutline}
+                        className='w-6 h-6 cursor-pointer ms-2'
+                        id='z-workspace-internal-post'
+                        testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.internalPostInfoButton}-${workspaceId}`}
+                        testinglistselector={
+                          CONSTANTS.testingSelectors.workspace.settingsModal
+                            .settings.internalPostInfoButton
+                        }
+                      />
+                      <ZRTooltip
+                        anchorSelect='#z-workspace-internal-post'
+                        place='bottom'
+                        className='z-40'
+                        content='New posts will be visible only for team members.'
+                      />
+                    </ZIonCol>
 
-                  <ZIonCol className='ion-text-end'>
-                    <ZRCSwitch
-                      disabled={
-                        wsShareId !== undefined &&
-                        wsShareId !== null &&
-                        wsShareId?.trim()?.length > 0 &&
-                        wsShareMemberId !== undefined &&
-                        wsShareMemberId !== null &&
-                        wsShareMemberId?.trim()?.length > 0
-                      }
-                      testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.internalPostToggler}-${workspaceId}`}
-                      testinglistselector={
-                        CONSTANTS.testingSelectors.workspace.settingsModal
-                          .settings.internalPostToggler
-                      }
-                      onChange={value => {
-                        void setFieldValue('internalPost', value, false);
-                      }}
-                    />
-                  </ZIonCol>
-                </ZIonRow>
+                    <ZIonCol
+                      className={classNames({
+                        'ion-text-end': true
+                      })}>
+                      <ZRCSwitch
+                        disabled={
+                          wsShareId !== undefined &&
+                          wsShareId !== null &&
+                          wsShareId?.trim()?.length > 0 &&
+                          wsShareMemberId !== undefined &&
+                          wsShareMemberId !== null &&
+                          wsShareMemberId?.trim()?.length > 0
+                        }
+                        testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.internalPostToggler}-${workspaceId}`}
+                        testinglistselector={
+                          CONSTANTS.testingSelectors.workspace.settingsModal
+                            .settings.internalPostToggler
+                        }
+                        onChange={value => {
+                          void setFieldValue('internalPost', value, false);
+                        }}
+                      />
+                    </ZIonCol>
+                  </ZIonRow>
+                )}
 
                 <div className='flex w-full mt-2 ion-justify-content-end'>
                   <div
                     className={classNames({
-                      'w-max': true,
+                      'w-max': isSmScale,
+                      'w-full': !isSmScale,
                       'cursor-not-allowed':
                         isValid &&
                         values.workspaceName ===
@@ -631,6 +629,7 @@ const ZSettingsTab: React.FC<{
                           Boolean(initialValues?.internalPost)
                     })}>
                     <ZIonButton
+                      expand={!isSmScale ? 'block' : undefined}
                       testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.updateButton}-${workspaceId}`}
                       testinglistselector={
                         CONSTANTS.testingSelectors.workspace.settingsModal
@@ -670,38 +669,47 @@ const ZSettingsTab: React.FC<{
         <ZIonCol
           size='12'
           className='mt-2'>
-          <ZIonText className='block text-lg'>
+          <ZIonText
+            className={classNames({
+              'block text-lg': true,
+              'ion-text-center': !isSmScale
+            })}>
             {workspaceId !== undefined &&
             workspaceId !== null &&
             workspaceId?.trim()?.length > 0
               ? 'Remove workspace'
               : wsShareId !== undefined &&
-                wsShareId !== null &&
-                wsShareId?.trim()?.length > 0 &&
-                wsShareMemberId !== undefined &&
-                wsShareMemberId !== null &&
-                wsShareMemberId?.trim()?.length > 0
-              ? 'Leave workspace'
-              : null}
+                  wsShareId !== null &&
+                  wsShareId?.trim()?.length > 0 &&
+                  wsShareMemberId !== undefined &&
+                  wsShareMemberId !== null &&
+                  wsShareMemberId?.trim()?.length > 0
+                ? 'Leave workspace'
+                : null}
           </ZIonText>
-          <ZIonText className='block text-sm text-muted'>
+          <ZIonText
+            className={classNames({
+              'block text-sm text-muted': true,
+              'ion-text-center': !isSmScale
+            })}>
             {workspaceId !== undefined &&
             workspaceId !== null &&
             workspaceId?.trim()?.length > 0
               ? 'Remove this workspace and erase all data (posts, comments, pages etc.). This action is irreversible.'
               : wsShareId !== undefined &&
-                wsShareId !== null &&
-                wsShareId?.trim()?.length > 0 &&
-                wsShareMemberId !== undefined &&
-                wsShareMemberId !== null &&
-                wsShareMemberId?.trim()?.length > 0
-              ? 'If you choose to leave this workspace you will lose access to all data (posts, comments, pages, etc.). You can regain your access in the future if someone else will invite you back in the workspace.'
-              : null}
+                  wsShareId !== null &&
+                  wsShareId?.trim()?.length > 0 &&
+                  wsShareMemberId !== undefined &&
+                  wsShareMemberId !== null &&
+                  wsShareMemberId?.trim()?.length > 0
+                ? 'If you choose to leave this workspace you will lose access to all data (posts, comments, pages, etc.). You can regain your access in the future if someone else will invite you back in the workspace.'
+                : null}
           </ZIonText>
 
           <ZIonButton
             color='danger'
             className='mt-2 normal-case ion-no-margin'
+            expand={!isSmScale ? 'block' : undefined}
             testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.deleteButton}-${workspaceId}`}
             testinglistselector={
               CONSTANTS.testingSelectors.workspace.settingsModal.settings
@@ -730,13 +738,13 @@ const ZSettingsTab: React.FC<{
             workspaceId?.trim()?.length > 0
               ? 'Remove this workspace'
               : wsShareId !== undefined &&
-                wsShareId !== null &&
-                wsShareId?.trim()?.length > 0 &&
-                wsShareMemberId !== undefined &&
-                wsShareMemberId !== null &&
-                wsShareMemberId?.trim()?.length > 0
-              ? 'Leave this workspace'
-              : null}
+                  wsShareId !== null &&
+                  wsShareId?.trim()?.length > 0 &&
+                  wsShareMemberId !== undefined &&
+                  wsShareMemberId !== null &&
+                  wsShareMemberId?.trim()?.length > 0
+                ? 'Leave this workspace'
+                : null}
           </ZIonButton>
         </ZIonCol>
       </ZIonRow>

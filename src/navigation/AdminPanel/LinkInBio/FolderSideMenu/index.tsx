@@ -21,7 +21,10 @@ import AdminPanelFoldersSidebarMenu from '@/navigation/AdminPanel/FolderSideMenu
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
-import { useZRQUpdateRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import {
+  useZRQGetRequest,
+  useZRQUpdateRequest
+} from '@/ZaionsHooks/zreactquery-hooks';
 import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
 import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 
@@ -29,7 +32,7 @@ import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import { API_URL_ENUM, PAGE_MENU_SIDE } from '@/utils/enums';
+import { API_URL_ENUM, PAGE_MENU_SIDE, ZWSTypeEum } from '@/utils/enums';
 import CONSTANTS from '@/utils/constants';
 import { reportCustomError } from '@/utils/customErrorType';
 import { zStringify } from '@/utils/helpers';
@@ -42,6 +45,8 @@ import { folderState } from '@/types/AdminPanel/index.type';
  * */
 import { LinkInBioFolderRState } from '@/ZaionsStore/UserDashboard/LinkInBio/linkInBioFoldersState.recoil';
 import FolderActionsPopoverContent from '@/components/InPageComponents/ZaionsPopovers/FoldersActionPopover';
+import { useParams } from 'react-router';
+import { LinkFolderType } from '@/types/AdminPanel/linksType';
 
 /**
  * Style files Imports go down
@@ -64,9 +69,15 @@ import FolderActionsPopoverContent from '@/components/InPageComponents/ZaionsPop
  * @type {*}
  * */
 
-const AdminPanelLinkInBioFolderSideMenu: React.FC<{ workspaceId: string }> = ({
-  workspaceId
-}) => {
+const AdminPanelLinkInBioFolderSideMenu: React.FC = () => {
+  // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
+  const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
+  }>();
+
+  // #region compState.
   const [compState, setCompState] = useState<{
     linkInBioFoldersReorder: {
       Ids?: string[];
@@ -77,26 +88,89 @@ const AdminPanelLinkInBioFolderSideMenu: React.FC<{ workspaceId: string }> = ({
       isEnable: false
     }
   });
+  // #endregion
 
+  // #region custom hooks.
+  const { validateRequestResponse } = useZValidateRequestResponse();
+  // #endregion
+
+  // #region popovers & modals.
   const { presentZIonPopover: presentFolderActionIonPopover } = useZIonPopover(
     FolderActionsPopoverContent,
     {
       workspaceId,
-      state: folderState.shortlink
+      shareWSMemberId,
+      wsShareId,
+      state: folderState.linkInBio
     }
   );
+  // #endregion
 
-  const [linkInBioFolderState] = useRecoilState(LinkInBioFolderRState);
+  // #region APIS.
+  const { data: libFoldersData } = useZRQGetRequest<LinkFolderType[]>({
+    _url: API_URL_ENUM.folders_list,
+    _key:
+      workspaceId !== undefined &&
+      workspaceId !== null &&
+      workspaceId?.trim()?.length > 0
+        ? [
+            CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
+            workspaceId,
+            folderState.linkInBio
+          ]
+        : wsShareId !== undefined &&
+            wsShareId !== null &&
+            wsShareId?.trim()?.length > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            shareWSMemberId?.trim()?.length > 0
+          ? [
+              CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
+              wsShareId,
+              shareWSMemberId,
+              folderState.linkInBio
+            ]
+          : [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
+    _itemsIds:
+      workspaceId !== undefined &&
+      workspaceId !== null &&
+      workspaceId?.trim()?.length > 0
+        ? [ZWSTypeEum.personalWorkspace, workspaceId, folderState.linkInBio]
+        : wsShareId !== undefined &&
+            wsShareId !== null &&
+            wsShareId?.trim()?.length > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            shareWSMemberId?.trim()?.length > 0
+          ? [ZWSTypeEum.shareWorkspace, shareWSMemberId, folderState.linkInBio]
+          : [],
+    _shouldFetchWhenIdPassed: !(
+      ((wsShareId?.trim()?.length ?? 0) === 0 &&
+        (shareWSMemberId?.trim()?.length ?? 0) === 0) ||
+      (workspaceId?.trim()?.length ?? 0) === 0
+    ),
+    _urlDynamicParts: [
+      CONSTANTS.RouteParams.workspace.type,
+      CONSTANTS.RouteParams.workspace.workspaceId,
+      CONSTANTS.RouteParams.workspace.modal
+    ]
+  });
 
-  const { validateRequestResponse } = useZValidateRequestResponse();
+  // Update shortLinks folders reorder API
+  const { mutateAsync: UpdateShortLinksFoldersReorder } = useZRQUpdateRequest({
+    _url: API_URL_ENUM.linkInBioBlocks_reorder,
+    _queriesKeysToInvalidate: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN]
+  });
+  // #endregion
 
+  // #region Functions.
   // folder reorder handler
   const handleReorder = (event: CustomEvent<ItemReorderEventDetail>): void => {
     event.detail.complete();
 
     setTimeout(() => {
       const _shortLinksFoldersEls = document.querySelectorAll(
-        `.zaions-short-link-folder-${folderState.linkInBio}`
+        `.zaions-folder-${folderState.linkInBio}`
       );
       const _shortLinksFoldersIds: string[] = [];
       for (let i = 0; i < _shortLinksFoldersEls.length; i++) {
@@ -124,12 +198,6 @@ const AdminPanelLinkInBioFolderSideMenu: React.FC<{ workspaceId: string }> = ({
   // workspaceId,
   // folderState.linkInBio,],
   // });
-
-  // Update shortLinks folders reorder API
-  const { mutateAsync: UpdateShortLinksFoldersReorder } = useZRQUpdateRequest({
-    _url: API_URL_ENUM.linkInBioBlocks_reorder,
-    _queriesKeysToInvalidate: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN]
-  });
 
   // useEffect(() => {
   // try {
@@ -169,23 +237,25 @@ const AdminPanelLinkInBioFolderSideMenu: React.FC<{ workspaceId: string }> = ({
       reportCustomError(error);
     }
   };
+  // #endregion
 
   return (
     <AdminPanelFoldersSidebarMenu
-      menuSide={PAGE_MENU_SIDE.END}
-      foldersData={linkInBioFolderState}
-      folderActionHandlerFn={(event: unknown) => {
-        presentFolderActionIonPopover({
-          _event: event as Event,
-          _cssClass: 'zaions_present_folder_Action_popover_width'
-        });
-      }}
+      menuSide={PAGE_MENU_SIDE.START}
       showSaveReorderButton={compState.linkInBioFoldersReorder.isEnable}
       handleReorderFn={handleReorder}
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       saveReorderButtonFn={shortLinksFoldersReorderHandler}
       state={folderState.linkInBio}
       menuId={CONSTANTS.MENU_IDS.ADMIN_PAGE_LINKS_IN_BIO_FOLDERS_MENU_ID}
+      contentId={CONSTANTS.PAGE_IDS.AD_LIB_LIST_PAGE}
+      foldersData={libFoldersData ?? []}
+      folderActionHandlerFn={(event: unknown) => {
+        presentFolderActionIonPopover({
+          _event: event as Event,
+          _cssClass: 'zaions_present_folder_Action_popover_width'
+        });
+      }}
     />
   );
 };
