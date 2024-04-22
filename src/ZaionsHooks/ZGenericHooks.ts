@@ -185,7 +185,7 @@ export const useZHybridDeviceIsMobile = (): {
   value: boolean;
 } => {
   const { isMdScale } = useZMediaQueryScale();
-  const value = isPlatform('hybrid') && !isMdScale;
+  const value = isPlatform('hybrid') && isPlatform('android') && !isMdScale;
   return { value };
 };
 

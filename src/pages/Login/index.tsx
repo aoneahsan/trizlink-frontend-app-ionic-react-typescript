@@ -32,7 +32,7 @@ const Login: React.FC = () => {
               sizeLg='5'
               sizeMd='6.2'
               sizeSm='8.2'
-              sizeXs='11.5'>
+              sizeXs='11.9'>
               <ZaionsLoginForm />
             </ZIonCol>
           </ZIonRow>

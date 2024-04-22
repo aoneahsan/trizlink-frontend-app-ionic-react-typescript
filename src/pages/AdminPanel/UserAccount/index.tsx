@@ -62,6 +62,7 @@ import { reportCustomError } from '@/utils/customErrorType';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import CONSTANTS from '@/utils/constants';
 import WorkspacesSettings from './WorkspacesSettings';
+import ZUtilityButtonGroup from '@/components/AdminPanelComponents/UtilityButtonGroup';
 const ZAdminPanelTopBar = lazy(
   () => import('@/components/AdminPanelComponents/TopBar')
 );
@@ -263,6 +264,10 @@ const ZUserAccount: React.FC = () => {
                     </ZIonItem>
                   </ZIonItemGroup>
                 </ZIonList>
+
+                <div className='px-2'>
+                  <ZUtilityButtonGroup />
+                </div>
               </ZIonCol>
             </ZIonRow>
           </ZIonGrid>

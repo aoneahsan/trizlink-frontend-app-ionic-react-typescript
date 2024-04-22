@@ -9,7 +9,6 @@ import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
 // Custom Imports
 import {
   ZIonCol,
-  ZIonText,
   ZIonIcon,
   ZIonRouterLink,
   ZIonInput,
@@ -48,6 +47,7 @@ import {
 import { type ZGenericObject } from '@/types/zaionsAppSettings.type';
 import ZInputLengthConstant from '@/utils/constants/InputLenghtConstant';
 import TermsPrivacyAcceptedNote from '@/components/TermsPrivacyAcceptedNote';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 // Style
 
@@ -67,6 +67,7 @@ const ZaionsLoginForm: React.FC = () => {
   const { presentZIonErrorAlert } = useZIonErrorAlert(); // hook to show alert
   const { presentZIonLoader, dismissZIonLoader } = useZIonLoading(); // hook to show loader
   const { zNavigatePushRoute } = useZNavigate(); // hook to navigate
+  const { isSmScale } = useZMediaQueryScale();
 
   // Formik submit function.
   const FormikSubmissionHandler = async (
@@ -302,7 +303,12 @@ const ZaionsLoginForm: React.FC = () => {
 
               <div className='ion-text-end'>
                 <ZIonRouterLink
-                  className='block ion-no-padding ion-no-margin hover:underline'
+                  className={classNames(
+                    'block ion-no-padding ion-no-margin hover:underline',
+                    {
+                      'text-sm': !isSmScale
+                    }
+                  )}
                   routerLink={ZaionsRoutes.PasswordResetEmailForm}
                   testingselector={
                     CONSTANTS.testingSelectors.loginPage.forgetPasswordButton
