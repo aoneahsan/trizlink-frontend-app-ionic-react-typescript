@@ -38,6 +38,9 @@ import FirebaseHOC from '@/HOCs/FirebaseHOC';
 import ErrorLoggingHOC from '@/HOCs/ErrorLoggingHOC';
 import ReloadBlockingHOC from './HOCs/ReloadBlockingHOC';
 
+// Configs
+import '@/configs/googleAuth';
+
 // Global Constants
 
 setupIonicReact();

@@ -66,8 +66,8 @@ dependencies:
     specifier: ^6.0.0
     version: 6.0.0(@capacitor/core@6.0.0)
   '@codetrix-studio/capacitor-google-auth':
-    specifier: ^3.3.6
-    version: 3.3.6(@capacitor/core@6.0.0)
+    specifier: ^3.4.0-rc.0
+    version: 3.4.0-rc.4(@capacitor/core@6.0.0)
   '@ionic/core':
     specifier: ^7.8.4
     version: 7.8.4
@@ -2081,10 +2081,10 @@ packages:
       '@capacitor/core': 6.0.0
     dev: false
 
-  /@codetrix-studio/capacitor-google-auth@3.3.6(@capacitor/core@6.0.0):
-    resolution: {integrity: sha512-SiMjYq5O2rWzEdKrmu3VZQ2nmFdq6LUXPzsNbjs4Ri6WTJVCtzp1HI12t4Dcwi5YoSw8g94Iyi3Can8msj57QA==}
+  /@codetrix-studio/capacitor-google-auth@3.4.0-rc.4(@capacitor/core@6.0.0):
+    resolution: {integrity: sha512-d548/xKrbMHHbzMYSWnlgZCLZYo2zzY7Onrh3x8ujojrb7atkNK68I6su5WgmaBt4E+R4gxBsWams4554aOFjA==}
     peerDependencies:
-      '@capacitor/core': ^5.0.0
+      '@capacitor/core': ^6.0.0
     dependencies:
       '@capacitor/core': 6.0.0
     dev: false

@@ -5,7 +5,7 @@ import CONSTANTS, {
   encryptKeys
 } from '@/utils/constants';
 import { logoGoogle } from 'ionicons/icons';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import { useZIonErrorAlert, useZIonLoading } from '@/ZaionsHooks/zionic-hooks';
@@ -34,19 +34,6 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import { AxiosError } from 'axios';
 import { type ZGenericObject } from '@/types/zaionsAppSettings.type';
-const isWeb = !isPlatform('capacitor');
-
-if (isWeb) {
-  try {
-    GoogleAuth.initialize({
-      clientId: ENVS.googleClientId,
-      grantOfflineAccess: googleAuthConfig.grantOfflineAccess,
-      scopes: googleAuthConfig.scopes
-    });
-  } catch (error) {
-    reportCustomError(error);
-  }
-}
 
 interface IGoogleSocialAuthProps {
   children?: React.ReactNode;
@@ -96,7 +83,6 @@ const GoogleSocialAuth: React.FC<IGoogleSocialAuthProps> = () => {
       void dismissZIonLoader();
       if (gUser?.id?.trim()?.length > 0) {
         const data = {
-          // [encryptKeys.accessToken]: gUser?.authentication?.accessToken,
           [encryptKeys.accessToken]: gUser?.authentication?.accessToken,
           [encryptKeys.time]: dayjs().add(CONSTANTS.ZRequestTimeAddM, 'minute')
         };
@@ -196,6 +182,7 @@ const GoogleSocialAuth: React.FC<IGoogleSocialAuthProps> = () => {
       }
     }
   };
+
   return (
     <ZIonButton
       className='me-2 ion-text-capitalize'
