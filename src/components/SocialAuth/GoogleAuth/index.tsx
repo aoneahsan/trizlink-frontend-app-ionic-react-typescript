@@ -74,6 +74,8 @@ const GoogleSocialAuth: React.FC<IGoogleSocialAuthProps> = () => {
       }
 
       const gUser = await GoogleAuth.signIn();
+
+      console.log({ ml: 'googleAuthHandler', gUser });
       setCompState(oldState => ({
         ...oldState,
         processing: false
