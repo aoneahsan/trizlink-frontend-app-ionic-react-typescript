@@ -10,7 +10,7 @@ module.exports = {
   },
   // uncomment this and it will show the errors in project
   extends: [
-    'standard-with-typescript',
+    'eslint-config-love',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended'
   ],
