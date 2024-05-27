@@ -13,15 +13,15 @@ const googleClientId = CAPACITOR_PLATFORM.isWeb
     ? _env.VITE_GOOGLE_CLIENT_ID_PROD
     : _env.VITE_GOOGLE_CLIENT_ID
   : CAPACITOR_PLATFORM.isAndroid
-  ? _env.VITE_GOOGLE_CLIENT_ID_ANDROID
-  : '';
+    ? _env.VITE_GOOGLE_CLIENT_ID_ANDROID
+    : '';
 const googleApiKey = CAPACITOR_PLATFORM.isWeb
   ? _env.PROD
     ? _env.VITE_GOOGLE_API_KEY_PROD
     : _env.VITE_GOOGLE_API_KEY
   : CAPACITOR_PLATFORM.isAndroid
-  ? _env.VITE_GOOGLE_API_KEY_ANDROID
-  : '';
+    ? _env.VITE_GOOGLE_API_KEY_ANDROID
+    : '';
 
 if (!CAPACITOR_PLATFORM.isIos && (!googleApiKey || !googleClientId)) {
   throw new Error(

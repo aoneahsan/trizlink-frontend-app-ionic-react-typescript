@@ -18,6 +18,7 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import CONSTANTS from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { ProductFavicon } from '@/assets/images';
+import GoogleSocialAuth from '@/components/SocialAuth/GoogleAuth';
 
 // Style
 
@@ -26,7 +27,7 @@ const ZaionsLoginOptions: React.FC = () => {
 
   return (
     <>
-      <ZIonRow className='mb-10'>
+      <ZIonRow>
         <ZIonCol className='flex ion-justify-content-center'>
           <div className='w-full ion-text-center'>
             <ZIonImg
@@ -60,7 +61,7 @@ const ZaionsLoginOptions: React.FC = () => {
           </div>
         </ZIonCol>
       </ZIonRow>
-      {/* <ZIonRow>
+      <ZIonRow className='mb-10'>
         <ZIonCol
           className='mx-auto ion-text-center'
           size='4.2'
@@ -76,6 +77,7 @@ const ZaionsLoginOptions: React.FC = () => {
           <GoogleSocialAuth />
         </ZIonCol>
       </ZIonRow>
+      {/* 
       <ZaionsSeparator className='py-2 my-6' /> */}
     </>
   );
