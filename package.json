@@ -6,10 +6,10 @@
   "version": "1.0.0",
   "type": "module",
   "engines": {
-    "node": "^21.6.2",
-    "npm": "Please use PNPM (v1.22.21)",
-    "yarn": "Please use PNPM (^9.0.4)",
-    "pnpm": "^9.0.4"
+    "node": "^22.2.0",
+    "npm": "Please use PNPM (v1.22.22)",
+    "yarn": "Please use PNPM (^9.0.6)",
+    "pnpm": "^9.0.6"
   },
   "author": {
     "email": "developer@zaions.com",
@@ -119,6 +119,7 @@
     "@types/crypto-js": "^4.2.2",
     "@types/draft-js": "^0.11.18",
     "@types/draftjs-to-html": "^0.8.4",
+    "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20.12.12",
     "@types/qs": "^6.9.15",
     "@types/react": "^18.3.3",

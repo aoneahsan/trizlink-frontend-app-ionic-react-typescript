@@ -29,6 +29,13 @@ if (!CAPACITOR_PLATFORM.isIos && (!googleApiKey || !googleClientId)) {
   );
 }
 
+const jwtSharedSecretKey = _env.VITE_JWT_SECRET_SHARED;
+const jwtFrontendSecretKey = _env.VITE_JWT_SECRET_FRONTEND;
+
+if (!jwtSharedSecretKey || !jwtFrontendSecretKey) {
+  throw new Error('JWT Secret Key is not defined.');
+}
+
 export const ENVS = {
   // Environment
   isProduction: _env.PROD,
@@ -57,8 +64,16 @@ export const ENVS = {
 
   // Third Party Services
   // Sentry
-  sentryErrorLoggingDNS: _env.VITE_SENTRY_DNS ?? null
-};
+  sentryErrorLoggingDNS: _env.VITE_SENTRY_DNS ?? null,
+
+  // JWT
+  jwt: {
+    sharedSecret: jwtSharedSecretKey,
+    frontendSecret: jwtFrontendSecretKey,
+    expiresIn: '30m',
+    algorithm: 'HS256'
+  }
+} as const;
 
 if (!ENVS.googleApiKey) {
   console.error('Google Map API Key is not defined.');

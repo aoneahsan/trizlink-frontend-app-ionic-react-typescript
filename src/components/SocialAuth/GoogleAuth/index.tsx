@@ -1,18 +1,10 @@
 import { ZIonButton, ZIonIcon } from '@/components/ZIonComponents';
-import CONSTANTS, {
-  BRACKPOINT_SM,
-  LOCALSTORAGE_KEYS,
-  encryptKeys
-} from '@/utils/constants';
+import CONSTANTS, { LOCALSTORAGE_KEYS, encryptKeys } from '@/utils/constants';
 import { logoGoogle } from 'ionicons/icons';
-import React, { useCallback, useState } from 'react';
-import { useMediaQuery } from 'react-responsive';
+import React, { useState } from 'react';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import { useZIonErrorAlert, useZIonLoading } from '@/ZaionsHooks/zionic-hooks';
 import { ZCustomError, reportCustomError } from '@/utils/customErrorType';
-import { isPlatform } from '@ionic/react';
-import { ENVS } from '@/utils/envKeys';
-import { googleAuthConfig } from '@/configs/socialAuth';
 import dayjs from 'dayjs';
 import {
   STORAGE,
@@ -22,7 +14,7 @@ import {
   zStringify
 } from '@/utils/helpers';
 import { type UserAuthData } from '@/types/ZaionsApis.type';
-import { API_URL_ENUM } from '@/utils/enums';
+import { API_URL_ENUM, JWTSecretKeyTypeEnum } from '@/utils/enums';
 import { showSuccessNotification } from '@/utils/notification';
 import MESSAGES from '@/utils/messages';
 import { useSetRecoilState } from 'recoil';
@@ -42,9 +34,6 @@ interface IGoogleSocialAuthProps {
 const GoogleSocialAuth: React.FC<IGoogleSocialAuthProps> = () => {
   const [compState, setCompState] = useState({
     processing: false
-  });
-  const isXsScale = useMediaQuery({
-    query: `(min-width: ${BRACKPOINT_SM})`
   });
   const { presentZIonErrorAlert } = useZIonErrorAlert();
   const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
@@ -74,12 +63,6 @@ const GoogleSocialAuth: React.FC<IGoogleSocialAuthProps> = () => {
       }
 
       const gUser = await GoogleAuth.signIn();
-
-      console.log({ ml: 'googleAuthHandler', gUser });
-      setCompState(oldState => ({
-        ...oldState,
-        processing: false
-      }));
 
       // yes we will only dismiss the main loader once we have completed the auth request completely and properly, or in case of error
       void dismissZIonLoader();

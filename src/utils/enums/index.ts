@@ -272,3 +272,8 @@ export enum TypeEnum {
   null = 'null',
   undefined = 'undefined'
 }
+
+export enum JWTSecretKeyTypeEnum {
+  sharedSecret = 'sharedSecret',
+  frontendSecret = 'frontendSecret'
+}
