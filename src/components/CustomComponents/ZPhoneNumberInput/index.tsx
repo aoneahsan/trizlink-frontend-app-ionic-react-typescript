@@ -92,10 +92,10 @@ const ZCPhoneNumberInput: React.FC<IZCPhoneNumberInput> = ({
     style !== undefined && minHeight !== undefined
       ? { ...style, minHeight }
       : style !== undefined && minHeight === undefined
-      ? { ...style }
-      : style === undefined && minHeight !== undefined
-      ? { minHeight }
-      : {};
+        ? { ...style }
+        : style === undefined && minHeight !== undefined
+          ? { minHeight }
+          : {};
 
   const _testinglistselector =
     testinglistselector !== undefined
@@ -120,7 +120,12 @@ const ZCPhoneNumberInput: React.FC<IZCPhoneNumberInput> = ({
       <PhoneInput
         placeholder={placeholder}
         onBlur={onBlur}
-        onChange={onChange}
+        onChange={val => {
+          const _val = val?.toString().trim() ?? '';
+          if (_val.length > 0) {
+            onChange(_val);
+          }
+        }}
         style={compStyle}
         className={classNames(classes['z-custom-pn-field'], {
           'w-full': true,
