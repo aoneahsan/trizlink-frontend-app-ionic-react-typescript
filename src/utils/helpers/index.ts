@@ -535,17 +535,15 @@ export const validateField = (
     errorsObj[fieldKey] = `${_fieldKeyTitleCase} needs to be a valid email.`;
   } else if (validationRule === VALIDATION_RULE.password) {
     if (!checkIfContains(_val, CONTAINS.minCharacter)) {
-      errorsObj[
-        fieldKey
-      ] = `${_fieldKeyTitleCase} needs to be at least 8 digits long.`;
+      errorsObj[fieldKey] =
+        `${_fieldKeyTitleCase} needs to be at least 8 digits long.`;
     } else if (!checkIfContains(_val, CONTAINS.number)) {
       errorsObj[fieldKey] = `${_fieldKeyTitleCase} must include a digit.`;
     } else if (!checkIfContains(_val, CONTAINS.letter)) {
       errorsObj[fieldKey] = `${_fieldKeyTitleCase} must include a letter.`;
     } else if (!checkIfContains(_val, CONTAINS.specialSymbol)) {
-      errorsObj[
-        fieldKey
-      ] = `${_fieldKeyTitleCase} must include a special character.`;
+      errorsObj[fieldKey] =
+        `${_fieldKeyTitleCase} must include a special character.`;
     }
   } else if (validationRule === VALIDATION_RULE.url && !VALIDATOR.isURL(_val)) {
     errorsObj[fieldKey] =
@@ -673,6 +671,25 @@ export const getApiUrl = (
     } else if (itemIds?.length !== urlDynamicParts?.length) {
       throw new Error('length does not match. invalid length');
     }
+
+    // replace the default dynamic part in the url
+    try {
+      if (_url.includes(CONSTANTS.RouteParams.pageNumber)) {
+        _url = _url.replace(
+          CONSTANTS.RouteParams.pageNumber,
+          CONSTANTS.pagination.startingPageIndex.toString()
+        );
+      }
+    } catch (error) {}
+    try {
+      if (_url.includes(CONSTANTS.RouteParams.paginationLimit)) {
+        _url = _url.replace(
+          CONSTANTS.RouteParams.paginationLimit,
+          CONSTANTS.pagination.defaultPageSize.toString()
+        );
+      }
+    } catch (error) {}
+
     return _url;
   } catch (error) {
     reportError(error);
@@ -723,9 +740,8 @@ export const zAxiosApiRequest = async <T>({
     };
 
     // Making axios request.
-    const _res = await axiosInstance.request<AxiosRequestResponseType>(
-      reqInput
-    );
+    const _res =
+      await axiosInstance.request<AxiosRequestResponseType>(reqInput);
 
     // retuning data of type T
     return _res.data as unknown as T;

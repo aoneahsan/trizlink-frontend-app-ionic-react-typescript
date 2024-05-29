@@ -381,31 +381,6 @@ const ZInpageTable: React.FC = () => {
       _extractType: ZRQGetRequestExtractEnum.extractData
     });
 
-  // const {
-  //   data: ShortLinksInfiniteQueryData,
-  //   fetchNextPage: ShortLinksInfiniteQueryFetchNextPage
-  // } = useZInfiniteQuery<unknown[]>({
-  //   _url: API_URL_ENUM.shortLinks_list,
-  //   _key: [
-  //     CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
-  //     workspaceId ?? '',
-  //     // String(pageindex),
-  //     'testing'
-  //   ],
-  //   _shouldFetchWhenIdPassed: !((workspaceId?.trim()?.length ?? 0) > 0),
-  //   _itemsIds: [workspaceId ?? '', String(pageindex), String(pagesize)],
-  //   _urlDynamicParts: [
-  //     CONSTANTS.RouteParams.workspace.workspaceId,
-  //     CONSTANTS.RouteParams.pageNumber,
-  //     CONSTANTS.RouteParams.paginationLimit
-  //   ],
-  //   _showLoader: false,
-  //   _extractType: ZRQGetRequestExtractEnum.extractPage,
-  //   _pageParam: Number(pageindex)
-  // });
-  // console.log({ ShortLinksInfiniteQueryData });
-  // console.log({ hasNextPage, isFetching, isFetchingNextPage, status });
-
   // Request for getting share workspace short links data.
   const { data: swsShortLinksData } = useZRQGetRequest<ShortLinkType[]>({
     _url: API_URL_ENUM.sws_sl_create_list,
@@ -557,6 +532,74 @@ const ZInpageTable: React.FC = () => {
       footer: 'Title'
     }),
 
+    // link to share
+    columnHelper.accessor(itemData => itemData.shortUrlDomain, {
+      header: 'Link to share',
+      id: ZShortLinkListPageTableColumnsIds.linkToShare,
+      footer: 'Link to share',
+      cell: ({ row }) => {
+        const _shortLink = zGenerateShortLink({
+          domain: row?.original?.shortUrlDomain,
+          urlPath: row?.original?.shortUrlPath
+        });
+        return (
+          <div className='ZaionsTextEllipsis'>
+            <ZIonText
+              color='primary'
+              className='block cursor-pointer hover:underline'
+              id={`z-shortlink-${row?.original?.id}`}
+              testingselector={
+                CONSTANTS.testingSelectors.shortLink.listPage.table.linkToShare
+              }
+              testinglistselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.linkToShare}-${row.original.id}`}
+              onClick={() => {
+                void navigator.clipboard.writeText(_shortLink ?? '');
+
+                void presentZIonToast('✨ Copied', 'tertiary');
+              }}>
+              {_shortLink}
+            </ZIonText>
+
+            <ZRTooltip
+              anchorSelect={`#z-shortlink-${row?.original?.id}`}
+              place='top'
+              onArrow={true}
+              variant='info'
+              className='z-50'>
+              <ZIonText>{_shortLink}</ZIonText>
+            </ZRTooltip>
+          </div>
+        );
+      }
+    }),
+
+    // Url
+    columnHelper.accessor(
+      itemData => {
+        if (itemData?.target !== undefined) {
+          return (itemData.target as LinkTargetType).url;
+        }
+      },
+      {
+        header: 'Url',
+        id: ZShortLinkListPageTableColumnsIds.url,
+        cell: row => (
+          <ZIonRouterLink
+            href={String(row.getValue())}
+            color='dark'
+            className='hover:underline'
+            target='_blank'
+            testingselector={
+              CONSTANTS.testingSelectors.shortLink.listPage.table.url
+            }
+            testinglistselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.url}-${row.row.original.id}`}>
+            {row.getValue()}
+          </ZIonRouterLink>
+        ),
+        footer: 'Url Footer'
+      }
+    ),
+
     // Date
     columnHelper.accessor(itemData => itemData.createdAt, {
       header: 'Date',
@@ -643,74 +686,6 @@ const ZInpageTable: React.FC = () => {
               CONSTANTS.NO_VALUE_FOUND
             )}
           </>
-        );
-      }
-    }),
-
-    // Url
-    columnHelper.accessor(
-      itemData => {
-        if (itemData?.target !== undefined) {
-          return (itemData.target as LinkTargetType).url;
-        }
-      },
-      {
-        header: 'Url',
-        id: ZShortLinkListPageTableColumnsIds.url,
-        cell: row => (
-          <ZIonRouterLink
-            href={String(row.getValue())}
-            color='dark'
-            className='hover:underline'
-            target='_blank'
-            testingselector={
-              CONSTANTS.testingSelectors.shortLink.listPage.table.url
-            }
-            testinglistselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.url}-${row.row.original.id}`}>
-            {row.getValue()}
-          </ZIonRouterLink>
-        ),
-        footer: 'Url Footer'
-      }
-    ),
-
-    // link to share
-    columnHelper.accessor(itemData => itemData.shortUrlDomain, {
-      header: 'Link to share',
-      id: ZShortLinkListPageTableColumnsIds.linkToShare,
-      footer: 'Link to share',
-      cell: ({ row }) => {
-        const _shortLink = zGenerateShortLink({
-          domain: row?.original?.shortUrlDomain,
-          urlPath: row?.original?.shortUrlPath
-        });
-        return (
-          <div className='ZaionsTextEllipsis'>
-            <ZIonText
-              color='primary'
-              className='block cursor-pointer hover:underline'
-              id={`z-shortlink-${row?.original?.id}`}
-              testingselector={
-                CONSTANTS.testingSelectors.shortLink.listPage.table.linkToShare
-              }
-              testinglistselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.linkToShare}-${row.original.id}`}
-              onClick={() => {
-                void navigator.clipboard.writeText(_shortLink ?? '');
-
-                void presentZIonToast('✨ Copied', 'tertiary');
-              }}>
-              {_shortLink}
-            </ZIonText>
-
-            <ZRTooltip
-              anchorSelect={`#z-shortlink-${row?.original?.id}`}
-              place='top'
-              onArrow={true}
-              variant='info'
-              className='z-50'>
-              <ZIonText>{_shortLink}</ZIonText>
-            </ZRTooltip>
-          </div>
         );
       }
     })

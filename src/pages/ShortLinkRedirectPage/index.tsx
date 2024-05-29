@@ -218,7 +218,7 @@ const ZShortLinkRedirectPage: React.FC = () => {
         short_name: string;
         types: string[];
       }>
-    ).find(component => component.types.includes('country'));
+    )?.find(component => component?.types?.includes('country'));
     return countryComponent ?? null;
   };
 
