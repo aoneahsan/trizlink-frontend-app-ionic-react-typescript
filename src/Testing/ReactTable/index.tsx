@@ -17,6 +17,7 @@ import {
 import { flexRender, useReactTable } from '@tanstack/react-table';
 import classNames from 'classnames';
 import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
+import CONSTANTS from '@/utils/constants';
 
 const TestingReactTable: React.FC = () => {
   //
@@ -105,8 +106,8 @@ const TestingReactTable: React.FC = () => {
   });
 
   useEffect(() => {
-    zTable.setPageIndex(0);
-    zTable.setPageSize(2);
+    zTable.setPageIndex(CONSTANTS.pagination.startingPageIndex);
+    zTable.setPageSize(CONSTANTS.pagination.defaultPageSize);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -280,11 +281,14 @@ const TestingReactTable: React.FC = () => {
 
             {/* Page Size */}
             <select
-              value={zTable.getState().pagination.pageSize}
+              value={
+                zTable.getState().pagination.pageSize ??
+                CONSTANTS.pagination.defaultPageSize
+              }
               onChange={e => {
                 zTable.setPageSize(Number(e.target.value));
               }}>
-              {[2, 3].map(pageSize => (
+              {CONSTANTS.pagination.pageSizeOptions.map(pageSize => (
                 <option
                   key={pageSize}
                   value={pageSize}>

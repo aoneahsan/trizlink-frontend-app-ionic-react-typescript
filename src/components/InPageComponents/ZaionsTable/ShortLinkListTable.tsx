@@ -810,11 +810,24 @@ const ZInpageTable: React.FC = () => {
   }, [getShortLinkFiltersData]);
 
   useEffect(() => {
-    // zShortLinksTable.setPageIndex(Number(pageindex) ?? 0);
-    zShortLinksTable.setPageSize(Number(pagesize ?? 2));
+    try {
+      zShortLinksTable.setPageIndex(
+        isNaN(Number(pageindex))
+          ? CONSTANTS.pagination.startingPageIndex
+          : Number(pageindex)
+      );
+      zShortLinksTable.setPageSize(
+        isNaN(Number(pagesize))
+          ? CONSTANTS.pagination.defaultPageSize
+          : Number(pagesize)
+      );
+    } catch (error) {
+      zShortLinksTable.setPageIndex(CONSTANTS.pagination.startingPageIndex);
+      zShortLinksTable.setPageSize(CONSTANTS.pagination.defaultPageSize);
+    }
 
     // eslint-disable-next-line
-  }, [pagesize]);
+  }, [pageindex, pagesize]);
 
   // When the short links data fetch from backend, storing it in ShortLinksRStateAtom recoil state.
   useEffect(() => {
@@ -1356,9 +1369,11 @@ const ZInpageTable: React.FC = () => {
                     ],
                     routeSearchParams: {
                       pageindex: pageNumber - 1,
-                      pagesize: zShortLinksTable
-                        .getState()
-                        .pagination.pageSize.toString()
+                      pagesize:
+                        (isNaN(zShortLinksTable.getState().pagination.pageSize)
+                          ? CONSTANTS.pagination.defaultPageSize
+                          : zShortLinksTable.getState().pagination.pageSize) +
+                        ''
                     }
                   })
                 );
@@ -1381,9 +1396,10 @@ const ZInpageTable: React.FC = () => {
                     ],
                     routeSearchParams: {
                       pageindex: +String(pageindex ?? '0') - 1 - 1,
-                      pagesize: zShortLinksTable
-                        .getState()
-                        .pagination.pageSize.toString()
+                      pagesize: (
+                        zShortLinksTable.getState().pagination.pageSize ??
+                        CONSTANTS.pagination.defaultPageSize
+                      ).toString()
                     }
                   })
                 );
@@ -1415,7 +1431,10 @@ const ZInpageTable: React.FC = () => {
             minHeight='30px'
             fill='outline'
             className='zaions__bg_white w-[8rem]'
-            value={zShortLinksTable.getState().pagination.pageSize ?? 2}
+            value={
+              zShortLinksTable.getState().pagination.pageSize ??
+              CONSTANTS.pagination.defaultPageSize
+            }
             testingselector={
               CONSTANTS.testingSelectors.shortLink.listPage.table.pageSizeInput
             }
@@ -1465,7 +1484,7 @@ const ZInpageTable: React.FC = () => {
                 );
               }
             }}>
-            {[2, 3].map(pageSize => (
+            {CONSTANTS.pagination.pageSizeOptions.map(pageSize => (
               <ZIonSelectOption
                 key={pageSize}
                 value={pageSize}

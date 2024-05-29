@@ -379,18 +379,18 @@ const ZInpageTable: React.FC = () => {
               ZUserSettingTypeEnum.UTMTagListPageTable
             ]
           : wsShareId !== undefined &&
-            wsShareId !== null &&
-            wsShareId?.trim()?.length > 0 &&
-            shareWSMemberId !== undefined &&
-            shareWSMemberId !== null &&
-            shareWSMemberId?.trim()?.length > 0
-          ? [
-              CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
-              wsShareId,
-              shareWSMemberId,
-              ZUserSettingTypeEnum.UTMTagListPageTable
-            ]
-          : [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET],
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              shareWSMemberId?.trim()?.length > 0
+            ? [
+                CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
+                wsShareId,
+                shareWSMemberId,
+                ZUserSettingTypeEnum.UTMTagListPageTable
+              ]
+            : [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET],
       _itemsIds:
         workspaceId !== undefined &&
         workspaceId !== null &&
@@ -401,17 +401,17 @@ const ZInpageTable: React.FC = () => {
               ZUserSettingTypeEnum.UTMTagListPageTable
             ]
           : wsShareId !== undefined &&
-            wsShareId !== null &&
-            wsShareId?.trim()?.length > 0 &&
-            shareWSMemberId !== undefined &&
-            shareWSMemberId !== null &&
-            shareWSMemberId?.trim()?.length > 0
-          ? [
-              ZWSTypeEum.shareWorkspace,
-              shareWSMemberId,
-              ZUserSettingTypeEnum.UTMTagListPageTable
-            ]
-          : [],
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              shareWSMemberId?.trim()?.length > 0
+            ? [
+                ZWSTypeEum.shareWorkspace,
+                shareWSMemberId,
+                ZUserSettingTypeEnum.UTMTagListPageTable
+              ]
+            : [],
       _urlDynamicParts: [
         CONSTANTS.RouteParams.workspace.type,
         CONSTANTS.RouteParams.workspace.workspaceId,
@@ -710,8 +710,21 @@ const ZInpageTable: React.FC = () => {
   }, [getUTMTagFiltersData]);
 
   useEffect(() => {
-    zUTMTagTable.setPageIndex(Number(pageindex ?? 0));
-    zUTMTagTable.setPageSize(Number(pagesize ?? 2));
+    try {
+      zUTMTagTable.setPageIndex(
+        isNaN(Number(pageindex))
+          ? CONSTANTS.pagination.startingPageIndex
+          : Number(pageindex)
+      );
+      zUTMTagTable.setPageSize(
+        isNaN(Number(pagesize))
+          ? CONSTANTS.pagination.defaultPageSize
+          : Number(pagesize)
+      );
+    } catch (error) {
+      zUTMTagTable.setPageIndex(CONSTANTS.pagination.startingPageIndex);
+      zUTMTagTable.setPageSize(CONSTANTS.pagination.defaultPageSize);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageindex, pagesize]);
 
@@ -815,44 +828,46 @@ const ZInpageTable: React.FC = () => {
                       <ZIonRow
                         key={_rowIndex}
                         className='flex-nowrap'>
-                        {_rowInfo?.getAllCells()?.map((_cellInfo, _cellIndex) =>
-                          _cellInfo?.column?.getIsVisible() ? (
-                            <ZIonCol
-                              key={_cellIndex}
-                              size={
-                                _cellInfo.column.id ===
-                                  ZUTMTagsListPageTableColumnsIds.id ||
-                                _cellInfo.column.id ===
-                                  ZUTMTagsListPageTableColumnsIds.actions
-                                  ? '.8'
-                                  : '2.6'
-                              }
-                              className={classNames({
-                                'py-1 mt-1 border-b flex ion-align-items-center':
-                                  true,
-                                'border-r': false,
-                                'ps-2':
-                                  _cellInfo.column.id !==
-                                  ZUTMTagsListPageTableColumnsIds.id,
-                                'ps-0':
+                        {_rowInfo
+                          ?.getAllCells()
+                          ?.map((_cellInfo, _cellIndex) =>
+                            _cellInfo?.column?.getIsVisible() ? (
+                              <ZIonCol
+                                key={_cellIndex}
+                                size={
                                   _cellInfo.column.id ===
-                                  ZUTMTagsListPageTableColumnsIds.id
-                              })}>
-                              <div
+                                    ZUTMTagsListPageTableColumnsIds.id ||
+                                  _cellInfo.column.id ===
+                                    ZUTMTagsListPageTableColumnsIds.actions
+                                    ? '.8'
+                                    : '2.6'
+                                }
                                 className={classNames({
-                                  'w-full text-sm ZaionsTextEllipsis': true,
-                                  'ps-3':
+                                  'py-1 mt-1 border-b flex ion-align-items-center':
+                                    true,
+                                  'border-r': false,
+                                  'ps-2':
+                                    _cellInfo.column.id !==
+                                    ZUTMTagsListPageTableColumnsIds.id,
+                                  'ps-0':
                                     _cellInfo.column.id ===
                                     ZUTMTagsListPageTableColumnsIds.id
                                 })}>
-                                {flexRender(
-                                  _cellInfo.column.columnDef.cell,
-                                  _cellInfo.getContext()
-                                )}
-                              </div>
-                            </ZIonCol>
-                          ) : null
-                        )}
+                                <div
+                                  className={classNames({
+                                    'w-full text-sm ZaionsTextEllipsis': true,
+                                    'ps-3':
+                                      _cellInfo.column.id ===
+                                      ZUTMTagsListPageTableColumnsIds.id
+                                  })}>
+                                  {flexRender(
+                                    _cellInfo.column.columnDef.cell,
+                                    _cellInfo.getContext()
+                                  )}
+                                </div>
+                              </ZIonCol>
+                            ) : null
+                          )}
 
                         <ZIonCol
                           size='.8'
@@ -979,28 +994,28 @@ const ZInpageTable: React.FC = () => {
                         }
                       })
                     : wsShareId !== undefined &&
-                      wsShareId !== null &&
-                      wsShareId?.trim()?.length > 0 &&
-                      shareWSMemberId !== null &&
-                      shareWSMemberId !== undefined &&
-                      shareWSMemberId?.trim()?.length > 0 &&
-                      shareWSMemberId !== undefined
-                    ? createRedirectRoute({
-                        url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
-                          .UTMTag,
-                        params: [
-                          CONSTANTS.RouteParams.workspace.wsShareId,
-                          CONSTANTS.RouteParams.workspace.shareWSMemberId
-                        ],
-                        values: [wsShareId, shareWSMemberId],
-                        routeSearchParams: {
-                          pageindex: 0,
-                          pagesize: zUTMTagTable
-                            .getState()
-                            .pagination.pageSize.toString()
-                        }
-                      })
-                    : ''
+                        wsShareId !== null &&
+                        wsShareId?.trim()?.length > 0 &&
+                        shareWSMemberId !== null &&
+                        shareWSMemberId !== undefined &&
+                        shareWSMemberId?.trim()?.length > 0 &&
+                        shareWSMemberId !== undefined
+                      ? createRedirectRoute({
+                          url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
+                            .UTMTag,
+                          params: [
+                            CONSTANTS.RouteParams.workspace.wsShareId,
+                            CONSTANTS.RouteParams.workspace.shareWSMemberId
+                          ],
+                          values: [wsShareId, shareWSMemberId],
+                          routeSearchParams: {
+                            pageindex: 0,
+                            pagesize: zUTMTagTable
+                              .getState()
+                              .pagination.pageSize.toString()
+                          }
+                        })
+                      : ''
                 );
 
                 zUTMTagTable.setPageIndex(0);
@@ -1043,29 +1058,29 @@ const ZInpageTable: React.FC = () => {
                         }
                       })
                     : wsShareId !== undefined &&
-                      wsShareId !== null &&
-                      wsShareId?.trim()?.length > 0 &&
-                      shareWSMemberId !== null &&
-                      shareWSMemberId !== undefined &&
-                      shareWSMemberId?.trim()?.length > 0 &&
-                      shareWSMemberId !== undefined
-                    ? createRedirectRoute({
-                        url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
-                          .UTMTag,
-                        params: [
-                          CONSTANTS.RouteParams.workspace.wsShareId,
-                          CONSTANTS.RouteParams.workspace.shareWSMemberId
-                        ],
-                        values: [wsShareId, shareWSMemberId],
-                        routeSearchParams: {
-                          pageindex:
-                            zUTMTagTable.getState().pagination.pageIndex - 1,
-                          pagesize: zUTMTagTable
-                            .getState()
-                            .pagination.pageSize.toString()
-                        }
-                      })
-                    : ''
+                        wsShareId !== null &&
+                        wsShareId?.trim()?.length > 0 &&
+                        shareWSMemberId !== null &&
+                        shareWSMemberId !== undefined &&
+                        shareWSMemberId?.trim()?.length > 0 &&
+                        shareWSMemberId !== undefined
+                      ? createRedirectRoute({
+                          url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
+                            .UTMTag,
+                          params: [
+                            CONSTANTS.RouteParams.workspace.wsShareId,
+                            CONSTANTS.RouteParams.workspace.shareWSMemberId
+                          ],
+                          values: [wsShareId, shareWSMemberId],
+                          routeSearchParams: {
+                            pageindex:
+                              zUTMTagTable.getState().pagination.pageIndex - 1,
+                            pagesize: zUTMTagTable
+                              .getState()
+                              .pagination.pageSize.toString()
+                          }
+                        })
+                      : ''
                 );
               }
             }}>
@@ -1107,29 +1122,29 @@ const ZInpageTable: React.FC = () => {
                         }
                       })
                     : wsShareId !== undefined &&
-                      wsShareId !== null &&
-                      wsShareId?.trim()?.length > 0 &&
-                      shareWSMemberId !== null &&
-                      shareWSMemberId !== undefined &&
-                      shareWSMemberId?.trim()?.length > 0 &&
-                      shareWSMemberId !== undefined
-                    ? createRedirectRoute({
-                        url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
-                          .UTMTag,
-                        params: [
-                          CONSTANTS.RouteParams.workspace.wsShareId,
-                          CONSTANTS.RouteParams.workspace.shareWSMemberId
-                        ],
-                        values: [wsShareId, shareWSMemberId],
-                        routeSearchParams: {
-                          pageindex:
-                            zUTMTagTable.getState().pagination.pageIndex + 1,
-                          pagesize: zUTMTagTable
-                            .getState()
-                            .pagination.pageSize.toString()
-                        }
-                      })
-                    : ''
+                        wsShareId !== null &&
+                        wsShareId?.trim()?.length > 0 &&
+                        shareWSMemberId !== null &&
+                        shareWSMemberId !== undefined &&
+                        shareWSMemberId?.trim()?.length > 0 &&
+                        shareWSMemberId !== undefined
+                      ? createRedirectRoute({
+                          url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
+                            .UTMTag,
+                          params: [
+                            CONSTANTS.RouteParams.workspace.wsShareId,
+                            CONSTANTS.RouteParams.workspace.shareWSMemberId
+                          ],
+                          values: [wsShareId, shareWSMemberId],
+                          routeSearchParams: {
+                            pageindex:
+                              zUTMTagTable.getState().pagination.pageIndex + 1,
+                            pagesize: zUTMTagTable
+                              .getState()
+                              .pagination.pageSize.toString()
+                          }
+                        })
+                      : ''
                 );
               }
             }}>
@@ -1170,28 +1185,28 @@ const ZInpageTable: React.FC = () => {
                         }
                       })
                     : wsShareId !== undefined &&
-                      wsShareId !== null &&
-                      wsShareId?.trim()?.length > 0 &&
-                      shareWSMemberId !== null &&
-                      shareWSMemberId !== undefined &&
-                      shareWSMemberId?.trim()?.length > 0 &&
-                      shareWSMemberId !== undefined
-                    ? createRedirectRoute({
-                        url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
-                          .UTMTag,
-                        params: [
-                          CONSTANTS.RouteParams.workspace.wsShareId,
-                          CONSTANTS.RouteParams.workspace.shareWSMemberId
-                        ],
-                        values: [wsShareId, shareWSMemberId],
-                        routeSearchParams: {
-                          pageindex: zUTMTagTable.getPageCount() - 1,
-                          pagesize: zUTMTagTable
-                            .getState()
-                            .pagination.pageSize.toString()
-                        }
-                      })
-                    : ''
+                        wsShareId !== null &&
+                        wsShareId?.trim()?.length > 0 &&
+                        shareWSMemberId !== null &&
+                        shareWSMemberId !== undefined &&
+                        shareWSMemberId?.trim()?.length > 0 &&
+                        shareWSMemberId !== undefined
+                      ? createRedirectRoute({
+                          url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
+                            .UTMTag,
+                          params: [
+                            CONSTANTS.RouteParams.workspace.wsShareId,
+                            CONSTANTS.RouteParams.workspace.shareWSMemberId
+                          ],
+                          values: [wsShareId, shareWSMemberId],
+                          routeSearchParams: {
+                            pageindex: zUTMTagTable.getPageCount() - 1,
+                            pagesize: zUTMTagTable
+                              .getState()
+                              .pagination.pageSize.toString()
+                          }
+                        })
+                      : ''
                 );
               }
             }}>
@@ -1225,7 +1240,10 @@ const ZInpageTable: React.FC = () => {
             minHeight='30px'
             fill='outline'
             className='zaions__bg_white w-[7rem]'
-            value={zUTMTagTable.getState().pagination.pageSize}
+            value={
+              zUTMTagTable.getState().pagination.pageSize ??
+              CONSTANTS.pagination.defaultPageSize
+            }
             testingselector={
               CONSTANTS.testingSelectors.utmTags.listPage.table.pageSizeInput
             }
@@ -1247,29 +1265,29 @@ const ZInpageTable: React.FC = () => {
                       }
                     })
                   : wsShareId !== undefined &&
-                    wsShareId !== null &&
-                    wsShareId?.trim()?.length > 0 &&
-                    shareWSMemberId !== null &&
-                    shareWSMemberId !== undefined &&
-                    shareWSMemberId?.trim()?.length > 0 &&
-                    shareWSMemberId !== undefined
-                  ? createRedirectRoute({
-                      url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
-                        .UTMTag,
-                      params: [
-                        CONSTANTS.RouteParams.workspace.wsShareId,
-                        CONSTANTS.RouteParams.workspace.shareWSMemberId
-                      ],
-                      values: [wsShareId, shareWSMemberId],
-                      routeSearchParams: {
-                        pageindex: zUTMTagTable.getPageCount() - 1,
-                        pagesize: Number(e.target.value)
-                      }
-                    })
-                  : ''
+                      wsShareId !== null &&
+                      wsShareId?.trim()?.length > 0 &&
+                      shareWSMemberId !== null &&
+                      shareWSMemberId !== undefined &&
+                      shareWSMemberId?.trim()?.length > 0 &&
+                      shareWSMemberId !== undefined
+                    ? createRedirectRoute({
+                        url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
+                          .UTMTag,
+                        params: [
+                          CONSTANTS.RouteParams.workspace.wsShareId,
+                          CONSTANTS.RouteParams.workspace.shareWSMemberId
+                        ],
+                        values: [wsShareId, shareWSMemberId],
+                        routeSearchParams: {
+                          pageindex: zUTMTagTable.getPageCount() - 1,
+                          pagesize: Number(e.target.value)
+                        }
+                      })
+                    : ''
               );
             }}>
-            {[2, 3].map(pageSize => (
+            {CONSTANTS.pagination.pageSizeOptions.map(pageSize => (
               <ZIonSelectOption
                 key={pageSize}
                 value={pageSize}
@@ -1660,14 +1678,14 @@ const ZUTMTagActionPopover: React.FC<{
           workspaceId?.trim()?.length > 0
             ? [permissionsEnum.update_utmTag]
             : wsShareId !== undefined &&
-              wsShareId !== null &&
-              wsShareId?.trim()?.length > 0 &&
-              shareWSMemberId !== null &&
-              shareWSMemberId !== undefined &&
-              shareWSMemberId?.trim()?.length > 0 &&
-              shareWSMemberId !== undefined
-            ? [shareWSPermissionEnum.update_sws_utmTag]
-            : []
+                wsShareId !== null &&
+                wsShareId?.trim()?.length > 0 &&
+                shareWSMemberId !== null &&
+                shareWSMemberId !== undefined &&
+                shareWSMemberId?.trim()?.length > 0 &&
+                shareWSMemberId !== undefined
+              ? [shareWSPermissionEnum.update_sws_utmTag]
+              : []
         }>
         <ZIonItem
           button={true}
@@ -1738,14 +1756,14 @@ const ZUTMTagActionPopover: React.FC<{
           workspaceId?.trim()?.length > 0
             ? [permissionsEnum.delete_utmTag]
             : wsShareId !== undefined &&
-              wsShareId !== null &&
-              wsShareId?.trim()?.length > 0 &&
-              shareWSMemberId !== null &&
-              shareWSMemberId !== undefined &&
-              shareWSMemberId?.trim()?.length > 0 &&
-              shareWSMemberId !== undefined
-            ? [shareWSPermissionEnum.delete_sws_utmTag]
-            : []
+                wsShareId !== null &&
+                wsShareId?.trim()?.length > 0 &&
+                shareWSMemberId !== null &&
+                shareWSMemberId !== undefined &&
+                shareWSMemberId?.trim()?.length > 0 &&
+                shareWSMemberId !== undefined
+              ? [shareWSPermissionEnum.delete_sws_utmTag]
+              : []
         }>
         <ZIonItem
           button={true}

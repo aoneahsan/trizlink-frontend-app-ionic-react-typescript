@@ -62,53 +62,18 @@ export const ZSwiperContainer: React.FC<ZSwiperInterface> = ({
   style,
   className
 }) => {
-  // const _pagination = {
-  //   hideOnClick: true
-  // };
-  // const _breakpoints = {
-  //   768: {
-  //     slidesPerView: 3
-  //   }
-  // };
-
   return (
     <swiper-container
-      // class={classNames(className, {
-      // mySwiper: true,
-      // })}
       slides-per-view={slidesPerView}
       space-between={spaceBetween}
       mousewheel-force-to-axis='true'
       style={style}
       onSwiper={onSwiper}
-      onSlideChange={onSlideChange}
-      // navigation='true'
-      // pagination='true'
-      // centered-slides={true}
-      // pagination={_pagination}
-      // breakpoints={_breakpoints}
-      // pagination-dynamic-bullets='true'
-      // pagination-type='progressbar'
-      // effect=''
-      // grab-cursor='true'
-      // centered-slides='true'
-      // slides-per-view='auto'
-      // coverflow-effect-rotate='50'
-      // coverflow-effect-stretch='0'
-      // coverflow-effect-depth='100'
-      // coverflow-effect-modifier='1'
-      // coverflow-effect-slide-shadows='false'
-    >
+      onSlideChange={onSlideChange}>
       {children}
     </swiper-container>
   );
 };
-
-// export const ZSwiper = React.forwardRef(
-// (props: ZSwiperInterface, ref: React.Ref<any>) => {
-// return <swiper-container></swiper-container>;
-// }
-// );
 
 export const ZSwiperSlide: React.FC<ZSwiperSlideInterface> = ({
   children,

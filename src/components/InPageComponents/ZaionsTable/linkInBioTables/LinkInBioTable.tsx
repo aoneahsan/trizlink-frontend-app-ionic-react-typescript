@@ -633,8 +633,21 @@ const ZInpageTable: React.FC<{
   }, [getLinkInBioLinkData?.items?.length]);
 
   useEffect(() => {
-    zLinkInBioTable.setPageIndex(Number(pageindex ?? 0));
-    zLinkInBioTable.setPageSize(Number(pagesize ?? 2));
+    try {
+      zLinkInBioTable.setPageIndex(
+        isNaN(Number(pageindex))
+          ? CONSTANTS.pagination.startingPageIndex
+          : Number(pageindex)
+      );
+      zLinkInBioTable.setPageSize(
+        isNaN(Number(pagesize))
+          ? CONSTANTS.pagination.defaultPageSize
+          : Number(pagesize)
+      );
+    } catch (error) {
+      zLinkInBioTable.setPageIndex(CONSTANTS.pagination.startingPageIndex);
+      zLinkInBioTable.setPageSize(CONSTANTS.pagination.defaultPageSize);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageindex, pagesize]);
 
@@ -1090,7 +1103,10 @@ const ZInpageTable: React.FC<{
             minHeight='30px'
             fill='outline'
             className='zaions__light_bg w-[7rem]'
-            value={zLinkInBioTable.getState().pagination.pageSize}
+            value={
+              zLinkInBioTable.getState().pagination.pageSize ??
+              CONSTANTS.pagination.defaultPageSize
+            }
             testingselector={
               CONSTANTS.testingSelectors.linkInBio.listPage.table.pageSizeInput
             }
@@ -1140,7 +1156,7 @@ const ZInpageTable: React.FC<{
                 );
               }
             }}>
-            {[2, 3].map(pageSize => (
+            {CONSTANTS.pagination.pageSizeOptions.map(pageSize => (
               <ZIonSelectOption
                 key={pageSize}
                 value={pageSize}

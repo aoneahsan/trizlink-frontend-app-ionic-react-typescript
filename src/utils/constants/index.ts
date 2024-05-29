@@ -1892,6 +1892,12 @@ const ZStatesOptions: ZaionsRSelectOptions[] = [
   { label: 'Suspended', value: ZTeamMemberInvitationEnum.suspended }
 ];
 
+const pagination = {
+  startingPageIndex: 0,
+  defaultPageSize: 5,
+  pageSizeOptions: [5, 10, 15]
+} as const;
+
 const CONSTANTS = {
   ZHomePageAccountBtnText,
   ZOptResendAfter,
@@ -1923,7 +1929,8 @@ const CONSTANTS = {
   ZTooltipIds,
   testingSelectors,
   testingSelectorsPrefix,
-  showIncompleteFeaturesInMobileApp
+  showIncompleteFeaturesInMobileApp,
+  pagination
 } as const;
 
 export default CONSTANTS;

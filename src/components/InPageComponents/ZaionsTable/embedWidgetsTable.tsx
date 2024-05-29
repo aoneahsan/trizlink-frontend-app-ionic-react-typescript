@@ -243,18 +243,18 @@ const ZInpageTable: React.FC = () => {
               ZUserSettingTypeEnum.embedWidgetsListPageTable
             ]
           : wsShareId !== undefined &&
-            wsShareId !== null &&
-            wsShareId?.trim()?.length > 0 &&
-            shareWSMemberId !== undefined &&
-            shareWSMemberId !== null &&
-            shareWSMemberId?.trim()?.length > 0
-          ? [
-              CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
-              wsShareId,
-              shareWSMemberId,
-              ZUserSettingTypeEnum.embedWidgetsListPageTable
-            ]
-          : [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET],
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              shareWSMemberId?.trim()?.length > 0
+            ? [
+                CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
+                wsShareId,
+                shareWSMemberId,
+                ZUserSettingTypeEnum.embedWidgetsListPageTable
+              ]
+            : [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET],
       _itemsIds:
         workspaceId !== undefined &&
         workspaceId !== null &&
@@ -265,17 +265,17 @@ const ZInpageTable: React.FC = () => {
               ZUserSettingTypeEnum.embedWidgetsListPageTable
             ]
           : wsShareId !== undefined &&
-            wsShareId !== null &&
-            wsShareId?.trim()?.length > 0 &&
-            shareWSMemberId !== undefined &&
-            shareWSMemberId !== null &&
-            shareWSMemberId?.trim()?.length > 0
-          ? [
-              ZWSTypeEum.shareWorkspace,
-              shareWSMemberId,
-              ZUserSettingTypeEnum.embedWidgetsListPageTable
-            ]
-          : [],
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              shareWSMemberId?.trim()?.length > 0
+            ? [
+                ZWSTypeEum.shareWorkspace,
+                shareWSMemberId,
+                ZUserSettingTypeEnum.embedWidgetsListPageTable
+              ]
+            : [],
       _urlDynamicParts: [
         CONSTANTS.RouteParams.workspace.type,
         CONSTANTS.RouteParams.workspace.workspaceId,
@@ -540,8 +540,21 @@ const ZInpageTable: React.FC = () => {
   }, [getEmbedWidgetFiltersData]);
 
   useEffect(() => {
-    zUTMTagTable.setPageIndex(Number(pageindex) ?? 0);
-    zUTMTagTable.setPageSize(Number(pagesize) ?? 2);
+    try {
+      zUTMTagTable.setPageIndex(
+        isNaN(Number(pageindex))
+          ? CONSTANTS.pagination.startingPageIndex
+          : Number(pageindex)
+      );
+      zUTMTagTable.setPageSize(
+        isNaN(Number(pagesize))
+          ? CONSTANTS.pagination.defaultPageSize
+          : Number(pagesize)
+      );
+    } catch (error) {
+      zUTMTagTable.setPageIndex(CONSTANTS.pagination.startingPageIndex);
+      zUTMTagTable.setPageSize(CONSTANTS.pagination.defaultPageSize);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageindex, pagesize]);
 
@@ -634,44 +647,46 @@ const ZInpageTable: React.FC = () => {
                       <ZIonRow
                         key={_rowIndex}
                         className='flex-nowrap'>
-                        {_rowInfo?.getAllCells()?.map((_cellInfo, _cellIndex) =>
-                          _cellInfo?.column?.getIsVisible() ? (
-                            <ZIonCol
-                              key={_cellIndex}
-                              size={
-                                _cellInfo.column.id ===
-                                  ZUTMTagsListPageTableColumnsIds.id ||
-                                _cellInfo.column.id ===
-                                  ZUTMTagsListPageTableColumnsIds.actions
-                                  ? '.8'
-                                  : '2.6'
-                              }
-                              className={classNames({
-                                'py-1 mt-1 border-b flex ion-align-items-center':
-                                  true,
-                                'border-r': false,
-                                'ps-2':
-                                  _cellInfo.column.id !==
-                                  ZUTMTagsListPageTableColumnsIds.id,
-                                'ps-0':
+                        {_rowInfo
+                          ?.getAllCells()
+                          ?.map((_cellInfo, _cellIndex) =>
+                            _cellInfo?.column?.getIsVisible() ? (
+                              <ZIonCol
+                                key={_cellIndex}
+                                size={
                                   _cellInfo.column.id ===
-                                  ZUTMTagsListPageTableColumnsIds.id
-                              })}>
-                              <div
+                                    ZUTMTagsListPageTableColumnsIds.id ||
+                                  _cellInfo.column.id ===
+                                    ZUTMTagsListPageTableColumnsIds.actions
+                                    ? '.8'
+                                    : '2.6'
+                                }
                                 className={classNames({
-                                  'w-full text-sm ZaionsTextEllipsis': true,
-                                  'ps-3':
+                                  'py-1 mt-1 border-b flex ion-align-items-center':
+                                    true,
+                                  'border-r': false,
+                                  'ps-2':
+                                    _cellInfo.column.id !==
+                                    ZUTMTagsListPageTableColumnsIds.id,
+                                  'ps-0':
                                     _cellInfo.column.id ===
                                     ZUTMTagsListPageTableColumnsIds.id
                                 })}>
-                                {flexRender(
-                                  _cellInfo.column.columnDef.cell,
-                                  _cellInfo.getContext()
-                                )}
-                              </div>
-                            </ZIonCol>
-                          ) : null
-                        )}
+                                <div
+                                  className={classNames({
+                                    'w-full text-sm ZaionsTextEllipsis': true,
+                                    'ps-3':
+                                      _cellInfo.column.id ===
+                                      ZUTMTagsListPageTableColumnsIds.id
+                                  })}>
+                                  {flexRender(
+                                    _cellInfo.column.columnDef.cell,
+                                    _cellInfo.getContext()
+                                  )}
+                                </div>
+                              </ZIonCol>
+                            ) : null
+                          )}
 
                         <ZIonCol
                           size='.8'
@@ -908,7 +923,10 @@ const ZInpageTable: React.FC = () => {
             minHeight='30px'
             fill='outline'
             className='bg-white w-[7rem]'
-            value={zUTMTagTable.getState().pagination.pageSize}
+            value={
+              zUTMTagTable.getState().pagination.pageSize ??
+              CONSTANTS.pagination.defaultPageSize
+            }
             testingselector={
               CONSTANTS.testingSelectors.utmTags.listPage.table.pageSizeInput
             }
@@ -927,7 +945,7 @@ const ZInpageTable: React.FC = () => {
                 })
               );
             }}>
-            {[2, 3].map(pageSize => (
+            {CONSTANTS.pagination.pageSizeOptions.map(pageSize => (
               <ZIonSelectOption
                 key={pageSize}
                 value={pageSize}

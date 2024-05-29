@@ -393,18 +393,18 @@ const ZInpageTable: React.FC = () => {
               ZUserSettingTypeEnum.pixelListPageTable
             ]
           : wsShareId !== undefined &&
-            wsShareId !== null &&
-            wsShareId?.trim()?.length > 0 &&
-            shareWSMemberId !== undefined &&
-            shareWSMemberId !== null &&
-            shareWSMemberId?.trim()?.length > 0
-          ? [
-              CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
-              wsShareId,
-              shareWSMemberId,
-              ZUserSettingTypeEnum.pixelListPageTable
-            ]
-          : [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET],
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              shareWSMemberId?.trim()?.length > 0
+            ? [
+                CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
+                wsShareId,
+                shareWSMemberId,
+                ZUserSettingTypeEnum.pixelListPageTable
+              ]
+            : [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET],
       _itemsIds:
         workspaceId !== undefined &&
         workspaceId !== null &&
@@ -415,17 +415,17 @@ const ZInpageTable: React.FC = () => {
               ZUserSettingTypeEnum.pixelListPageTable
             ]
           : wsShareId !== undefined &&
-            wsShareId !== null &&
-            wsShareId?.trim()?.length > 0 &&
-            shareWSMemberId !== undefined &&
-            shareWSMemberId !== null &&
-            shareWSMemberId?.trim()?.length > 0
-          ? [
-              ZWSTypeEum.shareWorkspace,
-              shareWSMemberId,
-              ZUserSettingTypeEnum.pixelListPageTable
-            ]
-          : [],
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              shareWSMemberId?.trim()?.length > 0
+            ? [
+                ZWSTypeEum.shareWorkspace,
+                shareWSMemberId,
+                ZUserSettingTypeEnum.pixelListPageTable
+              ]
+            : [],
       _urlDynamicParts: [
         CONSTANTS.RouteParams.workspace.type,
         CONSTANTS.RouteParams.workspace.workspaceId,
@@ -618,8 +618,21 @@ const ZInpageTable: React.FC = () => {
   }, [getPixelFiltersData]);
 
   useEffect(() => {
-    zPixelTable.setPageIndex(Number(pageindex ?? 0));
-    zPixelTable.setPageSize(Number(pagesize ?? 2));
+    try {
+      zPixelTable.setPageIndex(
+        isNaN(Number(pageindex))
+          ? CONSTANTS.pagination.startingPageIndex
+          : Number(pageindex)
+      );
+      zPixelTable.setPageSize(
+        isNaN(Number(pagesize))
+          ? CONSTANTS.pagination.defaultPageSize
+          : Number(pagesize)
+      );
+    } catch (error) {
+      zPixelTable.setPageIndex(CONSTANTS.pagination.startingPageIndex);
+      zPixelTable.setPageSize(CONSTANTS.pagination.defaultPageSize);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageindex, pagesize]);
 
@@ -875,22 +888,22 @@ const ZInpageTable: React.FC = () => {
                         }
                       })
                     : wsShareId !== undefined && shareWSMemberId !== undefined
-                    ? createRedirectRoute({
-                        url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
-                          .Pixel,
-                        params: [
-                          CONSTANTS.RouteParams.workspace.wsShareId,
-                          CONSTANTS.RouteParams.workspace.shareWSMemberId
-                        ],
-                        values: [wsShareId, shareWSMemberId],
-                        routeSearchParams: {
-                          pageindex: 0,
-                          pagesize: zPixelTable
-                            .getState()
-                            .pagination.pageSize.toString()
-                        }
-                      })
-                    : ''
+                      ? createRedirectRoute({
+                          url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
+                            .Pixel,
+                          params: [
+                            CONSTANTS.RouteParams.workspace.wsShareId,
+                            CONSTANTS.RouteParams.workspace.shareWSMemberId
+                          ],
+                          values: [wsShareId, shareWSMemberId],
+                          routeSearchParams: {
+                            pageindex: 0,
+                            pagesize: zPixelTable
+                              .getState()
+                              .pagination.pageSize.toString()
+                          }
+                        })
+                      : ''
                 );
 
                 zPixelTable.setPageIndex(0);
@@ -931,23 +944,23 @@ const ZInpageTable: React.FC = () => {
                         }
                       })
                     : wsShareId !== undefined && shareWSMemberId !== undefined
-                    ? createRedirectRoute({
-                        url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
-                          .Pixel,
-                        params: [
-                          CONSTANTS.RouteParams.workspace.wsShareId,
-                          CONSTANTS.RouteParams.workspace.shareWSMemberId
-                        ],
-                        values: [wsShareId, shareWSMemberId],
-                        routeSearchParams: {
-                          pageindex:
-                            zPixelTable.getState().pagination.pageIndex - 1,
-                          pagesize: zPixelTable
-                            .getState()
-                            .pagination.pageSize.toString()
-                        }
-                      })
-                    : ''
+                      ? createRedirectRoute({
+                          url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
+                            .Pixel,
+                          params: [
+                            CONSTANTS.RouteParams.workspace.wsShareId,
+                            CONSTANTS.RouteParams.workspace.shareWSMemberId
+                          ],
+                          values: [wsShareId, shareWSMemberId],
+                          routeSearchParams: {
+                            pageindex:
+                              zPixelTable.getState().pagination.pageIndex - 1,
+                            pagesize: zPixelTable
+                              .getState()
+                              .pagination.pageSize.toString()
+                          }
+                        })
+                      : ''
                 );
               }
             }}>
@@ -987,23 +1000,23 @@ const ZInpageTable: React.FC = () => {
                         }
                       })
                     : wsShareId !== undefined && shareWSMemberId !== undefined
-                    ? createRedirectRoute({
-                        url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
-                          .Pixel,
-                        params: [
-                          CONSTANTS.RouteParams.workspace.wsShareId,
-                          CONSTANTS.RouteParams.workspace.shareWSMemberId
-                        ],
-                        values: [wsShareId, shareWSMemberId],
-                        routeSearchParams: {
-                          pageindex:
-                            zPixelTable.getState().pagination.pageIndex + 1,
-                          pagesize: zPixelTable
-                            .getState()
-                            .pagination.pageSize.toString()
-                        }
-                      })
-                    : ''
+                      ? createRedirectRoute({
+                          url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
+                            .Pixel,
+                          params: [
+                            CONSTANTS.RouteParams.workspace.wsShareId,
+                            CONSTANTS.RouteParams.workspace.shareWSMemberId
+                          ],
+                          values: [wsShareId, shareWSMemberId],
+                          routeSearchParams: {
+                            pageindex:
+                              zPixelTable.getState().pagination.pageIndex + 1,
+                            pagesize: zPixelTable
+                              .getState()
+                              .pagination.pageSize.toString()
+                          }
+                        })
+                      : ''
                 );
               }
             }}>
@@ -1041,23 +1054,23 @@ const ZInpageTable: React.FC = () => {
                         }
                       })
                     : wsShareId !== undefined && shareWSMemberId !== undefined
-                    ? createRedirectRoute({
-                        url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
-                          .Pixel,
-                        params: [
-                          CONSTANTS.RouteParams.workspace.wsShareId,
-                          CONSTANTS.RouteParams.workspace.shareWSMemberId
-                        ],
-                        values: [wsShareId, shareWSMemberId],
-                        routeSearchParams: {
-                          pageindex:
-                            zPixelTable.getState().pagination.pageIndex + 1,
-                          pagesize: zPixelTable
-                            .getState()
-                            .pagination.pageSize.toString()
-                        }
-                      })
-                    : ''
+                      ? createRedirectRoute({
+                          url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
+                            .Pixel,
+                          params: [
+                            CONSTANTS.RouteParams.workspace.wsShareId,
+                            CONSTANTS.RouteParams.workspace.shareWSMemberId
+                          ],
+                          values: [wsShareId, shareWSMemberId],
+                          routeSearchParams: {
+                            pageindex:
+                              zPixelTable.getState().pagination.pageIndex + 1,
+                            pagesize: zPixelTable
+                              .getState()
+                              .pagination.pageSize.toString()
+                          }
+                        })
+                      : ''
                 );
               }
             }}>
@@ -1091,7 +1104,10 @@ const ZInpageTable: React.FC = () => {
             minHeight='30px'
             fill='outline'
             className='bg-white w-[7rem]'
-            value={zPixelTable.getState().pagination.pageSize}
+            value={
+              zPixelTable.getState().pagination.pageSize ??
+              CONSTANTS.pagination.defaultPageSize
+            }
             testingselector={
               CONSTANTS.testingSelectors.pixels.listPage.table.pageSizeInput
             }
@@ -1111,23 +1127,23 @@ const ZInpageTable: React.FC = () => {
                       }
                     })
                   : wsShareId !== undefined && shareWSMemberId !== undefined
-                  ? createRedirectRoute({
-                      url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
-                        .Pixel,
-                      params: [
-                        CONSTANTS.RouteParams.workspace.wsShareId,
-                        CONSTANTS.RouteParams.workspace.shareWSMemberId
-                      ],
-                      values: [wsShareId, shareWSMemberId],
-                      routeSearchParams: {
-                        pageindex: zPixelTable.getPageCount() - 1,
-                        pagesize: Number(e.target.value)
-                      }
-                    })
-                  : ''
+                    ? createRedirectRoute({
+                        url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
+                          .Pixel,
+                        params: [
+                          CONSTANTS.RouteParams.workspace.wsShareId,
+                          CONSTANTS.RouteParams.workspace.shareWSMemberId
+                        ],
+                        values: [wsShareId, shareWSMemberId],
+                        routeSearchParams: {
+                          pageindex: zPixelTable.getPageCount() - 1,
+                          pagesize: Number(e.target.value)
+                        }
+                      })
+                    : ''
               );
             }}>
-            {[2, 3].map(pageSize => (
+            {CONSTANTS.pagination.pageSizeOptions.map(pageSize => (
               <ZIonSelectOption
                 key={pageSize}
                 value={pageSize}
@@ -1512,13 +1528,13 @@ const ZPixelActionPopover: React.FC<{
           workspaceId !== undefined
             ? [permissionsEnum.update_pixel]
             : wsShareId !== undefined &&
-              wsShareId !== null &&
-              wsShareId?.trim()?.length > 0 &&
-              shareWSMemberId !== undefined &&
-              shareWSMemberId !== null &&
-              shareWSMemberId?.trim()?.length > 0
-            ? [shareWSPermissionEnum.update_sws_pixel]
-            : []
+                wsShareId !== null &&
+                wsShareId?.trim()?.length > 0 &&
+                shareWSMemberId !== undefined &&
+                shareWSMemberId !== null &&
+                shareWSMemberId?.trim()?.length > 0
+              ? [shareWSPermissionEnum.update_sws_pixel]
+              : []
         }>
         <ZIonItem
           button={true}
@@ -1582,13 +1598,13 @@ const ZPixelActionPopover: React.FC<{
           workspaceId !== undefined
             ? [permissionsEnum.delete_pixel]
             : wsShareId !== undefined &&
-              wsShareId !== null &&
-              wsShareId?.trim()?.length > 0 &&
-              shareWSMemberId !== undefined &&
-              shareWSMemberId !== null &&
-              shareWSMemberId?.trim()?.length > 0
-            ? [shareWSPermissionEnum.delete_sws_pixel]
-            : []
+                wsShareId !== null &&
+                wsShareId?.trim()?.length > 0 &&
+                shareWSMemberId !== undefined &&
+                shareWSMemberId !== null &&
+                shareWSMemberId?.trim()?.length > 0
+              ? [shareWSPermissionEnum.delete_sws_pixel]
+              : []
         }>
         <ZIonItem
           button={true}

@@ -309,8 +309,21 @@ const ZInpageTable: React.FC = () => {
   // #endregion
 
   useEffect(() => {
-    zTeamsTable.setPageIndex(Number(pageindex) ?? 0);
-    zTeamsTable.setPageSize(Number(pagesize) ?? 2);
+    try {
+      zTeamsTable.setPageIndex(
+        isNaN(Number(pageindex))
+          ? CONSTANTS.pagination.startingPageIndex
+          : Number(pageindex)
+      );
+      zTeamsTable.setPageSize(
+        isNaN(Number(pagesize))
+          ? CONSTANTS.pagination.defaultPageSize
+          : Number(pagesize)
+      );
+    } catch (error) {
+      zTeamsTable.setPageIndex(CONSTANTS.pagination.startingPageIndex);
+      zTeamsTable.setPageSize(CONSTANTS.pagination.defaultPageSize);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageindex, pagesize]);
 
@@ -344,9 +357,9 @@ const ZInpageTable: React.FC = () => {
                           ZWSTeamListPageTableColumnsIds.actions
                           ? '1.2'
                           : _columnInfo.column.id ===
-                            ZWSTeamListPageTableColumnsIds.description
-                          ? '5.5'
-                          : '2.5'
+                              ZWSTeamListPageTableColumnsIds.description
+                            ? '5.5'
+                            : '2.5'
                       }>
                       {_columnInfo.column.columnDef.header?.toString()}
                     </ZIonCol>
@@ -388,9 +401,9 @@ const ZInpageTable: React.FC = () => {
                                 ZWSTeamListPageTableColumnsIds.actions
                                 ? '1.2'
                                 : _cellInfo.column.id ===
-                                  ZWSTeamListPageTableColumnsIds.description
-                                ? '5.5'
-                                : '2.5'
+                                    ZWSTeamListPageTableColumnsIds.description
+                                  ? '5.5'
+                                  : '2.5'
                             }
                             className={classNames({
                               'py-1 mt-1 border-b flex ion-align-items-center':
@@ -619,7 +632,10 @@ const ZInpageTable: React.FC = () => {
             minHeight='30px'
             fill='outline'
             className='bg-white w-[7rem] mt-1'
-            value={zTeamsTable.getState().pagination.pageSize}
+            value={
+              zTeamsTable.getState().pagination.pageSize ??
+              CONSTANTS.pagination.defaultPageSize
+            }
             testingselector={
               CONSTANTS.testingSelectors.WSSettings.teamListPage.table
                 .pageSizeInput
@@ -639,7 +655,7 @@ const ZInpageTable: React.FC = () => {
                 })
               );
             }}>
-            {[2, 3].map(pageSize => (
+            {CONSTANTS.pagination.pageSizeOptions.map(pageSize => (
               <ZIonSelectOption
                 key={pageSize}
                 value={pageSize}
