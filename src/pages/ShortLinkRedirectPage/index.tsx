@@ -10,7 +10,7 @@ import { useParams } from 'react-router';
  * ? Like import of ionic components is a packages import
  * */
 import { AxiosError } from 'axios';
-import { Geolocation } from '@capacitor/geolocation';
+import { Geolocation, Position } from '@capacitor/geolocation';
 import { Device } from '@capacitor/device';
 import dayjs from 'dayjs';
 import DayJsTimezonePlugin from 'dayjs/plugin/timezone';
@@ -153,48 +153,46 @@ const ZShortLinkRedirectPage: React.FC = () => {
   });
 
   const logDeviceInfo = useCallback(async () => {
-    const _deviceInfo = await Device.getInfo();
-    const {
-      isAndroidPlatform,
-      isCapacitor,
-      isCordova,
-      isDesktop,
-      isElectron,
-      isHybrid,
-      isIOS,
-      isIPad,
-      isIPhone,
-      isMobile,
-      isMobileWeb,
-      isPWA,
-      isPhablet,
-      isTablet
-    } = zIsPlatforms();
+    try {
+      const _deviceInfo = await Device.getInfo();
+      const {
+        isAndroidPlatform,
+        isCapacitor,
+        isCordova,
+        isDesktop,
+        isElectron,
+        isHybrid,
+        isIOS,
+        isIPad,
+        isIPhone,
+        isMobile,
+        isMobileWeb,
+        isPWA,
+        isPhablet,
+        isTablet
+      } = zIsPlatforms();
 
-    return {
-      ..._deviceInfo,
-      isAndroidPlatform,
-      isCapacitor,
-      isCordova,
-      isDesktop,
-      isElectron,
-      isHybrid,
-      isIOS,
-      isIPad,
-      isIPhone,
-      isMobile,
-      isMobileWeb,
-      isPWA,
-      isPhablet,
-      isTablet
-    };
+      return {
+        ..._deviceInfo,
+        isAndroidPlatform,
+        isCapacitor,
+        isCordova,
+        isDesktop,
+        isElectron,
+        isHybrid,
+        isIOS,
+        isIPad,
+        isIPhone,
+        isMobile,
+        isMobileWeb,
+        isPWA,
+        isPhablet,
+        isTablet
+      };
+    } catch (error) {
+      return null;
+    }
   }, []);
-
-  // const logBatteryInfo = useCallback(async () => {
-  // const _batteryInfo = await Device.getBatteryInfo();
-
-  // return _batteryInfo;
-  // }, []);
 
   const getCountryFromCoordinates = async ({
     latitude,
@@ -207,192 +205,213 @@ const ZShortLinkRedirectPage: React.FC = () => {
     short_name: string;
     types: string[];
   } | null> => {
-    const response = await fetch(
-      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${ENVS.googleApiKey}`
-    );
-    const data = await response.json();
+    try {
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${ENVS.googleApiKey}`
+      );
+      const data = await response.json();
 
-    const countryComponent = (
-      data?.results?.[0]?.address_components as Array<{
-        long_name: string;
-        short_name: string;
-        types: string[];
-      }>
-    )?.find(component => component?.types?.includes('country'));
-    return countryComponent ?? null;
+      const countryComponent = (
+        data?.results?.[0]?.address_components as Array<{
+          long_name: string;
+          short_name: string;
+          types: string[];
+        }>
+      )?.find(component => component?.types?.includes('country'));
+      return countryComponent ?? null;
+    } catch (error) {
+      return null;
+    }
   };
 
   //
   const createURlRecodeCallback = useCallback(async () => {
-    // Getting device info from capacitor/device package
-    const _deviceInfo = await logDeviceInfo();
+    try {
+      // Getting device info from capacitor/device package
+      const _deviceInfo = await logDeviceInfo();
 
-    // zStringify the data to sent in short-link recode api.
-    const _data = zStringify({
-      type: 'click',
-      userIP: '',
-      userLocationCoords: zStringify({}),
-      userDeviceInfo: zStringify(_deviceInfo)
-    });
+      // zStringify the data to sent in short-link recode api.
+      const _data = zStringify({
+        type: 'click',
+        userIP: '',
+        userLocationCoords: zStringify({}),
+        userDeviceInfo: zStringify(_deviceInfo)
+      });
 
-    // Creating short-link recode
-    const _response = await createSLRecodeAsyncMutate(_data);
+      // Creating short-link recode
+      const _response = await createSLRecodeAsyncMutate(_data);
 
-    // After creating recode the response is send with short link information.
-    if ((_response as ZLinkMutateApiType<ShortLinkType>)?.success) {
-      // Extracting the data from response.
-      const _data = extractInnerData<ShortLinkType>(
-        _response,
-        extractInnerDataOptionsEnum.createRequestResponseItem
-      );
+      // After creating recode the response is send with short link information.
+      if ((_response as ZLinkMutateApiType<ShortLinkType>)?.success) {
+        // Extracting the data from response.
+        const _data = extractInnerData<ShortLinkType>(
+          _response,
+          extractInnerDataOptionsEnum.createRequestResponseItem
+        );
 
-      if (_data?.id !== null && _data?.id !== undefined) {
-        setCompState(oldValues => ({
-          ...oldValues,
-          sl: _data,
-          isProcessing: false
-        }));
+        if (_data?.id !== null && _data?.id !== undefined) {
+          setCompState(oldValues => ({
+            ...oldValues,
+            sl: _data,
+            isProcessing: false
+          }));
 
-        const _target = _data?.target as LinkTargetType;
-        const _type = _data?.type as messengerPlatformsBlockEnum;
-        const _geoLocations =
-          _data?.geoLocationRotatorLinks as GeoLocationRotatorInterface[];
-        const _abTestingRotator =
-          _data?.abTestingRotatorLinks as ABTestingRotatorInterface[];
-        const _linkExpiration =
-          _data?.linkExpirationInfo as LinkExpirationInfoInterface;
-        const _userPosition = await Geolocation.getCurrentPosition();
-        const _userCountry = await getCountryFromCoordinates({
-          latitude: _userPosition?.coords?.latitude,
-          longitude: _userPosition?.coords?.longitude
-        });
+          const _target = _data?.target as LinkTargetType;
+          const _type = _data?.type as messengerPlatformsBlockEnum;
+          const _geoLocations =
+            _data?.geoLocationRotatorLinks as GeoLocationRotatorInterface[];
+          const _abTestingRotator =
+            _data?.abTestingRotatorLinks as ABTestingRotatorInterface[];
+          const _linkExpiration =
+            _data?.linkExpirationInfo as LinkExpirationInfoInterface;
+          let _userCountry: {
+            long_name: string;
+            short_name: string;
+            types: string[];
+          } | null = null;
+          try {
+            let _userPosition: Position | null = null;
+            _userPosition = await Geolocation.getCurrentPosition();
+            _userCountry = await getCountryFromCoordinates({
+              latitude: _userPosition?.coords?.latitude,
+              longitude: _userPosition?.coords?.longitude
+            });
+          } catch (error) {}
 
-        // trimming and lowercasing because if user country is same but in api the case is change then it will be a problem so her we are trimming and lowercase to compare correctly.
-        const _userCountryTrim = _userCountry?.long_name?.trim()?.toLowerCase();
+          // trimming and lowercasing because if user country is same but in api the case is change then it will be a problem so her we are trimming and lowercase to compare correctly.
+          const _userCountryTrim = _userCountry?.long_name
+            ?.trim()
+            ?.toLowerCase();
 
-        // generating redirect link according to __target and type. (the default redirection)
-        let _redirectUrl = zRedirectToTarget({
-          _target,
-          type: _type
-        });
+          // generating redirect link according to __target and type. (the default redirection)
+          let _redirectUrl = zRedirectToTarget({
+            _target,
+            type: _type
+          });
 
-        // if Ab testing rotators are set the setting _redirectUrl from below.
-        if (
-          _abTestingRotator?.length > 0 &&
-          (_geoLocations?.length === 0 ||
-            _geoLocations === undefined ||
-            _geoLocations === null)
-        ) {
-          const _randomRotatorLink = zGetRandomLink(_abTestingRotator);
+          // if Ab testing rotators are set the setting _redirectUrl from below.
+          if (
+            _abTestingRotator?.length > 0 &&
+            (_geoLocations?.length === 0 ||
+              _geoLocations === undefined ||
+              _geoLocations === null)
+          ) {
+            const _randomRotatorLink = zGetRandomLink(_abTestingRotator);
 
-          if (_randomRotatorLink !== null) {
-            _redirectUrl = _randomRotatorLink;
+            if (_randomRotatorLink !== null) {
+              _redirectUrl = _randomRotatorLink;
+            }
           }
-        }
 
-        // if geo locations are set the setting _redirectUrl from below.
-        if (
-          _userCountryTrim !== undefined &&
-          _userCountryTrim !== null &&
-          (_abTestingRotator?.length === 0 ||
-            _abTestingRotator === undefined ||
-            _abTestingRotator === null)
-        ) {
-          let highestPriority = Infinity; // Start with a high value
+          // if geo locations are set the setting _redirectUrl from below.
+          if (
+            _userCountryTrim !== undefined &&
+            _userCountryTrim !== null &&
+            (_abTestingRotator?.length === 0 ||
+              _abTestingRotator === undefined ||
+              _abTestingRotator === null)
+          ) {
+            let highestPriority = Infinity; // Start with a high value
 
-          // Checking if any geo-location define. if define then redirect according to it.
-          // Now check if the user's country exists in the geoRedirects array.
-          for (const geoLocation of _geoLocations) {
-            if (
-              geoLocation?.condition !== undefined &&
-              geoLocation?.country !== null
-            ) {
-              let _country: string | string[] | null = null;
-
-              //
-              if (typeof geoLocation?.country === 'string') {
-                // trimming and lowercasing because if user country is same but in google map api result the case is change then it will be a problem so her we are trimming and lowercase to compare correctly.
-                _country = geoLocation?.country?.trim()?.toLowerCase();
-              } else if (typeof geoLocation?.country === typeof []) {
-                _country = (geoLocation?.country ?? []).map(el =>
-                  el?.trim()?.toLowerCase()
-                );
-              }
-
-              // If condition is `equal to`.
-              const _equalTo =
-                geoLocation?.condition === EZGeoLocationCondition.equalTo &&
-                typeof _country === 'string' &&
-                _country === _userCountryTrim;
-
-              // If condition is `not equal to`.
-              const _notEqualTo =
-                geoLocation?.condition === EZGeoLocationCondition.notEqualTo &&
-                typeof _country === 'string' &&
-                _country !== _userCountryTrim;
-
-              // If condition is `with in`.
-              const _within =
-                geoLocation.condition === EZGeoLocationCondition.within &&
-                Array.isArray(geoLocation.country) &&
-                typeof _country === typeof [] &&
-                (_country ?? [])?.includes(_userCountryTrim ?? '');
-
-              // If condition is `not with in`.
-              const _notWithin =
-                geoLocation?.condition === EZGeoLocationCondition.notWithin &&
-                Array.isArray(geoLocation.country) &&
-                typeof _country === typeof [] &&
-                !(_country ?? [])?.includes(_userCountryTrim ?? '');
-
+            // Checking if any geo-location define. if define then redirect according to it.
+            // Now check if the user's country exists in the geoRedirects array.
+            for (const geoLocation of _geoLocations) {
               if (
                 geoLocation?.condition !== undefined &&
-                (_equalTo || _notEqualTo || _within || _notWithin)
+                geoLocation?.country !== null
               ) {
-                const currentPriority =
-                  conditionPriority[geoLocation?.condition];
-                if (currentPriority < highestPriority) {
-                  highestPriority = currentPriority;
-                  _redirectUrl = geoLocation.redirectionLink;
+                let _country: string | string[] | null = null;
+
+                //
+                if (typeof geoLocation?.country === 'string') {
+                  // trimming and lowercasing because if user country is same but in google map api result the case is change then it will be a problem so her we are trimming and lowercase to compare correctly.
+                  _country = geoLocation?.country?.trim()?.toLowerCase();
+                } else if (typeof geoLocation?.country === typeof []) {
+                  _country = (geoLocation?.country ?? []).map(el =>
+                    el?.trim()?.toLowerCase()
+                  );
+                }
+
+                // If condition is `equal to`.
+                const _equalTo =
+                  geoLocation?.condition === EZGeoLocationCondition.equalTo &&
+                  typeof _country === 'string' &&
+                  _country === _userCountryTrim;
+
+                // If condition is `not equal to`.
+                const _notEqualTo =
+                  geoLocation?.condition ===
+                    EZGeoLocationCondition.notEqualTo &&
+                  typeof _country === 'string' &&
+                  _country !== _userCountryTrim;
+
+                // If condition is `with in`.
+                const _within =
+                  geoLocation.condition === EZGeoLocationCondition.within &&
+                  Array.isArray(geoLocation.country) &&
+                  typeof _country === typeof [] &&
+                  (_country ?? [])?.includes(_userCountryTrim ?? '');
+
+                // If condition is `not with in`.
+                const _notWithin =
+                  geoLocation?.condition === EZGeoLocationCondition.notWithin &&
+                  Array.isArray(geoLocation.country) &&
+                  typeof _country === typeof [] &&
+                  !(_country ?? [])?.includes(_userCountryTrim ?? '');
+
+                if (
+                  geoLocation?.condition !== undefined &&
+                  (_equalTo || _notEqualTo || _within || _notWithin)
+                ) {
+                  const currentPriority =
+                    conditionPriority[geoLocation?.condition];
+                  if (currentPriority < highestPriority) {
+                    highestPriority = currentPriority;
+                    _redirectUrl = geoLocation.redirectionLink;
+                  }
                 }
               }
             }
           }
-        }
 
-        // If there is link-expiration define. then redirect according to it.
-        if (
-          _linkExpiration?.enabled === true &&
-          _linkExpiration?.redirectionLink !== undefined &&
-          _linkExpiration?.redirectionLink?.trim()?.length > 0
-        ) {
-          const _expirationTimePass = dayjs
-            .tz(dayjs(), _linkExpiration?.timezone)
-            .isAfter(
-              dayjs.tz(
-                _linkExpiration?.expirationDate,
-                _linkExpiration?.timezone
-              )
-            );
+          // If there is link-expiration define. then redirect according to it.
+          if (
+            _linkExpiration?.enabled === true &&
+            _linkExpiration?.redirectionLink !== undefined &&
+            _linkExpiration?.redirectionLink?.trim()?.length > 0
+          ) {
+            const _expirationTimePass = dayjs
+              .tz(dayjs(), _linkExpiration?.timezone)
+              .isAfter(
+                dayjs.tz(
+                  _linkExpiration?.expirationDate,
+                  _linkExpiration?.timezone
+                )
+              );
 
-          if (_expirationTimePass) {
-            _redirectUrl = _linkExpiration?.redirectionLink;
+            if (_expirationTimePass) {
+              _redirectUrl = _linkExpiration?.redirectionLink;
+            }
           }
-        }
 
-        // redirecting...
-        if (_redirectUrl !== undefined) {
-          setCompState(oldValues => ({
-            ...oldValues,
-            redirectLink: _redirectUrl
-          }));
-          if ((_data?.password as PasswordInterface)?.enabled === false) {
-            window.location.replace(_redirectUrl);
+          // redirecting...
+          if (_redirectUrl !== undefined) {
+            setCompState(oldValues => ({
+              ...oldValues,
+              redirectLink: _redirectUrl
+            }));
+            if ((_data?.password as PasswordInterface)?.enabled === false) {
+              window.location.replace(_redirectUrl);
+            }
           }
         }
       }
+    } catch (error) {
+      console.error({
+        ml: 'Error Occurred while trying to redirect user to target link',
+        error
+      });
     }
-
     // eslint-disable-next-line
   }, []);
 
