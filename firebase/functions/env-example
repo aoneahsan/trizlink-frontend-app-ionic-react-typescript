@@ -1,0 +1,5 @@
+APP_NAME="trizlink-firebase-backend"
+APP_ENV="local"
+
+### Frontend Config
+Z_FRONTEND_URL="https://trizlink.com"

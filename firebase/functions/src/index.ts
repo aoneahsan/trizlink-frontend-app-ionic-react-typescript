@@ -1,41 +1,28 @@
-import { generate } from '@genkit-ai/ai';
-import { configureGenkit } from '@genkit-ai/core';
-import { firebaseAuth } from '@genkit-ai/firebase/auth';
-import { onFlow } from '@genkit-ai/firebase/functions';
-import { geminiPro } from '@genkit-ai/googleai';
-import * as z from 'zod';
-import { firebase } from '@genkit-ai/firebase';
-import { googleAI } from '@genkit-ai/googleai';
+import express from 'express';
+import cors from 'cors';
 
-configureGenkit({
-  plugins: [firebase(), googleAI()],
-  logLevel: 'debug',
-  enableTracingAndMetrics: true
+import { onRequest } from 'firebase-functions/v2/https';
+import router from './routes';
+import ENVS, { checkZEnvMiddleware } from './utils/envKeys';
+
+const app = express();
+
+app.use(checkZEnvMiddleware); // To check environment variables
+
+app.use(express.json()); // This allows to handle JSON POST requests.
+
+app.use(express.urlencoded({ extended: true })); // For URL-encoded data
+
+// CORS middleware
+app.use(cors());
+
+// Routes
+app.use(router);
+
+// any other route, which is not defined in the router (or any other above middleware), will be redirected to the main website
+app.get('*', (req, res) => {
+  return res.status(200).redirect(ENVS.frontendUrl);
 });
 
-export const menuSuggestionFlow = onFlow(
-  {
-    name: 'menuSuggestionFlow',
-    inputSchema: z.string(),
-    outputSchema: z.string(),
-    // authPolicy: firebaseAuth(user => {
-    //   // if (!user.email_verified) {
-    //   //   throw new Error("Verified email required to run flow");
-    //   // }
-    // }),
-    authPolicy: firebaseAuth(() => {})
-  },
-  async subject => {
-    const prompt = `Suggest an item for the menu of a ${subject} themed restaurant`;
-
-    const llmResponse = await generate({
-      model: geminiPro,
-      prompt: prompt,
-      config: {
-        temperature: 1
-      }
-    });
-
-    return llmResponse.text();
-  }
-);
+// Export the Express app as an HTTP function
+export default onRequest(app);
