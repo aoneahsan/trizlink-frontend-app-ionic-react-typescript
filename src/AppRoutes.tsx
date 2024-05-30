@@ -16,6 +16,7 @@ import PublicRoute from './components/PublicRoute';
 import PrivateRoute from './components/PrivateRoute';
 import ZShareWSStartup from './pages/AdminPanel/ShareWS/Startup';
 import { useZHybridDeviceIsMobile } from './ZaionsHooks/ZGenericHooks';
+import TestingFirebaseFeatures from './Testing/TestingFirebaseFeatures';
 const ZInvitationSLRedirectPage = lazy(
   () => import('./pages/InvitationSLRedirect')
 );
@@ -461,65 +462,56 @@ const AppRoutes = (): JSX.Element => {
             Component={AdminCreateNewLinkPages}
           />
 
-          {!isHybridDevice ? (
-            <>
-              <PrivateRoute
-                exact
-                path={
-                  ZaionsRoutes.AdminPanel.ZaionsDashboard.LinkCampaignsInactive
-                }
-                Component={ZLinkCampaigns}
-              />
-              <PrivateRoute
-                exact
-                path={ZaionsRoutes.AdminPanel.ZaionsDashboard.LinkInBioInactive}
-                Component={ZLinkInBio}
-              />
-              <PrivateRoute
-                exact
-                path={
-                  ZaionsRoutes.AdminPanel.ZaionsDashboard.CustomlinksInactive
-                }
-                Component={ZCustomLinks}
-              />
-              <PrivateRoute
-                exact
-                path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZLinks}
-                Component={ZLinks}
-              />
-              <PrivateRoute
-                exact
-                path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZProfile}
-                Component={ZProfile}
-              />
-              <PrivateRoute
-                exact
-                path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZCustomDomain}
-                Component={ZCustomDomain}
-              />
-              <PrivateRoute
-                exact
-                path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZGroup}
-                Component={ZGroups}
-              />
-              <PrivateRoute
-                exact
-                path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZCSVBulk}
-                Component={ZCSVBulkShortening}
-              />
-              <PrivateRoute
-                exact
-                path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZAccountDetails}
-                Component={ZAccountDetails}
-              />
-              <PrivateRoute
-                exact
-                path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZIntegration}
-                Component={ZIntegration}
-              />
-            </>
-          ) : null}
-
+          <PrivateRoute
+            exact
+            path={ZaionsRoutes.AdminPanel.ZaionsDashboard.LinkCampaignsInactive}
+            Component={ZLinkCampaigns}
+          />
+          <PrivateRoute
+            exact
+            path={ZaionsRoutes.AdminPanel.ZaionsDashboard.LinkInBioInactive}
+            Component={ZLinkInBio}
+          />
+          <PrivateRoute
+            exact
+            path={ZaionsRoutes.AdminPanel.ZaionsDashboard.CustomlinksInactive}
+            Component={ZCustomLinks}
+          />
+          <PrivateRoute
+            exact
+            path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZLinks}
+            Component={ZLinks}
+          />
+          <PrivateRoute
+            exact
+            path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZProfile}
+            Component={ZProfile}
+          />
+          <PrivateRoute
+            exact
+            path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZCustomDomain}
+            Component={ZCustomDomain}
+          />
+          <PrivateRoute
+            exact
+            path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZGroup}
+            Component={ZGroups}
+          />
+          <PrivateRoute
+            exact
+            path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZCSVBulk}
+            Component={ZCSVBulkShortening}
+          />
+          <PrivateRoute
+            exact
+            path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZAccountDetails}
+            Component={ZAccountDetails}
+          />
+          <PrivateRoute
+            exact
+            path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZIntegration}
+            Component={ZIntegration}
+          />
           {/* <Route
           exact
           path={ZaionsRoutes.DiscoverEnterpriseRoute}
@@ -712,6 +704,12 @@ const AppRoutes = (): JSX.Element => {
           />
         )}
       /> */}
+
+          <Route
+            path={ZaionsRoutes.Testing.FirebaseFeatures.Main}
+            component={TestingFirebaseFeatures}
+          />
+
           <Route
             path={ZaionsRoutes.Asterisk}
             component={Z404View}

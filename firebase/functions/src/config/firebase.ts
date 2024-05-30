@@ -4,17 +4,17 @@ import { getRemoteConfig } from 'firebase-admin/remote-config';
 import { getAuth } from 'firebase-admin/auth';
 
 // Initialize the Firebase app with the configuration object
-export const firebaseApp = initializeApp();
+export const firebaseServerApp = initializeApp();
 
 // Firebase Auth Package
-export const firebaseAuth = getAuth(firebaseApp);
+export const firebaseServerAuth = getAuth(firebaseServerApp);
 
 /**
  * Firebase Firestore database.
  */
-export const firebaseFirestoreDB = getFirestore();
+export const firebaseServerFirestoreDB = getFirestore(firebaseServerApp);
 
 /**
  * Firebase Remote Config.
  */
-export const firebaseRemoteConfig = getRemoteConfig();
+export const firebaseServerRemoteConfig = getRemoteConfig(firebaseServerApp);

@@ -266,6 +266,9 @@ const ZaionsRoutes = {
     },
     DraftJs: {
       Main: '/testing/testing-draft-js'
+    },
+    FirebaseFeatures: {
+      Main: '/testing/firebase-features'
     }
   }
 } as const;

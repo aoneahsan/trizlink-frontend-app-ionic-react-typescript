@@ -2,23 +2,21 @@
 import React, { useEffect } from 'react';
 
 // Packages Imports
-import {
-  type FirebaseApp,
-  initializeApp as initializeFirebaseApp
-} from 'firebase/app';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   frbAnalyticsRState,
   frbAppRStateAtom,
   frbRemoteConfigRStateAtom
 } from '@/ZaionsStore/firebaseRStore';
 import { reportCustomError } from '@/utils/customErrorType';
-import { firebaseConfig } from '@/configs';
 import {} from 'firebase/analytics';
 import ZFallbackIonSpinner from '@/components/CustomComponents/FallbackSpinner';
 import Z500View from '@/components/Errors/500';
 import { fetchAndSetupFrbRemoteConfigKeys } from './frbRemoteConfigFeatureSetup';
-import { setupFrbAnalytics } from './frbAnalyticsFeatureSetup';
+import {
+  logFirebaseAnalyticsEvent,
+  setupFrbAnalytics
+} from './frbAnalyticsFeatureSetup';
 
 // Types
 interface IFirebaseHOCProps {
@@ -32,7 +30,6 @@ const FirebaseHOC: React.FC<IFirebaseHOCProps> = ({ children }) => {
   }>({
     isProcessing: true
   });
-  const [frbAppRState, setFrbAppRState] = useRecoilState(frbAppRStateAtom);
   const [frbRemoteConfigRState, setFrbRemoteConfigRState] = useRecoilState(
     frbRemoteConfigRStateAtom
   );
@@ -48,17 +45,17 @@ const FirebaseHOC: React.FC<IFirebaseHOCProps> = ({ children }) => {
           isProcessing: true
         }));
 
-        // Firebase App Initialization
-        const _firebaseApp = initializeAndSetupFirebaseApp();
-
         // Firebase Remote Config Keys Setup
-        await fetchAndSetupFrbRemoteConfigKeys(
-          _firebaseApp,
-          setFrbRemoteConfigRState
-        );
+        await fetchAndSetupFrbRemoteConfigKeys(setFrbRemoteConfigRState);
 
         // Setup Firebase Analytics Feature
-        await setupFrbAnalytics(_firebaseApp, setFrbAnalyticsState);
+        await setupFrbAnalytics(setFrbAnalyticsState);
+
+        logFirebaseAnalyticsEvent('page_view', {
+          page_location: window.location.href,
+          page_path: window.location.pathname,
+          page_search: window.location.search
+        });
 
         setCompState(oldState => ({
           ...oldState,
@@ -71,27 +68,10 @@ const FirebaseHOC: React.FC<IFirebaseHOCProps> = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const initializeAndSetupFirebaseApp = (): FirebaseApp => {
-    const firebaseApp = initializeFirebaseApp(firebaseConfig, {
-      name: firebaseConfig.projectId,
-      automaticDataCollectionEnabled: false
-    });
-
-    setFrbAppRState(oldState => ({
-      ...oldState,
-      frbAppInitialized: true,
-      frbAppInitLastTriedAt: new Date().toString(),
-      frbAppData: firebaseApp
-    }));
-
-    return firebaseApp;
-  };
-
   if (compState.isProcessing) {
     return <ZFallbackIonSpinner />;
   } else if (
     !compState.isProcessing &&
-    frbAppRState.frbAppInitialized &&
     frbRemoteConfigRState.isInitialized &&
     frbAnalyticsState.isInitialized
   ) {

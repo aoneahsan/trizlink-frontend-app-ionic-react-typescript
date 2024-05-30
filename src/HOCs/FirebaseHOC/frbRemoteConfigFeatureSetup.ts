@@ -1,8 +1,8 @@
+import { firebaseApp } from '@/configs';
 import { type IFrbRemoteConfigRStateAtom } from '@/types/firebaseTypes/index.type';
 import { frbRemoteConfigSetting } from '@/utils/constants/firebaseConstants';
 import { ENVS } from '@/utils/envKeys';
 import { getRemoteConfigKeysData } from '@/utils/helpers/firebaseHelpers';
-import { type FirebaseApp } from 'firebase/app';
 import {
   fetchAndActivate,
   isSupported,
@@ -12,12 +12,11 @@ import {
 import { type SetterOrUpdater } from 'recoil';
 
 export const fetchAndSetupFrbRemoteConfigKeys = async (
-  _firebaseApp: FirebaseApp,
   setFrbRemoteConfigRState: SetterOrUpdater<IFrbRemoteConfigRStateAtom>
 ): Promise<void> => {
   const checkRemoteConfigIsSupported = await isSupported();
   if (checkRemoteConfigIsSupported) {
-    const remoteConfig = getRemoteConfig(_firebaseApp);
+    const remoteConfig = getRemoteConfig(firebaseApp);
     if (remoteConfig.app.name !== null) {
       setLogLevel(remoteConfig, ENVS.isProduction ? 'silent' : 'error');
 
