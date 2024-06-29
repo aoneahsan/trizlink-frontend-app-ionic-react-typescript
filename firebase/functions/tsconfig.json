@@ -10,7 +10,9 @@
     "target": "es2017",
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
+    "rootDir": "./",
+    "baseUrl": "./"
   },
   "exclude": ["node_modules", ".vscode", ".firebase", "lib"]
 }

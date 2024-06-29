@@ -26,3 +26,5 @@ app.get('*', (req, res) => {
 
 // Export the Express app as an HTTP function
 export default onRequest(app);
+
+export const login = onRequest(() => {});

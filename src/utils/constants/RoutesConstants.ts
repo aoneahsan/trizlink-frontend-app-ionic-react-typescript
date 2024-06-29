@@ -252,9 +252,6 @@ const ZaionsRoutes = {
     ReactCharts: {
       Main: '/testing/charts'
     },
-    AWS_AMPLIFY: {
-      Main: '/testing/aws-amplify/blog-project'
-    },
     GOOGLE_MAP: {
       Main: '/testing/google-map/map1'
     },

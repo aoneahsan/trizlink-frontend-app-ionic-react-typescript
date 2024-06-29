@@ -14,7 +14,7 @@ import {
   zStringify
 } from '@/utils/helpers';
 import { type UserAuthData } from '@/types/ZaionsApis.type';
-import { API_URL_ENUM, JWTSecretKeyTypeEnum } from '@/utils/enums';
+import { API_URL_ENUM } from '@/utils/enums';
 import { showSuccessNotification } from '@/utils/notification';
 import MESSAGES from '@/utils/messages';
 import { useSetRecoilState } from 'recoil';

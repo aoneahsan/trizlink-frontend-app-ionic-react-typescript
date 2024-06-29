@@ -1,0 +1,12 @@
+{
+  "name": "trizlink-firebase",
+  "version": "1.0.0",
+  "description": "created this to provide simple commands for this firebase folder for trizlink firebase project.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
