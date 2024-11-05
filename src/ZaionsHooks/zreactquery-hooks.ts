@@ -835,13 +835,13 @@ export const useZRQDeleteRequest = <T>({
 
 export const useZInvalidateReactQueries = ():
   | {
-      zInvalidateReactQueries: (
-        _queriesKeysToInvalidate?: string[]
-      ) => Promise<void>;
-    }
+    zInvalidateReactQueries: (
+      _queriesKeysToInvalidate?: string[]
+    ) => Promise<void>;
+  }
   | {
-      zInvalidateReactQueries: () => void;
-    } => {
+    zInvalidateReactQueries: () => void;
+  } => {
   const queryClient = useQueryClient();
   try {
     const zInvalidateReactQueries = async (
@@ -965,11 +965,11 @@ export const useZUpdateRQCacheData = (): {
  */
 export const useZGetRQCacheData = ():
   | {
-      getRQCDataHandler: <T>({ key }: { key: string[] }) => T | undefined;
-    }
+    getRQCDataHandler: <T>({ key }: { key: string[] }) => T | undefined;
+  }
   | {
-      getRQCDataHandler: () => void;
-    } => {
+    getRQCDataHandler: () => void;
+  } => {
   try {
     const QueryClient = useQueryClient();
 

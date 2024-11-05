@@ -80,11 +80,11 @@ dayjs.extend(DayJsDurationPlugin);
 export const isValidUrl = (url: string): boolean => {
   const re = new RegExp(
     '^(https?:\\/\\/)?' + // protocol
-      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
-      '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-      '(\\:\\d+)?(\\/[-a-z\\d%_.~+#]*)*' + // port and path
-      '(\\?[;&a-z\\d%_.~+#=-]*)?' + // query string
-      '(\\#[-a-z\\d_]*)?$',
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+#]*)*' + // port and path
+    '(\\?[;&a-z\\d%_.~+#=-]*)?' + // query string
+    '(\\#[-a-z\\d_]*)?$',
     'i'
   ); // fragment locator
   return re.test(url);
@@ -137,7 +137,7 @@ export const showZCapDialog = async ({
   inputText = '',
   inputPlaceholder = 'Enter your input here...'
 }: // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-ZCapDialogPropsType): Promise<void | ConfirmResult | PromptResult> => {
+  ZCapDialogPropsType): Promise<void | ConfirmResult | PromptResult> => {
   switch (type) {
     case 'alert': {
       await Dialog.alert({
@@ -173,7 +173,7 @@ export const showZCapDialogAlert = async ({
   message,
   buttonTitle
 }: // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-ZCapDialogPropsType): Promise<void | ConfirmResult | PromptResult> => {
+  ZCapDialogPropsType): Promise<void | ConfirmResult | PromptResult> => {
   return await showZCapDialog({ title, message, buttonTitle, type: 'alert' });
 };
 
@@ -207,7 +207,7 @@ export const showZCapDialogPrompt = async ({
   inputText,
   inputPlaceholder
 }: // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-ZCapDialogPropsType): Promise<void | ConfirmResult | PromptResult> => {
+  ZCapDialogPropsType): Promise<void | ConfirmResult | PromptResult> => {
   return await showZCapDialog({
     title,
     message,
@@ -225,7 +225,7 @@ export const showZCapDialogConfirm = async ({
   okButtonTitle,
   cancelButtonTitle
 }: // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-ZCapDialogPropsType): Promise<void | ConfirmResult | PromptResult> => {
+  ZCapDialogPropsType): Promise<void | ConfirmResult | PromptResult> => {
   return await showZCapDialog({
     title,
     message,
@@ -257,7 +257,7 @@ export const validatePixelAccountID = (
       }
 
     case (PixelPlatformsEnum.google_analytics,
-    PixelPlatformsEnum.google_analytics_4):
+      PixelPlatformsEnum.google_analytics_4):
       if (
         pixelID.length !== CONSTANTS.PIXEL_ACCOUNTS.GOOGLE_ANALYTICS.WORD_COUNT
       ) {
@@ -650,9 +650,8 @@ export const getApiUrl = (
       if (includeAPIDefault) {
         _url = `${ZLinkApiRootUrl}${API_URLS[url]}`;
       } else {
-        _url = `${ZLinkApiRootUrl.replace('/api/trizlink/v1', '')}${
-          API_URLS[url]
-        }`;
+        _url = `${ZLinkApiRootUrl.replace('/api/trizlink/v1', '')}${API_URLS[url]
+          }`;
       }
     }
 
@@ -680,7 +679,7 @@ export const getApiUrl = (
           CONSTANTS.pagination.startingPageIndex.toString()
         );
       }
-    } catch (error) {}
+    } catch (error) { }
     try {
       if (_url.includes(CONSTANTS.RouteParams.paginationLimit)) {
         _url = _url.replace(
@@ -688,7 +687,7 @@ export const getApiUrl = (
           CONSTANTS.pagination.defaultPageSize.toString()
         );
       }
-    } catch (error) {}
+    } catch (error) { }
 
     return _url;
   } catch (error) {
@@ -733,9 +732,8 @@ export const zAxiosApiRequest = async <T>({
       headers: {
         Accept: zAxiosApiRequestContentType.Json,
         'Content-Type': _contentType,
-        Authorization: `${CONSTANTS.DEFAULT_VALUES.API_TOKEN_PRIMARY_KEY} ${
-          _authToken ?? ''
-        }`
+        Authorization: `${CONSTANTS.DEFAULT_VALUES.API_TOKEN_PRIMARY_KEY} ${_authToken ?? ''
+          }`
       }
     };
 
@@ -2160,30 +2158,30 @@ export const zComponentTestingSelectorMaker = ({
   const _testinglistselector =
     testinglistselector !== undefined
       ? {
-          ...zCreateElementTestingSelector({
-            _value: testinglistselector,
-            _key: zCreateElementTestingSelectorKeyEnum.listSelector
-          })
-        }
+        ...zCreateElementTestingSelector({
+          _value: testinglistselector,
+          _key: zCreateElementTestingSelectorKeyEnum.listSelector
+        })
+      }
       : {};
 
   const _testingSelector =
     testingselector !== undefined
       ? {
-          ...zCreateElementTestingSelector({
-            _value: testingselector
-          })
-        }
+        ...zCreateElementTestingSelector({
+          _value: testingselector
+        })
+      }
       : {};
 
   const _idSelector =
     testingidselector !== undefined
       ? {
-          ...zCreateElementTestingSelector({
-            _value: testingidselector,
-            _key: zCreateElementTestingSelectorKeyEnum.dateIdSelector
-          })
-        }
+        ...zCreateElementTestingSelector({
+          _value: testingidselector,
+          _key: zCreateElementTestingSelectorKeyEnum.dateIdSelector
+        })
+      }
       : {};
 
   return { _testinglistselector, _testingSelector, _idSelector };

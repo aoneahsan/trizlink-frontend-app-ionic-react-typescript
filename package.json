@@ -11,7 +11,7 @@
     "yarn": "Please use PNPM (^9.0.6)",
     "pnpm": "^9.0.6"
   },
-  "packageManager": "pnpm@9.0.6",
+  "packageManager": "pnpm",
   "author": {
     "email": "developer@zaions.com",
     "name": "Zaions (Software House)",
