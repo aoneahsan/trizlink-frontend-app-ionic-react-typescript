@@ -24,45 +24,45 @@ const ZaionsRoutes = {
   DiscoverEnterpriseRoute: '/pages/landing/discover-enterprise',
 
   // Redirecting All these pages to Dashboard page for now
-  // // Why Zaions Section
-  // WhyZaions: {
-  //   Zaions101Route: `/pages/why-${PRODUCT_NAME}/${PRODUCT_NAME}-101`,
-  //   ZaionsEnterpriseClassRoute: `/pages/why-${PRODUCT_NAME}/enterprise-class`,
-  //   ZaionsIntegrationApiRoute: `/pages/why-${PRODUCT_NAME}/integrations-api`,
-  //   ZaionsPricingRoute: '/pages/pricing/v1'
-  // },
+  // Why Zaions Section
+  WhyZaions: {
+    Zaions101Route: `/pages/why-${PRODUCT_NAME}/${PRODUCT_NAME}-101`,
+    ZaionsEnterpriseClassRoute: `/pages/why-${PRODUCT_NAME}/enterprise-class`,
+    ZaionsIntegrationApiRoute: `/pages/why-${PRODUCT_NAME}/integrations-api`,
+    ZaionsPricingRoute: '/pages/pricing/v1'
+  },
 
-  // // Product Section
-  // Products: {
-  //   ZaionsQRCodeRoute: '/pages/products/qr-codes',
-  //   ZaionsLinkManagmentRoute: '/pages/products/link-management',
-  //   ZaionsLinkInBioRoute: '/pages/products/link-in-bio'
-  // },
+  // Product Section
+  Products: {
+    ZaionsQRCodeRoute: '/pages/products/qr-codes',
+    ZaionsLinkManagmentRoute: '/pages/products/link-management',
+    ZaionsLinkInBioRoute: '/pages/products/link-in-bio'
+  },
 
-  // // Solution Section
-  // Solution: {
-  //   ZaionsSocialMediaRoute: '/pages/solutions/social-media',
-  //   ZaionsDigitalMarketingRoute: '/pages/solutions/digital-marketing',
-  //   ZaionsCustomerServiceRoute: '/pages/solutions/customer-services',
-  //   ZaionsForDevelopersRoute: '/pages/solutions/for-developers'
-  // },
+  // Solution Section
+  Solution: {
+    ZaionsSocialMediaRoute: '/pages/solutions/social-media',
+    ZaionsDigitalMarketingRoute: '/pages/solutions/digital-marketing',
+    ZaionsCustomerServiceRoute: '/pages/solutions/customer-services',
+    ZaionsForDevelopersRoute: '/pages/solutions/for-developers'
+  },
 
-  // // Feature Section
-  // Feature: {
-  //   ZaionsBrandedLinksRoute: '/pages/features/branded-links',
-  //   ZaionsMobileLinksRoute: '/pages/features/mobile-links',
-  //   ZaionsCampaignManagementAnalyticsRoute:
-  //     '/pages/features/campaign-management-analytics'
-  // },
+  // Feature Section
+  Feature: {
+    ZaionsBrandedLinksRoute: '/pages/features/branded-links',
+    ZaionsMobileLinksRoute: '/pages/features/mobile-links',
+    ZaionsCampaignManagementAnalyticsRoute:
+      '/pages/features/campaign-management-analytics'
+  },
 
-  // // Resources Section
-  // Resources: {
-  //   ZaionsBlogsRoute: '/blog/',
-  //   ZaionsResourceLibraryRoute: '/resources',
-  //   ZaionsTrustCenterRoute: '/pages/trust',
-  //   ZaionsBrowserExtensionsRoute: '/pages/browser-extension',
-  //   ZaionsMobileAppsRoute: '/pages/mobile-app'
-  // },
+  // Resources Section
+  Resources: {
+    ZaionsBlogsRoute: '/blog/',
+    ZaionsResourceLibraryRoute: '/resources',
+    ZaionsTrustCenterRoute: '/pages/trust',
+    ZaionsBrowserExtensionsRoute: '/pages/browser-extension',
+    ZaionsMobileAppsRoute: '/pages/mobile-app'
+  },
 
   // Legal Section
   Legal: {
@@ -72,65 +72,65 @@ const ZaionsRoutes = {
     ZaionsTermsOfService: '/pages/terms-of-service'
   },
 
-  // // Company Section
-  // Company: {
-  //   ZaionsAboutRoute: '/pages/about',
-  //   ZaionsContactRoute: '/pages/contact',
-  //   ZaionsCareersRoute: '/pages/careers',
-  //   ZaionsPartnersRoute: '/pages/partners',
-  //   ZaionsPressRoute: '/pages/press',
-  //   ZaionsReviewsRoute: '/pages/reviews'
-  // },
+  // Company Section
+  Company: {
+    ZaionsAboutRoute: '/pages/about',
+    ZaionsContactRoute: '/pages/contact',
+    ZaionsCareersRoute: '/pages/careers',
+    ZaionsPartnersRoute: '/pages/partners',
+    ZaionsPressRoute: '/pages/press',
+    ZaionsReviewsRoute: '/pages/reviews'
+  },
 
   // Please note the above pages are not available yet, so redirecting to the dashboard page for now, i have commented these in route file for now
   // Why Zaions Section
-  WhyZaions: {
-    Zaions101Route: loginRoute,
-    ZaionsEnterpriseClassRoute: loginRoute,
-    ZaionsIntegrationApiRoute: loginRoute,
-    ZaionsPricingRoute: loginRoute
-  },
+  // WhyZaions: {
+  //   Zaions101Route: loginRoute,
+  //   ZaionsEnterpriseClassRoute: loginRoute,
+  //   ZaionsIntegrationApiRoute: loginRoute,
+  //   ZaionsPricingRoute: loginRoute
+  // },
 
-  // Product Section
-  Products: {
-    ZaionsQRCodeRoute: loginRoute,
-    ZaionsLinkManagmentRoute: loginRoute,
-    ZaionsLinkInBioRoute: loginRoute
-  },
+  // // Product Section
+  // Products: {
+  //   ZaionsQRCodeRoute: loginRoute,
+  //   ZaionsLinkManagmentRoute: loginRoute,
+  //   ZaionsLinkInBioRoute: loginRoute
+  // },
 
-  // Solution Section
-  Solution: {
-    ZaionsSocialMediaRoute: loginRoute,
-    ZaionsDigitalMarketingRoute: loginRoute,
-    ZaionsCustomerServiceRoute: loginRoute,
-    ZaionsForDevelopersRoute: loginRoute
-  },
+  // // Solution Section
+  // Solution: {
+  //   ZaionsSocialMediaRoute: loginRoute,
+  //   ZaionsDigitalMarketingRoute: loginRoute,
+  //   ZaionsCustomerServiceRoute: loginRoute,
+  //   ZaionsForDevelopersRoute: loginRoute
+  // },
 
-  // Feature Section
-  Feature: {
-    ZaionsBrandedLinksRoute: loginRoute,
-    ZaionsMobileLinksRoute: loginRoute,
-    ZaionsCampaignManagementAnalyticsRoute: loginRoute
-  },
+  // // Feature Section
+  // Feature: {
+  //   ZaionsBrandedLinksRoute: loginRoute,
+  //   ZaionsMobileLinksRoute: loginRoute,
+  //   ZaionsCampaignManagementAnalyticsRoute: loginRoute
+  // },
 
-  // Resources Section
-  Resources: {
-    ZaionsBlogsRoute: loginRoute,
-    ZaionsResourceLibraryRoute: loginRoute,
-    ZaionsTrustCenterRoute: loginRoute,
-    ZaionsBrowserExtensionsRoute: loginRoute,
-    ZaionsMobileAppsRoute: loginRoute
-  },
+  // // Resources Section
+  // Resources: {
+  //   ZaionsBlogsRoute: loginRoute,
+  //   ZaionsResourceLibraryRoute: loginRoute,
+  //   ZaionsTrustCenterRoute: loginRoute,
+  //   ZaionsBrowserExtensionsRoute: loginRoute,
+  //   ZaionsMobileAppsRoute: loginRoute
+  // },
 
-  // Company Section
-  Company: {
-    ZaionsAboutRoute: loginRoute,
-    ZaionsContactRoute: loginRoute,
-    ZaionsCareersRoute: loginRoute,
-    ZaionsPartnersRoute: loginRoute,
-    ZaionsPressRoute: loginRoute,
-    ZaionsReviewsRoute: loginRoute
-  },
+  // // Company Section
+  // Company: {
+  //   ZaionsAboutRoute: loginRoute,
+  //   ZaionsContactRoute: loginRoute,
+  //   ZaionsCareersRoute: loginRoute,
+  //   ZaionsPartnersRoute: loginRoute,
+  //   ZaionsPressRoute: loginRoute,
+  //   ZaionsReviewsRoute: loginRoute
+  // },
 
   Error: {
     Z400: '/error/400-bad-request',
