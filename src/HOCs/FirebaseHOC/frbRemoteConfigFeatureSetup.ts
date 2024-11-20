@@ -1,4 +1,4 @@
-import { firebaseApp } from '@/configs';
+import { firebaseApp } from '@/configs/firebase';
 import { type IFrbRemoteConfigRStateAtom } from '@/types/firebaseTypes/index.type';
 import { frbRemoteConfigSetting } from '@/utils/constants/firebaseConstants';
 import { ENVS } from '@/utils/envKeys';

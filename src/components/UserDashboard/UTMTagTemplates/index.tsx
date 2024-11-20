@@ -172,7 +172,7 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
 
         void setFieldValue(
           'target.url',
-          `${_baseUrlWithoutParams}${`?${_queryStringParams}` ?? ''}`,
+          `${_baseUrlWithoutParams}?${_queryStringParams}`,
           false
         );
       }

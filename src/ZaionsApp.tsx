@@ -29,6 +29,7 @@ import { type UserAccountType } from '@/types/UserAccount/index.type';
 import { reportCustomError } from '@/utils/customErrorType';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import { useLocation } from 'react-router';
+import TestingPackagesAndLogic from './Testing';
 
 const App: React.FC = () => {
   const setAuthTokenState = useSetRecoilState(ZaionsAuthTokenData);
@@ -142,7 +143,7 @@ const App: React.FC = () => {
   return (
     <IonApp>
       <AppRoutes />
-      {/* <TestingPackagesAndLogic /> */}
+      <TestingPackagesAndLogic />
       <ToastContainer />
       <ZaionsGlobalComponent />
     </IonApp>

@@ -27,12 +27,6 @@ export default defineConfig({
     port: 5173
   },
 
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: './src/setupTests.ts'
-  },
-
   build: {
     // also change this to 'true' when you want to enable sentry source map upload
     sourcemap: false

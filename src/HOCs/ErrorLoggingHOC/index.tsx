@@ -5,8 +5,7 @@
 import React, { useEffect } from 'react';
 import {
   init as sentryReactInit,
-  browserTracingIntegration,
-  replayIntegration
+  browserTracingIntegration
 } from '@sentry/react';
 import { ENVS } from '@/utils/envKeys';
 
@@ -28,13 +27,7 @@ const ErrorLoggingHOC: React.FC<IErrorLoggingHOC> = ({ children }) => {
       sentryReactInit({
         dsn: _sentryDNS,
         dist: '1',
-        integrations: [
-          browserTracingIntegration(),
-          replayIntegration({
-            maskAllText: false,
-            blockAllMedia: false
-          })
-        ],
+        integrations: [browserTracingIntegration()],
         enabled: true,
         enableTracing: true,
         environment: window.location.host,
