@@ -29,13 +29,6 @@ if (!CAPACITOR_PLATFORM.isIos && (!googleApiKey || !googleClientId)) {
   );
 }
 
-const jwtSharedSecretKey = _env.VITE_JWT_SECRET_SHARED;
-const jwtFrontendSecretKey = _env.VITE_JWT_SECRET_FRONTEND;
-
-if (!jwtSharedSecretKey || !jwtFrontendSecretKey) {
-  throw new Error('JWT Secret Key is not defined.');
-}
-
 export const ENVS = {
   // Environment
   isProduction: _env.PROD,
@@ -56,7 +49,7 @@ export const ENVS = {
 
   // Firebase & Google Cloud Console
   firebaseAppId: _env.VITE_FIREBASE_APP_ID ?? null,
-  firebaseAppKey: googleApiKey, // as right now i think these two are same, but if needed i will add a new ENV key and separate them.
+  firebaseAppKey: _env.VITE_FIREBASE_API_KEY ?? googleApiKey, // as right now i think these two are same, but if needed i will add a new ENV key and separate them.
   firebaseProductId: _env.VITE_FIREBASE_PROJECT_ID ?? null,
   firebaseMeasurementId: _env.VITE_FIREBASE_MEASUREMENT_ID ?? null,
   googleClientId: _env.VITE_GOOGLE_CLIENT_ID ?? null,
@@ -64,15 +57,7 @@ export const ENVS = {
 
   // Third Party Services
   // Sentry
-  sentryErrorLoggingDNS: _env.VITE_SENTRY_DNS ?? null,
-
-  // JWT
-  jwt: {
-    sharedSecret: jwtSharedSecretKey,
-    frontendSecret: jwtFrontendSecretKey,
-    expiresIn: '30m',
-    algorithm: 'HS256'
-  }
+  sentryErrorLoggingDNS: _env.VITE_SENTRY_DNS ?? null
 } as const;
 
 if (!ENVS.googleApiKey) {

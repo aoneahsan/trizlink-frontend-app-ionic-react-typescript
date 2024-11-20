@@ -16,72 +16,74 @@ import PublicRoute from './components/PublicRoute';
 import PrivateRoute from './components/PrivateRoute';
 import ZShareWSStartup from './pages/AdminPanel/ShareWS/Startup';
 import { useZHybridDeviceIsMobile } from './ZaionsHooks/ZGenericHooks';
+import TestingFirebaseFeatures from './Testing/TestingFirebaseFeatures';
+import TestingIonComponents from './Testing/TestingIonComponents';
 const ZInvitationSLRedirectPage = lazy(
   () => import('./pages/InvitationSLRedirect')
 );
 
 const ZShareWSView = lazy(() => import('./pages/AdminPanel/ShareWS/View'));
-// const TestingReactDropzone = lazy(() => import('./Testing/ReactDropZone'));
+const TestingReactDropzone = lazy(() => import('./Testing/ReactDropZone'));
 const Z400View = lazy(() => import('./components/Errors/400'));
 const Z401View = lazy(() => import('./components/Errors/401'));
 const Z403View = lazy(() => import('./components/Errors/403'));
 const Z404View = lazy(() => import('./components/Errors/404'));
 const Z500View = lazy(() => import('./components/Errors/500'));
 
-// const Zaions101 = lazy(() => import('@/pages/Zaions/Zaions101'));
-// const ZaionsEnterpriseClass = lazy(
-//   () => import('@/pages/Zaions/enterprise-class')
-// );
-// const ZaionsIntegrationApi = lazy(
-//   () => import('@/pages/Zaions/integration-api')
-// );
-// const ZaionsLinkManagment = lazy(
-//   () => import('@/pages/Products/link-management')
-// );
-// const ZaionsQRCode = lazy(() => import('@/pages/Products/qr-code'));
-// const ZaionsLinkInBio = lazy(() => import('@/pages/Products/link-in-bio'));
-// const ZaionsPricing = lazy(() => import('@/pages/Zaions/Pricing'));
-// const ZaionsSocialMedia = lazy(
-//   () => import('@/pages/Solutions/ZaionsSocialMedia')
-// );
-// const ZaionsDigitalMarketing = lazy(
-//   () => import('@/pages/Solutions/ZaionsDigitalMarketing')
-// );
-// const ZaionsForDevelopers = lazy(
-//   () => import('@/pages/Solutions/ZaionsForDevelopers')
-// );
-// const ZaionsCustomerService = lazy(
-//   () => import('@/pages/Solutions/ZaionsCustomerService')
-// );
-// const ZaionsBrandedLinks = lazy(() => import('@/pages/Features/BrandedLinks'));
-// const ZaionsMobileLinks = lazy(() => import('@/pages/Features/MobileLinks'));
-// const ZaionsCampaignManagementAnalytics = lazy(
-//   () => import('@/pages/Features/CampaignManagementAnalytics')
-// );
-// const ZaionsBlogs = lazy(() => import('@/pages/Resources/Blog'));
-// const ZaionsResourceLibrary = lazy(
-//   () => import('@/pages/Resources/ResourceLibrary')
-// );
-// const ZaionsTrustCenter = lazy(() => import('@/pages/Resources/TrustCenter'));
-// const ZaionsBrowserExtensions = lazy(
-//   () => import('@/pages/Resources/BrowserExtensions')
-// );
-// const ZaionsMobileApps = lazy(() => import('@/pages/Resources/MobileApp'));
+const Zaions101 = lazy(() => import('@/pages/Zaions/Zaions101'));
+const ZaionsEnterpriseClass = lazy(
+  () => import('@/pages/Zaions/enterprise-class')
+);
+const ZaionsIntegrationApi = lazy(
+  () => import('@/pages/Zaions/integration-api')
+);
+const ZaionsLinkManagment = lazy(
+  () => import('@/pages/Products/link-management')
+);
+const ZaionsQRCode = lazy(() => import('@/pages/Products/qr-code'));
+const ZaionsLinkInBio = lazy(() => import('@/pages/Products/link-in-bio'));
+const ZaionsPricing = lazy(() => import('@/pages/Zaions/Pricing'));
+const ZaionsSocialMedia = lazy(
+  () => import('@/pages/Solutions/ZaionsSocialMedia')
+);
+const ZaionsDigitalMarketing = lazy(
+  () => import('@/pages/Solutions/ZaionsDigitalMarketing')
+);
+const ZaionsForDevelopers = lazy(
+  () => import('@/pages/Solutions/ZaionsForDevelopers')
+);
+const ZaionsCustomerService = lazy(
+  () => import('@/pages/Solutions/ZaionsCustomerService')
+);
+const ZaionsBrandedLinks = lazy(() => import('@/pages/Features/BrandedLinks'));
+const ZaionsMobileLinks = lazy(() => import('@/pages/Features/MobileLinks'));
+const ZaionsCampaignManagementAnalytics = lazy(
+  () => import('@/pages/Features/CampaignManagementAnalytics')
+);
+const ZaionsBlogs = lazy(() => import('@/pages/Resources/Blog'));
+const ZaionsResourceLibrary = lazy(
+  () => import('@/pages/Resources/ResourceLibrary')
+);
+const ZaionsTrustCenter = lazy(() => import('@/pages/Resources/TrustCenter'));
+const ZaionsBrowserExtensions = lazy(
+  () => import('@/pages/Resources/BrowserExtensions')
+);
+const ZaionsMobileApps = lazy(() => import('@/pages/Resources/MobileApp'));
 const ZaionsPrivacyPolicy = lazy(() => import('@/pages/Legal/PrivacyPolicy'));
 const ZaionsAcceptableUsePolicy = lazy(
   () => import('@/pages/Legal/AcceptableUsePolicy')
 );
 const ZaionsCodeOfConduct = lazy(() => import('@/pages/Legal/CodeOfConduct'));
-// const ZaionsAbout = lazy(() => import('@/pages/Company/AboutZaions'));
-// const ZaionsContact = lazy(() => import('@/pages/Company/Contact'));
-// const ZaionsCareers = lazy(() => import('@/pages/Company/Careers'));
-// const ZaionsPartners = lazy(() => import('@/pages/Company/Partners'));
-// const ZaionsPress = lazy(() => import('@/pages/Company/Press'));
-// const ZaionsReviews = lazy(() => import('@/pages/Company/Reviews'));
-// const ZaionsDiscoverEnterprise = lazy(
-//   () => import('@/pages/DiscoverEnterprise')
-// );
-// const TestingReactTable = lazy(() => import('@/Testing/ReactTable/index'));
+const ZaionsAbout = lazy(() => import('@/pages/Company/AboutZaions'));
+const ZaionsContact = lazy(() => import('@/pages/Company/Contact'));
+const ZaionsCareers = lazy(() => import('@/pages/Company/Careers'));
+const ZaionsPartners = lazy(() => import('@/pages/Company/Partners'));
+const ZaionsPress = lazy(() => import('@/pages/Company/Press'));
+const ZaionsReviews = lazy(() => import('@/pages/Company/Reviews'));
+const ZaionsDiscoverEnterprise = lazy(
+  () => import('@/pages/DiscoverEnterprise')
+);
+const TestingReactTable = lazy(() => import('@/Testing/ReactTable/index'));
 const ZLinkInBio = lazy(() => import('@/pages/AdminPanel/ZLinkInBio'));
 const ZLinkCampaigns = lazy(() => import('@/pages/AdminPanel/ZLCampaigns'));
 const ZCustomLinks = lazy(() => import('@/pages/AdminPanel/ZLCustomLinks'));
@@ -94,10 +96,10 @@ const ZAccountDetails = lazy(
   () => import('@/pages/AdminPanel/ZAccountDetails')
 );
 const ZIntegration = lazy(() => import('@/pages/AdminPanel/ZIntegration'));
-// const GoogleMapsCapacitorPackageTest = lazy(
-//   () => import('@/Testing/GoogleMaps')
-// );
-// const TestingTabs = lazy(() => import('@/Testing/TestingTabs'));
+const GoogleMapsCapacitorPackageTest = lazy(
+  () => import('@/Testing/GoogleMaps')
+);
+const TestingTabs = lazy(() => import('@/Testing/TestingTabs'));
 
 // Routes
 
@@ -141,13 +143,13 @@ const ZaionsLinkInBioForm = lazy(
   () => import('@/pages/AdminPanel/LinkInBio/LinkInBioForm')
 );
 // const TestingIonComponents = lazy(
-//   () => import('./Testing/TestingIonComponents/index')
+() => import('./Testing/TestingIonComponents/index');
 // );
-// const DraftJS = lazy(() => import('./Testing/DraftJs'));
+const DraftJS = lazy(() => import('./Testing/DraftJs'));
 const ZUserAccount = lazy(() => import('./pages/AdminPanel/UserAccount'));
 const ZSetPasswordPage = lazy(() => import('./pages/SetPassword'));
 const ZAppStartupPage = lazy(() => import('./pages/AdminPanel/StartUpPage'));
-// const ChartsExamples = lazy(() => import('./Testing/Charts'));
+const ChartsExamples = lazy(() => import('./Testing/Charts'));
 const ZFallbackIonSpinner = lazy(
   () => import('./components/CustomComponents/FallbackSpinner')
 );
@@ -159,7 +161,7 @@ const ZValidateInvitationPage = lazy(
   () => import('./pages/ValidateInvitation')
 );
 
-// const ZaionsTestPage = lazy(() => import('./pages/TestPage'));
+const ZaionsTestPage = lazy(() => import('./pages/TestPage'));
 const ZWorkspaceSettings = lazy(() => import('./pages/AdminPanel/WSSettings'));
 const ZWSSettingsTeamViewPage = lazy(
   () => import('./pages/AdminPanel/WSSettings/Team/View')
@@ -211,29 +213,29 @@ const AppRoutes = (): JSX.Element => {
             component={ZaionsTermsOfService}
           />
 
-          {/* <Route
-          exact
-          path={ZaionsRoutes.Testing.IonComponents.Main}
-          component={TestingIonComponents}
-        />
+          <Route
+            exact
+            path={ZaionsRoutes.Testing.IonComponents.Main}
+            component={TestingIonComponents}
+          />
 
-        <Route
-          exact
-          path={ZaionsRoutes.Testing.DraftJs.Main}
-          component={DraftJS}
-        />
+          <Route
+            exact
+            path={ZaionsRoutes.Testing.DraftJs.Main}
+            component={DraftJS}
+          />
 
-        <Route
-          exact
-          path={ZaionsRoutes.Testing.ReactDropzone.Main}
-          component={TestingReactDropzone}
-        />
+          <Route
+            exact
+            path={ZaionsRoutes.Testing.ReactDropzone.Main}
+            component={TestingReactDropzone}
+          />
 
-        <Route
-          exact
-          path={ZaionsRoutes.Testing.Page}
-          component={ZaionsTestPage}
-        /> */}
+          <Route
+            exact
+            path={ZaionsRoutes.Testing.Page}
+            component={ZaionsTestPage}
+          />
 
           {/* Public Routes */}
           <PublicRoute
@@ -461,171 +463,162 @@ const AppRoutes = (): JSX.Element => {
             Component={AdminCreateNewLinkPages}
           />
 
-          {!isHybridDevice ? (
-            <>
-              <PrivateRoute
-                exact
-                path={
-                  ZaionsRoutes.AdminPanel.ZaionsDashboard.LinkCampaignsInactive
-                }
-                Component={ZLinkCampaigns}
-              />
-              <PrivateRoute
-                exact
-                path={ZaionsRoutes.AdminPanel.ZaionsDashboard.LinkInBioInactive}
-                Component={ZLinkInBio}
-              />
-              <PrivateRoute
-                exact
-                path={
-                  ZaionsRoutes.AdminPanel.ZaionsDashboard.CustomlinksInactive
-                }
-                Component={ZCustomLinks}
-              />
-              <PrivateRoute
-                exact
-                path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZLinks}
-                Component={ZLinks}
-              />
-              <PrivateRoute
-                exact
-                path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZProfile}
-                Component={ZProfile}
-              />
-              <PrivateRoute
-                exact
-                path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZCustomDomain}
-                Component={ZCustomDomain}
-              />
-              <PrivateRoute
-                exact
-                path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZGroup}
-                Component={ZGroups}
-              />
-              <PrivateRoute
-                exact
-                path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZCSVBulk}
-                Component={ZCSVBulkShortening}
-              />
-              <PrivateRoute
-                exact
-                path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZAccountDetails}
-                Component={ZAccountDetails}
-              />
-              <PrivateRoute
-                exact
-                path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZIntegration}
-                Component={ZIntegration}
-              />
-            </>
-          ) : null}
+          <PrivateRoute
+            exact
+            path={ZaionsRoutes.AdminPanel.ZaionsDashboard.LinkCampaignsInactive}
+            Component={ZLinkCampaigns}
+          />
+          <PrivateRoute
+            exact
+            path={ZaionsRoutes.AdminPanel.ZaionsDashboard.LinkInBioInactive}
+            Component={ZLinkInBio}
+          />
+          <PrivateRoute
+            exact
+            path={ZaionsRoutes.AdminPanel.ZaionsDashboard.CustomlinksInactive}
+            Component={ZCustomLinks}
+          />
+          <PrivateRoute
+            exact
+            path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZLinks}
+            Component={ZLinks}
+          />
+          <PrivateRoute
+            exact
+            path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZProfile}
+            Component={ZProfile}
+          />
+          <PrivateRoute
+            exact
+            path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZCustomDomain}
+            Component={ZCustomDomain}
+          />
+          <PrivateRoute
+            exact
+            path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZGroup}
+            Component={ZGroups}
+          />
+          <PrivateRoute
+            exact
+            path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZCSVBulk}
+            Component={ZCSVBulkShortening}
+          />
+          <PrivateRoute
+            exact
+            path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZAccountDetails}
+            Component={ZAccountDetails}
+          />
+          <PrivateRoute
+            exact
+            path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZIntegration}
+            Component={ZIntegration}
+          />
+          <Route
+            exact
+            path={ZaionsRoutes.DiscoverEnterpriseRoute}
+            component={ZaionsDiscoverEnterprise}
+          />
 
-          {/* <Route
-          exact
-          path={ZaionsRoutes.DiscoverEnterpriseRoute}
-          component={ZaionsDiscoverEnterprise}
-        />
+          <Route
+            exact
+            path={ZaionsRoutes.WhyZaions.Zaions101Route}
+            component={Zaions101}
+          />
+          <Route
+            exact
+            path={ZaionsRoutes.WhyZaions.ZaionsEnterpriseClassRoute}
+            component={ZaionsEnterpriseClass}
+          />
+          <Route
+            exact
+            path={ZaionsRoutes.WhyZaions.ZaionsIntegrationApiRoute}
+            component={ZaionsIntegrationApi}
+          />
 
-        <Route
-          exact
-          path={ZaionsRoutes.WhyZaions.Zaions101Route}
-          component={Zaions101}
-        />
-        <Route
-          exact
-          path={ZaionsRoutes.WhyZaions.ZaionsEnterpriseClassRoute}
-          component={ZaionsEnterpriseClass}
-        />
-        <Route
-          exact
-          path={ZaionsRoutes.WhyZaions.ZaionsIntegrationApiRoute}
-          component={ZaionsIntegrationApi}
-        />
+          <Route
+            exact
+            path={ZaionsRoutes.Products.ZaionsQRCodeRoute}
+            component={ZaionsQRCode}
+          />
+          <Route
+            exact
+            path={ZaionsRoutes.Products.ZaionsLinkManagmentRoute}
+            component={ZaionsLinkManagment}
+          />
+          <Route
+            exact
+            path={ZaionsRoutes.Products.ZaionsLinkInBioRoute}
+            component={ZaionsLinkInBio}
+          />
+          <Route
+            exact
+            path={ZaionsRoutes.WhyZaions.ZaionsPricingRoute}
+            component={ZaionsPricing}
+          />
 
-        <Route
-          exact
-          path={ZaionsRoutes.Products.ZaionsQRCodeRoute}
-          component={ZaionsQRCode}
-        />
-        <Route
-          exact
-          path={ZaionsRoutes.Products.ZaionsLinkManagmentRoute}
-          component={ZaionsLinkManagment}
-        />
-        <Route
-          exact
-          path={ZaionsRoutes.Products.ZaionsLinkInBioRoute}
-          component={ZaionsLinkInBio}
-        />
-        <Route
-          exact
-          path={ZaionsRoutes.WhyZaions.ZaionsPricingRoute}
-          component={ZaionsPricing}
-        />
+          <Route
+            exact
+            path={ZaionsRoutes.Solution.ZaionsSocialMediaRoute}
+            component={ZaionsSocialMedia}
+          />
+          <Route
+            exact
+            path={ZaionsRoutes.Solution.ZaionsDigitalMarketingRoute}
+            component={ZaionsDigitalMarketing}
+          />
+          <Route
+            exact
+            path={ZaionsRoutes.Solution.ZaionsCustomerServiceRoute}
+            component={ZaionsCustomerService}
+          />
+          <Route
+            exact
+            path={ZaionsRoutes.Solution.ZaionsForDevelopersRoute}
+            component={ZaionsForDevelopers}
+          />
 
-        <Route
-          exact
-          path={ZaionsRoutes.Solution.ZaionsSocialMediaRoute}
-          component={ZaionsSocialMedia}
-        />
-        <Route
-          exact
-          path={ZaionsRoutes.Solution.ZaionsDigitalMarketingRoute}
-          component={ZaionsDigitalMarketing}
-        />
-        <Route
-          exact
-          path={ZaionsRoutes.Solution.ZaionsCustomerServiceRoute}
-          component={ZaionsCustomerService}
-        />
-        <Route
-          exact
-          path={ZaionsRoutes.Solution.ZaionsForDevelopersRoute}
-          component={ZaionsForDevelopers}
-        />
+          <Route
+            exact
+            path={ZaionsRoutes.Feature.ZaionsBrandedLinksRoute}
+            component={ZaionsBrandedLinks}
+          />
 
-        <Route
-          exact
-          path={ZaionsRoutes.Feature.ZaionsBrandedLinksRoute}
-          component={ZaionsBrandedLinks}
-        />
+          <Route
+            exact
+            path={ZaionsRoutes.Feature.ZaionsMobileLinksRoute}
+            component={ZaionsMobileLinks}
+          />
+          <Route
+            exact
+            path={ZaionsRoutes.Feature.ZaionsCampaignManagementAnalyticsRoute}
+            component={ZaionsCampaignManagementAnalytics}
+          />
 
-        <Route
-          exact
-          path={ZaionsRoutes.Feature.ZaionsMobileLinksRoute}
-          component={ZaionsMobileLinks}
-        />
-        <Route
-          exact
-          path={ZaionsRoutes.Feature.ZaionsCampaignManagementAnalyticsRoute}
-          component={ZaionsCampaignManagementAnalytics}
-        />
-
-        <Route
-          exact
-          path={ZaionsRoutes.Resources.ZaionsBlogsRoute}
-          component={ZaionsBlogs}
-        />
-        <Route
-          exact
-          path={ZaionsRoutes.Resources.ZaionsResourceLibraryRoute}
-          component={ZaionsResourceLibrary}
-        />
-        <Route
-          exact
-          path={ZaionsRoutes.Resources.ZaionsTrustCenterRoute}
-          component={ZaionsTrustCenter}
-        />
-        <Route
-          exact
-          path={ZaionsRoutes.Resources.ZaionsBrowserExtensionsRoute}
-          component={ZaionsBrowserExtensions}
-        />
-        <Route
-          exact
-          path={ZaionsRoutes.Resources.ZaionsMobileAppsRoute}
-          component={ZaionsMobileApps}
-        /> */}
+          <Route
+            exact
+            path={ZaionsRoutes.Resources.ZaionsBlogsRoute}
+            component={ZaionsBlogs}
+          />
+          <Route
+            exact
+            path={ZaionsRoutes.Resources.ZaionsResourceLibraryRoute}
+            component={ZaionsResourceLibrary}
+          />
+          <Route
+            exact
+            path={ZaionsRoutes.Resources.ZaionsTrustCenterRoute}
+            component={ZaionsTrustCenter}
+          />
+          <Route
+            exact
+            path={ZaionsRoutes.Resources.ZaionsBrowserExtensionsRoute}
+            component={ZaionsBrowserExtensions}
+          />
+          <Route
+            exact
+            path={ZaionsRoutes.Resources.ZaionsMobileAppsRoute}
+            component={ZaionsMobileApps}
+          />
 
           <Route
             exact
@@ -648,70 +641,76 @@ const AppRoutes = (): JSX.Element => {
             component={ZaionsTermsOfService}
           />
 
-          {/* <Route
-          exact
-          path={ZaionsRoutes.Company.ZaionsAboutRoute}
-          component={ZaionsAbout}
-        />
-        <Route
-          exact
-          path={ZaionsRoutes.Company.ZaionsContactRoute}
-          component={ZaionsContact}
-        />
-        <Route
-          exact
-          path={ZaionsRoutes.Company.ZaionsCareersRoute}
-          component={ZaionsCareers}
-        />
-        <Route
-          exact
-          path={ZaionsRoutes.Company.ZaionsPartnersRoute}
-          component={ZaionsPartners}
-        />
-        <Route
-          exact
-          path={ZaionsRoutes.Company.ZaionsPressRoute}
-          component={ZaionsPress}
-        />
-        <Route
-          exact
-          path={ZaionsRoutes.Company.ZaionsReviewsRoute}
-          component={ZaionsReviews}
-        />
-
-        <Route
-          path={ZaionsRoutes.Testing.ReactTable.Main}
-          component={TestingReactTable}
-        />
-
-        <Route
-          exact
-          path={ZaionsRoutes.Testing.ReactCharts.Main}
-          component={ChartsExamples}
-        />
-        <Route
-          path={ZaionsRoutes.Testing.GOOGLE_MAP.Main}
-          component={GoogleMapsCapacitorPackageTest}
-        />
-        <Route
-          path={ZaionsRoutes.Testing.TestingTabs.Main}
-          component={TestingTabs}
-        />
-
-        <Route
-          path={ZaionsRoutes.Testing.TestingTabs.Main}
-          component={TestingTabs}
-        /> */}
-
-          {/* <Route
-        path={ZaionsRoutes.Asterisk}
-        component={() => (
-          <Redirect
+          <Route
             exact
-            to={ZaionsRoutes.Error.Z404}
+            path={ZaionsRoutes.Company.ZaionsAboutRoute}
+            component={ZaionsAbout}
           />
-        )}
-      /> */}
+          <Route
+            exact
+            path={ZaionsRoutes.Company.ZaionsContactRoute}
+            component={ZaionsContact}
+          />
+          <Route
+            exact
+            path={ZaionsRoutes.Company.ZaionsCareersRoute}
+            component={ZaionsCareers}
+          />
+          <Route
+            exact
+            path={ZaionsRoutes.Company.ZaionsPartnersRoute}
+            component={ZaionsPartners}
+          />
+          <Route
+            exact
+            path={ZaionsRoutes.Company.ZaionsPressRoute}
+            component={ZaionsPress}
+          />
+          <Route
+            exact
+            path={ZaionsRoutes.Company.ZaionsReviewsRoute}
+            component={ZaionsReviews}
+          />
+
+          <Route
+            path={ZaionsRoutes.Testing.ReactTable.Main}
+            component={TestingReactTable}
+          />
+
+          <Route
+            exact
+            path={ZaionsRoutes.Testing.ReactCharts.Main}
+            component={ChartsExamples}
+          />
+          <Route
+            path={ZaionsRoutes.Testing.GOOGLE_MAP.Main}
+            component={GoogleMapsCapacitorPackageTest}
+          />
+          <Route
+            path={ZaionsRoutes.Testing.TestingTabs.Main}
+            component={TestingTabs}
+          />
+
+          <Route
+            path={ZaionsRoutes.Testing.TestingTabs.Main}
+            component={TestingTabs}
+          />
+
+          {/* <Route
+            path={ZaionsRoutes.Asterisk}
+            component={() => (
+              <Redirect
+                exact
+                to={ZaionsRoutes.Error.Z404}
+              />
+            )}
+          /> */}
+
+          <Route
+            path={ZaionsRoutes.Testing.FirebaseFeatures.Main}
+            component={TestingFirebaseFeatures}
+          />
+
           <Route
             path={ZaionsRoutes.Asterisk}
             component={Z404View}

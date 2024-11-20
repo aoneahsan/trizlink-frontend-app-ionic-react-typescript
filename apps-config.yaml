@@ -3,11 +3,7 @@
 vars:
   BUNDLE_ID:
     default: com.trizlink.app
-  PACKAGE_NAME:
-    default: com.trizlink.app
   PRODUCT_NAME:
-    default: Trizlink
-  DISPLAY_NAME:
     default: Trizlink
 
 platforms:
@@ -18,9 +14,9 @@ platforms:
         version: 1.0.0
         buildNumber: 1
         productName: $PRODUCT_NAME
-        displayName: $DISPLAY_NAME
+        displayName: $PRODUCT_NAME
 
   android:
-    packageName: $PACKAGE_NAME
+    packageName: $BUNDLE_ID
     versionName: 1.0.0
-    versionCode: 4
+    versionCode: 5

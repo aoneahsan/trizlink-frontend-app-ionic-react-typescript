@@ -5,12 +5,6 @@ const config: CapacitorConfig = {
   appName: 'Trizlink',
   webDir: 'dist',
   plugins: {
-    GoogleAuth: {
-      scopes: ['profile', 'email'],
-      androidClientId:
-        '1098579848404-agkui3kbus8ml8skfo1qgcqpsk205jqv.apps.googleusercontent.com', // sir ahsan say to paste directly
-      forceCodeForRefreshToken: true
-    },
     CapacitorCookies: {
       enabled: true
     },
